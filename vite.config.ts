@@ -12,7 +12,7 @@ export default ({ mode }: { mode: string }) => {
     plugins: [
       vue(),
       AutoImport({
-        imports: ['vue', 'vue-router'],
+        imports: ['vue', 'vue-router', 'pinia'],
         dirs: ['./src/api'],
       }),
       svgLoader(),

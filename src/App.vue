@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import Toaster from '@/components/ui/toast/Toaster.vue'
+import ConfirmModal from './components/base/ConfirmModal.vue'
 import { useLoadingStore } from './stores/loading'
 import { showToast } from './utils/toast'
+import { useModalConfirm } from './stores/modal'
 const route = useRoute()
 
 const layout = computed(() => {
@@ -17,10 +19,21 @@ onMounted(() => {
     variant: 'default',
   })
 })
+
+const modalConfirm = useModalConfirm()
+const openConfirm = async () => {
+  const result = await modalConfirm.open({
+    title: 'Are you sure?',
+    question: 'Do you really want to delete this item?',
+  })
+  console.log('result', result)
+}
 </script>
 
 <template>
-  <ModalConfirm />
+  <ConfirmModal />
+
+  <button @click="openConfirm">Open Modal</button>
   <Toaster />
   <div
     v-if="loadingStore.getLoading"

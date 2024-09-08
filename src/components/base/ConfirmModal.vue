@@ -1,81 +1,45 @@
 <script setup lang="ts">
+import { Button } from '@/components/ui/button'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
+
 import { useModalConfirm } from '@/stores/modal'
+
 const modalConfirm = useModalConfirm()
+const isShow = ref(true)
 
-const close = () => {
-  modalConfirm.clearQuestion()
-}
-
-const confirm = () => {
-  if (typeof modalConfirm.actionConfirm === 'function') {
-    modalConfirm.actionConfirm(modalConfirm.data)
-  }
-  close()
-}
-
-const cancel = () => {
-  if (typeof modalConfirm.actionCancel === 'function') {
-    modalConfirm.actionCancel(modalConfirm.data)
-  }
-  close()
-}
+watchEffect(() => {
+  isShow.value = modalConfirm.getQuestion !== null
+})
 </script>
 <template>
-  <div
-    v-if="modalConfirm.isShow"
-    v-motion
-    :initial="{ opacity: 0 }"
-    :enter="{ opacity: 1 }"
-    :duration="200"
-    class="modal__wrapper bg-mark-bg"
-    @click="close"
-  >
-    <div
-      v-motion
-      :initial="{ opacity: 0, scale: 0.5 }"
-      :enter="{ opacity: 1, scale: 1 }"
-      :duration="200"
-      class="modal__main"
-      @click.stop
-    >
-      <p class="modal__main--title">{{ modalConfirm.title }}</p>
-      <div
-        class="ic-close"
-        @click="cancel"
-      >
-        <Icon icon="carbon:close" />
-      </div>
-      <p class="modal__main--question text-lg">{{ modalConfirm.question }}</p>
-      <div
-        v-if="!modalConfirm.onlyConfirm"
-        class="modal__action"
-      >
+  <AlertDialog v-model:open="isShow">
+    <AlertDialogContent>
+      <AlertDialogHeader>
+        <AlertDialogTitle> {{ modalConfirm.getQuestion?.title }}</AlertDialogTitle>
+        <AlertDialogDescription>
+          {{ modalConfirm.getQuestion?.question }}
+        </AlertDialogDescription>
+      </AlertDialogHeader>
+      <AlertDialogFooter>
         <Button
-          style-type="light"
-          width="60%"
-          title="Cancel"
-          @click="cancel"
-        />
-        <Button
-          style-type="solid"
-          width="60%"
-          title="Ok"
-          @click="confirm"
-        />
-      </div>
-      <div
-        v-else
-        class="mt-5"
-      >
-        <Button
-          style-type="solid"
-          width="100%"
-          title="Ok"
-          @click="confirm"
-        />
-      </div>
-    </div>
-  </div>
+          variant="secondary"
+          @click="modalConfirm.confirm(false)"
+          >Cancel</Button
+        >
+        <Button @click="modalConfirm.confirm(true)">Confirm</Button>
+      </AlertDialogFooter>
+    </AlertDialogContent>
+  </AlertDialog>
 </template>
 <style lang="scss" scoped>
 .modal__wrapper {

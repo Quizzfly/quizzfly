@@ -12,32 +12,29 @@ interface IQuestion {
 export const useModalConfirm = defineStore({
   id: 'modal-confirm',
   state: () => ({
-    isShow: false,
-    title: '',
-    question: '',
-    actionConfirm: null as any,
-    actionCancel: null as any,
-    data: null as any,
-    onlyConfirm: false,
+    confirmationResolver: null as any,
+    data: null as IQuestion | null,
   }),
   actions: {
-    setQuestion(data: IQuestion) {
-      this.isShow = true
-      this.title = data.title
-      this.question = data.question
-      this.actionConfirm = data.actionConfirm
-      this.actionCancel = data.actionCancel
-      this.data = data.data
-      this.onlyConfirm = data.onlyConfirm ?? false
+    open(data: IQuestion) {
+      this.data = data
+      return new Promise((resolve) => {
+        this.confirmationResolver = {
+          resolve,
+          data,
+        }
+      })
     },
-    clearQuestion() {
-      this.isShow = false
-      this.title = ''
-      this.question = ''
-      this.actionCancel = null
-      this.actionConfirm = null
+    confirm(value: boolean) {
+      this.confirmationResolver.resolve({
+        isConfirmed: value,
+        data: this.data,
+      })
+      this.confirmationResolver = null
       this.data = null
-      this.onlyConfirm = false
     },
+  },
+  getters: {
+    getQuestion: (state) => state.data,
   },
 })
