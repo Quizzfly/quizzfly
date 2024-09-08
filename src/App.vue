@@ -3,7 +3,7 @@ import Toaster from '@/components/ui/toast/Toaster.vue'
 import ConfirmModal from './components/base/ConfirmModal.vue'
 import { useLoadingStore } from './stores/loading'
 import { showToast } from './utils/toast'
-import { useModalConfirm } from './stores/modal'
+import { useConfirmDialog } from './stores/modal'
 const route = useRoute()
 
 const layout = computed(() => {
@@ -20,9 +20,9 @@ onMounted(() => {
   })
 })
 
-const modalConfirm = useModalConfirm()
+const confirmDialog = useConfirmDialog()
 const openConfirm = async () => {
-  const result = await modalConfirm.open({
+  const result = await confirmDialog.open({
     title: 'Are you sure?',
     question: 'Do you really want to delete this item?',
   })

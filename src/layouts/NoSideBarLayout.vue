@@ -24,7 +24,7 @@ import TopBar from '@/components/layout/TopBar.vue'
                 <slot />
             </SplitterPanel>
         </Splitter> -->
-    <ModalConfirm />
+    <confirmDialog />
   </div>
 </template>
 <style lang="scss" scoped>

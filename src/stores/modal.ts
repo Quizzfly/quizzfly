@@ -9,7 +9,7 @@ interface IQuestion {
   onlyConfirm?: boolean
 }
 
-export const useModalConfirm = defineStore({
+export const useConfirmDialog = defineStore({
   id: 'modal-confirm',
   state: () => ({
     confirmationResolver: null as any,

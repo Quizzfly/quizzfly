@@ -12,31 +12,31 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 
-import { useModalConfirm } from '@/stores/modal'
+import { useConfirmDialog } from '@/stores/modal'
 
-const modalConfirm = useModalConfirm()
+const confirmDialog = useConfirmDialog()
 const isShow = ref(true)
 
 watchEffect(() => {
-  isShow.value = modalConfirm.getQuestion !== null
+  isShow.value = confirmDialog.getQuestion !== null
 })
 </script>
 <template>
   <AlertDialog v-model:open="isShow">
     <AlertDialogContent>
       <AlertDialogHeader>
-        <AlertDialogTitle> {{ modalConfirm.getQuestion?.title }}</AlertDialogTitle>
+        <AlertDialogTitle> {{ confirmDialog.getQuestion?.title }}</AlertDialogTitle>
         <AlertDialogDescription>
-          {{ modalConfirm.getQuestion?.question }}
+          {{ confirmDialog.getQuestion?.question }}
         </AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>
         <Button
           variant="secondary"
-          @click="modalConfirm.confirm(false)"
+          @click="confirmDialog.confirm(false)"
           >Cancel</Button
         >
-        <Button @click="modalConfirm.confirm(true)">Confirm</Button>
+        <Button @click="confirmDialog.confirm(true)">Confirm</Button>
       </AlertDialogFooter>
     </AlertDialogContent>
   </AlertDialog>

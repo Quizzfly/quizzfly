@@ -41,7 +41,7 @@ const initApp = async () => {
       }, // => Global default options * see all props
     },
   )
-  app.component('ModalConfirm', ConfirmModal)
+  app.component('confirmDialog', ConfirmModal)
   app.component('DefaultLayout', DefaultLayout)
   app.component('GuestLayout', GuestLayout)
   app.component('NoSideBarLayout', NoSideBarLayout)

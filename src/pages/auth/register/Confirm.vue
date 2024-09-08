@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { confirmEmailApi } from '@/services/auth'
 import { useLoadingStore } from '@/stores/loading'
-import { useModalConfirm } from '@/stores/modal'
+import { useConfirmDialog } from '@/stores/modal'
 
 const loadingStore = useLoadingStore()
 
-const modalConfirm = useModalConfirm()
+const confirmDialog = useConfirmDialog()
 
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
@@ -16,7 +16,7 @@ const route = useRoute()
 const confirmEmail = async (token: string) => {
   try {
     await confirmEmailApi(token)
-    modalConfirm.setQuestion({
+    confirmDialog.setQuestion({
       title: 'Success',
       question: t('question.confirm_account_success'),
       onlyConfirm: true,
@@ -25,7 +25,7 @@ const confirmEmail = async (token: string) => {
       },
     })
   } catch (error) {
-    modalConfirm.setQuestion({
+    confirmDialog.setQuestion({
       title: 'Failed',
       question: t('question.confirm_account_failed'),
       onlyConfirm: true,
