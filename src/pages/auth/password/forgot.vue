@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { forgotPasswordApi } from "@/services/auth";
-import { notify } from "@/utils/toast";
 
 // import Vue from 'vue';
 // import { validEmail } from '~/modules/validation/ValidAuth.js';

@@ -6,7 +6,6 @@ import Button from "@/components/base/Button.vue";
 import { useForm } from "vee-validate";
 import * as yup from "yup";
 import { loginApi, registerApi } from "@/services/auth";
-import { notify } from "@/utils/toast";
 import { apiExceptionHandler } from "@/utils/exceptionHandler";
 
 const { errors, handleSubmit, defineField } = useForm({

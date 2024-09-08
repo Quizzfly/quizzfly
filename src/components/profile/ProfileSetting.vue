@@ -6,7 +6,6 @@ import ErrorMessage from "@/components/base/ErrorMessage.vue";
 import { useForm } from "vee-validate";
 import * as yup from "yup";
 import { updateProfileApi } from "@/services/auth";
-import { notify } from "@/utils/toast";
 import { apiExceptionHandler } from "@/utils/exceptionHandler";
 
 const authStore = useAuthStore();

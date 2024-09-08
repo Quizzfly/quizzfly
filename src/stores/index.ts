@@ -1,6 +1,5 @@
 import { useAuthStore } from "./auth";
 import { useSocketStore } from "./socket";
-import { notify } from "@/utils/toast";
 
 export const initAuthStore = async () => {
     const authStore = useAuthStore();

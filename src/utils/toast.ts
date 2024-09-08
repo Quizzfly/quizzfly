@@ -1,11 +1,32 @@
-import { toast, type ToastOptions } from "vue3-toastify";
-// 'info' | 'success' | 'error' | 'warning' | 'loading' | 'default'
+// toastUtils.ts
+import { h } from 'vue'
+import { ToastAction } from '@/components/ui/toast'
+import { useToast } from '@/components/ui/toast/use-toast'
 
-export const notify = {
-    error: (message: string, data?: ToastOptions) => toast(message, { ...data, type: "error" }),
-    success: (message: string, data?: ToastOptions) => toast(message, { ...data, type: "success" }),
-    info: (message: string, data?: ToastOptions) => toast(message, { ...data, type: "info" }),
-    warning: (message: string, data?: ToastOptions) => toast(message, { ...data, type: "warning" }),
-    loading: (message: string, data?: ToastOptions) => toast(message, { ...data, type: "loading" }),
-    default: (message: string, data?: ToastOptions) => toast(message, { ...data, type: "default" }),
-};
+const { toast } = useToast()
+
+export function showToast({
+  title = 'Notification',
+  description = '',
+  variant = 'default' as 'default' | 'destructive',
+  actionText = '',
+  onActionClick = () => {},
+}) {
+  toast({
+    title,
+    description,
+    variant: variant,
+    action: actionText
+      ? h(
+          ToastAction,
+          {
+            altText: actionText,
+            onClick: onActionClick,
+          },
+          {
+            default: () => actionText,
+          },
+        )
+      : undefined,
+  })
+}

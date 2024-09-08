@@ -6,7 +6,6 @@ import { Input } from '@/components/ui/input'
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
 import { loginApi } from '@/services/auth'
-import { notify } from '@/utils/toast'
 import { apiExceptionHandler } from '@/utils/exceptionHandler'
 
 const { errors, handleSubmit, defineField } = useForm({
@@ -48,7 +47,6 @@ const onSubmit = handleSubmit(async (values) => {
         <p><b>Password</b>: 123456Aa</p>
         <!-- <h2 class="mt-1 text-[#667085]">Hello, welcome back to your account</h2> -->
         <div class="mt-6">
-          <Input type="email" placeholder="Email" />
           <InputText
             v-model="email"
             placeholder="Enter email..."

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useAuthStore } from "@/stores";
 import { apiExceptionHandler } from "@/utils/exceptionHandler";
-import { notify } from "@/utils/toast";
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 import Button from "primevue/button";
