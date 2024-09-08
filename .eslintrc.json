@@ -1,0 +1,33 @@
+{
+  "root": true,
+  "globals": {
+    "defineProps": "readonly"
+  },
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": [
+    "plugin:vue/vue3-recommended",
+    "eslint:recommended",
+    "plugin:prettier/recommended",
+    "@vue/typescript/recommended",
+    "prettier"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2021
+  },
+  "plugins": [],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "off",
+    "vue/multi-word-component-names": 0,
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ]
+    // "vue/no-multiple-template-root": 0,
+  }
+}
