@@ -1,3 +1,4 @@
+<!-- eslint-disable @typescript-eslint/no-unused-vars -->
 <script setup lang="ts">
 import { type HTMLAttributes, computed } from 'vue'
 import { ToastTitle, type ToastTitleProps } from 'radix-vue'
@@ -13,7 +14,10 @@ const delegatedProps = computed(() => {
 </script>
 
 <template>
-  <ToastTitle v-bind="delegatedProps" :class="cn('text-sm font-semibold [&+div]:text-xs', props.class)">
+  <ToastTitle
+    v-bind="delegatedProps"
+    :class="cn('text-sm font-semibold [&+div]:text-xs', props.class)"
+  >
     <slot />
   </ToastTitle>
 </template>

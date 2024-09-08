@@ -1,3 +1,4 @@
+<!-- eslint-disable @typescript-eslint/no-unused-vars -->
 <script setup lang="ts">
 import { computed } from 'vue'
 import { ToastRoot, type ToastRootEmits, useForwardPropsEmits } from 'radix-vue'

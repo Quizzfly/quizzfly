@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Toaster from '@/components/ui/toast/Toaster.vue'
 import { useLoadingStore } from './stores/loading'
-import { showToast } from './utils/toast';
+import { showToast } from './utils/toast'
 const route = useRoute()
 
 const layout = computed(() => {

@@ -1,6 +1,6 @@
 /* THEME OPTIONS */
-@import "./themes/default.css";
-@import "./themes/green.css";
+@import './themes/default.css';
+@import './themes/green.css';
 
 body {
   font-size: 14px;

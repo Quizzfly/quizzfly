@@ -1,9 +1,8 @@
-html[data-theme="theme1"] {
-    --color-primary: #06594D;
-    --color-primary-1: #097B66;
-    --color-primary-sidebar-hover: #11977E;
-    --color-buttons: #89da59;
-    --color-typography: #ff320e;
-    --color-border-primary: #D0D5DD;
+html[data-theme='theme1'] {
+  --color-primary: #06594d;
+  --color-primary-1: #097b66;
+  --color-primary-sidebar-hover: #11977e;
+  --color-buttons: #89da59;
+  --color-typography: #ff320e;
+  --color-border-primary: #d0d5dd;
 }
-    

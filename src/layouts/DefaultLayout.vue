@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import SideBar from "@/components/layout/SideBar.vue";
-import TopBar from "@/components/layout/TopBar.vue";
+import SideBar from '@/components/layout/SideBar.vue'
+import TopBar from '@/components/layout/TopBar.vue'
 </script>
 <template>
-    <div class="container-div pt-[54px]">
-        <TopBar />
-        <div class="w-full flex">
-            <SideBar />
-            <div class="flex-1 relative overflow-hidden">
-                <slot />
-            </div>
-        </div>
-        <!-- <Splitter class="mb-8 w-full border-0 h-full">
+  <div class="container-div pt-[54px]">
+    <TopBar />
+    <div class="w-full flex">
+      <SideBar />
+      <div class="flex-1 relative overflow-hidden">
+        <slot />
+      </div>
+    </div>
+    <!-- <Splitter class="mb-8 w-full border-0 h-full">
             <SplitterPanel
                 :size="25"
                 class="flex items-center justify-center"
@@ -26,20 +26,20 @@ import TopBar from "@/components/layout/TopBar.vue";
                 <slot />
             </SplitterPanel>
         </Splitter> -->
-        <ModalConfirm />
-    </div>
+    <ModalConfirm />
+  </div>
 </template>
 <style lang="scss" scoped>
 .container-div {
-    display: flex;
-    height: 100vh;
-    min-height: 100vh;
-    width: 100%;
+  display: flex;
+  height: 100vh;
+  min-height: 100vh;
+  width: 100%;
 
-    .wrapper {
-        height: 100%;
-        overflow-y: auto;
-        width: 100%;
-    }
+  .wrapper {
+    height: 100%;
+    overflow-y: auto;
+    width: 100%;
+  }
 }
 </style>

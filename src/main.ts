@@ -9,7 +9,7 @@ import { Icon } from '@iconify/vue'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import GuestLayout from '@/layouts/GuestLayout.vue'
 import NoSideBarLayout from '@/layouts/NoSideBarLayout.vue'
-import { initAuthStore, initMasterStore } from './stores'
+// import { initAuthStore, initMasterStore } from './stores'
 const app = createApp(App)
 import ConfirmModal from '@/components/base/ConfirmModal.vue'
 import { plugin as VueTippy } from 'vue-tippy'

@@ -1,9 +1,9 @@
 :root {
-    --color-primary: #3E4784;
-    --color-primary-1: #4E5BA6;
-    --color-text-primary-active: #293056;
-    --color-primary-sidebar-hover: #717BBC;
-    --color-buttons: #fbbc05;
-    --color-typography: #ea4335;
-    --color-border-primary: #D0D5DD;
+  --color-primary: #3e4784;
+  --color-primary-1: #4e5ba6;
+  --color-text-primary-active: #293056;
+  --color-primary-sidebar-hover: #717bbc;
+  --color-buttons: #fbbc05;
+  --color-typography: #ea4335;
+  --color-border-primary: #d0d5dd;
 }

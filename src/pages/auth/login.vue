@@ -2,7 +2,6 @@
 import InputText from '@/components/base/InputText.vue'
 import ErrorMessage from '@/components/base/ErrorMessage.vue'
 import Button from '@/components/base/Button.vue'
-import { Input } from '@/components/ui/input'
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
 import { loginApi } from '@/services/auth'
