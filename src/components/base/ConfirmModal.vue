@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import Button from "@/components/common/ui-kit/Button.vue";
 import { useModalConfirm } from "@/stores/modal";
 const modalConfirm = useModalConfirm();
 
 const close = () => {
     modalConfirm.clearQuestion();
 };
+
 const confirm = () => {
     if (typeof modalConfirm.actionConfirm === "function") {
         modalConfirm.actionConfirm(modalConfirm.data);
@@ -109,10 +109,8 @@ const cancel = () => {
             font-size: 20px;
             border-radius: 50%;
             cursor: pointer;
-            background-color: $color-gray-50;
 
             &:hover {
-                background-color: $color-gray-100;
             }
         }
         &--title {
