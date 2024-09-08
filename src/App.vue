@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Toaster from '@/components/ui/toast/Toaster.vue'
-import ConfirmModal from './components/base/ConfirmModal.vue'
+import ConfirmModal from './components/base/ConfirmDialog.vue'
 import { useLoadingStore } from './stores/loading'
 import { showToast } from './utils/toast'
 import { useConfirmDialog } from './stores/modal'

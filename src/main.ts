@@ -11,7 +11,7 @@ import GuestLayout from '@/layouts/GuestLayout.vue'
 import NoSideBarLayout from '@/layouts/NoSideBarLayout.vue'
 // import { initAuthStore, initMasterStore } from './stores'
 const app = createApp(App)
-import ConfirmModal from '@/components/base/ConfirmModal.vue'
+import ConfirmModal from '@/components/base/ConfirmDialog.vue'
 import { plugin as VueTippy } from 'vue-tippy'
 import { MotionPlugin } from '@vueuse/motion'
 import TouchOutSide from '@/plugins/directives/VueTouchOutside'
