@@ -1,24 +1,36 @@
 import { createWebHistory, createRouter, type RouteRecordRaw } from 'vue-router'
-import { authRoute, homeRoute } from './modules'
+import { authRoute, dashboardRoute, profileRoute, quizRoute } from './modules'
 import { authGuard } from './auth-guard'
+const { progress } = useIndicator()
 
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    name: 'home',
     // beforeEnter: [authGuard],
     component: () => import('@/pages/index.vue'),
-    children: homeRoute,
+    children: dashboardRoute,
   },
   {
     path: '/auth',
-    name: 'auth',
     meta: {
       layout: 'GuestLayout',
       public: true,
     },
     beforeEnter: [authGuard],
     children: authRoute,
+  },
+  {
+    path: '/profiles',
+    // beforeEnter: [authGuard],
+    children: profileRoute,
+  },
+  {
+    path: '/quiz',
+    // beforeEnter: [authGuard],
+    meta: {
+      layout: 'QuizCreateLayout',
+    },
+    children: quizRoute,
   },
   {
     path: '/test',
@@ -29,6 +41,16 @@ const routes: RouteRecordRaw[] = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+})
+
+router.beforeEach(() => {
+  progress.value = 0.3
+})
+
+router.afterEach(() => {
+  setTimeout(() => {
+    progress.value = 1
+  }, 100)
 })
 
 export default router

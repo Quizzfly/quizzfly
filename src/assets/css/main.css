@@ -1,5 +1,5 @@
 /* THEME OPTIONS */
-
+@import './nprogress.css';
 body {
   font-size: 14px;
   min-height: 100vh;

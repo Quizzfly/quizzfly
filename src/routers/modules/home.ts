@@ -1,8 +1,8 @@
 import type { RouteRecordRaw } from 'vue-router'
 
-export const homeRoute: RouteRecordRaw[] = [
+export const dashboardRoute: RouteRecordRaw[] = [
   {
-    path: '/',
+    path: '',
     name: 'dashboard',
     component: () => import('@/pages/index.vue'),
   },

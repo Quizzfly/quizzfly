@@ -13,7 +13,7 @@ export default ({ mode }: { mode: string }) => {
       vue(),
       AutoImport({
         imports: ['vue', 'vue-router', 'pinia'],
-        dirs: ['./src/api'],
+        dirs: ['./src/api', './src/composables'],
       }),
       svgLoader(),
     ],

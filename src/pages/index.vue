@@ -1,3 +1,6 @@
+<script setup lang="ts">
+import Button from '@/components/ui/button/Button.vue'
+</script>
 <template>
   <div class="p-8">
     <!-- header -->
@@ -7,6 +10,12 @@
         <div>Here's what's going on today.</div>
       </div>
       <div class="flex">
+        <RouterLink to="/quiz/create">
+          <Button>
+            <span class="i-material-symbols-light-add text-2xl"></span>
+            Create Quiz
+          </Button>
+        </RouterLink>
         <div
           class="w-10 h-10 hover:bg-slate-200 flex justify-center items-center rounded-full cursor-pointer"
         >

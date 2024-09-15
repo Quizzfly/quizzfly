@@ -9,9 +9,9 @@ import { Icon } from '@iconify/vue'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import GuestLayout from '@/layouts/GuestLayout.vue'
 import NoSideBarLayout from '@/layouts/NoSideBarLayout.vue'
+import QuizCreateLayout from './layouts/QuizCreateLayout.vue'
 // import { initAuthStore, initMasterStore } from './stores'
 const app = createApp(App)
-import ConfirmModal from '@/components/base/ConfirmDialog.vue'
 import { plugin as VueTippy } from 'vue-tippy'
 import { MotionPlugin } from '@vueuse/motion'
 import TouchOutSide from '@/plugins/directives/VueTouchOutside'
@@ -41,10 +41,10 @@ const initApp = async () => {
       }, // => Global default options * see all props
     },
   )
-  app.component('confirmDialog', ConfirmModal)
   app.component('DefaultLayout', DefaultLayout)
   app.component('GuestLayout', GuestLayout)
   app.component('NoSideBarLayout', NoSideBarLayout)
+  app.component('QuizCreateLayout', QuizCreateLayout)
   app.use(createPinia())
   // await initAuthStore();
   // await initWebSocketStore();
