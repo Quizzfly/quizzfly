@@ -3,11 +3,11 @@ import SideBar from '@/components/layout/SideBar.vue'
 import TopBar from '@/components/layout/TopBar.vue'
 </script>
 <template>
-  <div class="container-div pt-[54px]">
-    <TopBar />
+  <div class="container-div">
+    <!-- <TopBar /> -->
     <div class="w-full flex">
       <SideBar />
-      <div class="flex-1 relative overflow-hidden">
+      <div class="flex-1 relative overflow-y-auto">
         <slot />
       </div>
     </div>

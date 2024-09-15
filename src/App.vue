@@ -33,7 +33,7 @@ const openConfirm = async () => {
 <template>
   <ConfirmModal />
 
-  <button @click="openConfirm">Open Modal</button>
+  <!-- <button @click="openConfirm">Open Modal</button> -->
   <Toaster />
   <div
     v-if="loadingStore.getLoading"

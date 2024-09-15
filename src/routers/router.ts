@@ -6,7 +6,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'home',
-    beforeEnter: [authGuard],
+    // beforeEnter: [authGuard],
     component: () => import('@/pages/index.vue'),
     children: homeRoute,
   },
