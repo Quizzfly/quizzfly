@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import InputText from '@/components/base/InputText.vue'
+import { Input } from '@/components/ui/input'
 import ErrorMessage from '@/components/base/ErrorMessage.vue'
-import Button from '@/components/base/Button.vue'
+import { Button } from '@/components/ui/button'
 
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
@@ -37,62 +37,89 @@ const onSubmit = handleSubmit(async (values) => {
 })
 </script>
 <template>
-  <div class="h-full flex">
+  <div class="h-full flex p-8">
     <div class="flex-1 flex justify-center items-center">
       <form
-        class="w-[360px] form-shadow p-6 rounded-xl"
+        class="form-shadow p-6 rounded-xl"
         @submit="onSubmit"
       >
-        <img
-          src=""
-          alt=""
-        />
-        <h1 class="text-[344054] text-lg font-semibold mt-3">Đăng ký</h1>
-        <h2 class="mt-1 text-[#667085]">Hello, welcome back to your account</h2>
-        <div class="mt-6">
-          <InputText
-            v-model="email"
-            placeholder="Enter email..."
-            v-bind="emailAttrs"
-            :invalid="errors.email"
-            type="email"
-          />
-          <ErrorMessage :error="errors.email" />
-          <InputText
-            v-model="name"
-            placeholder="Enter name..."
-            v-bind="nameAttrs"
-            :invalid="errors.name"
-            type="text"
-          />
-          <ErrorMessage :error="errors.name" />
-          <InputText
-            v-model="password"
-            placeholder="Enter password..."
-            v-bind="passwordAttrs"
-            :invalid="errors.password"
-            type="password"
-          />
-          <ErrorMessage :error="errors.password" />
+        <div class="flex items-center gap-0.5 mb-4">
+          <h1 class="text-[344054] text-lg font-semibold">Register account</h1>
         </div>
-        <div class="text-end">
-          <div
-            class="text-[#0921D9] text-xs font-semibold"
-            :to="{ name: 'password-forgot' }"
-          >
-            Quên mật khẩu
+        <div>
+          <h2 class="mt-1 text-[#667085]">Today is a new day. It's your day. You shape it.</h2>
+          <h2 class="mt-1 text-[#667085]">Sign in to start managing your projects</h2>
+        </div>
+        <div class="mt-6">
+          <div class="form-data">
+            <Label for="email">Name</Label>
+            <Input
+              v-model="name"
+              placeholder="Enter name..."
+              v-bind="nameAttrs"
+              :invalid="errors.name"
+              type="text"
+              class="h-10 mt-1"
+            />
+            <ErrorMessage :error="errors.name" />
+          </div>
+          <div class="form-data">
+            <Label for="email">Email</Label>
+            <Input
+              v-model="email"
+              placeholder="Enter email..."
+              v-bind="emailAttrs"
+              :invalid="errors.email"
+              type="email"
+              class="h-10 mt-1"
+            />
+            <ErrorMessage :error="errors.email" />
+          </div>
+          <div class="form-data">
+            <Label for="email">Password</Label>
+            <Input
+              v-model="password"
+              placeholder="Enter password..."
+              v-bind="passwordAttrs"
+              :invalid="errors.password"
+              type="password"
+              class="h-10 mt-1"
+            />
+            <ErrorMessage :error="errors.password" />
           </div>
         </div>
+        <Button class="mt-6 w-full h-10"> Sign Up </Button>
+        <div class="flex items-center gap-2 w-full mt-8">
+          <span class="h-px bg-slate-200 w-full"></span>
+          <p class="text-base">Or</p>
+          <span class="h-px bg-slate-200 w-full"></span>
+        </div>
         <Button
-          class="mt-6"
-          label="Đăng ký"
-        ></Button>
+          class="h-10 mt-8 w-full flex items-center gap-4 bg-zinc-200"
+          variant="secondary"
+        >
+          <img
+            class="w-5"
+            src="@/assets/img/google-logo.png"
+            alt=""
+          />
+          Sign in with Google
+        </Button>
+        <div class="flex justify-center mt-6">
+          <p>If you have an account?</p>
+          <RouterLink
+            class="ml-[6px] text-[#0921D9] font-semibold"
+            to="/login"
+          >
+            Sign in
+          </RouterLink>
+        </div>
       </form>
     </div>
     <div class="flex-1 relative max-md:hidden">
       <img
-        class="absolute top-0 left-0 w-full h-full object-cover rounded-tl-3xl rounded-bl-3xl"
-        src="/assets/images/bg.avif"
+        class="absolute top-0 left-0 w-full h-full object-cover rounded-3xl"
+        src="@/assets/img/auth-bg.png"
         alt=""
       />
     </div>

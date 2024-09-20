@@ -39,7 +39,7 @@ export default ({ mode }: { mode: string }) => {
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: `@import "@/assets/scss/mixins.scss";`,
+          additionalData: `@import "@/assets/scss/main.scss";`,
         },
       },
     },
