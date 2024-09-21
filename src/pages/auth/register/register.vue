@@ -40,7 +40,7 @@ const onSubmit = handleSubmit(async (values) => {
   <div class="h-full flex p-8">
     <div class="flex-1 flex justify-center items-center">
       <form
-        class="form-shadow p-6 rounded-xl"
+        class="form-shadow p-6 rounded-xl max-md:w-full max-sm:p-0"
         @submit="onSubmit"
       >
         <div class="flex items-center gap-0.5 mb-4">
@@ -130,5 +130,11 @@ const onSubmit = handleSubmit(async (values) => {
   box-shadow:
     0px 1px 3px 0px rgba(16, 24, 40, 0.1),
     0px 1px 2px 0px rgba(16, 24, 40, 0.06);
+}
+
+@media not all and (min-width: 640px) {
+  .form-shadow {
+    box-shadow: none;
+  }
 }
 </style>
