@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { forgotPasswordApi } from '@/services/auth'
-
+import ErrorMessage from '@/components/base/ErrorMessage.vue'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { useForm } from 'vee-validate'
+import * as yup from 'yup'
 // import Vue from 'vue';
 // import { validEmail } from '~/modules/validation/ValidAuth.js';
 // import { mapActions } from 'vuex';
@@ -56,11 +60,9 @@ import { forgotPasswordApi } from '@/services/auth'
 //         },
 //     },
 // });
-const email = ref('')
-const checkEmail = () => {}
 const errorEmail = ref()
 
-async function handleForgot() {
+const handleForgot = async () => {
   try {
     if (!email.value) {
       errorEmail.value = 'Email must not be blank'
@@ -71,149 +73,64 @@ async function handleForgot() {
     notify.error(((error as any).data?.error?.message as string) || 'Send forgot password error')
   }
 }
+
+const { errors, defineField } = useForm({
+  validationSchema: yup.object({
+    email: yup.string().email().required('Email is required'),
+  }),
+})
+
+const [email, emailAttrs] = defineField('email')
 </script>
 <template>
-  <div>
-    <!-- <question-popup
-            v-if="question != null"
-            :question="question"
-            @close="$router.push('/login')"
-            @accept="question.action()"
-        /> -->
-    <div class="forgot-header"></div>
-    <div class="forgot-container">
-      <div class="forgot-container-head">{{ $t('auth.forgot_pass') }}</div>
-      <div class="forgot-container-intro">{{ $t('auth.we_reset_pass') }}</div>
-      <br />
-      <div class="forgot-input-container">
-        <div class="forgot-input-label">{{ $t('auth.email') }} :</div>
-        <input
-          v-model="email"
-          type="text"
-          class="forgot-input"
-          :placeholder="$t('placeholder.enter_email')"
-          @input="checkEmail"
-        />
-        <div class="login-validation">{{ errorEmail }}</div>
-        <div
-          class="fotgot-btn"
-          @click="handleForgot"
-        >
-          {{ $t('common.send') }}
+  <div class="h-full flex p-8">
+    <div class="flex-1 flex justify-center items-center">
+      <form
+        class="p-6 rounded-xl"
+        @submit="handleForgot"
+      >
+        <div class="flex items-center gap-0.5 mb-4">
+          <h1 class="text-[344054] text-lg font-semibold mt-3">Forgot password</h1>
         </div>
-      </div>
+        <div>
+          <h2 class="mt-1 text-[#667085]">Enter your email to reset password</h2>
+        </div>
+        <div class="mt-6">
+          <div class="form-data">
+            <Label for="email">Email</Label>
+            <Input
+              id="email"
+              v-model="email"
+              placeholder="Enter email..."
+              v-bind="emailAttrs"
+              :invalid="errors.email"
+              type="email"
+              class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
+            />
+            <ErrorMessage
+              class="text-xs mt-0.5"
+              :error="errors.email"
+            />
+          </div>
+        </div>
+        <Button class="mt-4 w-full h-10 bg-primary"> Submit </Button>
+        <div class="text-end mt-6">
+          <RouterLink
+            class="text-[#0921D9] text-xs font-semibold"
+            to="/login"
+          >
+            Come back
+          </RouterLink>
+        </div>
+      </form>
     </div>
-    <langAuth :on-top="true" />
+    <div class="flex-1 relative max-md:hidden">
+      <img
+        class="absolute top-0 left-0 w-full h-full object-cover rounded-3xl"
+        src="@/assets/img/auth-bg.png"
+        alt=""
+      />
+    </div>
   </div>
 </template>
-<style scoped>
-.forgot-header {
-  width: 100%;
-  height: 56px;
-  background: #334d6e;
-  display: flex;
-  align-items: center;
-}
-
-.forgot-container {
-  text-align: center;
-}
-
-.forgot-container-head {
-  font-weight: bold;
-  font-size: 36px;
-  line-height: 42px;
-  text-align: center;
-
-  /* Dark green */
-  color: #00693b;
-  margin-top: 74px;
-}
-
-.forgot-container-intro {
-  font-weight: normal;
-  font-size: 16px;
-  line-height: 24px;
-
-  /* or 150% */
-  text-align: center;
-  letter-spacing: 0.02em;
-
-  /* Body text 2 */
-  color: #525252;
-  margin-top: 24px;
-  max-width: 556px;
-  clear: both;
-  display: inline-block;
-}
-
-.forgot-input-label {
-  font-weight: normal;
-  font-size: 15px;
-  line-height: 24px;
-
-  /* identical to box height, or 160% */
-  letter-spacing: 0.02em;
-
-  /* Title text */
-  color: #363445;
-}
-
-.forgot-input-container {
-  width: 556px;
-  height: 200px;
-  clear: both;
-  display: inline-block;
-  text-align: left;
-  margin-top: 24px;
-}
-
-.forgot-input {
-  width: 566px;
-  height: 48px;
-  background: #dde1cd;
-  border-radius: 4px;
-  border: none;
-  font-weight: normal;
-  font-size: 16px;
-  line-height: 24px;
-  letter-spacing: 0.02em;
-  color: #525252;
-  padding: 0px 12px;
-}
-
-.login-validation {
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 22px;
-  display: flex;
-  align-items: center;
-  letter-spacing: 0.02em;
-  color: #f46414;
-  height: 24px;
-}
-
-.fotgot-btn {
-  width: 566px;
-  height: 48px;
-  background: #00693b;
-  border-radius: 4px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 24px;
-  text-align: center;
-  letter-spacing: 0.02em;
-  color: #ffffff;
-}
-
-.fotgot-btn:hover {
-  cursor: pointer;
-}
-
-.logoImg:hover {
-  cursor: pointer;
-}
-</style>
+<style scoped></style>
