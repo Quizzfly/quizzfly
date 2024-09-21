@@ -40,7 +40,7 @@ const onSubmit = handleSubmit(async (values) => {
   <div class="h-full flex p-8">
     <div class="flex-1 flex justify-center items-center">
       <form
-        class="form-shadow p-6 rounded-xl max-md:w-full max-sm:p-0"
+        class="p-6 rounded-xl max-md:w-full max-sm:p-0"
         @submit="onSubmit"
       >
         <div class="flex items-center gap-0.5 mb-4">
@@ -59,7 +59,7 @@ const onSubmit = handleSubmit(async (values) => {
               v-bind="nameAttrs"
               :invalid="errors.name"
               type="text"
-              class="h-10 mt-1"
+              class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
             />
             <ErrorMessage :error="errors.name" />
           </div>
@@ -71,7 +71,7 @@ const onSubmit = handleSubmit(async (values) => {
               v-bind="emailAttrs"
               :invalid="errors.email"
               type="email"
-              class="h-10 mt-1"
+              class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
             />
             <ErrorMessage :error="errors.email" />
           </div>
@@ -83,7 +83,7 @@ const onSubmit = handleSubmit(async (values) => {
               v-bind="passwordAttrs"
               :invalid="errors.password"
               type="password"
-              class="h-10 mt-1"
+              class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
             />
             <ErrorMessage :error="errors.password" />
           </div>
@@ -95,7 +95,7 @@ const onSubmit = handleSubmit(async (values) => {
           <span class="h-px bg-slate-200 w-full"></span>
         </div>
         <Button
-          class="h-10 mt-8 w-full flex items-center gap-4 bg-zinc-200"
+          class="h-10 mt-8 w-full flex items-center gap-4 bg-slate-100"
           variant="secondary"
         >
           <img
@@ -108,7 +108,7 @@ const onSubmit = handleSubmit(async (values) => {
         <div class="flex justify-center mt-6">
           <p>If you have an account?</p>
           <RouterLink
-            class="ml-[6px] text-[#0921D9] font-semibold"
+            class="ml-[6px] text-[#0921D9] font-normal"
             to="/login"
           >
             Sign in
@@ -125,16 +125,4 @@ const onSubmit = handleSubmit(async (values) => {
     </div>
   </div>
 </template>
-<style scoped>
-.form-shadow {
-  box-shadow:
-    0px 1px 3px 0px rgba(16, 24, 40, 0.1),
-    0px 1px 2px 0px rgba(16, 24, 40, 0.06);
-}
-
-@media not all and (min-width: 640px) {
-  .form-shadow {
-    box-shadow: none;
-  }
-}
-</style>
+<style scoped></style>

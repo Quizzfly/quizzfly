@@ -86,7 +86,7 @@ const [email, emailAttrs] = defineField('email')
   <div class="h-full flex p-8">
     <div class="flex-1 flex justify-center items-center">
       <form
-        class="form-shadow p-6 rounded-xl"
+        class="p-6 rounded-xl"
         @submit="handleForgot"
       >
         <div class="flex items-center gap-0.5 mb-4">
@@ -105,7 +105,7 @@ const [email, emailAttrs] = defineField('email')
               v-bind="emailAttrs"
               :invalid="errors.email"
               type="email"
-              class="h-10 mt-1"
+              class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
             />
             <ErrorMessage
               class="text-xs mt-0.5"
@@ -113,7 +113,7 @@ const [email, emailAttrs] = defineField('email')
             />
           </div>
         </div>
-        <Button class="mt-4 w-full h-10"> Submit </Button>
+        <Button class="mt-4 w-full h-10 bg-primary"> Submit </Button>
         <div class="text-end mt-6">
           <RouterLink
             class="text-[#0921D9] text-xs font-semibold"
@@ -133,10 +133,4 @@ const [email, emailAttrs] = defineField('email')
     </div>
   </div>
 </template>
-<style scoped>
-.form-shadow {
-  box-shadow:
-    0px 1px 3px 0px rgba(16, 24, 40, 0.1),
-    0px 1px 2px 0px rgba(16, 24, 40, 0.06);
-}
-</style>
+<style scoped></style>
