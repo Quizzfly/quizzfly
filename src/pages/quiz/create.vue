@@ -14,12 +14,21 @@ const slides = ref<Partial<Slide>[]>([
 ])
 
 const currentSlide = ref<Partial<Slide>>(slides.value[0])
+
+const handleAddSlide = () => {
+  slides.value.push({
+    id: slides.value.length + 1,
+    title: `Slide ${slides.value.length + 1}`,
+    type: 'quiz',
+  })
+}
 </script>
 <template>
   <div class="flex w-full items-stretch p-5 pl-0 gap-4">
     <SlideList
       v-model="currentSlide"
       :slides="slides"
+      @add-slide="handleAddSlide"
     />
     <MainEditor :current-slide="currentSlide" />
   </div>

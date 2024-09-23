@@ -3,6 +3,8 @@ import draggable from 'vuedraggable'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import type { Slide } from '@/types/slide'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { quizOptions } from '@/utils/quiz'
 
 const props = defineProps<{
   slides: Slide[]
@@ -12,8 +14,9 @@ defineEmits<{
   (e: 'addSlide'): void
 }>()
 
-const tests = ref<Slide[]>(props.slides)
 const currentSlide = defineModel<Slide>({ required: true })
+
+const tests = ref<Slide[]>(props.slides)
 
 const dragOptions = ref({
   animation: 200,
@@ -23,25 +26,67 @@ const dragOptions = ref({
 })
 
 const drag = ref(false)
+const isShow = ref(false)
 </script>
 <template>
   <div
     class="md:min-w-[200px] w-[200px] min-h-[100px] max-md:w-full flex flex-col gap-4 overflow-hidden"
   >
     <div class="pl-8">
-      <Button
-        class="w-full rounded-full"
-        @click="$emit('addSlide')"
+      <Popover
+        :open="isShow"
+        @update:open="isShow = $event"
       >
-        <span class="i-material-symbols-light-add text-2xl"></span>
-        Add quiz
-      </Button>
+        <PopoverTrigger>
+          <Button class="rounded-full w-[150px]">
+            <span class="i-material-symbols-light-add text-2xl"></span>
+            Add quiz
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent>
+          <div class="w-[400px] py-6 px-4">
+            <div class="flex items-center justify-between px-4">
+              <span class="text-sm">Quiz type</span>
+              <span
+                class="i-material-symbols-light-close text-xl cursor-pointer"
+                @click="isShow = false"
+              ></span>
+            </div>
+
+            <!-- quiz options -->
+            <div class="grid grid-cols-2 gap-1 mt-5">
+              <div
+                v-for="item in quizOptions"
+                :key="item.type"
+                class="flex items-center cursor-pointer hover:bg-slate-100 h-12 px-3 rounded-xl"
+              >
+                <img
+                  :src="item.icon"
+                  :alt="item.name"
+                />
+                <span class="text-sm font-medium">{{ item.name }}</span>
+              </div>
+            </div>
+            <p class="text-sm mt-4 px-4">Impressed slide</p>
+            <div class="px-3">
+              <Button
+                variant="secondary"
+                class="w-full mt-5"
+              >
+                Add slide
+              </Button>
+            </div>
+          </div>
+        </PopoverContent>
+      </Popover>
     </div>
+
+    <!-- slides list -->
     <ScrollArea class="flex flex-col flex-auto overflow-y-auto gap-2 pr-2">
       <draggable
         v-model="tests"
         item-key="id"
-        class="flex flex-col gap-2"
+        class="flex flex-col gap-2 pr-2"
         :component-data="{
           tag: 'ul',
           type: 'transition-group',
@@ -74,7 +119,6 @@ const drag = ref(false)
               }"
               @click="currentSlide = element"
             >
-              <!-- tag quiz/slide -->
               <div class="text-[10px] font-medium bg-slate-200 absolute px-2 py-[2px] rounded-sm">
                 {{ element.type }}
               </div>

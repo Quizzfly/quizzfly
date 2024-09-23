@@ -1,0 +1,17 @@
+   <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  role="img"
+                  preserveAspectRatio="xMidYMid meet"
+                  width="32"
+                  height="32"
+                  viewBox="0 0 32 32"
+                >
+                  <path
+                    d="M24.96 16H16V24.96H24.96V16Z"
+                    fill="#FF403D"
+                  ></path>
+                  <path
+                    d="M16 7.04004H7.04004V16H16V7.04004Z"
+                    fill="#FF403D"
+                  ></path>
+                </svg>

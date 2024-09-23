@@ -1,0 +1,30 @@
+      <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  role="img"
+                  preserveAspectRatio="xMidYMid meet"
+                  width="32"
+                  height="32"
+                  viewBox="0 0 32 32"
+                >
+                  <rect
+                    x="18.7202"
+                    y="8"
+                    width="5.44"
+                    height="16"
+                    fill="#6E54BD"
+                  ></rect>
+                  <rect
+                    x="13.28"
+                    y="13.4399"
+                    width="5.44"
+                    height="10.56"
+                    fill="#6E54BD"
+                  ></rect>
+                  <rect
+                    x="7.84009"
+                    y="18.7202"
+                    width="5.44"
+                    height="5.28"
+                    fill="#6E54BD"
+                  ></rect>
+                </svg>
