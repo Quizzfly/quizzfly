@@ -1,3 +1,1 @@
-<template>
-  profile
-</template>
+<template>profile</template>
