@@ -8,7 +8,9 @@ const handleSaveTitle = (value: string) => {
 <template>
   <div class="flex justify-between items-center border-b py-2 px-5 h-[60px]">
     <div class="flex items-center gap-5">
-      <span class="i-solar-arrow-left-linear text-xl"></span>
+      <RouterLink to="/">
+        <span class="i-solar-arrow-left-linear text-xl cursor-pointer"></span>
+      </RouterLink>
       <div>
         <EditableText
           v-slot="{ data }"

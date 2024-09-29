@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import SlideList from '@/components/quizzfly/create/SlideList.vue'
-import MainEditor from '@/components/quizzfly/create/SlideMain.vue'
-import SlideSettings from '@/components/quizzfly/create/slide/SlideSettings.vue'
+import SlideMain from '@/components/quizzfly/create/SlideMain.vue'
+import QuizMain from '@/components/quizzfly/create/QuizMain.vue'
 import type { Slide } from '@/types/slide'
 
 const slides = ref<Partial<Slide>[]>([
@@ -19,6 +19,14 @@ const handleAddSlide = () => {
   slides.value.push({
     id: slides.value.length + 1,
     title: `Slide ${slides.value.length + 1}`,
+    type: 'slide',
+  })
+}
+
+const handleAddQuiz = (type: string) => {
+  slides.value.push({
+    id: slides.value.length + 1,
+    title: `Slide ${slides.value.length + 1}`,
     type: 'quiz',
   })
 }
@@ -29,7 +37,9 @@ const handleAddSlide = () => {
       v-model="currentSlide"
       :slides="slides"
       @add-slide="handleAddSlide"
+      @add-quiz="handleAddQuiz"
     />
-    <MainEditor :current-slide="currentSlide" />
+    <QuizMain v-if="currentSlide.type === 'quiz'" />
+    <SlideMain v-else />
   </div>
 </template>

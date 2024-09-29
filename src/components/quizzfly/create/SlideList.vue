@@ -10,8 +10,9 @@ const props = defineProps<{
   slides: Slide[]
 }>()
 
-defineEmits<{
+const emits = defineEmits<{
   (e: 'addSlide'): void
+  (e: 'addQuiz', type: string): void
 }>()
 
 const currentSlide = defineModel<Slide>({ required: true })
@@ -27,6 +28,16 @@ const dragOptions = ref({
 
 const drag = ref(false)
 const isShow = ref(false)
+
+const handleAddSlide = () => {
+  emits('addSlide')
+  isShow.value = false
+}
+
+const handleAddQuiz = (type: string) => {
+  emits('addQuiz', type)
+  isShow.value = false
+}
 </script>
 <template>
   <div
@@ -59,6 +70,7 @@ const isShow = ref(false)
                 v-for="item in quizOptions"
                 :key="item.type"
                 class="flex items-center cursor-pointer hover:bg-slate-100 h-12 px-3 rounded-xl"
+                @click="handleAddQuiz(item.type)"
               >
                 <img
                   :src="item.icon"
@@ -72,6 +84,7 @@ const isShow = ref(false)
               <Button
                 variant="secondary"
                 class="w-full mt-5"
+                @click="handleAddSlide"
               >
                 Add slide
               </Button>
