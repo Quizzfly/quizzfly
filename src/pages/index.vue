@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button'
         <div class="text-2xl font-medium">Hello, Trinh Huy Nam 👋</div>
         <div>Here's what's going on today.</div>
       </div>
-      <div class="flex">
+      <div class="flex items-center gap-5">
         <RouterLink to="/quiz/create">
           <Button>
             <span class="i-material-symbols-light-add text-2xl"></span>

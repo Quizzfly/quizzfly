@@ -2,22 +2,24 @@
 import { Input } from '@/components/ui/input'
 import EditableText from '@/components/base/EditableText.vue'
 import AnswerSetting from '../quiz/AnswerSetting.vue'
+import type { SlideLayout } from '@/modules/slide/layout'
 
-const title = ref('')
+const props = defineProps<{
+  layout: SlideLayout
+}>()
 
-const handleFocusInputTitle = () => {
-  nextTick(() => {
-    titleInputRef.value?.$el?.focus()
-  })
+interface LayoutItemStyle {
+  [key: string]: {
+    [key: string]: string
+  }
 }
-
-const titleInputRef = ref<InstanceType<typeof Input>>()
+const data = ref<LayoutItemStyle>({})
 </script>
 <template>
   <div class="w-full h-full flex flex-col p-5 overflow-hidden">
     <!-- question -->
     <div class="h-full">
-      <EditableText
+      <!-- <EditableText
         :value="title"
         :click-callback="handleFocusInputTitle"
       >
@@ -37,10 +39,53 @@ const titleInputRef = ref<InstanceType<typeof Input>>()
             {{ title || 'Enter question' }}
           </p>
         </template>
-      </EditableText>
-    </div>
+      </EditableText> -->
+      <div class="flex flex-col gap-1 h-full justify-center items-center">
+        <template
+          v-for="(row, index) in layout.rows"
+          :key="index"
+        >
+          <component
+            :is="row.element"
+            v-if="row.element !== 'group'"
+            v-model="data[row.label]"
+            v-bind="row.props"
+            class="w-full rounded-sm"
+          ></component>
 
-    <!-- answer -->
-    <AnswerSetting />
+          <!-- render columns -->
+          <div
+            v-else
+            class="flex w-full items-center gap-1 justify-between"
+          >
+            <template
+              v-for="(group, groupIndex) in row.columns"
+              :key="groupIndex"
+            >
+              <!-- render each column -->
+              <div class="flex flex-col h-full w-full gap-1 items-center justify-center">
+                <template v-if="group.rows">
+                  <component
+                    :is="groupItem.element"
+                    v-for="(groupItem, groupItemIndex) in group.rows"
+                    :key="groupItemIndex"
+                    v-model="data[groupItem.label]"
+                    v-bind="groupItem.props"
+                    class="w-full rounded-sm"
+                  ></component>
+                </template>
+                <component
+                  :is="group.element"
+                  v-else-if="group.elementType"
+                  v-model="data[group.label]"
+                  v-bind="group.props"
+                  class="w-full rounded-sm"
+                ></component>
+              </div>
+            </template>
+          </div>
+        </template>
+      </div>
+    </div>
   </div>
 </template>
