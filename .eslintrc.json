@@ -29,5 +29,6 @@
       }
     ]
     // "vue/no-multiple-template-root": 0,
-  }
+  },
+  "ignorePatterns": ["src/components/ui/**"]
 }

@@ -4,30 +4,78 @@ import SlideMain from '@/components/quizzfly/create/SlideMain.vue'
 import QuizMain from '@/components/quizzfly/create/QuizMain.vue'
 import type { Slide } from '@/types/slide'
 
-const slides = ref<Partial<Slide>[]>([
-  { id: 1, title: 'Slide 1', type: 'quiz' },
-  { id: 2, title: 'Slide 2', type: 'slide' },
-  { id: 3, title: 'Slide 3', type: 'slide' },
-  { id: 4, title: 'Slide 4', type: 'quiz' },
-  { id: 5, title: 'Slide 5', type: 'quiz' },
-  { id: 6, title: 'Slide 5', type: 'quiz' },
+const slides = ref<Slide[]>([
+  {
+    id: 1,
+    title: 'Slide 1',
+    type: 'quiz',
+    content: 'This is a quiz slide',
+    image: 'https://picsum.photos/200/300',
+    link: 'https://picsum.photos/200/300',
+  },
+  {
+    id: 2,
+    title: 'Slide 2',
+    type: 'slide',
+    content: 'This is a quiz slide',
+    image: 'https://picsum.photos/200/300',
+    link: 'https://picsum.photos/200/300',
+  },
+  {
+    id: 3,
+    title: 'Slide 3',
+    type: 'slide',
+    content: 'This is a quiz slide',
+    image: 'https://picsum.photos/200/300',
+    link: 'https://picsum.photos/200/300',
+  },
+  {
+    id: 4,
+    title: 'Slide 4',
+    type: 'quiz',
+    content: 'This is a quiz slide',
+    image: 'https://picsum.photos/200/300',
+    link: 'https://picsum.photos/200/300',
+  },
+  {
+    id: 5,
+    title: 'Slide 5',
+    type: 'quiz',
+    content: 'This is a quiz slide',
+    image: 'https://picsum.photos/200/300',
+    link: 'https://picsum.photos/200/300',
+  },
+  {
+    id: 6,
+    title: 'Slide 5',
+    type: 'quiz',
+    content: 'This is a quiz slide',
+    image: 'https://picsum.photos/200/300',
+    link: 'https://picsum.photos/200/300',
+  },
 ])
 
-const currentSlide = ref<Partial<Slide>>(slides.value[0])
+const currentSlide = ref<Slide>(slides.value[0])
 
 const handleAddSlide = () => {
   slides.value.push({
     id: slides.value.length + 1,
     title: `Slide ${slides.value.length + 1}`,
     type: 'slide',
+    content: 'This is a quiz slide',
+    image: 'https://picsum.photos/200/300',
+    link: 'https://picsum.photos/200/300',
   })
 }
 
-const handleAddQuiz = (type: string) => {
+const handleAddQuiz = (type: 'quiz' | 'slide') => {
   slides.value.push({
     id: slides.value.length + 1,
     title: `Slide ${slides.value.length + 1}`,
-    type: 'quiz',
+    type: type,
+    content: 'This is a quiz slide',
+    image: 'https://picsum.photos/200/300',
+    link: 'https://picsum.photos/200/300',
   })
 }
 </script>
