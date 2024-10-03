@@ -5,6 +5,8 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
+import { showToast } from '@/utils/toast'
+
 // import Vue from 'vue';
 // import { validEmail } from '~/modules/validation/ValidAuth.js';
 // import { mapActions } from 'vuex';
@@ -61,6 +63,10 @@ import * as yup from 'yup'
 //     },
 // });
 const errorEmail = ref()
+const isForgot = ref(false)
+const isCountdown = ref(false)
+const timeResend = ref(0)
+const secondsResend = ref(0)
 
 const handleForgot = async () => {
   try {
@@ -69,9 +75,53 @@ const handleForgot = async () => {
       return
     }
     await forgotPasswordApi(email.value)
+    showToast({
+      title: 'Success',
+      description: 'Resend email success',
+      variant: 'default',
+    })
+    isForgot.value = true
   } catch (error) {
-    notify.error(((error as any).data?.error?.message as string) || 'Send forgot password error')
+    showToast({
+      title: 'Forgot password failed',
+      description: `${((error as any).data?.error?.message as string) || 'Send forgot password error'}`,
+      variant: 'destructive',
+    })
   }
+}
+
+const handleResentEmail = async (time: number) => {
+  timeResend.value = time
+  isCountdown.value = true
+  startTimer()
+
+  await forgotPasswordApi(email.value)
+  showToast({
+    title: 'Success',
+    description: 'Resend email success',
+    variant: 'default',
+  })
+}
+
+const startTimer = () => {
+  secondsResend.value = checkSecond(secondsResend.value - 1)
+
+  if (secondsResend.value == 59) {
+    timeResend.value = timeResend.value - 1
+  }
+  if (timeResend.value < 0) {
+    isCountdown.value = false
+    clearInterval(interval)
+  }
+
+  setTimeout(startTimer, 1000)
+}
+
+const checkSecond = (sec: number) => {
+  if (sec < 0) {
+    sec = 59
+  }
+  return sec
 }
 
 const { errors, defineField } = useForm({
@@ -85,20 +135,37 @@ const [email, emailAttrs] = defineField('email')
 <template>
   <div class="h-full flex p-8">
     <div class="flex-1 flex justify-center items-center">
-      <form
-        class="p-6 rounded-xl"
-        @submit="handleForgot"
-      >
-        <div class="flex items-center gap-0.5 mb-4">
-          <h1 class="text-[344054] text-lg font-semibold mt-3">Forgot password</h1>
+      <div class="p-6 rounded-xl max-md:w-full max-sm:p-0">
+        <div class="flex items-center gap-4 justify-center">
+          <img
+            class="w-10 h-10 rounded-md object-contain"
+            src="@/assets/img/logo.png"
+            alt=""
+          />
+          <h2 class="text-lg font-semibold">Quizzfly</h2>
+        </div>
+        <div class="flex items-center gap-0.5 mb-2 mt-6">
+          <h1 class="text-[344054] text-lg font-semibold">Forgot password</h1>
+          <h1
+            v-if="isForgot"
+            class="text-[344054] text-lg font-semibold"
+          >
+            A password reset link has been sent to {{ email }}. Click the link to complete the
+            password reset. If you still haven't received the email, please hit resend below.
+          </h1>
         </div>
         <div>
           <h2 class="mt-1 text-[#667085]">Enter your email to reset password</h2>
         </div>
         <div class="mt-6">
-          <div class="form-data">
+          <form
+            v-if="!isForgot"
+            class="form-data"
+            @submit="handleForgot"
+          >
             <Label for="email">Email</Label>
             <Input
+              v-if="!isForgot"
               id="email"
               v-model="email"
               placeholder="Enter email..."
@@ -111,9 +178,31 @@ const [email, emailAttrs] = defineField('email')
               class="text-xs mt-0.5"
               :error="errors.email"
             />
+            <Button
+              type="submit"
+              class="mt-4 w-full h-10 bg-primary"
+            >
+              Submit
+            </Button>
+          </form>
+          <Button
+            v-else
+            class="mt-4 w-full h-10 bg-primary"
+            :variant="isCountdown ? 'secondary' : 'default'"
+            :disable-cache="isCountdown"
+            @click="handleResentEmail(5)"
+          >
+            Reset
+          </Button>
+          <div
+            v-if="isCountdown"
+            class="countdown"
+          >
+            {{ timeResend < 10 ? `0${timeResend}` : timeResend }}:{{
+              secondsResend < 10 ? `0${secondsResend}` : secondsResend
+            }}
           </div>
         </div>
-        <Button class="mt-4 w-full h-10 bg-primary"> Submit </Button>
         <div class="text-end mt-6">
           <RouterLink
             class="text-[#0921D9] text-xs font-semibold"
@@ -122,7 +211,7 @@ const [email, emailAttrs] = defineField('email')
             Come back
           </RouterLink>
         </div>
-      </form>
+      </div>
     </div>
     <div class="flex-1 relative max-md:hidden">
       <img

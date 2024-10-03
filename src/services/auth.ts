@@ -5,8 +5,8 @@ export const loginApi = async (
   password: string,
 ): Promise<
   BaseResponse<{
-    access_token: string
-    refresh_token: string
+    accessToken: string
+    refreshToken: string
   }>
 > => {
   return $api(
@@ -25,7 +25,7 @@ export const loginApi = async (
 interface RegisterBody {
   email: string
   password: string
-  name: string
+  // name: string
 }
 
 export const registerApi = async (data: RegisterBody): Promise<any> => {
@@ -37,7 +37,7 @@ export const confirmEmailApi = async (token: string): Promise<any> => {
 }
 
 export const forgotPasswordApi = async (email: string): Promise<any> => {
-  return $api('/users/forgot-password', {
+  return $api('/auth/forgot-password', {
     method: 'POST',
     body: { email },
   })

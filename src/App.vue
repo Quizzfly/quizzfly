@@ -13,11 +13,11 @@ const layout = computed(() => {
 const loadingStore = useLoadingStore()
 
 onMounted(() => {
-  showToast({
-    title: 'Welcome to Vite Vue3',
-    description: 'This is a simple toast message',
-    variant: 'default',
-  })
+  // showToast({
+  //   title: 'Welcome to Vite Vue3',
+  //   description: 'This is a simple toast message',
+  //   variant: 'default',
+  // })
 })
 
 // const confirmDialog = useConfirmDialog()

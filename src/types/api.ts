@@ -1,4 +1,1 @@
-export type BaseResponse<T> = {
-  data: T
-  status: string
-}
+export type BaseResponse<T> = T

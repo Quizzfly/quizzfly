@@ -7,36 +7,47 @@ import { useForm } from 'vee-validate'
 import * as yup from 'yup'
 import { registerApi } from '@/services/auth'
 import { apiExceptionHandler } from '@/utils/exceptionHandler'
+import Toaster from '@/components/ui/toast/Toaster.vue'
+import { showToast } from '@/utils/toast'
 
 const { errors, handleSubmit, defineField } = useForm({
   validationSchema: yup.object({
     email: yup.string().email().required('Email is required'),
-    name: yup.string().required('name is required'),
+    // name: yup.string().required('name is required'),
     password: yup.string().required('Password is required'),
   }),
 })
 
 const [email, emailAttrs] = defineField('email')
 const [password, passwordAttrs] = defineField('password')
-const [name, nameAttrs] = defineField('name')
+// const [name, nameAttrs] = defineField('name')
 
 const router = useRouter()
 const onSubmit = handleSubmit(async (values) => {
   try {
     const data = await registerApi({
       email: values.email,
-      name: values.name,
+      // name: values.name,
       password: values.password,
     })
     console.log(data)
     router.push({ name: 'login' })
-    notify.success('Register success')
+    showToast({
+      title: 'Register success',
+      description: 'This is a simple toast message',
+      variant: 'default',
+    })
   } catch (error) {
-    notify.error(apiExceptionHandler(error).message)
+    showToast({
+      title: 'Register failed',
+      description: `${apiExceptionHandler(error).message}`,
+      variant: 'destructive',
+    })
   }
 })
 </script>
 <template>
+  <Toaster />
   <div class="h-full flex p-8">
     <div class="flex-1 flex justify-center items-center">
       <form
@@ -51,7 +62,7 @@ const onSubmit = handleSubmit(async (values) => {
           <h2 class="mt-1 text-[#667085]">Sign in to start managing your projects</h2>
         </div>
         <div class="mt-6">
-          <div class="form-data">
+          <!-- <div class="form-data">
             <Label for="email">Name</Label>
             <Input
               v-model="name"
@@ -62,7 +73,7 @@ const onSubmit = handleSubmit(async (values) => {
               class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
             />
             <ErrorMessage :error="errors.name" />
-          </div>
+          </div> -->
           <div class="form-data">
             <Label for="email">Email</Label>
             <Input

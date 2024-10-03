@@ -6,6 +6,7 @@ import { useForm } from 'vee-validate'
 import * as yup from 'yup'
 import { loginApi } from '@/services/auth'
 import { apiExceptionHandler } from '@/utils/exceptionHandler'
+import { showToast } from '@/utils/toast'
 
 const { errors, handleSubmit, defineField } = useForm({
   validationSchema: yup.object({
@@ -21,11 +22,15 @@ const onSubmit = handleSubmit(async (values) => {
   try {
     const data = await loginApi(values.email, values.password)
     console.log(data)
-    localStorage.setItem('access_token', data.tokens.access.token)
-    localStorage.setItem('refresh_token', data.tokens.refresh.token)
-    location.reload()
+    localStorage.setItem('access_token', data.accessToken)
+    localStorage.setItem('refresh_token', data.refreshToken)
+    // location.reload()
   } catch (error) {
-    notify.error(apiExceptionHandler(error).message)
+    showToast({
+      title: 'Login failed',
+      description: `${apiExceptionHandler(error).message}`,
+      variant: 'destructive',
+    })
   }
 })
 </script>
