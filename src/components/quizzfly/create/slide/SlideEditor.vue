@@ -1,10 +1,7 @@
 <script setup lang="ts">
-import { Input } from '@/components/ui/input'
-import EditableText from '@/components/base/EditableText.vue'
-import AnswerSetting from '../quiz/AnswerSetting.vue'
 import type { SlideLayout } from '@/modules/slide/layout'
 
-const props = defineProps<{
+defineProps<{
   layout: SlideLayout
 }>()
 

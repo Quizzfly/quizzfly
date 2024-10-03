@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import QuizEditor from './quiz/QuizEditor.vue'
 import QuizSettings from './quiz/QuizSettings.vue'
-
 </script>
 <template>
   <div class="flex w-full gap-4">

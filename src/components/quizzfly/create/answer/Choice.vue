@@ -2,7 +2,7 @@
 defineProps<{
   index: number
 }>()
-const answer = defineModel()
+const answer = defineModel<any>()
 
 const colorsHex = ['#1d69ff', '#ff80b0', '#0fd98d', '#959def', '#0000FF', '#4B0082', '#EE82EE']
 </script>
