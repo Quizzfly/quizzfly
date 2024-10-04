@@ -1,0 +1,25 @@
+name: Type Check
+
+on:
+  pull_request:
+    branches:
+      - master  # Hoặc branch mà bạn muốn áp dụng kiểm tra
+
+jobs:
+  type-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'  # Phiên bản Node.js mà bạn đang sử dụng
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run type-check
+        run: npm run type-check  # Lệnh để kiểm tra kiểu của bạn

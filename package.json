@@ -8,7 +8,7 @@
     "build-check": "run-p type-check \"build {@}\" --",
     "preview": "vite preview",
     "build": "vite build",
-    "check": "vue-tsc --build --force",
+    "type-check": "vue-tsc --build --force",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "format": "prettier --write src/"
   },
