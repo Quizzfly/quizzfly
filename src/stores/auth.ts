@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { getInfoApi } from '@/services/user'
+import router from '@/routers/router'
 export const useAuthStore = defineStore({
   id: 'auth',
   state: () => ({
@@ -23,7 +24,7 @@ export const useAuthStore = defineStore({
         refresh: '',
       }
       location.reload()
-      // router.push({ name: "login" });
+      router.push({ name: 'login' })
     },
     setUser(user: any) {
       this.user = user
@@ -34,9 +35,11 @@ export const useAuthStore = defineStore({
 
         if (access_token) {
           this.token.access = access_token
-          const user = await getInfoApi()
-          console.log('LOG user', user)
-          user && (this.user = user)
+          // const user = await getInfoApi()
+          // console.log('LOG user', user)
+          // user && (this.user = user)
+          // this.isLoggedIn = true
+          this.user = {}
           this.isLoggedIn = true
           console.log('Login state:', this.isLoggedIn, this.user)
         }

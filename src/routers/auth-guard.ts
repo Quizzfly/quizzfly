@@ -12,7 +12,8 @@ export const authGuard: NavigationGuardWithThis<any> = async (to, from, next) =>
   if (isLoggedIn) {
     isPublicRoute ? next('/') : next()
   } else {
-    isPublicRoute ? next() : next({ name: 'login' })
+    // isPublicRoute ? next() : next({ name: 'login' })
+    isPublicRoute ? next('/') : next()
   }
 }
 

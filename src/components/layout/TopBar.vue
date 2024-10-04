@@ -1,4 +1,8 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useAuthStore } from '@/stores/auth'
+
+const authStore = useAuthStore()
+</script>
 <template>
   <div
     class="fixed top-0 left-0 z-[999] w-full h-[54px] items-center px-7 flex justify-between border-b"

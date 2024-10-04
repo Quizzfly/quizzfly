@@ -6,7 +6,7 @@ const { progress } = useIndicator()
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    // beforeEnter: [authGuard],
+    beforeEnter: [authGuard],
     component: () => import('@/pages/index.vue'),
     children: dashboardRoute,
   },
