@@ -1,4 +1,4 @@
-name: Type Check
+name: Type Check and Lint
 
 on:
   pull_request:
@@ -23,3 +23,6 @@ jobs:
 
       - name: Run type-check
         run: npm run type-check  # Lệnh để kiểm tra kiểu của bạn
+
+      - name: Run lint
+        run: npm run lint  # Lệnh để kiểm tra lint của bạn
