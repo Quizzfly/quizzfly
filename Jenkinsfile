@@ -7,14 +7,19 @@ pipeline {
                 git url: 'https://github.com/Quizzfly/quizzfly.git'
             }
         }
-        stage('Build Docker Image') {
+        stage('Stop Existing Container') {
             steps {
-                sh 'docker build -t quizzfly-client .'
+                script {
+                    sh 'docker-compose down || true' // Dừng và xóa các container đang chạy
+                }
             }
         }
-        stage('Deploy Docker Container') {
+        stage('Build and Deploy with Docker Compose') {
             steps {
-                sh 'docker run -d -p 5000:80 quizzfly-client'
+                // Tạo tag cho phiên bản mới
+                sh 'docker build -t quizzfly-client:latest .'
+                // Cập nhật dịch vụ mới
+                sh 'docker-compose up --build -d'
             }
         }
     }
