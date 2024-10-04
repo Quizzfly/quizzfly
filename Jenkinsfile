@@ -16,10 +16,15 @@ pipeline {
         }
         stage('Build and Deploy with Docker Compose') {
             steps {
-                // Tạo tag cho phiên bản mới
-                sh 'docker build -t quizzfly-client:latest .'
-                // Cập nhật dịch vụ mới
                 sh 'docker-compose up --build -d'
+            }
+        }
+    }
+    post {
+        always {
+            script {
+                // Xem logs từ container nếu cần
+                sh 'docker-compose logs'
             }
         }
     }
