@@ -16,7 +16,7 @@ const route = useRoute()
 const confirmEmail = async (token: string) => {
   try {
     await confirmEmailApi(token)
-    confirmDialog.setQuestion({
+    confirmDialog.open({
       title: 'Success',
       question: t('question.confirm_account_success'),
       onlyConfirm: true,
@@ -25,7 +25,7 @@ const confirmEmail = async (token: string) => {
       },
     })
   } catch (error) {
-    confirmDialog.setQuestion({
+    confirmDialog.open({
       title: 'Failed',
       question: t('question.confirm_account_failed'),
       onlyConfirm: true,

@@ -111,7 +111,7 @@ const startTimer = () => {
   }
   if (timeResend.value < 0) {
     isCountdown.value = false
-    clearInterval(interval)
+    // clearInterval(interval)
   }
 
   setTimeout(startTimer, 1000)
