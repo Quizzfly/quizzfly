@@ -46,7 +46,7 @@ const initApp = async () => {
   app.component('NoSideBarLayout', NoSideBarLayout)
   app.component('QuizCreateLayout', QuizCreateLayout)
   app.use(createPinia())
-  await initAuthStore();
+  await initAuthStore()
   // await initWebSocketStore();
   // await initMasterStore();
   app.use(router)
