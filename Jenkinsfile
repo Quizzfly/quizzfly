@@ -10,7 +10,7 @@ pipeline {
         stage('Stop Existing Container') {
             steps {
                 script {
-                    sh 'docker-compose down || true' // Dừng và xóa các container đang chạy
+                    sh 'docker-compose down || true'
                 }
             }
         }
@@ -23,7 +23,6 @@ pipeline {
     post {
         always {
             script {
-                // Xem logs từ container nếu cần
                 sh 'docker-compose logs'
             }
         }
