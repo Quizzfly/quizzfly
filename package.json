@@ -1,11 +1,11 @@
 {
-  "name": "smarthome-admin",
+  "name": "quizzfly-client",
   "version": "0.0.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build-check": "run-p type-check \"build-only {@}\" --",
+    "build-check": "run-p type-check \"build {@}\" --",
     "preview": "vite preview",
     "build": "vite build",
     "type-check": "vue-tsc --build --force",

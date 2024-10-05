@@ -1,0 +1,31 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git url: 'https://github.com/Quizzfly/quizzfly.git'
+            }
+        }
+        stage('Stop Existing Container') {
+            steps {
+                script {
+                    sh 'docker-compose down || true' // Dừng và xóa các container đang chạy
+                }
+            }
+        }
+        stage('Build and Deploy with Docker Compose') {
+            steps {
+                sh 'docker-compose up --build -d'
+            }
+        }
+    }
+    post {
+        always {
+            script {
+                // Xem logs từ container nếu cần
+                sh 'docker-compose logs'
+            }
+        }
+    }
+}

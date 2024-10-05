@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SidebarMenu from '@/components/layout/sideBar/SidebarMenu.vue'
+import SidebarMenu from '@/components/layout/sidebar/SidebarMenu.vue'
 import Button from '../ui/button/Button.vue'
 import { useAuthStore } from '@/stores/auth'
 

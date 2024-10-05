@@ -12,7 +12,7 @@ const props = defineProps<{
 
 const emits = defineEmits<{
   (e: 'addSlide'): void
-  (e: 'addQuiz', type: string): void
+  (e: 'addQuiz', type: 'quiz' | 'slide'): void
 }>()
 
 const currentSlide = defineModel<Slide>({ required: true })
@@ -35,7 +35,7 @@ const handleAddSlide = () => {
 }
 
 const handleAddQuiz = (type: string) => {
-  emits('addQuiz', type)
+  emits('addQuiz', type as 'quiz' | 'slide')
   isShow.value = false
 }
 </script>
