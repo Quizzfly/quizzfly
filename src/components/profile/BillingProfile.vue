@@ -1,20 +1,4 @@
-<script setup lang="ts">
-import { Input } from '@/components/ui/input'
-import { Switch } from '../ui/switch'
-import { useForm } from 'vee-validate'
-import * as yup from 'yup'
-// import { apiExceptionHandler } from '@/utils/exceptionHandler'
-// import Toaster from '@/components/ui/toast/Toaster.vue'
-// import { showToast } from '@/utils/toast'
-
-const { errors, handleSubmit, defineField } = useForm({
-  validationSchema: yup.object({
-    email: yup.string().email().required('Email is required'),
-    name: yup.string().required('name is required'),
-    username: yup.string().required('Username is required'),
-  }),
-})
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <div class="w-full flex items-start gap-8">
