@@ -1,120 +1,117 @@
 <script setup lang="ts">
-// import { validPass, validPassConfirm } from '~/modules/validation/ValidAuth.js';
-// import { reset_password_client_api } from '~/services/authService';
-// import langAuth from '~/components/Layout/langAuth.vue';
-// import QuestionPopup from '~/components/Layout/QuestionPopup.vue';
-// //for confirm password reset
-// export default {
-//     auth: false,
-//     components: {
-//         langAuth,
-//         QuestionPopup,
-//     },
-//     middleware: 'guest',
-//     data() {
-//         return {
-//             password: null,
-//             confirm_password: null,
-//             token: null,
-//             checked: false,
-//             errorPassword: '',
-//             errorConfirmPassword: '',
-//             question: null,
-//         };
-//     },
+import { onMounted } from 'vue'
+import { validPass, validPassConfirm } from '@/utils/validate'
+import { resetPasswordApi } from '@/services/auth'
+import Toaster from '@/components/ui/toast/Toaster.vue'
+import { useConfirmDialog } from '@/stores/modal'
+import { Input } from '@/components/ui/input'
+import ErrorMessage from '@/components/base/ErrorMessage.vue'
+import { Button } from '@/components/ui/button'
 
-//     created() {
-//         this.token = this.$route.query.token;
-//         if (!this.token) {
-//             this.$router.push('/login');
-//         }
-//     },
-
-//     methods: {
-//         checkPassword() {
-//             const check = validPass(this.password);
-//             this.errorPassword = check.mess;
-
-//             return check.check;
-//         },
-//         checkConfirmPassword() {
-//             const check = validPassConfirm(this.confirm_password, this.password);
-//             this.errorConfirmPassword = check.mess;
-
-//             return check.check;
-//         },
-//         async resetPassword() {
-//             if (this.checkPassword() && this.checkConfirmPassword()) {
-//                 try {
-//                     await reset_password_client_api({
-//                         confirm_token: this.token,
-//                         password: this.password,
-//                         confirm_password: this.confirm_password,
-//                     }).then(() => {
-//                         this.question = {
-//                             type: 'SUCCESS',
-//                             body: this.$t('question.reset_pass_success'),
-//                             router: '/login',
-//                         };
-//                     });
-//                 } catch {}
-//             }
-//         },
-//     },
-// };
+const router = useRouter()
+const route = useRoute()
+const confirmDialog = useConfirmDialog()
 const password = ref('')
-const confirm_password = ref('')
+const confirmPassword = ref('')
+const token = ref()
 const errorPassword = ref('')
 const errorConfirmPassword = ref('')
 
-const checkPassword = () => {}
-const resetPassword = () => {}
-const checkConfirmPassword = () => {}
+onMounted(() => {
+  token.value = route.query.token
+  console.log(token.value, 'check token')
+  if (!token) {
+    router.push('/login')
+  }
+})
+
+const checkPassword = () => {
+  const check = validPass(password.value)
+  errorPassword.value = check.mess
+
+  return check.check
+}
+
+const checkConfirmPassword = () => {
+  const check = validPassConfirm(confirmPassword.value, password.value)
+  errorConfirmPassword.value = check.mess
+
+  return check.check
+}
+
+const onSubmit = async () => {
+  if (checkPassword() && checkConfirmPassword()) {
+    try {
+      await resetPasswordApi({
+        confirm_token: token,
+        password: password,
+        confirm_password: confirmPassword,
+      }).then(() => {
+        confirmDialog.open({
+          title: 'Success',
+          question: 'Reset successful',
+          onlyConfirm: true,
+          actionConfirm: () => {
+            router.push({ name: 'login' })
+          },
+        })
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+}
 </script>
 
 <template>
-  <div>
-    <!-- <question-popup
-            v-if="question != null"
-            :question="question"
-            @close="$router.push('/login')"
-            @accept="question.action()"
-        /> -->
-    <div class="forgot-header"></div>
-    <div class="forgot-container">
-      <div class="forgot-container-head">{{ $t('auth.create_new_pass') }}</div>
-      <div class="forgot-container-intro"></div>
-      <br />
-      <div class="forgot-input-container">
-        <div class="forgot-input-label">{{ $t('auth.new_pass') }}</div>
-        <input
-          v-model="password"
-          type="password"
-          class="forgot-input"
-          :placeholder="$t('placeholder.enter_pass')"
-          @input="checkPassword"
-        />
-        <div class="login-validation">{{ errorPassword }}</div>
-
-        <div class="forgot-input-label">{{ $t('auth.confirm_pass') }}</div>
-        <input
-          v-model="confirm_password"
-          type="password"
-          class="forgot-input"
-          :placeholder="$t('placeholder.enter_confirm_pass')"
-          @input="checkConfirmPassword"
-        />
-        <div class="login-validation">{{ errorConfirmPassword }}</div>
-
-        <div
-          class="fotgot-btn"
-          @click="resetPassword"
-        >
-          {{ $t('common.send') }}
+  <Toaster />
+  <div class="h-full flex p-8">
+    <div class="flex-1 flex justify-center items-center">
+      <form
+        class="rounded-xl max-md:w-full max-sm:p-0 w-96"
+        @submit="onSubmit"
+      >
+        <div class="flex items-center gap-0.5 mb-4">
+          <h1 class="text-[344054] text-lg font-semibold">Reset Password</h1>
         </div>
-      </div>
+        <div>
+          <h2 class="mt-1 text-[#667085]">Today is a new day. It's your day. You shape it.</h2>
+          <h2 class="mt-1 text-[#667085]">Sign in to start managing your projects</h2>
+        </div>
+        <div class="mt-6">
+          <div class="form-data">
+            <Label for="password">Password</Label>
+            <Input
+              v-model="password"
+              placeholder="Enter password..."
+              type="password"
+              class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
+              @input="checkPassword"
+            />
+            <ErrorMessage :error="errorConfirmPassword" />
+          </div>
+          <div class="form-data">
+            <Label for="confirm-password">Confirm password</Label>
+            <Input
+              v-model="confirmPassword"
+              placeholder="Enter email..."
+              type="password"
+              class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
+              @input="checkConfirmPassword"
+            />
+            <ErrorMessage :error="errorConfirmPassword" />
+          </div>
+        </div>
+        <Button class="mt-6 w-full h-10"> Reset Password </Button>
+      </form>
     </div>
-    <langAuth :on-top="true" />
+    <div class="flex-1 relative max-md:hidden">
+      <img
+        class="absolute top-0 left-0 w-full h-full object-unset rounded-3xl"
+        src="@/assets/img/auth-bg.jpg"
+        alt=""
+      />
+    </div>
   </div>
 </template>
 

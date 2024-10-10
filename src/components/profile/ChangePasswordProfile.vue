@@ -21,8 +21,8 @@ const [repeatNewPassword, repeatNewPasswordAttrs] = defineField('repeatNewPasswo
 </script>
 
 <template>
-  <div class="w-full flex items-start gap-8">
-    <div class="w-2/4 p-4 rounded-md shadow flex flex-col gap-10">
+  <div class="w-full flex items-start gap-8 max-lg:flex-col">
+    <div class="w-2/4 p-4 rounded-md shadow flex flex-col gap-10 max-lg:w-full">
       <div class="header flex items-center justify-between">
         <h3 class="text-lg font-semibold">Change password</h3>
       </div>

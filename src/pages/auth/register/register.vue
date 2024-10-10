@@ -9,6 +9,9 @@ import { registerApi } from '@/services/auth'
 import { apiExceptionHandler } from '@/utils/exceptionHandler'
 import Toaster from '@/components/ui/toast/Toaster.vue'
 import { showToast } from '@/utils/toast'
+import { useConfirmDialog } from '@/stores/modal'
+
+const confirmDialog = useConfirmDialog()
 
 const { errors, handleSubmit, defineField } = useForm({
   validationSchema: yup.object({
@@ -37,11 +40,13 @@ const onSubmit = handleSubmit(async (values) => {
       confirm_password: values.confirmPassword,
     })
     console.log(data)
-    router.push({ name: 'login' })
-    showToast({
-      title: 'Register success',
-      description: 'This is a simple toast message',
-      variant: 'default',
+    confirmDialog.open({
+      title: 'Success',
+      question: 'Registration successful check email to confirm account',
+      onlyConfirm: true,
+      actionConfirm: () => {
+        router.push({ name: 'login' })
+      },
     })
   } catch (error) {
     showToast({
@@ -57,7 +62,7 @@ const onSubmit = handleSubmit(async (values) => {
   <div class="h-full flex p-8">
     <div class="flex-1 flex justify-center items-center">
       <form
-        class="p-6 rounded-xl max-md:w-full max-sm:p-0"
+        class="rounded-xl max-md:w-full max-sm:p-0 w-96"
         @submit="onSubmit"
       >
         <div class="flex items-center gap-0.5 mb-4">
@@ -147,8 +152,8 @@ const onSubmit = handleSubmit(async (values) => {
     </div>
     <div class="flex-1 relative max-md:hidden">
       <img
-        class="absolute top-0 left-0 w-full h-full object-cover rounded-3xl"
-        src="@/assets/img/auth-bg.png"
+        class="absolute top-0 left-0 w-full h-full object-unset rounded-3xl"
+        src="@/assets/img/auth-bg.jpg"
         alt=""
       />
     </div>
