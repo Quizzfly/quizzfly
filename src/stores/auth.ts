@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia'
+import type { IUser } from '@/types'
+import { getInfoApi } from '@/services/user'
 
 import router from '@/routers/router'
 export const useAuthStore = defineStore({
   id: 'auth',
   state: () => ({
-    // initialize state from local storage to enable user to stay logged in
     user: null as any | null,
     returnUrl: '',
     isLoggedIn: false,
@@ -26,7 +27,7 @@ export const useAuthStore = defineStore({
       location.reload()
       router.push({ name: 'login' })
     },
-    setUser(user: any) {
+    setUser(user: IUser) {
       this.user = user
     },
     async setupAuth() {
@@ -35,13 +36,12 @@ export const useAuthStore = defineStore({
 
         if (access_token) {
           this.token.access = access_token
-          // const user = await getInfoApi()
-          // console.log('LOG user', user)
-          // user && (this.user = user)
-          // this.isLoggedIn = true
-          this.user = {}
+          // const user = userStore.getInfo()
+          const user = await getInfoApi()
+          this.setUser(user)
+          console.log('LOG user', user)
+          user && (this.user = user)
           this.isLoggedIn = true
-          console.log('Login state:', this.isLoggedIn, this.user)
         }
       } catch (error) {
         console.log('Setup auth error', error)

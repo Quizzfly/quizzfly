@@ -3,8 +3,8 @@ import { Switch } from '../ui/switch'
 </script>
 
 <template>
-  <div class="w-full flex items-start gap-8">
-    <div class="w-2/4 p-4 rounded-md shadow flex flex-col gap-10">
+  <div class="w-full flex items-start gap-8 max-lg:flex-col">
+    <div class="w-2/4 p-4 rounded-md shadow flex flex-col gap-10 max-lg:w-full">
       <div class="header flex items-center justify-between">
         <h3 class="text-lg font-semibold">Notifications</h3>
       </div>
@@ -54,7 +54,7 @@ import { Switch } from '../ui/switch'
         </div>
       </div>
     </div>
-    <div class="w-2/4 flex flex-col gap-10">
+    <div class="w-2/4 flex flex-col gap-10 max-lg:w-full">
       <div class="shadow rounded-md p-4 flex flex-col gap-8">
         <div class="header">
           <h3 class="text-lg font-semibold">Privacy and marketing</h3>

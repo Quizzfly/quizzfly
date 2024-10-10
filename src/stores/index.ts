@@ -27,3 +27,5 @@ export const initWebSocketStore = async () => {
   const socketStore = useSocketStore()
   socketStore.setupSocketStore()
 }
+
+export { useUserStore } from './user'

@@ -9,33 +9,41 @@ import { registerApi } from '@/services/auth'
 import { apiExceptionHandler } from '@/utils/exceptionHandler'
 import Toaster from '@/components/ui/toast/Toaster.vue'
 import { showToast } from '@/utils/toast'
+import { useConfirmDialog } from '@/stores/modal'
+
+const confirmDialog = useConfirmDialog()
 
 const { errors, handleSubmit, defineField } = useForm({
   validationSchema: yup.object({
     email: yup.string().email().required('Email is required'),
-    // name: yup.string().required('name is required'),
+    name: yup.string().required('name is required'),
     password: yup.string().required('Password is required'),
+    confirmPassword: yup.string().required('Confirm password is required'),
   }),
 })
 
 const [email, emailAttrs] = defineField('email')
 const [password, passwordAttrs] = defineField('password')
-// const [name, nameAttrs] = defineField('name')
+const [confirmPassword, confirmPasswordAttrs] = defineField('confirmPassword')
+const [name, nameAttrs] = defineField('name')
 
 const router = useRouter()
 const onSubmit = handleSubmit(async (values) => {
   try {
     const data = await registerApi({
       email: values.email,
-      // name: values.name,
+      name: values.name,
       password: values.password,
+      confirm_password: values.confirmPassword,
     })
     console.log(data)
-    router.push({ name: 'login' })
-    showToast({
-      title: 'Register success',
-      description: 'This is a simple toast message',
-      variant: 'default',
+    confirmDialog.open({
+      title: 'Success',
+      question: 'Registration successful check email to confirm account',
+      onlyConfirm: true,
+      actionConfirm: () => {
+        router.push({ name: 'login' })
+      },
     })
   } catch (error) {
     showToast({
@@ -51,7 +59,7 @@ const onSubmit = handleSubmit(async (values) => {
   <div class="h-full flex p-8">
     <div class="flex-1 flex justify-center items-center">
       <form
-        class="p-6 rounded-xl max-md:w-full max-sm:p-0"
+        class="rounded-xl max-md:w-full max-sm:p-0 w-96"
         @submit="onSubmit"
       >
         <div class="flex items-center gap-0.5 mb-4">
@@ -62,7 +70,7 @@ const onSubmit = handleSubmit(async (values) => {
           <h2 class="mt-1 text-[#667085]">Sign in to start managing your projects</h2>
         </div>
         <div class="mt-6">
-          <!-- <div class="form-data">
+          <div class="form-data">
             <Label for="email">Name</Label>
             <Input
               v-model="name"
@@ -73,7 +81,7 @@ const onSubmit = handleSubmit(async (values) => {
               class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
             />
             <ErrorMessage :error="errors.name" />
-          </div> -->
+          </div>
           <div class="form-data">
             <Label for="email">Email</Label>
             <Input
@@ -93,6 +101,18 @@ const onSubmit = handleSubmit(async (values) => {
               placeholder="Enter password..."
               v-bind="passwordAttrs"
               :invalid="errors.password"
+              type="password"
+              class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
+            />
+            <ErrorMessage :error="errors.password" />
+          </div>
+          <div class="form-data">
+            <Label for="email">Confirm Password</Label>
+            <Input
+              v-model="confirmPassword"
+              placeholder="Enter confirm password..."
+              v-bind="confirmPasswordAttrs"
+              :invalid="errors.confirmPassword"
               type="password"
               class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
             />
@@ -129,8 +149,8 @@ const onSubmit = handleSubmit(async (values) => {
     </div>
     <div class="flex-1 relative max-md:hidden">
       <img
-        class="absolute top-0 left-0 w-full h-full object-cover rounded-3xl"
-        src="@/assets/img/auth-bg.png"
+        class="absolute top-0 left-0 w-full h-full object-unset rounded-3xl"
+        src="@/assets/img/auth-bg.jpg"
         alt=""
       />
     </div>

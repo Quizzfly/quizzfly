@@ -29,6 +29,7 @@ watchEffect(() => {
       </AlertDialogHeader>
       <AlertDialogFooter>
         <Button
+          v-if="!confirmDialog.data?.onlyConfirm"
           variant="secondary"
           @click="confirmDialog.confirm(false)"
           >Cancel</Button

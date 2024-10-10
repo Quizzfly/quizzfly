@@ -18,7 +18,7 @@ const confirmEmail = async (token: string) => {
     await confirmEmailApi(token)
     confirmDialog.open({
       title: 'Success',
-      question: t('question.confirm_account_success'),
+      question: 'Registration successful check email to confirm account',
       onlyConfirm: true,
       actionConfirm: () => {
         router.push({ name: 'login' })

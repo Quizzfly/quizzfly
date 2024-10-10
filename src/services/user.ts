@@ -26,3 +26,10 @@ export const createProfileApi = async (payload: UserProfile): Promise<BaseRespon
     body: payload,
   })
 }
+
+export const UpdateInfoApi = async (data: any): Promise<BaseResponse<IUser>> => {
+  return $api(`/users/profile/me`, {
+    method: 'PATCH',
+    body: data,
+  })
+}
