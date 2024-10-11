@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
 import { Button } from '../ui/button'
 import { Input } from '@/components/ui/input'
+import ErrorMessage from '../base/ErrorMessage.vue'
 import {
   Select,
   SelectContent,
@@ -36,13 +36,8 @@ const [username, usernameAttrs] = defineField('username')
 const [name, nameAttrs] = defineField('name')
 const avatar = ref('')
 
-const getUserinfor = computed(() => {
-  return authStore.getUser
-})
-
 onMounted(() => {
-  console.log(getUserinfor.value, 'check value')
-  setData(getUserinfor.value.data)
+  setData(authStore.getUser)
 })
 
 const setData = (data: any) => {
@@ -71,7 +66,7 @@ const onSubmit = handleSubmit(async () => {
     avatar: avatar.value,
   }
   try {
-    const res = await UpdateInfoApi(data)
+    const { data: res } = await UpdateInfoApi(data)
     console.log(res.email, 'check res')
     setData(res)
     showToast({
@@ -94,12 +89,15 @@ const showChooseImg = () => {
 }
 
 const logoUpload = ref('')
-const onChangeImg = (e: { target: { files: any } }) => {
-  const data = e.target.files
+const onChangeImg = (e: Event) => {
+  const element = e.currentTarget as HTMLInputElement
+  const fileList: FileList | null = element.files
+  if (!fileList) return
+  const data = fileList[0] as any
 
-  if (data && data[0]) {
-    logoUpload.value = data[0]
-    avatar.value = URL.createObjectURL(data[0])
+  if (data) {
+    logoUpload.value = data
+    avatar.value = URL.createObjectURL(data)
   }
 }
 </script>
@@ -122,7 +120,7 @@ const onChangeImg = (e: { target: { files: any } }) => {
         <div class="img relative w-32 h-32 cursor-pointer rounded">
           <div
             class="image w-32 h-32"
-            @click="showChooseImg(avatar)"
+            @click="showChooseImg()"
           >
             <img
               v-if="avatar"
@@ -140,7 +138,7 @@ const onChangeImg = (e: { target: { files: any } }) => {
               type="file"
               accept="image/jpeg, image/png, image/jpg"
               class="hidden"
-              @input="onChangeImg"
+              @change="onChangeImg"
             />
             <div
               class="absolute bg-slate-50 w-6 h-6 flex items-center justify-center rounded-full -right-3 -bottom-2 shadow"
@@ -158,6 +156,7 @@ const onChangeImg = (e: { target: { files: any } }) => {
             >
             <Input
               v-model="username"
+              disabled
               placeholder="Enter name..."
               v-bind="usernameAttrs"
               :invalid="errors.username"
@@ -190,6 +189,7 @@ const onChangeImg = (e: { target: { files: any } }) => {
             >
             <Input
               v-model="email"
+              disabled
               placeholder="Enter email..."
               v-bind="emailAttrs"
               :invalid="errors.email"
