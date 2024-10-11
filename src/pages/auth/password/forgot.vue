@@ -135,7 +135,7 @@ const [email, emailAttrs] = defineField('email')
 <template>
   <div class="h-full flex p-8">
     <div class="flex-1 flex justify-center items-center">
-      <div class="p-6 rounded-xl max-md:w-full max-sm:p-0">
+      <div class="rounded-xl max-md:w-full max-sm:p-0 w-96">
         <div class="flex items-center gap-4 justify-center">
           <img
             class="w-10 h-10 rounded-md object-contain"
@@ -144,28 +144,34 @@ const [email, emailAttrs] = defineField('email')
           />
           <h2 class="text-lg font-semibold">Quizzfly</h2>
         </div>
-        <div class="flex items-center gap-0.5 mb-2 mt-6">
+        <div class="flex flex-col items-start gap-2 mb-2 mt-6">
           <h1 class="text-[344054] text-lg font-semibold">Forgot password</h1>
           <h1
-            v-if="isForgot"
-            class="text-[344054] text-lg font-semibold"
+            v-if="!isForgot"
+            class="text-[344054] text-sm font-medium"
           >
-            A password reset link has been sent to {{ email }}. Click the link to complete the
-            password reset. If you still haven't received the email, please hit resend below.
+            A password reset link has been sent to <span>{{ email }}</span
+            >. Click the link to complete the password reset. If you still haven't received the
+            email, please hit resend below.
           </h1>
         </div>
         <div>
-          <h2 class="mt-1 text-[#667085]">Enter your email to reset password</h2>
+          <h2
+            v-if="isForgot"
+            class="mt-1 text-[#667085]"
+          >
+            Enter your email to reset password
+          </h2>
         </div>
         <div class="mt-6">
           <form
-            v-if="!isForgot"
+            v-if="isForgot"
             class="form-data"
             @submit="handleForgot"
           >
             <Label for="email">Email</Label>
             <Input
-              v-if="!isForgot"
+              v-if="isForgot"
               id="email"
               v-model="email"
               placeholder="Enter email..."
@@ -186,7 +192,7 @@ const [email, emailAttrs] = defineField('email')
             </Button>
           </form>
           <Button
-            v-else
+            v-else-if="!isCountdown"
             class="mt-4 w-full h-10 bg-primary"
             :variant="isCountdown ? 'secondary' : 'default'"
             :disable-cache="isCountdown"
@@ -194,13 +200,15 @@ const [email, emailAttrs] = defineField('email')
           >
             Reset
           </Button>
-          <div
-            v-if="isCountdown"
-            class="countdown"
-          >
-            {{ timeResend < 10 ? `0${timeResend}` : timeResend }}:{{
-              secondsResend < 10 ? `0${secondsResend}` : secondsResend
-            }}
+          <div class="flex items-center justify-center w-full">
+            <div
+              v-if="isCountdown"
+              class="rounded-full w-28 py-2 flex items-center justify-center bg-secondary text-primary font-semibold"
+            >
+              {{ timeResend < 10 ? `0${timeResend}` : timeResend }}:{{
+                secondsResend < 10 ? `0${secondsResend}` : secondsResend
+              }}
+            </div>
           </div>
         </div>
         <div class="text-end mt-6">
@@ -215,8 +223,8 @@ const [email, emailAttrs] = defineField('email')
     </div>
     <div class="flex-1 relative max-md:hidden">
       <img
-        class="absolute top-0 left-0 w-full h-full object-cover rounded-3xl"
-        src="@/assets/img/auth-bg.png"
+        class="absolute top-0 left-0 w-full h-full object-unset rounded-3xl"
+        src="@/assets/img/auth-bg.jpg"
         alt=""
       />
     </div>

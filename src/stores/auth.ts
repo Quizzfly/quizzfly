@@ -31,7 +31,7 @@ export const useAuthStore = defineStore({
       // location.reload()
       router.push({ name: 'login' })
     },
-    setUser(user: any) {
+    setUser(user: IUser) {
       this.user = user
     },
     async login(email: string, password: string) {
@@ -58,8 +58,6 @@ export const useAuthStore = defineStore({
           console.log('LOG user', user)
           user && (this.user = user)
           this.isLoggedIn = true
-          // this.user = {}
-          // this.isLoggedIn = true
           console.log('Login state:', this.isLoggedIn, this.user)
         }
       } catch (error) {

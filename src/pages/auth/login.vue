@@ -22,10 +22,10 @@ const onSubmit = handleSubmit(async (values) => {
 })
 </script>
 <template>
-  <div class="h-full flex p-8">
+  <div class="h-full flex p-8 gap-12">
     <div class="flex-1 flex justify-center items-center">
       <form
-        class="p-6 rounded-xl max-md:w-full max-sm:p-0"
+        class="rounded-xl max-md:w-full max-sm:p-0 w-96"
         @submit="onSubmit"
       >
         <div class="flex items-center gap-0.5 mb-4">
@@ -108,8 +108,8 @@ const onSubmit = handleSubmit(async (values) => {
     </div>
     <div class="flex-1 relative max-md:hidden">
       <img
-        class="absolute top-0 left-0 w-full h-full object-cover rounded-3xl"
-        src="@/assets/img/auth-bg.png"
+        class="absolute top-0 left-0 w-full h-full object-unset rounded-3xl"
+        src="@/assets/img/auth-bg.jpg"
         alt=""
       />
     </div>

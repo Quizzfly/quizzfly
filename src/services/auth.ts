@@ -38,6 +38,13 @@ export const confirmEmailApi = async (token: string): Promise<any> => {
   return $api('/users/confirm', { query: { token: token } })
 }
 
+export const resetPasswordApi = async (data: any): Promise<any> => {
+  return $api('/users/confirm', {
+    method: 'POST',
+    body: { data },
+  })
+}
+
 export const forgotPasswordApi = async (email: string): Promise<any> => {
   return $api('/auth/forgot-password', {
     method: 'POST',
