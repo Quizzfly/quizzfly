@@ -1,22 +1,17 @@
 export interface IUser {
   id: string
-  first_name: ''
-  last_name: ''
-  user_id?: string
-  sub_id: string
-  name: string
   email: string
   role: string
-  property_id: string
-  avatar: string
-  setting_language_id: string
-  working_language_id: string
-  is_company: boolean
-  confirm_is_company: boolean
-  enabled: boolean
+  created_at: string
+  updated_at: string
+  user_info: Userinfo
 }
 
-export interface Member {
-  member: IUser
-  permission: 'OWNER' | 'MEMBER'
+export interface Userinfo {
+  id: string
+  username: string
+  name: string
+  avatar: null
+  created_at: string
+  updated_at: string
 }

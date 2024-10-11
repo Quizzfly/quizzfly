@@ -1,14 +1,15 @@
 import type { BaseResponse } from '@/types/api'
 
+interface LoginResponse {
+  user_id: string
+  access_token: string
+  refresh_token: string
+  token_expires: number
+}
 export const loginApi = async (
   email: string,
   password: string,
-): Promise<
-  BaseResponse<{
-    accessToken: string
-    refreshToken: string
-  }>
-> => {
+): Promise<BaseResponse<LoginResponse>> => {
   return $api(
     '/auth/login',
     {
@@ -25,7 +26,8 @@ export const loginApi = async (
 interface RegisterBody {
   email: string
   password: string
-  // name: string
+  name: string
+  confirm_password: string
 }
 
 export const registerApi = async (data: RegisterBody): Promise<any> => {

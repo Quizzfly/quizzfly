@@ -4,9 +4,7 @@ import ErrorMessage from '@/components/base/ErrorMessage.vue'
 import { Button } from '@/components/ui/button'
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
-import { loginApi } from '@/services/auth'
-import { apiExceptionHandler } from '@/utils/exceptionHandler'
-import { showToast } from '@/utils/toast'
+import { useAuthStore } from '@/stores/auth'
 
 const { errors, handleSubmit, defineField } = useForm({
   validationSchema: yup.object({
@@ -18,20 +16,9 @@ const { errors, handleSubmit, defineField } = useForm({
 const [email, emailAttrs] = defineField('email')
 const [password, passwordAttrs] = defineField('password')
 
+const authStore = useAuthStore()
 const onSubmit = handleSubmit(async (values) => {
-  try {
-    const data = await loginApi(values.email, values.password)
-    console.log(data)
-    localStorage.setItem('access_token', data.accessToken)
-    localStorage.setItem('refresh_token', data.refreshToken)
-    // location.reload()
-  } catch (error) {
-    showToast({
-      title: 'Login failed',
-      description: `${apiExceptionHandler(error).message}`,
-      variant: 'destructive',
-    })
-  }
+  authStore.login(values.email, values.password)
 })
 </script>
 <template>

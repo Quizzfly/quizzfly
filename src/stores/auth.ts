@@ -1,11 +1,16 @@
 import { defineStore } from 'pinia'
-
+import { getInfoApi } from '@/services/user'
 import router from '@/routers/router'
+import { loginApi } from '@/services/auth'
+import { showToast } from '@/utils/toast'
+import { apiExceptionHandler } from '@/utils/exceptionHandler'
+import type { IUser } from '@/types/user'
+
 export const useAuthStore = defineStore({
   id: 'auth',
   state: () => ({
     // initialize state from local storage to enable user to stay logged in
-    user: null as any | null,
+    user: null as IUser | null,
     returnUrl: '',
     isLoggedIn: false,
     token: {
@@ -23,11 +28,25 @@ export const useAuthStore = defineStore({
         access: '',
         refresh: '',
       }
-      location.reload()
+      // location.reload()
       router.push({ name: 'login' })
     },
     setUser(user: any) {
       this.user = user
+    },
+    async login(email: string, password: string) {
+      try {
+        const { data } = await loginApi(email, password)
+        localStorage.setItem('access_token', data.access_token)
+        localStorage.setItem('refresh_token', data.refresh_token)
+        location.reload()
+      } catch (error) {
+        showToast({
+          title: 'Login failed',
+          description: `${apiExceptionHandler(error).message}`,
+          variant: 'destructive',
+        })
+      }
     },
     async setupAuth() {
       try {
@@ -35,12 +54,12 @@ export const useAuthStore = defineStore({
 
         if (access_token) {
           this.token.access = access_token
-          // const user = await getInfoApi()
-          // console.log('LOG user', user)
-          // user && (this.user = user)
-          // this.isLoggedIn = true
-          this.user = {}
+          const { data: user } = await getInfoApi()
+          console.log('LOG user', user)
+          user && (this.user = user)
           this.isLoggedIn = true
+          // this.user = {}
+          // this.isLoggedIn = true
           console.log('Login state:', this.isLoggedIn, this.user)
         }
       } catch (error) {
