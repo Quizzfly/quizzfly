@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import SideBar from '@/components/layout/SideBar.vue'
-// import TopBar from '@/components/layout/TopBar.vue'
+import TopBar from '@/components/layout/TopBar.vue'
 </script>
 <template>
   <div class="container-div">
-    <!-- <TopBar /> -->
-    <div class="w-full flex">
+    <TopBar />
+    <div class="w-full flex max-md:pt-16">
       <SideBar />
       <div class="flex-1 relative overflow-y-auto">
         <slot />

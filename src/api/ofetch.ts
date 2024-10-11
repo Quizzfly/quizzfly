@@ -68,6 +68,12 @@ export const fetchInstance: $Fetch = ofetch.create({
 
 function createFetchOptions(options: FetchOptions, isAuthHeader: boolean) {
   const { token } = useAuthStore()
+  // set header need
+  // options.headers = {
+  //   'Allow-Control-Allow-Origin': '*',
+  //   'Content-Type': 'application/json',
+  //   ...options.headers,
+  // }
   if (isAuthHeader) {
     return {
       ...options,

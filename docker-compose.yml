@@ -6,5 +6,5 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "5000:80" # Cổng cho phiên bản mới
+      - "5000:80"
     restart: always

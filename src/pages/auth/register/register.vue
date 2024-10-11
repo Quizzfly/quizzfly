@@ -18,14 +18,17 @@ const { errors, handleSubmit, defineField } = useForm({
     email: yup.string().email().required('Email is required'),
     name: yup.string().required('name is required'),
     password: yup.string().required('Password is required'),
-    confirmPassword: yup.string().required('Confirm password is required'),
+    confirmPassword: yup
+      .string()
+      .oneOf([yup.ref('password')], 'Passwords must match')
+      .required('Confirm password is required'),
   }),
 })
 
 const [email, emailAttrs] = defineField('email')
 const [password, passwordAttrs] = defineField('password')
-const [confirmPassword, confirmPasswordAttrs] = defineField('confirmPassword')
 const [name, nameAttrs] = defineField('name')
+const [confirmPassword, confirmPasswordAttrs] = defineField('confirmPassword')
 
 const router = useRouter()
 const onSubmit = handleSubmit(async (values) => {
@@ -107,7 +110,7 @@ const onSubmit = handleSubmit(async (values) => {
             <ErrorMessage :error="errors.password" />
           </div>
           <div class="form-data">
-            <Label for="email">Confirm Password</Label>
+            <Label for="email">Confirm password</Label>
             <Input
               v-model="confirmPassword"
               placeholder="Enter confirm password..."
@@ -116,7 +119,7 @@ const onSubmit = handleSubmit(async (values) => {
               type="password"
               class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
             />
-            <ErrorMessage :error="errors.password" />
+            <ErrorMessage :error="errors.confirmPassword" />
           </div>
         </div>
         <Button class="mt-6 w-full h-10"> Sign Up </Button>
