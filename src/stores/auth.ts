@@ -61,7 +61,7 @@ export const useAuthStore = defineStore({
           console.log('Login state:', this.isLoggedIn, this.user)
         }
       } catch (error) {
-        console.log('Setup auth error', error)
+        console.error('Setup auth error', error)
       }
     },
     setToken(access: string) {

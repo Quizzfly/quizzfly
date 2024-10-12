@@ -20,7 +20,6 @@ export function showToast({
   actionText = '',
   onActionClick = () => {},
 }: ToastOptions) {
-  console.log('showToast', title)
   toast({
     title: title || (variant === 'destructive' ? 'Error' : 'Success'),
     description,

@@ -22,7 +22,6 @@ const startEditing = () => {
 }
 
 const finishEditing = () => {
-  console.log('finishEditing')
   if (!data.value.trim()) {
     data.value = 'Untitled'
   }

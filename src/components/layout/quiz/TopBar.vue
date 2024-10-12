@@ -8,7 +8,6 @@ const route = useRoute()
 const quizzflyStore = useQuizzflyStore()
 
 const handleSaveTitle = (value: string, isModified?: boolean) => {
-  console.log(value)
   if (!isModified) return
   quizzflyStore.updateQuizzflySettings(route.params.quizzflyId as string, { title: value })
 }

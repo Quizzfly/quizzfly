@@ -28,7 +28,6 @@ export const useQuizzflyStore = defineStore({
   }),
   actions: {
     async initQuizzflyDraft() {
-      console.log('initQuizzflyDraft', router.push)
       try {
         this.isUpdating = true
         const { data } = await createQuizzflyDraftApi(this.quizzflyInfo)
@@ -67,7 +66,6 @@ export const useQuizzflyStore = defineStore({
       }, 500)
     },
     async fetchQuizzflys() {
-      console.log('fetchQuizzflys')
       try {
         const { data } = await getQuizzflysApi()
         this.quizzflys = data
