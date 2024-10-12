@@ -7,7 +7,7 @@ import TopBar from '@/components/layout/TopBar.vue'
     <TopBar />
     <div class="w-full flex max-md:pt-16">
       <SideBar />
-      <div class="flex-1 relative overflow-y-auto">
+      <div class="flex-1 relative overflow-y-auto bg-gray-bg-100">
         <slot />
       </div>
     </div>

@@ -17,7 +17,7 @@ const menus = ref([
       {
         class: 'i-solar-bolt-broken group-hover:i-solar-bolt-bold-duotone',
         title: 'Quiz Management',
-        link: '/quiz',
+        link: '/quizzfly',
       },
     ],
   },

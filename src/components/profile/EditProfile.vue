@@ -105,7 +105,7 @@ const onChangeImg = (e: Event) => {
 <template>
   <Toaster />
   <div class="w-full flex items-start gap-8 max-lg:flex-col">
-    <div class="w-2/4 p-4 rounded-md shadow flex flex-col gap-10 max-lg:w-full">
+    <div class="w-2/4 p-4 rounded-md shadow flex flex-col gap-10 max-lg:w-full bg-white">
       <div class="header flex items-center justify-between">
         <h3 class="text-lg font-semibold">User information</h3>
         <Button
@@ -218,7 +218,7 @@ const onChangeImg = (e: Event) => {
         </div>
       </div>
     </div>
-    <div class="w-2/4 flex flex-col gap-10 max-lg:w-full">
+    <div class="w-2/4 flex flex-col gap-10 max-lg:w-full bg-white">
       <div class="shadow rounded-md p-4 flex flex-col gap-8">
         <div class="header">
           <h3 class="text-lg font-semibold">Account details</h3>
