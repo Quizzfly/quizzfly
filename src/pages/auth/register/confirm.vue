@@ -2,36 +2,37 @@
 import { confirmEmailApi } from '@/services/auth'
 import { useLoadingStore } from '@/stores/loading'
 import { useConfirmDialog } from '@/stores/modal'
-
+import { apiExceptionHandler } from '@/utils/exceptionHandler'
+import { showToast } from '@/utils/toast'
 const loadingStore = useLoadingStore()
 
 const confirmDialog = useConfirmDialog()
 
-import { useI18n } from 'vue-i18n'
-const { t } = useI18n()
-
 const router = useRouter()
 const route = useRoute()
+
+const openConfirm = async () => {
+  const result = await confirmDialog.open({
+    title: 'Success',
+    question: 'Registration confirmed successfully, please proceed to login',
+  })
+
+  if (result) {
+    router.push('/login')
+  }
+  router.push('/login')
+}
 
 const confirmEmail = async (token: string) => {
   try {
     await confirmEmailApi(token)
-    confirmDialog.open({
-      title: 'Success',
-      question: 'Registration successful check email to confirm account',
-      onlyConfirm: true,
-      actionConfirm: () => {
-        router.push({ name: 'login' })
-      },
-    })
-  } catch (error) {
-    confirmDialog.open({
-      title: 'Failed',
-      question: t('question.confirm_account_failed'),
-      onlyConfirm: true,
-      actionConfirm: () => {
-        router.push({ name: 'login' })
-      },
+    openConfirm()
+  } catch (error: any) {
+    console.log(error, 'check error')
+    showToast({
+      title: 'Confirm failed',
+      description: `${apiExceptionHandler(error).message}`,
+      variant: 'destructive',
     })
   }
 }
@@ -47,4 +48,12 @@ onBeforeMount(async () => {
   }
 })
 </script>
-<template><div></div></template>
+<template>
+  <div class="contain object-cover w-full h-full"></div>
+</template>
+
+<style scoped lang="scss">
+.contain {
+  background: url('@/assets/img/auth-bg.jpg');
+}
+</style>

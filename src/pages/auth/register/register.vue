@@ -30,6 +30,17 @@ const [password, passwordAttrs] = defineField('password')
 const [name, nameAttrs] = defineField('name')
 const [confirmPassword, confirmPasswordAttrs] = defineField('confirmPassword')
 
+const openConfirm = async () => {
+  const result = await confirmDialog.open({
+    title: 'Success',
+    question: 'Registration successful check email to confirm account',
+  })
+
+  if (result) {
+    router.push('/login')
+  }
+}
+
 const router = useRouter()
 const onSubmit = handleSubmit(async (values) => {
   try {
@@ -40,14 +51,7 @@ const onSubmit = handleSubmit(async (values) => {
       confirm_password: values.confirmPassword,
     })
     console.log(data)
-    confirmDialog.open({
-      title: 'Success',
-      question: 'Registration successful check email to confirm account',
-      onlyConfirm: true,
-      actionConfirm: () => {
-        router.push({ name: 'login' })
-      },
-    })
+    openConfirm()
   } catch (error) {
     showToast({
       title: 'Register failed',
@@ -63,7 +67,7 @@ const onSubmit = handleSubmit(async (values) => {
     <div class="flex-1 flex justify-center items-center">
       <form
         class="rounded-xl max-md:w-full max-sm:p-0 w-96"
-        @submit="onSubmit"
+        @submit.prevent="onSubmit"
       >
         <div class="flex items-center gap-0.5 mb-4">
           <h1 class="text-[344054] text-lg font-semibold">Register account</h1>
