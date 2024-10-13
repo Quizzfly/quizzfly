@@ -1,8 +1,14 @@
 <script setup lang="ts">
 import { Button } from '@/components/ui/button'
 import { useAuthStore } from '@/stores/auth'
+import { useQuizzflyStore } from '@/stores/quizzfly'
 
 const authStore = useAuthStore()
+const quizzflyStore = useQuizzflyStore()
+
+const handleClickCreateQuiz = async () => {
+  await quizzflyStore.initQuizzflyDraft()
+}
 </script>
 <template>
   <div class="p-8">
@@ -13,12 +19,10 @@ const authStore = useAuthStore()
         <div>Here's what's going on today.</div>
       </div>
       <div class="flex items-center gap-5">
-        <RouterLink to="/quiz/create">
-          <Button>
-            <span class="i-material-symbols-light-add text-2xl"></span>
-            Create Quiz
-          </Button>
-        </RouterLink>
+        <Button @click="handleClickCreateQuiz">
+          <span class="i-material-symbols-light-add text-2xl"></span>
+          Create Quiz
+        </Button>
         <div
           class="w-10 h-10 hover:bg-slate-200 flex justify-center items-center rounded-full cursor-pointer"
         >

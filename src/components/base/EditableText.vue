@@ -6,7 +6,7 @@ const props = defineProps<{
 }>()
 
 const emits = defineEmits<{
-  (e: 'save', payload: string): void
+  (e: 'save', payload: string, isModified?: boolean): void
 }>()
 
 const isEditing = ref(false)
@@ -22,12 +22,11 @@ const startEditing = () => {
 }
 
 const finishEditing = () => {
-  console.log('finishEditing')
   if (!data.value.trim()) {
     data.value = 'Untitled'
   }
   isEditing.value = false
-  emits('save', data.value)
+  emits('save', data.value, data.value !== props.value)
 }
 
 const data = ref(props.value)

@@ -1,8 +1,26 @@
 <script setup lang="ts">
 import EditableText from '@/components/base/EditableText.vue'
 import { Button } from '@/components/ui/button'
-const handleSaveTitle = (value: string) => {
-  console.log(value)
+import { useQuizzflyStore } from '@/stores/quizzfly'
+
+const router = useRouter()
+const route = useRoute()
+const quizzflyStore = useQuizzflyStore()
+
+const handleSaveTitle = (value: string, isModified?: boolean) => {
+  if (!isModified) return
+  quizzflyStore.updateQuizzflySettings(route.params.quizzflyId as string, { title: value })
+}
+
+const handleSaveSettings = () => {
+  quizzflyStore.updateQuizzflySettings(
+    route.params.quizzflyId as string,
+    quizzflyStore.getQuizzflyInfo,
+  )
+}
+
+const handleClickCancel = () => {
+  router.push({ name: 'dashboard' })
 }
 </script>
 <template>
@@ -15,7 +33,7 @@ const handleSaveTitle = (value: string) => {
         <EditableText
           v-slot="{ data }"
           class="text-lg font-medium"
-          value="Quiz"
+          :value="quizzflyStore.getQuizzflyInfo.title"
           @save="handleSaveTitle"
         >
           <div class="flex flex-col">
@@ -25,6 +43,13 @@ const handleSaveTitle = (value: string) => {
             <span class="text-xs text-gray-500"> Click to edit </span>
           </div>
         </EditableText>
+      </div>
+      <div
+        v-if="quizzflyStore.getIsUpdating"
+        class="flex items-center gap-2"
+      >
+        <span class="i-svg-spinners-tadpole"></span>
+        <span>saving...</span>
       </div>
     </div>
 
@@ -36,8 +61,13 @@ const handleSaveTitle = (value: string) => {
         <span class="i-solar-eye-linear text-xl"></span>
       </Button>
       <div class="h-6 border-r"></div>
-      <Button variant="secondary"> Cancel </Button>
-      <Button> Save </Button>
+      <Button
+        variant="secondary"
+        @click="handleClickCancel"
+      >
+        Cancel
+      </Button>
+      <Button @click="handleSaveSettings"> Save </Button>
     </div>
   </div>
 </template>

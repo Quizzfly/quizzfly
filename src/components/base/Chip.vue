@@ -1,15 +1,14 @@
 <script setup lang="ts">
-const prop = withDefaults(
-  defineProps<{
-    id: string
-    name: string
-    color: string
-    isShowDelete?: boolean
-  }>(),
-  {
-    color: '#FF0000',
-  },
-)
+interface Props {
+  name: string
+  color: string
+  isShowDelete?: boolean
+  chipId?: string
+}
+const prop = withDefaults(defineProps<Props>(), {
+  color: '#FF0000',
+  chipId: '',
+})
 
 defineEmits<{
   (e: 'delete', id: string): void
@@ -46,7 +45,7 @@ const colorComputed = computed(() => {
     <div
       v-if="isShowDelete"
       class="cursor-pointer"
-      @click="$emit('delete', id)"
+      @click="$emit('delete', chipId)"
     >
       <Icon icon="hugeicons:cancel-01" />
     </div>
