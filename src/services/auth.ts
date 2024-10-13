@@ -35,13 +35,13 @@ export const registerApi = async (data: RegisterBody): Promise<any> => {
 }
 
 export const confirmEmailApi = async (token: string): Promise<any> => {
-  return $api('/users/confirm', { query: { token: token } })
+  return $api('/auth/verify-email', { query: { token: token } })
 }
 
 export const resetPasswordApi = async (data: any): Promise<any> => {
-  return $api('/users/confirm', {
+  return $api('/auth/reset-password', {
     method: 'POST',
-    body: { data },
+    body: data,
   })
 }
 

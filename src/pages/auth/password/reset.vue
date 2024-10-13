@@ -1,21 +1,33 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { validPass, validPassConfirm } from '@/utils/validate'
 import { resetPasswordApi } from '@/services/auth'
 import Toaster from '@/components/ui/toast/Toaster.vue'
 import { useConfirmDialog } from '@/stores/modal'
 import { Input } from '@/components/ui/input'
 import ErrorMessage from '@/components/base/ErrorMessage.vue'
 import { Button } from '@/components/ui/button'
+import { apiError } from '@/utils/exceptionHandler'
+import { showToast } from '@/utils/toast'
+import { useForm } from 'vee-validate'
+import * as yup from 'yup'
 
 const router = useRouter()
 const route = useRoute()
 const confirmDialog = useConfirmDialog()
-const password = ref('')
-const confirmPassword = ref('')
+
+const { errors, handleSubmit, defineField } = useForm({
+  validationSchema: yup.object({
+    password: yup.string().required('Password is required'),
+    confirmPassword: yup
+      .string()
+      .oneOf([yup.ref('password')], 'Passwords must match')
+      .required('Confirm password is required'),
+  }),
+})
+
 const token = ref()
-const errorPassword = ref('')
-const errorConfirmPassword = ref('')
+const [password, passwordAttrs] = defineField('password')
+const [confirmPassword, confirmPasswordAttrs] = defineField('confirmPassword')
 
 onMounted(() => {
   token.value = route.query.token
@@ -25,42 +37,35 @@ onMounted(() => {
   }
 })
 
-const checkPassword = () => {
-  const check = validPass(password.value)
-  errorPassword.value = check.mess
+const openConfirm = async () => {
+  const result = await confirmDialog.open({
+    title: 'Success',
+    question: 'Reset password successful',
+    onlyConfirm: true,
+  })
 
-  return check.check
-}
-
-const checkConfirmPassword = () => {
-  const check = validPassConfirm(confirmPassword.value, password.value)
-  errorConfirmPassword.value = check.mess
-
-  return check.check
-}
-
-const onSubmit = async () => {
-  if (checkPassword() && checkConfirmPassword()) {
-    try {
-      await resetPasswordApi({
-        confirm_token: token,
-        password: password,
-        confirm_password: confirmPassword,
-      }).then(() => {
-        confirmDialog.open({
-          title: 'Success',
-          question: 'Reset successful',
-          onlyConfirm: true,
-          actionConfirm: () => {
-            router.push({ name: 'login' })
-          },
-        })
-      })
-    } catch (error) {
-      console.log(error)
-    }
+  if (result) {
+    router.push('/login')
   }
 }
+
+const onSubmit = handleSubmit(async (values) => {
+  try {
+    await resetPasswordApi({
+      token: token.value,
+      password: values.password,
+      confirm_password: values.confirmPassword,
+    }).then(() => {
+      openConfirm()
+    })
+  } catch (error) {
+    showToast({
+      title: 'Resend failed',
+      description: apiError(error).message,
+      variant: 'destructive',
+    })
+  }
+})
 </script>
 
 <template>
@@ -69,7 +74,7 @@ const onSubmit = async () => {
     <div class="flex-1 flex justify-center items-center">
       <form
         class="rounded-xl max-md:w-full max-sm:p-0 w-96"
-        @submit="onSubmit"
+        @submit.prevent="onSubmit"
       >
         <div class="flex items-center gap-0.5 mb-4">
           <h1 class="text-[344054] text-lg font-semibold">Reset Password</h1>
@@ -86,9 +91,10 @@ const onSubmit = async () => {
               placeholder="Enter password..."
               type="password"
               class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
-              @input="checkPassword"
+              v-bind="passwordAttrs"
+              :invalid="errors.password"
             />
-            <ErrorMessage :error="errorConfirmPassword" />
+            <ErrorMessage :error="errors.password" />
           </div>
           <div class="form-data">
             <Label for="confirm-password">Confirm password</Label>
@@ -97,9 +103,10 @@ const onSubmit = async () => {
               placeholder="Enter email..."
               type="password"
               class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
-              @input="checkConfirmPassword"
+              v-bind="confirmPasswordAttrs"
+              :invalid="errors.confirmPassword"
             />
-            <ErrorMessage :error="errorConfirmPassword" />
+            <ErrorMessage :error="errors.confirmPassword" />
           </div>
         </div>
         <Button class="mt-6 w-full h-10"> Reset Password </Button>

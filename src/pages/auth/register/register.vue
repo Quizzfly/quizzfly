@@ -2,6 +2,7 @@
 import { Input } from '@/components/ui/input'
 import ErrorMessage from '@/components/base/ErrorMessage.vue'
 import { Button } from '@/components/ui/button'
+import { ReloadIcon } from '@radix-icons/vue'
 
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
@@ -29,9 +30,23 @@ const [email, emailAttrs] = defineField('email')
 const [password, passwordAttrs] = defineField('password')
 const [name, nameAttrs] = defineField('name')
 const [confirmPassword, confirmPasswordAttrs] = defineField('confirmPassword')
-
+const isLoading = ref(false)
 const router = useRouter()
+
+const openConfirm = async () => {
+  const result = await confirmDialog.open({
+    title: 'Success',
+    question: 'Registration successful check email to confirm account',
+    onlyConfirm: true,
+  })
+
+  if (result) {
+    router.push('/login')
+  }
+}
+
 const onSubmit = handleSubmit(async (values) => {
+  isLoading.value = true
   try {
     const data = await registerApi({
       email: values.email,
@@ -39,15 +54,9 @@ const onSubmit = handleSubmit(async (values) => {
       password: values.password,
       confirm_password: values.confirmPassword,
     })
+    isLoading.value = false
     console.log(data)
-    confirmDialog.open({
-      title: 'Success',
-      question: 'Registration successful check email to confirm account',
-      onlyConfirm: true,
-      actionConfirm: () => {
-        router.push({ name: 'login' })
-      },
-    })
+    openConfirm()
   } catch (error) {
     showToast({
       title: 'Register failed',
@@ -63,7 +72,7 @@ const onSubmit = handleSubmit(async (values) => {
     <div class="flex-1 flex justify-center items-center">
       <form
         class="rounded-xl max-md:w-full max-sm:p-0 w-96"
-        @submit="onSubmit"
+        @submit.prevent="onSubmit"
       >
         <div class="flex items-center gap-0.5 mb-4">
           <h1 class="text-[344054] text-lg font-semibold">Register account</h1>
@@ -122,7 +131,13 @@ const onSubmit = handleSubmit(async (values) => {
             <ErrorMessage :error="errors.confirmPassword" />
           </div>
         </div>
-        <Button class="mt-6 w-full h-10"> Sign Up </Button>
+        <Button class="mt-6 w-full h-10">
+          <ReloadIcon
+            v-if="isLoading"
+            class="w-4 h-4 mr-2 animate-spin"
+          />
+          Sign Up
+        </Button>
         <div class="flex items-center gap-2 w-full mt-8">
           <span class="h-px bg-slate-200 w-full"></span>
           <p class="text-base">Or</p>
