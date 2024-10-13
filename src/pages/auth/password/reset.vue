@@ -7,7 +7,7 @@ import { useConfirmDialog } from '@/stores/modal'
 import { Input } from '@/components/ui/input'
 import ErrorMessage from '@/components/base/ErrorMessage.vue'
 import { Button } from '@/components/ui/button'
-import { apiExceptionHandler } from '@/utils/exceptionHandler'
+import { apiError } from '@/utils/exceptionHandler'
 import { showToast } from '@/utils/toast'
 
 const router = useRouter()
@@ -66,7 +66,7 @@ const onSubmit = async () => {
     } catch (error) {
       showToast({
         title: 'Resend failed',
-        description: `${apiExceptionHandler(error).message}`,
+        description: apiError(error).message,
         variant: 'destructive',
       })
     }

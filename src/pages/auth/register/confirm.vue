@@ -2,7 +2,7 @@
 import { confirmEmailApi } from '@/services/auth'
 import { useLoadingStore } from '@/stores/loading'
 import { useConfirmDialog } from '@/stores/modal'
-import { apiExceptionHandler } from '@/utils/exceptionHandler'
+import { apiError } from '@/utils/exceptionHandler'
 import { showToast } from '@/utils/toast'
 
 const loadingStore = useLoadingStore()
@@ -32,7 +32,7 @@ const confirmEmail = async (token: string) => {
     console.log(error, 'check error')
     showToast({
       title: 'Confirm failed',
-      description: `${apiExceptionHandler(error).message}`,
+      description: apiError(error).message,
       variant: 'destructive',
     })
   }
