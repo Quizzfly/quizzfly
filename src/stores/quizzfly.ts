@@ -7,6 +7,7 @@ import type { IQuizzflyInfo } from '@/types/quizzfly'
 import { showToast } from '@/utils/toast'
 import { defineStore } from 'pinia'
 import router from '@/routers/router'
+import { apiError } from '@/utils/exceptionHandler'
 
 export const useQuizzflyStore = defineStore({
   id: 'quizzfly',
@@ -40,7 +41,7 @@ export const useQuizzflyStore = defineStore({
       } catch (error) {
         console.error(error)
         showToast({
-          description: 'Create quizzfly draft failed',
+          description: apiError(error).message,
           variant: 'destructive',
         })
       }
@@ -54,10 +55,13 @@ export const useQuizzflyStore = defineStore({
       try {
         const { data } = await updateQuizzflySettingsApi(id, val)
         this.setQuizzflyInfo({ ...data })
+        showToast({
+          description: 'Update quizzfly settings successfully',
+        })
       } catch (error) {
         console.error(error)
         showToast({
-          description: 'Update quizzfly draft failed',
+          description: apiError(error).message,
           variant: 'destructive',
         })
       }

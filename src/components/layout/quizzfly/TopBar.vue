@@ -2,6 +2,7 @@
 import EditableText from '@/components/base/EditableText.vue'
 import { Button } from '@/components/ui/button'
 import { useQuizzflyStore } from '@/stores/quizzfly'
+import QuizzflySettings from './QuizzflySettings.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -44,6 +45,10 @@ const handleClickCancel = () => {
           </div>
         </EditableText>
       </div>
+
+      <!-- settings -->
+      <QuizzflySettings />
+
       <div
         v-if="quizzflyStore.getIsUpdating"
         class="flex items-center gap-2"
