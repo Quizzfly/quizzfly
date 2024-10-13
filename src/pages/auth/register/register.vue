@@ -7,7 +7,7 @@ import { ReloadIcon } from '@radix-icons/vue'
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
 import { registerApi } from '@/services/auth'
-import { apiExceptionHandler } from '@/utils/exceptionHandler'
+import { apiError } from '@/utils/exceptionHandler'
 import Toaster from '@/components/ui/toast/Toaster.vue'
 import { showToast } from '@/utils/toast'
 import { useConfirmDialog } from '@/stores/modal'
@@ -60,7 +60,7 @@ const onSubmit = handleSubmit(async (values) => {
   } catch (error) {
     showToast({
       title: 'Register failed',
-      description: `${apiExceptionHandler(error).message}`,
+      description: apiError(error).message,
       variant: 'destructive',
     })
   }

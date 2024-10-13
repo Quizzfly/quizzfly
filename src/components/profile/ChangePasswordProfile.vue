@@ -3,7 +3,7 @@ import { Button } from '../ui/button'
 import { Input } from '@/components/ui/input'
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
-// import { apiExceptionHandler } from '@/utils/exceptionHandler'
+// import { apiError } from '@/utils/exceptionHandler'
 // import Toaster from '@/components/ui/toast/Toaster.vue'
 // import { showToast } from '@/utils/toast'
 
@@ -22,7 +22,7 @@ const [repeatNewPassword, repeatNewPasswordAttrs] = defineField('repeatNewPasswo
 
 <template>
   <div class="w-full flex items-start gap-8 max-lg:flex-col">
-    <div class="w-2/4 p-4 rounded-md shadow flex flex-col gap-10 max-lg:w-full">
+    <div class="w-2/4 p-4 rounded-md shadow flex flex-col gap-10 max-lg:w-full bg-white">
       <div class="header flex items-center justify-between">
         <h3 class="text-lg font-semibold">Change password</h3>
       </div>
