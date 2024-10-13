@@ -41,7 +41,7 @@ export const confirmEmailApi = async (token: string): Promise<any> => {
 export const resetPasswordApi = async (data: any): Promise<any> => {
   return $api('/auth/reset-password', {
     method: 'POST',
-    body: { data },
+    body: data,
   })
 }
 
