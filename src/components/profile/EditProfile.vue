@@ -17,7 +17,7 @@ import { useAuthStore } from '@/stores/auth'
 import { UpdateInfoApi } from '@/services/user'
 import { uploadFile } from '@/services/file'
 
-import { apiExceptionHandler } from '@/utils/exceptionHandler'
+import { apiError } from '@/utils/exceptionHandler'
 import Toaster from '@/components/ui/toast/Toaster.vue'
 import { showToast } from '@/utils/toast'
 
@@ -77,7 +77,7 @@ const onSubmit = handleSubmit(async () => {
   } catch (error) {
     showToast({
       title: 'Update failed',
-      description: `${apiExceptionHandler(error).message}`,
+      description: `${apiError(error).message}`,
       variant: 'destructive',
     })
   }

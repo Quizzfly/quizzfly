@@ -3,7 +3,7 @@ import { Button } from '../ui/button'
 import { Input } from '@/components/ui/input'
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
-// import { apiExceptionHandler } from '@/utils/exceptionHandler'
+// import { apiError } from '@/utils/exceptionHandler'
 // import Toaster from '@/components/ui/toast/Toaster.vue'
 // import { showToast } from '@/utils/toast'
 

@@ -3,7 +3,7 @@ import { getInfoApi } from '@/services/user'
 import router from '@/routers/router'
 import { loginApi } from '@/services/auth'
 import { showToast } from '@/utils/toast'
-import { apiExceptionHandler } from '@/utils/exceptionHandler'
+import { apiError } from '@/utils/exceptionHandler'
 import type { IUser } from '@/types/user'
 
 export const useAuthStore = defineStore({
@@ -43,7 +43,7 @@ export const useAuthStore = defineStore({
       } catch (error) {
         showToast({
           title: 'Login failed',
-          description: `${apiExceptionHandler(error).message}`,
+          description: apiError(error).message,
           variant: 'destructive',
         })
       }

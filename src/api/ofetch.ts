@@ -59,7 +59,7 @@ export const fetchInstance: $Fetch = ofetch.create({
   retry: 1,
   retryStatusCodes: config.retryStatusCodes,
   async onResponseError(error) {
-    console.log('[Ofetch]: Unauthorized.', error)
+    console.error('[Ofetch]: Error:', error)
     if (isAllowRefreshToken(error)) {
       error.options = await handleUnauthorizedError(error)
     }
