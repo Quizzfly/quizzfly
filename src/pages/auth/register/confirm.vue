@@ -4,6 +4,7 @@ import { useLoadingStore } from '@/stores/loading'
 import { useConfirmDialog } from '@/stores/modal'
 import { apiExceptionHandler } from '@/utils/exceptionHandler'
 import { showToast } from '@/utils/toast'
+
 const loadingStore = useLoadingStore()
 
 const confirmDialog = useConfirmDialog()
@@ -15,12 +16,12 @@ const openConfirm = async () => {
   const result = await confirmDialog.open({
     title: 'Success',
     question: 'Registration confirmed successfully, please proceed to login',
+    onlyConfirm: true,
   })
 
   if (result) {
     router.push('/login')
   }
-  router.push('/login')
 }
 
 const confirmEmail = async (token: string) => {

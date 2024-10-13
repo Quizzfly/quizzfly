@@ -45,6 +45,7 @@ const openConfirm = async () => {
   const result = await confirmDialog.open({
     title: 'Success',
     question: 'Reset password successful',
+    onlyConfirm: true,
   })
 
   if (result) {

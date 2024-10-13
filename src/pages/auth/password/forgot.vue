@@ -6,12 +6,14 @@ import { Button } from '@/components/ui/button'
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
 import { showToast } from '@/utils/toast'
+import { ReloadIcon } from '@radix-icons/vue'
 
 const errorEmail = ref()
 const isForgot = ref(false)
 const isCountdown = ref(false)
 const timeResend = ref(0)
 const secondsResend = ref(0)
+const isLoading = ref(false)
 
 const handleForgot = async () => {
   try {
@@ -20,12 +22,14 @@ const handleForgot = async () => {
       return
     }
     await forgotPasswordApi(email.value)
+    isLoading.value = true
     showToast({
       title: 'Success',
       description: 'Resend email success',
       variant: 'default',
     })
     isForgot.value = true
+    isLoading.value = false
   } catch (error) {
     showToast({
       title: 'Resend email failed',
@@ -143,6 +147,10 @@ const [email, emailAttrs] = defineField('email')
               class="mt-4 w-full h-10 bg-primary"
               @click="handleForgot"
             >
+              <ReloadIcon
+                v-if="isLoading"
+                class="w-4 h-4 mr-2 animate-spin"
+              />
               Submit
             </Button>
           </form>
