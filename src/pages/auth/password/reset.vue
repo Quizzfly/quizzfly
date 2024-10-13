@@ -7,6 +7,8 @@ import { useConfirmDialog } from '@/stores/modal'
 import { Input } from '@/components/ui/input'
 import ErrorMessage from '@/components/base/ErrorMessage.vue'
 import { Button } from '@/components/ui/button'
+import { apiError } from '@/utils/exceptionHandler'
+import { showToast } from '@/utils/toast'
 
 const router = useRouter()
 const route = useRoute()
@@ -39,25 +41,34 @@ const checkConfirmPassword = () => {
   return check.check
 }
 
+const openConfirm = async () => {
+  const result = await confirmDialog.open({
+    title: 'Success',
+    question: 'Reset password successful',
+    onlyConfirm: true,
+  })
+
+  if (result) {
+    router.push('/login')
+  }
+}
+
 const onSubmit = async () => {
   if (checkPassword() && checkConfirmPassword()) {
     try {
       await resetPasswordApi({
-        confirm_token: token,
-        password: password,
-        confirm_password: confirmPassword,
+        confirm_token: token.value,
+        password: password.value,
+        confirm_password: confirmPassword.value,
       }).then(() => {
-        confirmDialog.open({
-          title: 'Success',
-          question: 'Reset successful',
-          onlyConfirm: true,
-          actionConfirm: () => {
-            router.push({ name: 'login' })
-          },
-        })
+        openConfirm()
       })
     } catch (error) {
-      console.log(error)
+      showToast({
+        title: 'Resend failed',
+        description: apiError(error).message,
+        variant: 'destructive',
+      })
     }
   }
 }
@@ -69,7 +80,7 @@ const onSubmit = async () => {
     <div class="flex-1 flex justify-center items-center">
       <form
         class="rounded-xl max-md:w-full max-sm:p-0 w-96"
-        @submit="onSubmit"
+        @submit.prevent="onSubmit"
       >
         <div class="flex items-center gap-0.5 mb-4">
           <h1 class="text-[344054] text-lg font-semibold">Reset Password</h1>

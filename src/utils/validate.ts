@@ -60,13 +60,15 @@ function validPass(pass: string, longPass?: string) {
 function validPassConfirm(confirmPass: string, pass: string, longPass?: string) {
   if (confirmPass === '' || confirmPass == null || confirmPass == undefined) {
     return {
-      mess: t('validation.ps_confirm_blank'),
+      // mess: t('validation.ps_confirm_blank'),
+      mess: 'Password cannot be blank',
       check: false,
     }
   } else if (!validPass(confirmPass).check) {
     if (!longPass) {
       return {
-        mess: t('error_code.VAL_SIG0202'),
+        // mess: t('error_code.VAL_SIG0202'),
+        mess: 'Password is not enough characters',
         check: false,
       }
     } else {
@@ -77,7 +79,8 @@ function validPassConfirm(confirmPass: string, pass: string, longPass?: string) 
     }
   } else if (confirmPass != pass) {
     return {
-      mess: t('validation.ps_confirm_match'),
+      // mess: t('validation.ps_confirm_match'),
+      mess: 'Confirm password incorrect',
       check: false,
     }
   } else

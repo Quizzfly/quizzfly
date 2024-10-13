@@ -6,67 +6,14 @@ import { Button } from '@/components/ui/button'
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
 import { showToast } from '@/utils/toast'
+import { ReloadIcon } from '@radix-icons/vue'
 
-// import Vue from 'vue';
-// import { validEmail } from '~/modules/validation/ValidAuth.js';
-// import { mapActions } from 'vuex';
-// import { forgot_password_client_api } from '~/services/authService';
-// import langAuth from '~/components/Layout/langAuth.vue';
-// import QuestionPopup from '~/components/Layout/QuestionPopup.vue';
-// export default Vue.extend({
-//     auth: false,
-//     components: {
-//         langAuth,
-//         QuestionPopup,
-//     },
-//     middleware: 'guest',
-//     data() {
-//         return {
-//             checked: false,
-//             email: '',
-//             errorEmail: '',
-//             question: null,
-//         };
-//     },
-//     methods: {
-//         ...mapActions({
-//             set_noti_mess: 'noti_mess/set_noti_mess',
-//         }),
-//         checkEmail() {
-//             const check = validEmail(this.email);
-//             this.errorEmail = check.mess;
-
-//             return check.check;
-//         },
-//         onGoToLogin() {
-//             this.$router.push('/login');
-//         },
-//         onGoToHomePage() {
-//             this.$router.push('/');
-//         },
-//         async sendForgotPassword() {
-//             if (this.checkEmail()) {
-//                 try {
-//                     await forgot_password_client_api({
-//                         email: this.email,
-//                     }).then(() => {
-//                         this.question = {
-//                             type: 'SUCCESS',
-//                             body: this.$t('question.check_email_confirm'),
-//                         };
-//                     });
-//                 } catch (e) {
-//                     this.errorEmail = e;
-//                 }
-//             }
-//         },
-//     },
-// });
 const errorEmail = ref()
 const isForgot = ref(false)
 const isCountdown = ref(false)
 const timeResend = ref(0)
 const secondsResend = ref(0)
+const isLoading = ref(false)
 
 const handleForgot = async () => {
   try {
@@ -75,32 +22,43 @@ const handleForgot = async () => {
       return
     }
     await forgotPasswordApi(email.value)
+    isLoading.value = true
     showToast({
       title: 'Success',
       description: 'Resend email success',
       variant: 'default',
     })
     isForgot.value = true
+    isLoading.value = false
   } catch (error) {
     showToast({
-      title: 'Forgot password failed',
+      title: 'Resend email failed',
       description: `${((error as any).data?.error?.message as string) || 'Send forgot password error'}`,
       variant: 'destructive',
     })
   }
+  console.log('hello')
 }
 
 const handleResentEmail = async (time: number) => {
-  timeResend.value = time
-  isCountdown.value = true
-  startTimer()
-
-  await forgotPasswordApi(email.value)
-  showToast({
-    title: 'Success',
-    description: 'Resend email success',
-    variant: 'default',
-  })
+  try {
+    await forgotPasswordApi(email.value)
+    showToast({
+      title: 'Success',
+      description: 'Resend email success',
+      variant: 'default',
+    })
+    isForgot.value = true
+    timeResend.value = time
+    isCountdown.value = true
+    startTimer()
+  } catch (error) {
+    showToast({
+      title: 'Failed',
+      description: 'Resend email failed',
+      variant: 'default',
+    })
+  }
 }
 
 const startTimer = () => {
@@ -147,17 +105,17 @@ const [email, emailAttrs] = defineField('email')
         <div class="flex flex-col items-start gap-2 mb-2 mt-6">
           <h1 class="text-[344054] text-lg font-semibold">Forgot password</h1>
           <h1
-            v-if="!isForgot"
+            v-if="isForgot"
             class="text-[344054] text-sm font-medium"
           >
-            A password reset link has been sent to <span>{{ email }}</span
+            A password reset link has been sent to <span class="primary-color">{{ email }}</span
             >. Click the link to complete the password reset. If you still haven't received the
             email, please hit resend below.
           </h1>
         </div>
         <div>
           <h2
-            v-if="isForgot"
+            v-if="!isForgot"
             class="mt-1 text-[#667085]"
           >
             Enter your email to reset password
@@ -165,13 +123,13 @@ const [email, emailAttrs] = defineField('email')
         </div>
         <div class="mt-6">
           <form
-            v-if="isForgot"
+            v-if="!isForgot"
             class="form-data"
-            @submit="handleForgot"
+            @submit.prevent="handleForgot"
           >
             <Label for="email">Email</Label>
             <Input
-              v-if="isForgot"
+              v-if="!isForgot"
               id="email"
               v-model="email"
               placeholder="Enter email..."
@@ -187,7 +145,12 @@ const [email, emailAttrs] = defineField('email')
             <Button
               type="submit"
               class="mt-4 w-full h-10 bg-primary"
+              @click="handleForgot"
             >
+              <ReloadIcon
+                v-if="isLoading"
+                class="w-4 h-4 mr-2 animate-spin"
+              />
               Submit
             </Button>
           </form>
