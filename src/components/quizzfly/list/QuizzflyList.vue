@@ -7,7 +7,7 @@ const quizzflyStore = useQuizzflyStore()
 const quizzflys = computed(() => quizzflyStore.getQuizzflys)
 </script>
 <template>
-  <div class="grid grid-cols-4 gap-5">
+  <div class="grid grid-cols-[repeat(auto-fill,400px)] max-md:grid-cols-1 gap-5">
     <Card
       v-for="quizzfly in quizzflys"
       :key="quizzfly.id"
@@ -25,7 +25,7 @@ const quizzflys = computed(() => quizzflyStore.getQuizzflys)
           <!-- information -->
           <div>
             <div class="flex item-center gap-3">
-              <h2 class="text-base font-medium">{{ quizzfly.title || 'Untitled' }}</h2>
+              <h2 class="title text-base font-medium">{{ quizzfly.title || 'Untitled' }}</h2>
               <Chip
                 :name="quizzfly.quizzfly_status"
                 color="#df223a"
@@ -48,3 +48,11 @@ const quizzflys = computed(() => quizzflyStore.getQuizzflys)
     </Card>
   </div>
 </template>
+<style scoped>
+.title {
+  width: 100px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+</style>

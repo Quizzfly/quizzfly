@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TopBar from '@/components/layout/quiz/TopBar.vue'
+import TopBar from '@/components/layout/quizzfly/TopBar.vue'
 </script>
 <template>
   <div class="flex flex-col w-full h-full">

@@ -31,6 +31,13 @@ const finishEditing = () => {
 
 const data = ref(props.value)
 
+watch(
+  () => props.value,
+  (value) => {
+    data.value = value
+  },
+)
+
 const inputRef = ref<InstanceType<typeof Input>>()
 </script>
 
