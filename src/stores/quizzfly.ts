@@ -1,5 +1,6 @@
 import {
   createQuizzflyDraftApi,
+  getQuizzflyApi,
   getQuizzflysApi,
   updateQuizzflySettingsApi,
 } from '@/services/quizzfly'
@@ -77,6 +78,19 @@ export const useQuizzflyStore = defineStore({
         console.error(error)
         showToast({
           description: 'Fetch quizzflys failed',
+          variant: 'destructive',
+        })
+        throw error
+      }
+    },
+    async getQuizzflyDetail(id: string) {
+      try {
+        const { data } = await getQuizzflyApi(id)
+        this.setQuizzflyInfo(data)
+      } catch (error) {
+        console.error(error)
+        showToast({
+          description: 'Fetch quizzfly detail failed',
           variant: 'destructive',
         })
         throw error

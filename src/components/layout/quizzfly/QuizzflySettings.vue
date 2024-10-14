@@ -11,7 +11,11 @@ import {
 } from '@/components/ui/dialog'
 import BasicInformation from './SettingsTab/BasicInformation.vue'
 import { useQuizzflyStore } from '@/stores/quizzfly'
+import { uploadFileApi } from '@/services/file'
+import { showToast } from '@/utils/toast'
+import { useLoadingStore } from '@/stores/loading'
 
+const loadingStore = useLoadingStore()
 const quizzflyStore = useQuizzflyStore()
 
 interface Tab {
@@ -29,17 +33,37 @@ export interface Settings {
   title: string
   description: string
   is_public: boolean
+  cover_image: string
 }
 
 const settings = ref<Settings>({
   title: '',
   description: '',
   is_public: false,
+  cover_image: '',
 })
+const imageRaw = ref<File>()
 
-const handleSaveSettings = () => {
+const handleSaveSettings = async () => {
   console.log('save settings')
-  quizzflyStore.updateQuizzflySettings(quizzflyStore.getQuizzflyInfo.id, settings.value)
+  loadingStore.setLoading(true)
+  try {
+    const formData = new FormData()
+    if (imageRaw.value) {
+      formData.append('file', imageRaw.value)
+      const { data } = await uploadFileApi(formData)
+      settings.value.cover_image = data.url
+      imageRaw.value = undefined
+    }
+    quizzflyStore.updateQuizzflySettings(quizzflyStore.getQuizzflyInfo.id, settings.value)
+  } catch (error) {
+    showToast({
+      title: 'Error',
+      description: 'Failed to upload image',
+      variant: 'destructive',
+    })
+  }
+  loadingStore.setLoading(false)
 }
 </script>
 
@@ -75,7 +99,10 @@ const handleSaveSettings = () => {
           <div class="px-5 flex-auto overflow-y-auto">
             <!-- <div></div> -->
             <div v-if="currentTab.value === 'basic'">
-              <BasicInformation v-model="settings" />
+              <BasicInformation
+                v-model="settings"
+                v-model:image-raw="imageRaw"
+              />
             </div>
           </div>
         </div>

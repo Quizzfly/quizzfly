@@ -34,7 +34,7 @@ const handleClickCancel = () => {
         <EditableText
           v-slot="{ data }"
           class="text-lg font-medium"
-          :value="quizzflyStore.getQuizzflyInfo.title"
+          :value="quizzflyStore.getQuizzflyInfo.title || 'Untitled'"
           @save="handleSaveTitle"
         >
           <div class="flex flex-col">
