@@ -15,7 +15,7 @@ import { useForm } from 'vee-validate'
 import * as yup from 'yup'
 import { useAuthStore } from '@/stores/auth'
 import { UpdateInfoApi } from '@/services/user'
-import { uploadFile } from '@/services/file'
+import { uploadFileApi } from '@/services/file'
 
 import { apiError } from '@/utils/exceptionHandler'
 import Toaster from '@/components/ui/toast/Toaster.vue'
@@ -55,7 +55,7 @@ const onSubmit = handleSubmit(async () => {
 
     formData.append('file', logoUpload.value)
 
-    await uploadFile(formData).then((res: any) => {
+    await uploadFileApi(formData).then((res: any) => {
       avatar.value = res.data.url
     })
   }

@@ -3,6 +3,23 @@ import SlideList from '@/components/quizzfly/create/SlideList.vue'
 import SlideMain from '@/components/quizzfly/create/SlideMain.vue'
 import QuizMain from '@/components/quizzfly/create/QuizMain.vue'
 import type { Slide } from '@/types/slide'
+import { useQuizzflyStore } from '@/stores/quizzfly'
+import { useLoadingStore } from '@/stores/loading'
+const route = useRoute()
+const quizzflyStore = useQuizzflyStore()
+const loadingStore = useLoadingStore()
+
+onBeforeMount(() => {
+  loadingStore.setLoading(true)
+  try {
+    quizzflyStore.getQuizzflyDetail(route.params.quizzflyId as string)
+  } catch (error) {
+    console.error(error)
+  }
+  setTimeout(() => {
+    loadingStore.setLoading(false)
+  }, 500)
+})
 
 const slides = ref<Slide[]>([
   {

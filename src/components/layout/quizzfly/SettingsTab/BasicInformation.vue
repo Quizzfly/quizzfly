@@ -4,17 +4,36 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-
 import { useQuizzflyStore } from '@/stores/quizzfly'
 import type { Settings } from '../QuizzflySettings.vue'
 
 const quizzflyStore = useQuizzflyStore()
-
 const settingsData = defineModel<Settings>({ required: true })
+const imageRaw = defineModel<File>('imageRaw')
 
 onBeforeMount(() => {
   settingsData.value.title = quizzflyStore.getQuizzflyInfo.title
+  settingsData.value.description = quizzflyStore.getQuizzflyInfo.description
+  settingsData.value.is_public = quizzflyStore.getQuizzflyInfo.is_public
+  settingsData.value.cover_image = quizzflyStore.getQuizzflyInfo.cover_image || ''
 })
+
+const inputRef = ref<HTMLInputElement>()
+const imagePreview = ref<string>()
+
+function handleUpload() {
+  inputRef.value?.click()
+}
+
+function handleFileChange(event: Event) {
+  const target = event.target as HTMLInputElement
+  const file = target.files?.[0]
+
+  if (file) {
+    imageRaw.value = file
+    imagePreview.value = URL.createObjectURL(file)
+  }
+}
 </script>
 <template>
   <div class="grid gap-4 pb-2">
@@ -23,11 +42,25 @@ onBeforeMount(() => {
       <p class="text-sm text-gray-500">
         Upload a cover image for your quiz. This image will be displayed on the quiz page.
       </p>
-      <div class="w-full h-[200px] border-2 border-dashed rounded-md mt-5">
+      <div
+        class="w-full h-[200px] border-2 border-dashed rounded-md mt-5 overflow-hidden"
+        :style="{ backgroundImage: `url(${imagePreview})` }"
+      >
+        <input
+          id=""
+          ref="inputRef"
+          type="file"
+          name=""
+          class="hidden"
+          @change="handleFileChange"
+        />
         <div class="flex justify-center items-center h-full">
-          <Button class="">
+          <Button
+            class=""
+            @click="handleUpload"
+          >
             <span class="i-material-symbols-light-add text-2xl"></span>
-            Upload image
+            {{ imagePreview ? 'Change' : 'Upload' }} image
           </Button>
         </div>
       </div>
@@ -50,6 +83,7 @@ onBeforeMount(() => {
           Description of your quizzfly. This will be displayed on the quiz page.
         </p>
         <Textarea
+          v-model="settingsData.description"
           class="mt-3"
           placeholder="Enter description"
         />
