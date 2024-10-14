@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import Toaster from '@/components/ui/toast/Toaster.vue'
 import ConfirmModal from './components/base/ConfirmDialog.vue'
-import { useLoadingStore } from './stores/loading'
+import LoadingOverlay from '@/components/base/LoadingOverlay.vue'
+// import { useLoadingStore } from './stores/loading'
 // import { useConfirmDialog } from './stores/modal'
 const route = useRoute()
 
@@ -9,9 +10,8 @@ const layout = computed(() => {
   return route.meta.layout ?? 'DefaultLayout'
 })
 
-const loadingStore = useLoadingStore()
-
 onMounted(() => {
+  // loadingStore.setLoading(true)
   // showToast({
   //   title: 'Welcome to Vite Vue3',
   //   description: 'This is a simple toast message',
@@ -31,18 +31,9 @@ onMounted(() => {
 
 <template>
   <ConfirmModal />
-
+  <LoadingOverlay />
   <!-- <button @click="openConfirm">Open Modal</button> -->
   <Toaster />
-  <div
-    v-if="loadingStore.getLoading"
-    class="fixed top-0 left-0 w-full h-full flex justify-center items-center z-[999] bg-[#4c4c4c61]"
-  >
-    <Icon
-      icon="svg-spinners:90-ring-with-bg"
-      class="w-10 h-10"
-    />
-  </div>
   <component :is="layout">
     <RouterView />
   </component>

@@ -5,6 +5,7 @@ export interface IQuizzflyInfo {
   theme: null | string
   is_public: boolean
   quizzfly_status: string
+  description: string
   user_id: string
   created_at: string
   updated_at: string
