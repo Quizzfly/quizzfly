@@ -5,6 +5,10 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import type { Slide } from '@/types/slide'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { quizOptions } from '@/utils/quiz'
+import { useSlidesStore } from '@/stores/quizzfly/quizzflySlide'
+
+const currentSlide = defineModel<Slide>({ required: true })
+const slidesStore = useSlidesStore()
 
 defineProps<{
   slides: Slide[]
@@ -13,8 +17,6 @@ defineProps<{
 const emits = defineEmits<{
   (e: 'addSlide', type: 'quiz' | 'slide', quizType: string): void
 }>()
-
-const currentSlide = defineModel<Slide>({ required: true })
 
 const dragOptions = ref({
   animation: 200,
@@ -97,6 +99,7 @@ const handleAddSlide = (type: string, quizType: string) => {
           name: !drag ? 'flip-list' : null,
         }"
         v-bind="dragOptions"
+        @update:model-value="slidesStore.updateSlides"
         @start="drag = true"
         @end="drag = false"
       >

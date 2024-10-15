@@ -25,6 +25,9 @@ export const useSlidesStore = defineStore({
       // const slides = await fetch('/api/slides')
       // this.slides = await slides.json()
     },
+    updateSlides(slides: Slide[]) {
+      this.slides = slides
+    },
     addSlide(slide: Slide) {
       this.slides.push(slide)
     },
