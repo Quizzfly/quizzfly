@@ -31,8 +31,8 @@ const { errors, handleSubmit, defineField } = useForm({
   }),
 })
 
-const [email, emailAttrs] = defineField('email')
-const [username, usernameAttrs] = defineField('username')
+const [email] = defineField('email')
+const [username] = defineField('username')
 const [name, nameAttrs] = defineField('name')
 const avatar = ref('')
 
@@ -67,8 +67,9 @@ const onSubmit = handleSubmit(async () => {
   }
   try {
     const { data: res } = await UpdateInfoApi(data)
-    console.log(res.email, 'check res')
+    console.log(res, 'check res')
     setData(res)
+    authStore.setUser(res)
     showToast({
       title: 'Update success',
       description: 'This is a simple toast message',
@@ -124,7 +125,7 @@ const onChangeImg = (e: Event) => {
           >
             <img
               v-if="avatar"
-              class="w-full"
+              class="w-full h-full rounded object-cover"
               :src="avatar"
             />
             <img
@@ -158,12 +159,10 @@ const onChangeImg = (e: Event) => {
               v-model="username"
               disabled
               placeholder="Enter name..."
-              v-bind="usernameAttrs"
               :invalid="errors.username"
               type="username"
               class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
             />
-            <ErrorMessage :error="errors.name" />
           </div>
           <div class="form-data w-full">
             <Label
@@ -191,12 +190,10 @@ const onChangeImg = (e: Event) => {
               v-model="email"
               disabled
               placeholder="Enter email..."
-              v-bind="emailAttrs"
               :invalid="errors.email"
               type="email"
               class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
             />
-            <ErrorMessage :error="errors.email" />
           </div>
         </div>
       </div>

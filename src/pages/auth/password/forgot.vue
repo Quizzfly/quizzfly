@@ -108,7 +108,7 @@ const [email, emailAttrs] = defineField('email')
             v-if="isForgot"
             class="text-[344054] text-sm font-medium"
           >
-            A password reset link has been sent to <span class="primary-color">{{ email }}</span
+            A password reset link has been sent to <span class="text-primary">{{ email }}</span
             >. Click the link to complete the password reset. If you still haven't received the
             email, please hit resend below.
           </h1>
@@ -145,7 +145,6 @@ const [email, emailAttrs] = defineField('email')
             <Button
               type="submit"
               class="mt-4 w-full h-10 bg-primary"
-              @click="handleForgot"
             >
               <ReloadIcon
                 v-if="isLoading"
