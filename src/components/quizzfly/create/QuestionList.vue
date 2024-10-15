@@ -99,7 +99,7 @@ const handleAddSlide = (type: string, quizType: string) => {
           name: !drag ? 'flip-list' : null,
         }"
         v-bind="dragOptions"
-        @update:model-value="questionsStore.updateQuestion"
+        @update:model-value="questionsStore.updateQuestions"
         @start="drag = true"
         @end="drag = false"
       >

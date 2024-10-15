@@ -42,7 +42,7 @@ const handleAddSlide = (type: 'quiz' | 'slide', quizType: string) => {
     type: type,
     quizType: quizType,
     content: 'This is a quiz slide',
-    image: 'https://picsum.photos/200/300',
+    image: '',
     link: 'https://picsum.photos/200/300',
     answers: [],
   })
