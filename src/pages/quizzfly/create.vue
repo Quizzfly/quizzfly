@@ -52,7 +52,12 @@ const handleAddSlide = (type: 'quiz' | 'slide', quizType: string) => {
   <div class="flex w-full items-stretch p-5 pl-0 gap-4">
     <QuestionList
       v-model="currentQuestion"
+      v-motion
       :slides="questionsStore.getSlides"
+      :initial="{ opacity: 0, x: -100 }"
+      :enter="{ opacity: 1, x: 0, scale: 1 }"
+      :delay="300"
+      :duration="300"
       @add-slide="handleAddSlide"
     />
     <QuizMain v-if="currentQuestion.type === 'quiz'" />

@@ -33,6 +33,23 @@ const routes: RouteRecordRaw[] = [
     path: '/test',
     component: () => import('@/pages/test.vue'),
   },
+  {
+    path: '/:catchAll(.*)',
+    name: 'NotFound',
+    meta: {
+      layout: 'GuestLayout',
+    },
+    redirect: '/404',
+    children: [],
+  },
+  {
+    path: '/404',
+    name: '404',
+    meta: {
+      layout: 'GuestLayout',
+    },
+    component: () => import('@/pages/NotFound.vue'),
+  },
 ]
 
 const router = createRouter({

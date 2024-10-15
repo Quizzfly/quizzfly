@@ -21,13 +21,13 @@ const handleSaveSettings = () => {
 }
 
 const handleClickCancel = () => {
-  router.push({ name: 'dashboard' })
+  router.push({ name: 'quizzfly' })
 }
 </script>
 <template>
   <div class="flex justify-between items-center border-b py-2 px-5 h-[60px]">
     <div class="flex items-center gap-5">
-      <RouterLink to="/">
+      <RouterLink :to="{ name: 'quizzfly' }">
         <span class="i-solar-arrow-left-linear text-xl cursor-pointer"></span>
       </RouterLink>
       <div>

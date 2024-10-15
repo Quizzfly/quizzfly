@@ -9,6 +9,10 @@ const quizzflyStore = useQuizzflyStore()
 onBeforeMount(() => {
   quizzflyStore.fetchQuizzflys()
 })
+
+const handleClickCreateQuiz = async () => {
+  await quizzflyStore.initQuizzflyDraft()
+}
 </script>
 <template>
   <div class="w-full p-8 flex flex-col gap-6 overflow-hidden h-full">
@@ -30,12 +34,10 @@ onBeforeMount(() => {
         </div>
       </div>
       <!-- right -->
-      <RouterLink to="/quizzfly/create">
-        <Button>
-          <span class="i-material-symbols-light-add text-2xl"></span>
-          Create Quiz
-        </Button>
-      </RouterLink>
+      <Button @click="handleClickCreateQuiz">
+        <span class="i-material-symbols-light-add text-2xl"></span>
+        Create Quiz
+      </Button>
     </div>
     <!-- filter -->
     <QuizzflyFilter />
