@@ -25,7 +25,7 @@ const handleUpdateTitle = (value: string | number) => {
         <template #input="{ finishEditing }">
           <Input
             placeholder="Enter your question"
-            class="text-2xl font-medium h-12"
+            class="text-2xl font-medium h-12 bg-white"
             :model-value="questionsStore.getCurrentQuestion.title"
             @update:model-value="handleUpdateTitle"
             @blur="finishEditing"
@@ -33,7 +33,7 @@ const handleUpdateTitle = (value: string | number) => {
         </template>
         <template #default="{}">
           <p
-            class="py-1 px-2 rounded-lg border-2 border-transparent hover:border-primary text-2xl font-medium"
+            class="bg-white py-1 px-2 rounded-lg border-2 border-transparent hover:border-primary text-2xl font-medium"
           >
             {{ questionsStore.getCurrentQuestion.title || 'Enter question' }}
           </p>
@@ -43,9 +43,14 @@ const handleUpdateTitle = (value: string | number) => {
 
     <!-- picture -->
     <div class="flex justify-center flex-auto">
-      <div class="w-[80%] h-full bg-slate-100 rounded-lg"></div>
+      <div class="w-[50%] h-full bg-slate-100 rounded-lg image-area"></div>
     </div>
     <!-- answer -->
     <AnswerSetting :key="questionsStore.getCurrentQuestion.id" />
   </div>
 </template>
+<style scoped>
+.image-area {
+  background-color: rgba(220, 220, 220, 0.743);
+}
+</style>

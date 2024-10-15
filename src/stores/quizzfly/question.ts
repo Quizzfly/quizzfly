@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import { v4 as uuidv4 } from 'uuid'
 
 export const useQuestionsStore = defineStore({
-  id: 'slide',
+  id: 'question',
   state: () => ({
     currentQuestion: {} as Question,
     questions: [
@@ -12,8 +12,8 @@ export const useQuestionsStore = defineStore({
         title: 'Question 1',
         type: 'quiz',
         quizType: 'multiple_choice',
-        content: 'This is a quiz slide',
-        image: 'https://picsum.photos/200/300',
+        content: 'This is a quiz question',
+        image: '',
         link: 'https://picsum.photos/200/300',
         answers: [],
       },
@@ -25,22 +25,22 @@ export const useQuestionsStore = defineStore({
       // const questions = await fetch('/api/questions')
       // this.questions = await questions.json()
     },
-    updateQuestion(questions: Question[]) {
+    updateQuestions(questions: Question[]) {
       this.questions = questions
     },
-    addSlide(slide: Question) {
-      this.questions.push(slide)
+    addSlide(question: Question) {
+      this.questions.push(question)
     },
-    setCurrentQuestion(slide: Question) {
-      this.currentQuestion = slide
+    setCurrentQuestion(question: Question) {
+      this.currentQuestion = question
     },
-    updateCurrentQuestion(slide: Partial<Question>) {
-      this.currentQuestion = { ...this.currentQuestion, ...slide }
-      this.updateSlide(this.currentQuestion)
+    updateCurrentQuestion(question: Partial<Question>) {
+      this.currentQuestion = { ...this.currentQuestion, ...question }
+      this.updateQuestion(this.currentQuestion)
     },
-    updateSlide(slide: Question) {
-      const index = this.questions.findIndex((s) => s.id === slide.id)
-      this.questions[index] = slide
+    updateQuestion(question: Question) {
+      const index = this.questions.findIndex((s) => s.id === question.id)
+      this.questions[index] = { ...this.questions[index], ...question }
     },
     updateCurrentQuestionAnswers(answers: any[]) {
       this.currentQuestion.answers = answers

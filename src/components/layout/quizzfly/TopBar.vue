@@ -3,6 +3,7 @@ import EditableText from '@/components/base/EditableText.vue'
 import { Button } from '@/components/ui/button'
 import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
 import QuizzflySettings from './QuizzflySettings.vue'
+import ThemeSetting from './ThemeSetting.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -59,6 +60,7 @@ const handleClickCancel = () => {
     </div>
 
     <div class="flex items-center gap-3">
+      <ThemeSetting />
       <Button
         variant="secondary"
         class="px-2"

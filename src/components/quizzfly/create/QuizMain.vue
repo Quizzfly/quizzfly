@@ -1,15 +1,17 @@
 <script setup lang="ts">
+import { useQuestionsStore } from '@/stores/quizzfly/question'
 import QuizEditor from './quiz/QuizEditor.vue'
 import QuizSettings from './quiz/QuizSettings.vue'
-
+const questionsStore = useQuestionsStore()
 const isHightLightMain = ref(false)
 </script>
 <template>
   <div class="flex w-full gap-4">
     <div class="flex-auto flex flex-col overflow-hidden">
       <div
-        class="h-full border-2 rounded-xl bg-white"
+        class="h-full border-2 rounded-xl bg-white theme-bg"
         :class="{ 'border-primary': isHightLightMain }"
+        :style="{ backgroundImage: `url(${questionsStore.getCurrentQuestion.image})` }"
         @click="isHightLightMain = true"
       >
         <QuizEditor />
@@ -30,3 +32,8 @@ const isHightLightMain = ref(false)
     />
   </div>
 </template>
+<style scoped>
+.theme-bg {
+  background-size: cover;
+}
+</style>
