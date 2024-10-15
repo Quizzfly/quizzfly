@@ -19,7 +19,7 @@ export const useQuizzflyStore = defineStore({
       is_public: false,
       quizzfly_status: 'string',
       id: '',
-      theme: null,
+      theme: '',
       user_id: '',
       created_at: '',
       updated_at: '',

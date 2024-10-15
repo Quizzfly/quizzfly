@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Choice from '@/components/quizzfly/create/answer/Choice.vue'
-import { useQuestionsStore } from '@/stores/quizzfly/quizzflySlide'
+import { useQuestionsStore } from '@/stores/quizzfly/question'
 const questionsStore = useQuestionsStore()
 
 function initAnswers() {
@@ -30,9 +30,6 @@ onBeforeMount(() => {
 </script>
 <template>
   <div class="">
-    <div class="flex items-center justify-between mb-2">
-      <h3 class="text-lg font-semibold">Answer Setting</h3>
-    </div>
     <div class="grid grid-cols-2 gap-4">
       <Choice
         v-for="(item, index) in questionsStore.getCurrentQuestionAnswers"

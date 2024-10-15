@@ -5,7 +5,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import type { Question } from '@/types/question'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { quizOptions } from '@/utils/quiz'
-import { useQuestionsStore } from '@/stores/quizzfly/quizzflySlide'
+import { useQuestionsStore } from '@/stores/quizzfly/question'
 
 const currentQuestion = defineModel<Question>({ required: true })
 const questionsStore = useQuestionsStore()

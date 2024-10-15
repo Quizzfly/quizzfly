@@ -2,7 +2,7 @@
 import { Input } from '@/components/ui/input'
 import EditableText from '@/components/base/EditableText.vue'
 import AnswerSetting from '@/components/quizzfly/create/quiz/AnswerSetting.vue'
-import { useQuestionsStore } from '@/stores/quizzfly/quizzflySlide'
+import { useQuestionsStore } from '@/stores/quizzfly/question'
 
 const questionsStore = useQuestionsStore()
 
@@ -15,7 +15,7 @@ const handleUpdateTitle = (value: string | number) => {
 }
 </script>
 <template>
-  <div class="w-full h-full flex flex-col gap-5 p-5 overflow-hidden justify-between">
+  <div class="w-full h-full flex flex-col gap-10 p-5 overflow-hidden justify-between">
     <!-- question -->
     <div class="">
       <EditableText

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import SlideList from '@/components/quizzfly/create/SlideList.vue'
+import QuestionList from '@/components/quizzfly/create/QuestionList.vue'
 import SlideMain from '@/components/quizzfly/create/SlideMain.vue'
 import QuizMain from '@/components/quizzfly/create/QuizMain.vue'
 import { v4 as uuidv4 } from 'uuid'
 import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
 import { useLoadingStore } from '@/stores/loading'
-import { useQuestionsStore } from '@/stores/quizzfly/quizzflySlide'
+import { useQuestionsStore } from '@/stores/quizzfly/question'
 
 const route = useRoute()
 const quizzflyStore = useQuizzflyStore()
@@ -50,7 +50,7 @@ const handleAddSlide = (type: 'quiz' | 'slide', quizType: string) => {
 </script>
 <template>
   <div class="flex w-full items-stretch p-5 pl-0 gap-4">
-    <SlideList
+    <QuestionList
       v-model="currentQuestion"
       :slides="questionsStore.getSlides"
       @add-slide="handleAddSlide"
