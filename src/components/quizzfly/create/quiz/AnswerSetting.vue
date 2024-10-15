@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import Choice from '@/components/quizzfly/create/answer/Choice.vue'
-import { useSlidesStore } from '@/stores/quizzfly/quizzflySlide'
-const slidesStore = useSlidesStore()
+import { useQuestionsStore } from '@/stores/quizzfly/quizzflySlide'
+const questionsStore = useQuestionsStore()
 
 function initAnswers() {
-  console.log(slidesStore.getCurrentSlide.quizType)
-  if (slidesStore.getCurrentSlide.answers?.length) return
+  console.log(questionsStore.getCurrentQuestion.quizType)
+  if (questionsStore.getCurrentQuestion.answers?.length) return
 
-  switch (slidesStore.getCurrentSlide.quizType) {
+  switch (questionsStore.getCurrentQuestion.quizType) {
     case 'multiple_choice':
-      slidesStore.updateCurrentSlideAnswers([
+      questionsStore.updateCurrentQuestionAnswers([
         { id: 1, text: '', isCorrect: true },
         { id: 2, text: '', isCorrect: false },
         { id: 3, text: '', isCorrect: false },
@@ -17,7 +17,7 @@ function initAnswers() {
       ])
       break
     case 'true_false':
-      slidesStore.updateCurrentSlideAnswers([
+      questionsStore.updateCurrentQuestionAnswers([
         { id: 1, text: 'True', isCorrect: true },
         { id: 2, text: 'False', isCorrect: false },
       ])
@@ -35,11 +35,11 @@ onBeforeMount(() => {
     </div>
     <div class="grid grid-cols-2 gap-4">
       <Choice
-        v-for="(item, index) in slidesStore.getCurrentSlideAnswers"
+        v-for="(item, index) in questionsStore.getCurrentQuestionAnswers"
         :key="item.id"
         :model-value="item"
         :index="index"
-        @update:model-value="slidesStore.updateCurrentSlideAnswers"
+        @update:model-value="questionsStore.updateCurrentQuestionAnswers"
       />
     </div>
   </div>

@@ -5,12 +5,12 @@ import QuizMain from '@/components/quizzfly/create/QuizMain.vue'
 import { v4 as uuidv4 } from 'uuid'
 import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
 import { useLoadingStore } from '@/stores/loading'
-import { useSlidesStore } from '@/stores/quizzfly/quizzflySlide'
+import { useQuestionsStore } from '@/stores/quizzfly/quizzflySlide'
 
 const route = useRoute()
 const quizzflyStore = useQuizzflyStore()
 const loadingStore = useLoadingStore()
-const slidesStore = useSlidesStore()
+const questionsStore = useQuestionsStore()
 
 onBeforeMount(() => {
   loadingStore.setLoading(true)
@@ -25,18 +25,18 @@ onBeforeMount(() => {
 })
 
 onBeforeMount(() => {
-  slidesStore.setCurrentSlide(slidesStore.getSlides[0])
+  questionsStore.setCurrentQuestion(questionsStore.getSlides[0])
 })
 
-const currentSlide = computed<any>({
-  get: () => slidesStore.getCurrentSlide,
+const currentQuestion = computed<any>({
+  get: () => questionsStore.getCurrentQuestion,
   set: (value) => {
-    slidesStore.setCurrentSlide(value)
+    questionsStore.setCurrentQuestion(value)
   },
 })
 
 const handleAddSlide = (type: 'quiz' | 'slide', quizType: string) => {
-  slidesStore.addSlide({
+  questionsStore.addSlide({
     id: uuidv4(),
     title: '',
     type: type,
@@ -51,11 +51,11 @@ const handleAddSlide = (type: 'quiz' | 'slide', quizType: string) => {
 <template>
   <div class="flex w-full items-stretch p-5 pl-0 gap-4">
     <SlideList
-      v-model="currentSlide"
-      :slides="slidesStore.getSlides"
+      v-model="currentQuestion"
+      :slides="questionsStore.getSlides"
       @add-slide="handleAddSlide"
     />
-    <QuizMain v-if="currentSlide.type === 'quiz'" />
+    <QuizMain v-if="currentQuestion.type === 'quiz'" />
     <SlideMain v-else />
   </div>
 </template>

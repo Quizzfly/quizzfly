@@ -1,5 +1,5 @@
 export * from './user'
-export * from './slide'
+export * from './question'
 export * from './exception'
 
 export interface IPaging {
