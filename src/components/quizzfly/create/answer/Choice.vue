@@ -30,16 +30,30 @@ const colorsHex = [
     class="relative py-10 min-h-[132px] flex items-center px-4 rounded-2xl text-white answer-item"
     :style="{ backgroundColor: colorsHex[index].primary }"
   >
-    <span
+    <div
       v-if="answer.isCorrect"
-      class="cursor-pointer i-solar-check-square-bold absolute top-4 right-4 text-2xl"
-      @click="answer.isCorrect = !answer.isCorrect"
-    ></span>
-    <span
+      v-motion
+      :initial="{
+        scale: 1.5,
+      }"
+      :enter="{
+        scale: 1,
+      }"
+      :tapped="{
+        scale: 0.8,
+      }"
+      class="absolute top-4 right-4"
+    >
+      <span
+        class="cursor-pointer i-solar-check-square-bold text-2xl"
+        @click="answer.isCorrect = !answer.isCorrect"
+      ></span>
+    </div>
+    <div
       v-else
-      class="cursor-pointer w-5 h-5 border-[1px] border-white rounded-sm absolute top-[17px] right-[17px] text-2xl"
+      class="absolute top-[17px] right-[17px] w-5 h-5 cursor-pointer border-[1px] border-white rounded-sm text-2xl"
       @click="answer.isCorrect = !answer.isCorrect"
-    ></span>
+    ></div>
 
     <EditableText
       :value="answer.text"

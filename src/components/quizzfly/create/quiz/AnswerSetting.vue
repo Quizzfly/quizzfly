@@ -34,8 +34,12 @@ onBeforeMount(() => {
       <Choice
         v-for="(item, index) in questionsStore.getCurrentQuestionAnswers"
         :key="item.id"
+        v-motion
         :model-value="item"
         :index="index"
+        :initial="{ opacity: 0, y: 100 }"
+        :enter="{ opacity: 1, y: 0, scale: 1 }"
+        :delay="index * 100"
         @update:model-value="questionsStore.updateCurrentQuestionAnswers"
       />
     </div>

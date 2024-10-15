@@ -104,7 +104,12 @@ const handleAddSlide = (type: string, quizType: string) => {
         @end="drag = false"
       >
         <template #item="{ element, index }">
-          <div class="flex relative items-stretch">
+          <div
+            v-motion
+            :initial="{ opacity: 0, y: 100 }"
+            :enter="{ opacity: 1, y: 0, scale: 1 }"
+            class="flex relative items-stretch"
+          >
             <div
               class="w-1 h-[40px] rounded-r-xl mt-8"
               :class="{ 'bg-primary ': currentQuestion.id === element.id }"
