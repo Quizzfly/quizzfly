@@ -1,15 +1,15 @@
-import type { Slide } from '@/types'
+import type { Question } from '@/types'
 import { defineStore } from 'pinia'
 import { v4 as uuidv4 } from 'uuid'
 
-export const useSlidesStore = defineStore({
+export const useQuestionsStore = defineStore({
   id: 'slide',
   state: () => ({
-    currentSlide: {} as Slide,
-    slides: [
+    currentQuestion: {} as Question,
+    questions: [
       {
         id: uuidv4(),
-        title: 'Slide 1',
+        title: 'Question 1',
         type: 'quiz',
         quizType: 'multiple_choice',
         content: 'This is a quiz slide',
@@ -17,43 +17,43 @@ export const useSlidesStore = defineStore({
         link: 'https://picsum.photos/200/300',
         answers: [],
       },
-    ] as Slide[],
+    ] as Question[],
   }),
   actions: {
     async fetchSlides() {
-      // fetch slides from an API
-      // const slides = await fetch('/api/slides')
-      // this.slides = await slides.json()
+      // fetch questions from an API
+      // const questions = await fetch('/api/questions')
+      // this.questions = await questions.json()
     },
-    updateSlides(slides: Slide[]) {
-      this.slides = slides
+    updateQuestion(questions: Question[]) {
+      this.questions = questions
     },
-    addSlide(slide: Slide) {
-      this.slides.push(slide)
+    addSlide(slide: Question) {
+      this.questions.push(slide)
     },
-    setCurrentSlide(slide: Slide) {
-      this.currentSlide = slide
+    setCurrentQuestion(slide: Question) {
+      this.currentQuestion = slide
     },
-    updateCurrentSlide(slide: Partial<Slide>) {
-      this.currentSlide = { ...this.currentSlide, ...slide }
-      this.updateSlide(this.currentSlide)
+    updateCurrentQuestion(slide: Partial<Question>) {
+      this.currentQuestion = { ...this.currentQuestion, ...slide }
+      this.updateSlide(this.currentQuestion)
     },
-    updateSlide(slide: Slide) {
-      const index = this.slides.findIndex((s) => s.id === slide.id)
-      this.slides[index] = slide
+    updateSlide(slide: Question) {
+      const index = this.questions.findIndex((s) => s.id === slide.id)
+      this.questions[index] = slide
     },
-    updateCurrentSlideAnswers(answers: any[]) {
-      this.currentSlide.answers = answers
-      const index = this.slides.findIndex((s) => s.id === this.currentSlide.id)
-      this.slides[index].answers = answers
+    updateCurrentQuestionAnswers(answers: any[]) {
+      this.currentQuestion.answers = answers
+      const index = this.questions.findIndex((s) => s.id === this.currentQuestion.id)
+      this.questions[index].answers = answers
     },
   },
   getters: {
     getSlideById: (state) => (id: string) => {
-      return state.slides.find((s) => s.id === id)
+      return state.questions.find((s) => s.id === id)
     },
-    getSlides: (state) => state.slides,
-    getCurrentSlide: (state) => state.currentSlide,
-    getCurrentSlideAnswers: (state) => state.currentSlide.answers,
+    getSlides: (state) => state.questions,
+    getCurrentQuestion: (state) => state.currentQuestion,
+    getCurrentQuestionAnswers: (state) => state.currentQuestion.answers,
   },
 })

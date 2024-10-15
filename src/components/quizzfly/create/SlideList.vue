@@ -2,16 +2,16 @@
 import draggable from 'vuedraggable'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import type { Slide } from '@/types/slide'
+import type { Question } from '@/types/question'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { quizOptions } from '@/utils/quiz'
-import { useSlidesStore } from '@/stores/quizzfly/quizzflySlide'
+import { useQuestionsStore } from '@/stores/quizzfly/quizzflySlide'
 
-const currentSlide = defineModel<Slide>({ required: true })
-const slidesStore = useSlidesStore()
+const currentQuestion = defineModel<Question>({ required: true })
+const questionsStore = useQuestionsStore()
 
 defineProps<{
-  slides: Slide[]
+  slides: Question[]
 }>()
 
 const emits = defineEmits<{
@@ -99,7 +99,7 @@ const handleAddSlide = (type: string, quizType: string) => {
           name: !drag ? 'flip-list' : null,
         }"
         v-bind="dragOptions"
-        @update:model-value="slidesStore.updateSlides"
+        @update:model-value="questionsStore.updateQuestion"
         @start="drag = true"
         @end="drag = false"
       >
@@ -107,7 +107,7 @@ const handleAddSlide = (type: string, quizType: string) => {
           <div class="flex relative items-stretch">
             <div
               class="w-1 h-[40px] rounded-r-xl mt-8"
-              :class="{ 'bg-primary ': currentSlide.id === element.id }"
+              :class="{ 'bg-primary ': currentQuestion.id === element.id }"
             ></div>
 
             <div class="flex flex-col justify-around px-1 items-center">
@@ -122,9 +122,9 @@ const handleAddSlide = (type: string, quizType: string) => {
             <div
               class="w-full h-[100px] border-2 bg-white rounded-xl cursor-pointer relative p-2 flex justify-center items-center overflow-hidden"
               :class="{
-                'border-primary': currentSlide.id === element.id && !drag,
+                'border-primary': currentQuestion.id === element.id && !drag,
               }"
-              @click="currentSlide = element"
+              @click="currentQuestion = element"
             >
               <div
                 class="text-[10px] font-medium bg-slate-200 absolute top-2 left-2 px-2 py-[2px] rounded-sm"
