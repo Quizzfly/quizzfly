@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import EditableText from '@/components/base/EditableText.vue'
 import { Button } from '@/components/ui/button'
-import { useQuizzflyStore } from '@/stores/quizzfly'
+import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
 import QuizzflySettings from './QuizzflySettings.vue'
 
 const router = useRouter()

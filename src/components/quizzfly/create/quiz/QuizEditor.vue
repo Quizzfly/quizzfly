@@ -2,31 +2,32 @@
 import { Input } from '@/components/ui/input'
 import EditableText from '@/components/base/EditableText.vue'
 import AnswerSetting from '@/components/quizzfly/create/quiz/AnswerSetting.vue'
+import { useSlidesStore } from '@/stores/quizzfly/quizzflySlide'
 
-const title = ref('')
+const slidesStore = useSlidesStore()
 
-const handleFocusInputTitle = () => {
-  nextTick(() => {
-    titleInputRef.value?.$el?.focus()
-  })
+const handleClickTitle = () => {
+  console.log('Do something')
 }
 
-const titleInputRef = ref<InstanceType<typeof Input>>()
+const handleUpdateTitle = (value: string | number) => {
+  slidesStore.updateCurrentSlide({ title: String(value) })
+}
 </script>
 <template>
-  <div class="w-full h-full flex flex-col gap-5 p-5 overflow-hidden">
+  <div class="w-full h-full flex flex-col gap-5 p-5 overflow-hidden justify-between">
     <!-- question -->
     <div class="">
       <EditableText
-        :value="title"
-        :click-callback="handleFocusInputTitle"
+        :value="slidesStore.getCurrentSlide.title"
+        :click-callback="handleClickTitle"
       >
         <template #input="{ finishEditing }">
           <Input
-            ref="titleInputRef"
-            v-model="title"
             placeholder="Enter your question"
             class="text-2xl font-medium h-12"
+            :model-value="slidesStore.getCurrentSlide.title"
+            @update:model-value="handleUpdateTitle"
             @blur="finishEditing"
           />
         </template>
@@ -34,7 +35,7 @@ const titleInputRef = ref<InstanceType<typeof Input>>()
           <p
             class="py-1 px-2 rounded-lg border-2 border-transparent hover:border-primary text-2xl font-medium"
           >
-            {{ title || 'Enter question' }}
+            {{ slidesStore.getCurrentSlide.title || 'Enter question' }}
           </p>
         </template>
       </EditableText>
@@ -45,6 +46,6 @@ const titleInputRef = ref<InstanceType<typeof Input>>()
       <div class="w-[80%] h-full bg-slate-100 rounded-lg"></div>
     </div>
     <!-- answer -->
-    <AnswerSetting />
+    <AnswerSetting :key="slidesStore.getCurrentSlide.id" />
   </div>
 </template>

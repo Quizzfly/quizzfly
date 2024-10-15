@@ -2,7 +2,7 @@
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import QuizzflyList from '@/components/quizzfly/list/QuizzflyList.vue'
-import { useQuizzflyStore } from '@/stores/quizzfly'
+import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
 import QuizzflyFilter from '@/components/quizzfly/list/QuizzflyFilter.vue'
 const quizzflyStore = useQuizzflyStore()
 

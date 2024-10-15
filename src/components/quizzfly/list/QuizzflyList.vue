@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useQuizzflyStore } from '@/stores/quizzfly'
+import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
 import { Card } from '@/components/ui/card'
 import Chip from '@/components/base/Chip.vue'
 const quizzflyStore = useQuizzflyStore()
