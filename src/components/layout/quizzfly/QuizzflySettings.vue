@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import BasicInformation from './SettingsTab/BasicInformation.vue'
-import { useQuizzflyStore } from '@/stores/quizzfly'
+import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
 import { uploadFileApi } from '@/services/file'
 import { showToast } from '@/utils/toast'
 import { useLoadingStore } from '@/stores/loading'

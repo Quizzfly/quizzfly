@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Button } from '@/components/ui/button'
 import { useAuthStore } from '@/stores/auth'
-import { useQuizzflyStore } from '@/stores/quizzfly'
+import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
 
 const authStore = useAuthStore()
 const quizzflyStore = useQuizzflyStore()

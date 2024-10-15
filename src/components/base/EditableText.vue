@@ -18,6 +18,8 @@ const startEditing = () => {
   }
   nextTick(() => {
     inputRef.value?.$el.focus()
+
+    componentElement.value?.querySelector('input')?.focus()
   })
 }
 
@@ -39,10 +41,11 @@ watch(
 )
 
 const inputRef = ref<InstanceType<typeof Input>>()
+const componentElement = ref<HTMLElement>()
 </script>
 
 <template>
-  <div>
+  <span ref="componentElement">
     <slot
       v-if="isEditing"
       name="input"
@@ -56,7 +59,7 @@ const inputRef = ref<InstanceType<typeof Input>>()
         @blur="finishEditing"
       />
     </slot>
-    <div
+    <span
       v-else
       @click="startEditing"
     >
@@ -68,6 +71,6 @@ const inputRef = ref<InstanceType<typeof Input>>()
           {{ data }}
         </span>
       </slot>
-    </div>
-  </div>
+    </span>
+  </span>
 </template>

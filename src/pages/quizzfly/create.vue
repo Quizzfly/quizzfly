@@ -2,12 +2,15 @@
 import SlideList from '@/components/quizzfly/create/SlideList.vue'
 import SlideMain from '@/components/quizzfly/create/SlideMain.vue'
 import QuizMain from '@/components/quizzfly/create/QuizMain.vue'
-import type { Slide } from '@/types/slide'
-import { useQuizzflyStore } from '@/stores/quizzfly'
+import { v4 as uuidv4 } from 'uuid'
+import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
 import { useLoadingStore } from '@/stores/loading'
+import { useSlidesStore } from '@/stores/quizzfly/quizzflySlide'
+
 const route = useRoute()
 const quizzflyStore = useQuizzflyStore()
 const loadingStore = useLoadingStore()
+const slidesStore = useSlidesStore()
 
 onBeforeMount(() => {
   loadingStore.setLoading(true)
@@ -21,78 +24,27 @@ onBeforeMount(() => {
   }, 500)
 })
 
-const slides = ref<Slide[]>([
-  {
-    id: 1,
-    title: 'Slide 1',
-    type: 'quiz',
-    content: 'This is a quiz slide',
-    image: 'https://picsum.photos/200/300',
-    link: 'https://picsum.photos/200/300',
-  },
-  {
-    id: 2,
-    title: 'Slide 2',
-    type: 'slide',
-    content: 'This is a quiz slide',
-    image: 'https://picsum.photos/200/300',
-    link: 'https://picsum.photos/200/300',
-  },
-  {
-    id: 3,
-    title: 'Slide 3',
-    type: 'slide',
-    content: 'This is a quiz slide',
-    image: 'https://picsum.photos/200/300',
-    link: 'https://picsum.photos/200/300',
-  },
-  {
-    id: 4,
-    title: 'Slide 4',
-    type: 'quiz',
-    content: 'This is a quiz slide',
-    image: 'https://picsum.photos/200/300',
-    link: 'https://picsum.photos/200/300',
-  },
-  {
-    id: 5,
-    title: 'Slide 5',
-    type: 'quiz',
-    content: 'This is a quiz slide',
-    image: 'https://picsum.photos/200/300',
-    link: 'https://picsum.photos/200/300',
-  },
-  {
-    id: 6,
-    title: 'Slide 5',
-    type: 'quiz',
-    content: 'This is a quiz slide',
-    image: 'https://picsum.photos/200/300',
-    link: 'https://picsum.photos/200/300',
-  },
-])
+onBeforeMount(() => {
+  slidesStore.setCurrentSlide(slidesStore.getSlides[0])
+})
 
-const currentSlide = ref<Slide>(slides.value[0])
+const currentSlide = computed<any>({
+  get: () => slidesStore.getCurrentSlide,
+  set: (value) => {
+    slidesStore.setCurrentSlide(value)
+  },
+})
 
-const handleAddSlide = () => {
-  slides.value.push({
-    id: slides.value.length + 1,
-    title: `Slide ${slides.value.length + 1}`,
-    type: 'slide',
-    content: 'This is a quiz slide',
-    image: 'https://picsum.photos/200/300',
-    link: 'https://picsum.photos/200/300',
-  })
-}
-
-const handleAddQuiz = (type: 'quiz' | 'slide') => {
-  slides.value.push({
-    id: slides.value.length + 1,
-    title: `Slide ${slides.value.length + 1}`,
+const handleAddSlide = (type: 'quiz' | 'slide', quizType: string) => {
+  slidesStore.addSlide({
+    id: uuidv4(),
+    title: '',
     type: type,
+    quizType: quizType,
     content: 'This is a quiz slide',
     image: 'https://picsum.photos/200/300',
     link: 'https://picsum.photos/200/300',
+    answers: [],
   })
 }
 </script>
@@ -100,9 +52,8 @@ const handleAddQuiz = (type: 'quiz' | 'slide') => {
   <div class="flex w-full items-stretch p-5 pl-0 gap-4">
     <SlideList
       v-model="currentSlide"
-      :slides="slides"
+      :slides="slidesStore.getSlides"
       @add-slide="handleAddSlide"
-      @add-quiz="handleAddQuiz"
     />
     <QuizMain v-if="currentSlide.type === 'quiz'" />
     <SlideMain v-else />

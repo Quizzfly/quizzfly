@@ -1,11 +1,11 @@
 export const quizOptions = [
   {
-    type: 'multiple',
+    type: 'multiple_choice',
     name: 'Multi choice',
     icon: '/assets/icons/multiple-choice.svg',
   },
   {
-    type: 'true-false',
+    type: 'true_false',
     name: 'True or False',
     icon: '/assets/icons/true-false.svg',
   },

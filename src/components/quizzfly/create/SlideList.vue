@@ -6,18 +6,15 @@ import type { Slide } from '@/types/slide'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { quizOptions } from '@/utils/quiz'
 
-const props = defineProps<{
+defineProps<{
   slides: Slide[]
 }>()
 
 const emits = defineEmits<{
-  (e: 'addSlide'): void
-  (e: 'addQuiz', type: 'quiz' | 'slide'): void
+  (e: 'addSlide', type: 'quiz' | 'slide', quizType: string): void
 }>()
 
 const currentSlide = defineModel<Slide>({ required: true })
-
-const tests = ref<Slide[]>(props.slides)
 
 const dragOptions = ref({
   animation: 200,
@@ -29,13 +26,8 @@ const dragOptions = ref({
 const drag = ref(false)
 const isShow = ref(false)
 
-const handleAddSlide = () => {
-  emits('addSlide')
-  isShow.value = false
-}
-
-const handleAddQuiz = (type: string) => {
-  emits('addQuiz', type as 'quiz' | 'slide')
+const handleAddSlide = (type: string, quizType: string) => {
+  emits('addSlide', type as 'quiz' | 'slide', quizType)
   isShow.value = false
 }
 </script>
@@ -70,7 +62,7 @@ const handleAddQuiz = (type: string) => {
                 v-for="item in quizOptions"
                 :key="item.type"
                 class="flex items-center cursor-pointer hover:bg-slate-100 h-12 px-3 rounded-xl"
-                @click="handleAddQuiz(item.type)"
+                @click="handleAddSlide('quiz', item.type)"
               >
                 <img
                   :src="item.icon"
@@ -84,7 +76,7 @@ const handleAddQuiz = (type: string) => {
               <Button
                 variant="secondary"
                 class="w-full mt-5"
-                @click="handleAddSlide"
+                @click="handleAddSlide('slide', 'impressed')"
               >
                 Add slide
               </Button>
@@ -93,11 +85,10 @@ const handleAddQuiz = (type: string) => {
         </PopoverContent>
       </Popover>
     </div>
-
     <!-- slides list -->
     <ScrollArea class="flex flex-col flex-auto overflow-y-auto gap-2 pr-2">
       <draggable
-        v-model="tests"
+        :model-value="slides"
         item-key="id"
         class="flex flex-col gap-2 pr-2"
         :component-data="{
@@ -126,15 +117,18 @@ const handleAddQuiz = (type: string) => {
             </div>
 
             <div
-              class="w-full h-[100px] border-2 bg-white rounded-xl cursor-pointer relative p-2"
+              class="w-full h-[100px] border-2 bg-white rounded-xl cursor-pointer relative p-2 flex justify-center items-center overflow-hidden"
               :class="{
                 'border-primary': currentSlide.id === element.id && !drag,
               }"
               @click="currentSlide = element"
             >
-              <div class="text-[10px] font-medium bg-slate-200 absolute px-2 py-[2px] rounded-sm">
+              <div
+                class="text-[10px] font-medium bg-slate-200 absolute top-2 left-2 px-2 py-[2px] rounded-sm"
+              >
                 {{ element.type }}
               </div>
+              <p class="truncate text-ellipsis">{{ element.title }}</p>
             </div>
           </div>
         </template>

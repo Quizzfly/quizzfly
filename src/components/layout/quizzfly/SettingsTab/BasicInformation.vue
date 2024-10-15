@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { useQuizzflyStore } from '@/stores/quizzfly'
+import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
 import type { Settings } from '../QuizzflySettings.vue'
 
 const quizzflyStore = useQuizzflyStore()
