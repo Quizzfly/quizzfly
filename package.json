@@ -19,7 +19,7 @@
     "@vueuse/components": "^10.11.0",
     "@vueuse/core": "^10.11.1",
     "@vueuse/integrations": "^11.0.3",
-    "@vueuse/motion": "^2.2.3",
+    "@vueuse/motion": "2.2.6",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "nprogress": "^0",

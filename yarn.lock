@@ -1273,10 +1273,10 @@
   resolved "https://registry.npmjs.org/@vueuse/metadata/-/metadata-11.1.0.tgz"
   integrity sha512-l9Q502TBTaPYGanl1G+hPgd3QX5s4CGnpXriVBR5fEZ/goI6fvDaVmIl3Td8oKFurOxTmbXvBPSsgrd6eu6HYg==
 
-"@vueuse/motion@^2.2.3":
-  version "2.2.5"
-  resolved "https://registry.yarnpkg.com/@vueuse/motion/-/motion-2.2.5.tgz#bfbc3f9915b41f06b43e9b2847b1c8e1bedd8843"
-  integrity sha512-pcqMdpPbm/Pd/rbQQ/sHyykdOahj0rueZ8WpLhhk8i1tbEcga80EhNJLn99G9J9DSuOvkJNYuv1n2OntGUc1rQ==
+"@vueuse/motion@2.2.6":
+  version "2.2.6"
+  resolved "https://registry.yarnpkg.com/@vueuse/motion/-/motion-2.2.6.tgz#26fe7b1f3aefd8159fdfbc1ce32dffa27296946c"
+  integrity sha512-gKFktPtrdypSv44SaW1oBJKLBiP6kE5NcoQ6RsAU3InemESdiAutgQncfPe/rhLSLCtL4jTAhMmFfxoR6gm5LQ==
   dependencies:
     "@vueuse/core" "^10.10.0"
     "@vueuse/shared" "^10.10.0"
