@@ -19,6 +19,11 @@ const isHightLightMain = ref(false)
 
     <!-- settings -->
     <QuizSettings
+      v-motion
+      :initial="{ opacity: 0, x: 100 }"
+      :enter="{ opacity: 1, x: 0, scale: 1 }"
+      :delay="300"
+      :duration="300"
       class="border-2"
       :class="{ 'border-primary': !isHightLightMain }"
       @click="isHightLightMain = false"
