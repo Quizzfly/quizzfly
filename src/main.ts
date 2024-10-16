@@ -10,6 +10,7 @@ import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import GuestLayout from '@/layouts/GuestLayout.vue'
 import NoSideBarLayout from '@/layouts/NoSideBarLayout.vue'
 import QuizCreateLayout from './layouts/QuizCreateLayout.vue'
+import RoomLayout from './layouts/RoomLayout.vue'
 import { initAuthStore } from './stores'
 const app = createApp(App)
 import { plugin as VueTippy } from 'vue-tippy'
@@ -45,6 +46,7 @@ const initApp = async () => {
   app.component('GuestLayout', GuestLayout)
   app.component('NoSideBarLayout', NoSideBarLayout)
   app.component('QuizCreateLayout', QuizCreateLayout)
+  app.component('RoomLayout', RoomLayout)
   app.use(createPinia())
   await initAuthStore()
   // await initWebSocketStore();

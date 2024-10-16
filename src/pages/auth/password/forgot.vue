@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button'
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
 import { showToast } from '@/utils/toast'
-import { ReloadIcon } from '@radix-icons/vue'
 
 const errorEmail = ref()
 const isForgot = ref(false)
@@ -143,13 +142,14 @@ const [email, emailAttrs] = defineField('email')
               :error="errors.email"
             />
             <Button
+              :disabled="isLoading ? true : false"
               type="submit"
-              class="mt-4 w-full h-10 bg-primary"
+              class="mt-4 w-full h-10 bg-primary flex gap-2"
             >
-              <ReloadIcon
+              <span
                 v-if="isLoading"
-                class="w-4 h-4 mr-2 animate-spin"
-              />
+                class="i-svg-spinners-ring-resize"
+              ></span>
               Submit
             </Button>
           </form>
@@ -160,7 +160,7 @@ const [email, emailAttrs] = defineField('email')
             :disable-cache="isCountdown"
             @click="handleResentEmail(5)"
           >
-            Reset
+            Resend
           </Button>
           <div class="flex items-center justify-center w-full">
             <div

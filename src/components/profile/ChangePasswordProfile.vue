@@ -10,7 +10,7 @@ import * as yup from 'yup'
 const { errors, handleSubmit, defineField } = useForm({
   validationSchema: yup.object({
     email: yup.string().email().required('Email is required'),
-    name: yup.string().required('name is required'),
+    name: yup.string().required('Name is required'),
     username: yup.string().required('Username is required'),
   }),
 })

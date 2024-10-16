@@ -25,7 +25,7 @@ const authStore = useAuthStore()
 const { errors, handleSubmit, defineField } = useForm({
   validationSchema: yup.object({
     email: yup.string().email().required('Email is required'),
-    name: yup.string().required('name is required'),
+    name: yup.string().required('Name is required'),
     username: yup.string().required('Username is required'),
   }),
 })
@@ -34,6 +34,7 @@ const [email] = defineField('email')
 const [username] = defineField('username')
 const [name, nameAttrs] = defineField('name')
 const avatar = ref('')
+const isLoading = ref(false)
 
 onMounted(() => {
   setData(authStore.getUser)
@@ -49,6 +50,7 @@ const setData = (data: any) => {
 }
 
 const onSubmit = handleSubmit(async () => {
+  isLoading.value = true
   if (logoUpload.value) {
     const formData = new FormData()
 
@@ -69,6 +71,7 @@ const onSubmit = handleSubmit(async () => {
     console.log(res, 'check res')
     setData(res)
     authStore.setUser(res)
+    isLoading.value = false
     showToast({
       title: 'Update success',
       description: 'This is a simple toast message',
@@ -109,10 +112,15 @@ const onChangeImg = (e: Event) => {
       <div class="header flex items-center justify-between">
         <h3 class="text-lg font-semibold">User information</h3>
         <Button
-          class="h-10 flex items-center gap-4 bg-slate-100"
+          class="h-10 flex items-center gap-2 bg-slate-100 w-24"
           variant="secondary"
+          :disabled="isLoading ? true : false"
           @click="onSubmit"
         >
+          <span
+            v-if="isLoading"
+            class="i-svg-spinners-ring-resize"
+          ></span>
           Save
         </Button>
       </div>
