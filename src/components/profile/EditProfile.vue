@@ -7,7 +7,6 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '../ui/select'
@@ -153,7 +152,7 @@ const onChangeImg = (e: Event) => {
             <label
               for="username"
               class="font-medium text-sm"
-              >Username</Label
+              >Username</label
             >
             <Input
               v-model="username"
@@ -168,7 +167,7 @@ const onChangeImg = (e: Event) => {
             <label
               for="name"
               class="font-medium text-sm"
-              >Name</Label
+              >Name</label
             >
             <Input
               v-model="name"
@@ -184,7 +183,7 @@ const onChangeImg = (e: Event) => {
             <label
               for="email"
               class="font-medium text-sm"
-              >Email</Label
+              >Email</label
             >
             <Input
               v-model="email"
@@ -225,7 +224,7 @@ const onChangeImg = (e: Event) => {
             <label
               for="name"
               class="font-medium text-sm"
-              >Language</Label
+              >Language</label
             >
             <Select>
               <SelectTrigger class="w-[280px]">
