@@ -2,7 +2,6 @@
 import { Input } from '@/components/ui/input'
 import ErrorMessage from '@/components/base/ErrorMessage.vue'
 import { Button } from '@/components/ui/button'
-import { ReloadIcon } from '@radix-icons/vue'
 
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
@@ -17,7 +16,7 @@ const confirmDialog = useConfirmDialog()
 const { errors, handleSubmit, defineField } = useForm({
   validationSchema: yup.object({
     email: yup.string().email().required('Email is required'),
-    name: yup.string().required('name is required'),
+    name: yup.string().required('Name is required'),
     password: yup.string().required('Password is required'),
     confirmPassword: yup
       .string()
@@ -131,11 +130,15 @@ const onSubmit = handleSubmit(async (values) => {
             <ErrorMessage :error="errors.confirmPassword" />
           </div>
         </div>
-        <Button class="mt-6 w-full h-10">
-          <ReloadIcon
+
+        <Button
+          :disabled="isLoading ? true : false"
+          class="mt-6 w-full h-10 flex gap-2"
+        >
+          <span
             v-if="isLoading"
-            class="w-4 h-4 mr-2 animate-spin"
-          />
+            class="i-svg-spinners-ring-resize"
+          ></span>
           Sign Up
         </Button>
         <div class="flex items-center gap-2 w-full mt-8">

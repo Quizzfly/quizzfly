@@ -17,7 +17,9 @@ const [email, emailAttrs] = defineField('email')
 const [password, passwordAttrs] = defineField('password')
 
 const authStore = useAuthStore()
+const isCheckLogining = ref(false)
 const onSubmit = handleSubmit(async (values) => {
+  isCheckLogining.value = true
   authStore.login(values.email, values.password)
 })
 </script>
@@ -78,7 +80,16 @@ const onSubmit = handleSubmit(async (values) => {
             Forgot Password?
           </RouterLink>
         </div>
-        <Button class="mt-6 w-full h-10 bg-primary"> Sign in </Button>
+        <Button
+          :disabled="isCheckLogining ? true : false"
+          class="mt-6 w-full h-10 bg-primary flex gap-2 items-center"
+        >
+          <span
+            v-if="isCheckLogining"
+            class="i-svg-spinners-ring-resize"
+          ></span>
+          Sign in
+        </Button>
         <div class="flex items-center gap-2 w-full mt-8">
           <span class="h-px bg-slate-200 w-full"></span>
           <p class="text-base">Or</p>
