@@ -1,18 +1,19 @@
 <script setup lang="ts">
 import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
 import { Card } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
 import Chip from '@/components/base/Chip.vue'
 const quizzflyStore = useQuizzflyStore()
 
 const quizzflys = computed(() => quizzflyStore.getQuizzflys)
 </script>
 <template>
-  <div class="grid grid-cols-[repeat(auto-fill,400px)] max-md:grid-cols-1 gap-5">
+  <div class="grid grid-cols-[repeat(auto-fill,49%)] max-md:grid-cols-1 gap-5">
     <Card
       v-for="quizzfly in quizzflys"
       :key="quizzfly.id"
     >
-      <div class="p-5 flex justify-between">
+      <div class="p-3 flex gap-2 w-full">
         <!-- left -->
         <div class="flex gap-5">
           <div>
@@ -31,18 +32,33 @@ const quizzflys = computed(() => quizzflyStore.getQuizzflys)
                 color="#df223a"
               />
             </div>
-            <div class="text-sm text-gray-500">@{{ quizzfly.username }}</div>
+            <RouterLink
+              :to="{ name: 'quizzfly-create', params: { quizzflyId: quizzfly.id } }"
+              class="flex items-center cursor-pointer hover:text-[#0061ff] gap-2 hover:underline"
+            >
+              <span>Edit</span>
+              <span class="i-material-symbols-light-arrow-right-alt text-2xl"></span>
+            </RouterLink>
           </div>
-        </div>
-        <!-- right -->
-        <div>
-          <RouterLink
-            :to="{ name: 'quizzfly-create', params: { quizzflyId: quizzfly.id } }"
-            class="flex items-center cursor-pointer hover:text-[#0061ff] gap-2 hover:underline"
-          >
-            <span>Edit</span>
-            <span class="i-material-symbols-light-arrow-right-alt text-2xl"></span>
-          </RouterLink>
+          <div class="flex items-center justify-between">
+            <div class="text-sm text-gray-500">@{{ quizzfly.username }}</div>
+            <div class="flex gap-2">
+              <Button class="flex items-center h-6 w-17 text-xs">
+                <RouterLink
+                  target="_blank"
+                  :to="{ name: 'host-live', params: { quizzflyId: quizzfly.id } }"
+                >
+                  Host live
+                </RouterLink>
+              </Button>
+              <Button
+                variant="secondary"
+                class="flex items-center h-6 w-17 text-xs"
+              >
+                Play solo
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
     </Card>

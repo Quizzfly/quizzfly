@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { resetPasswordApi } from '@/services/auth'
+import { resetPasswordApi, verifyResetPasswordApi } from '@/services/auth'
 import Toaster from '@/components/ui/toast/Toaster.vue'
 import { useConfirmDialog } from '@/stores/modal'
 import { Input } from '@/components/ui/input'
@@ -28,6 +28,7 @@ const { errors, handleSubmit, defineField } = useForm({
 const token = ref()
 const [password, passwordAttrs] = defineField('password')
 const [confirmPassword, confirmPasswordAttrs] = defineField('confirmPassword')
+const isLoading = ref(false)
 
 onMounted(() => {
   token.value = route.query.token
@@ -35,9 +36,18 @@ onMounted(() => {
   if (!token) {
     router.push('/login')
   }
+  verifyResetPassword(token.value)
 })
 
-const openConfirm = async () => {
+const verifyResetPassword = async (token: string) => {
+  try {
+    await verifyResetPasswordApi(token)
+  } catch (error) {
+    openConfirmError()
+  }
+}
+
+const openConfirmSuccess = async () => {
   const result = await confirmDialog.open({
     title: 'Success',
     question: 'Reset password successful',
@@ -49,15 +59,28 @@ const openConfirm = async () => {
   }
 }
 
+const openConfirmError = async () => {
+  const result = await confirmDialog.open({
+    title: 'Failed',
+    question: 'Expired password recovery link',
+    onlyConfirm: true,
+  })
+
+  if (result) {
+    router.push('/login')
+  }
+}
+
 const onSubmit = handleSubmit(async (values) => {
+  isLoading.value = true
   try {
     await resetPasswordApi({
       token: token.value,
       password: values.password,
       confirm_password: values.confirmPassword,
-    }).then(() => {
-      openConfirm()
     })
+    isLoading.value = false
+    openConfirmSuccess()
   } catch (error) {
     showToast({
       title: 'Resend failed',
@@ -109,7 +132,16 @@ const onSubmit = handleSubmit(async (values) => {
             <ErrorMessage :error="errors.confirmPassword" />
           </div>
         </div>
-        <Button class="mt-6 w-full h-10"> Reset Password </Button>
+        <Button
+          :disabled="isLoading ? true : false"
+          class="mt-6 w-full h-10 gap-2 flex"
+        >
+          <span
+            v-if="isLoading"
+            class="i-svg-spinners-ring-resize"
+          ></span>
+          Reset Password
+        </Button>
       </form>
     </div>
     <div class="flex-1 relative max-md:hidden">
