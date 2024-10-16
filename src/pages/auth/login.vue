@@ -1,20 +1,16 @@
 <script setup lang="ts">
-import { Input } from '@/components/ui/input'
-import ErrorMessage from '@/components/base/ErrorMessage.vue'
 import { Button } from '@/components/ui/button'
+import InputValidation from '@/components/base/InputValidation.vue'
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
 import { useAuthStore } from '@/stores/auth'
 
-const { errors, handleSubmit, defineField } = useForm({
+const { handleSubmit } = useForm({
   validationSchema: yup.object({
     email: yup.string().email().required('Email is required'),
     password: yup.string().required('Password is required'),
   }),
 })
-
-const [email, emailAttrs] = defineField('email')
-const [password, passwordAttrs] = defineField('password')
 
 const authStore = useAuthStore()
 const onSubmit = handleSubmit(async (values) => {
@@ -37,36 +33,23 @@ const onSubmit = handleSubmit(async (values) => {
         </div>
         <div class="mt-6">
           <div class="form-data">
-            <Label for="email">Email</Label>
-            <Input
+            <label for="email">Email</label>
+            <InputValidation
               id="email"
-              v-model="email"
               placeholder="Enter email..."
-              v-bind="emailAttrs"
-              :invalid="errors.email"
               type="email"
+              name="email"
               class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
-            />
-            <ErrorMessage
-              class="text-xs mt-0.5"
-              :error="errors.email"
             />
           </div>
-          <div class="form-data">
-            <Label for="password">Password</Label>
-            <Input
+          <div class="form-data mt-3">
+            <label for="password">Password</label>
+            <InputValidation
               id="password"
-              v-model="password"
               placeholder="Enter password..."
-              v-bind="passwordAttrs"
-              :invalid="errors.password"
               type="password"
+              name="password"
               class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
-            />
-
-            <ErrorMessage
-              class="text-xs mt-0.5"
-              :error="errors.password"
             />
           </div>
         </div>

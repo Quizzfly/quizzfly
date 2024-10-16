@@ -5,7 +5,6 @@ import {
   SelectValue,
   SelectContent,
   SelectGroup,
-  SelectLabel,
   SelectItem,
 } from '@/components/ui/select'
 </script>
@@ -20,7 +19,7 @@ import {
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectLabel>Type</SelectLabel>
+              <Selectlabel>Type</Selectlabel>
               <SelectItem value="DRAFT"> Draft </SelectItem>
               <SelectItem value="RECENT"> Recent </SelectItem>
               <SelectItem value="FAVOR"> Favorite </SelectItem>

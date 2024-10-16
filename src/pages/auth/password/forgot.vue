@@ -127,7 +127,7 @@ const [email, emailAttrs] = defineField('email')
             class="form-data"
             @submit.prevent="handleForgot"
           >
-            <Label for="email">Email</Label>
+            <label for="email">Email</label>
             <Input
               v-if="!isForgot"
               id="email"

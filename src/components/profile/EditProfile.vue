@@ -7,7 +7,6 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '../ui/select'
@@ -150,10 +149,10 @@ const onChangeImg = (e: Event) => {
         </div>
         <div class="form flex items-center gap-4 flex-col w-full">
           <div class="form-data w-full">
-            <Label
+            <label
               for="username"
               class="font-medium text-sm"
-              >Username</Label
+              >Username</label
             >
             <Input
               v-model="username"
@@ -165,10 +164,10 @@ const onChangeImg = (e: Event) => {
             />
           </div>
           <div class="form-data w-full">
-            <Label
+            <label
               for="name"
               class="font-medium text-sm"
-              >Name</Label
+              >Name</label
             >
             <Input
               v-model="name"
@@ -181,10 +180,10 @@ const onChangeImg = (e: Event) => {
             <ErrorMessage :error="errors.name" />
           </div>
           <div class="form-data w-full">
-            <Label
+            <label
               for="email"
               class="font-medium text-sm"
-              >Email</Label
+              >Email</label
             >
             <Input
               v-model="email"
@@ -222,10 +221,10 @@ const onChangeImg = (e: Event) => {
         </div>
         <div class="w-full">
           <div class="form-data flex flex-col gap-2">
-            <Label
+            <label
               for="name"
               class="font-medium text-sm"
-              >Language</Label
+              >Language</label
             >
             <Select>
               <SelectTrigger class="w-[280px]">
@@ -233,7 +232,7 @@ const onChangeImg = (e: Event) => {
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectLabel>Languages</SelectLabel>
+                  <Selectlabel>Languages</Selectlabel>
                   <SelectItem value="en"> English </SelectItem>
                   <SelectItem value="vi"> Tiếng việt </SelectItem>
                 </SelectGroup>

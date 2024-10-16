@@ -29,7 +29,7 @@ const [repeatNewPassword, repeatNewPasswordAttrs] = defineField('repeatNewPasswo
       <div class="body flex items-start gap-8">
         <div class="form flex items-center gap-4 flex-col w-full">
           <div class="form-data w-full font-medium text-base">
-            <Label
+            <label
               for="username"
               class="font-medium text-sm"
               >Old password</Label
@@ -45,7 +45,7 @@ const [repeatNewPassword, repeatNewPasswordAttrs] = defineField('repeatNewPasswo
             <ErrorMessage :error="errors.name" />
           </div>
           <div class="form-data w-full font-medium text-base">
-            <Label
+            <label
               for="name"
               class="font-medium text-sm"
               >New password</Label
@@ -61,7 +61,7 @@ const [repeatNewPassword, repeatNewPasswordAttrs] = defineField('repeatNewPasswo
             <ErrorMessage :error="errors.name" />
           </div>
           <div class="form-data w-full font-medium text-base">
-            <Label
+            <label
               for="email"
               class="font-medium text-sm"
               >Repeat new password</Label
