@@ -85,7 +85,7 @@ const onSubmit = handleSubmit(async (values) => {
         </div>
         <div class="mt-6">
           <div class="form-data">
-            <Label for="password">Password</Label>
+            <label for="password">Password</label>
             <Input
               v-model="password"
               placeholder="Enter password..."
@@ -97,7 +97,7 @@ const onSubmit = handleSubmit(async (values) => {
             <ErrorMessage :error="errors.password" />
           </div>
           <div class="form-data">
-            <Label for="confirm-password">Confirm password</Label>
+            <label for="confirm-password">Confirm password</label>
             <Input
               v-model="confirmPassword"
               placeholder="Enter email..."

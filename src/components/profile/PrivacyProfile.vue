@@ -14,7 +14,7 @@ import { Switch } from '../ui/switch'
           <div
             class="form-data w-full flex items-center gap-2 justify-between shadow-item p-2 rounded"
           >
-            <Label
+            <label
               for="shareKahoot"
               class="font-normal text-base"
               >Shares a kahoot with you</Label
@@ -24,7 +24,7 @@ import { Switch } from '../ui/switch'
           <div
             class="form-data w-full flex items-center gap-2 justify-between shadow-item p-2 rounded"
           >
-            <Label
+            <label
               for="feature"
               class="font-normal text-base"
               >Features your quizzfly to other users</Label
@@ -34,7 +34,7 @@ import { Switch } from '../ui/switch'
           <div
             class="form-data w-full flex items-center gap-2 justify-between shadow-item p-2 rounded"
           >
-            <Label
+            <label
               for="shareother"
               class="font-normal text-base"
               >Shares your quizzfly with other users</Label
@@ -44,7 +44,7 @@ import { Switch } from '../ui/switch'
           <div
             class="form-data w-full flex items-center gap-2 justify-between shadow-item p-2 rounded"
           >
-            <Label
+            <label
               for="favourite"
               class="font-normal text-base"
               >Favourites your quizzfly</Label
@@ -65,7 +65,7 @@ import { Switch } from '../ui/switch'
               <div
                 class="form-data w-full flex items-center gap-2 justify-between shadow-item p-2 rounded"
               >
-                <Label
+                <label
                   for="shareKahoot"
                   class="font-normal text-base w-full"
                   >I have read and agree with the quizzfly? <span>terms and conditions</span> and
@@ -77,7 +77,7 @@ import { Switch } from '../ui/switch'
               <div
                 class="form-data w-full flex items-center gap-2 justify-between shadow-item p-2 rounded"
               >
-                <Label
+                <label
                   for="feature"
                   class="font-normal text-base"
                   >I want to receive marketing messages with recommendations and other relevant
@@ -88,7 +88,7 @@ import { Switch } from '../ui/switch'
               <div
                 class="form-data w-full flex items-center gap-2 justify-between shadow-item p-2 rounded"
               >
-                <Label
+                <label
                   for="shareother"
                   class="font-normal text-base"
                   >I want to receive relevant information, exclusive invitations and special offers

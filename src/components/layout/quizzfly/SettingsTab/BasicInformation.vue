@@ -104,14 +104,14 @@ function handleFileChange(event: Event) {
               id="public"
               value="public"
             />
-            <Label for="public">Public</Label>
+            <label for="public">Public</label>
           </Card>
           <Card class="p-4 flex items-center gap-2">
             <RadioGroupItem
               id="private"
               value="private"
             />
-            <Label for="private">Private</Label>
+            <label for="private">Private</label>
           </Card>
         </RadioGroup>
       </Card>

@@ -150,7 +150,7 @@ const onChangeImg = (e: Event) => {
         </div>
         <div class="form flex items-center gap-4 flex-col w-full">
           <div class="form-data w-full">
-            <Label
+            <label
               for="username"
               class="font-medium text-sm"
               >Username</Label
@@ -165,7 +165,7 @@ const onChangeImg = (e: Event) => {
             />
           </div>
           <div class="form-data w-full">
-            <Label
+            <label
               for="name"
               class="font-medium text-sm"
               >Name</Label
@@ -181,7 +181,7 @@ const onChangeImg = (e: Event) => {
             <ErrorMessage :error="errors.name" />
           </div>
           <div class="form-data w-full">
-            <Label
+            <label
               for="email"
               class="font-medium text-sm"
               >Email</Label
@@ -222,7 +222,7 @@ const onChangeImg = (e: Event) => {
         </div>
         <div class="w-full">
           <div class="form-data flex flex-col gap-2">
-            <Label
+            <label
               for="name"
               class="font-medium text-sm"
               >Language</Label
@@ -233,7 +233,7 @@ const onChangeImg = (e: Event) => {
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectLabel>Languages</SelectLabel>
+                  <Selectlabel>Languages</Selectlabel>
                   <SelectItem value="en"> English </SelectItem>
                   <SelectItem value="vi"> Tiếng việt </SelectItem>
                 </SelectGroup>

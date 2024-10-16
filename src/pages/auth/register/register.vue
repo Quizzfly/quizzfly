@@ -83,7 +83,7 @@ const onSubmit = handleSubmit(async (values) => {
         </div>
         <div class="mt-6">
           <div class="form-data">
-            <Label for="email">Name</Label>
+            <label for="email">Name</label>
             <Input
               v-model="name"
               placeholder="Enter name..."
@@ -95,7 +95,7 @@ const onSubmit = handleSubmit(async (values) => {
             <ErrorMessage :error="errors.name" />
           </div>
           <div class="form-data">
-            <Label for="email">Email</Label>
+            <label for="email">Email</label>
             <Input
               v-model="email"
               placeholder="Enter email..."
@@ -107,7 +107,7 @@ const onSubmit = handleSubmit(async (values) => {
             <ErrorMessage :error="errors.email" />
           </div>
           <div class="form-data">
-            <Label for="email">Password</Label>
+            <label for="email">Password</label>
             <Input
               v-model="password"
               placeholder="Enter password..."
@@ -119,7 +119,7 @@ const onSubmit = handleSubmit(async (values) => {
             <ErrorMessage :error="errors.password" />
           </div>
           <div class="form-data">
-            <Label for="email">Confirm password</Label>
+            <label for="email">Confirm password</label>
             <Input
               v-model="confirmPassword"
               placeholder="Enter confirm password..."
