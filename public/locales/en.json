@@ -1,5 +1,6 @@
 {
   "auth": {
+    "sign_in": "Sign In",
     "forgot_pass": "hell"
   }
 }

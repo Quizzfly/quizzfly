@@ -46,6 +46,13 @@ const handleAddSlide = (type: 'quiz' | 'slide', quizType: string) => {
     link: 'https://picsum.photos/200/300',
     answers: [],
   })
+  questionsStore.setCurrentQuestion(questionsStore.getSlides[questionsStore.getSlides.length - 1])
+  nextTick(() => {
+    document.getElementById(`question-${questionsStore.currentQuestion.id}`)?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+    })
+  })
 }
 </script>
 <template>

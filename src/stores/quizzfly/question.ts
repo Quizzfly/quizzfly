@@ -25,6 +25,24 @@ export const useQuestionsStore = defineStore({
       // const questions = await fetch('/api/questions')
       // this.questions = await questions.json()
     },
+    initAnswers(quizType: string) {
+      switch (quizType) {
+        case 'multiple_choice':
+          this.updateCurrentQuestionAnswers([
+            { id: uuidv4(), text: '', isCorrect: false },
+            { id: uuidv4(), text: '', isCorrect: false },
+            { id: uuidv4(), text: '', isCorrect: false },
+            { id: uuidv4(), text: '', isCorrect: false },
+          ])
+          break
+        case 'true_false':
+          this.updateCurrentQuestionAnswers([
+            { id: uuidv4(), text: 'True', isCorrect: true },
+            { id: uuidv4(), text: 'False', isCorrect: false },
+          ])
+          break
+      }
+    },
     updateQuestions(questions: Question[]) {
       this.questions = questions
     },

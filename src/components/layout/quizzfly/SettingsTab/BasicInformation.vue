@@ -15,7 +15,8 @@ onBeforeMount(() => {
   settingsData.value.title = quizzflyStore.getQuizzflyInfo.title
   settingsData.value.description = quizzflyStore.getQuizzflyInfo.description
   settingsData.value.is_public = quizzflyStore.getQuizzflyInfo.is_public
-  settingsData.value.cover_image = quizzflyStore.getQuizzflyInfo.cover_image || ''
+  settingsData.value.coverImage = quizzflyStore.getQuizzflyInfo.cover_image || ''
+  imagePreview.value = quizzflyStore.getQuizzflyInfo.cover_image || ''
 })
 
 const inputRef = ref<HTMLInputElement>()
@@ -43,7 +44,7 @@ function handleFileChange(event: Event) {
         Upload a cover image for your quiz. This image will be displayed on the quiz page.
       </p>
       <div
-        class="w-full h-[200px] border-2 border-dashed rounded-md mt-5 overflow-hidden"
+        class="w-full h-[200px] border-2 border-dashed rounded-md mt-5 overflow-hidden bg-cover bg-center"
         :style="{ backgroundImage: `url(${imagePreview})` }"
       >
         <input

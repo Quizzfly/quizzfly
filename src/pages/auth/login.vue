@@ -61,7 +61,7 @@ const onSubmit = handleSubmit(async (values) => {
             Forgot Password?
           </RouterLink>
         </div>
-        <Button class="mt-6 w-full h-10 bg-primary"> Sign in </Button>
+        <Button class="mt-6 w-full h-10 bg-primary"> {{ $t('auth.sign_in') }} </Button>
         <div class="flex items-center gap-2 w-full mt-8">
           <span class="h-px bg-slate-200 w-full"></span>
           <p class="text-base">Or</p>

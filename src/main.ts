@@ -5,28 +5,32 @@ import './assets/css/main.css'
 import './assets/css/tailwind.css'
 import router from './routers/router'
 import { Icon } from '@iconify/vue'
-// import Icon from "./components/base/Icon.vue";
+
+/* layouts */
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import GuestLayout from '@/layouts/GuestLayout.vue'
 import NoSideBarLayout from '@/layouts/NoSideBarLayout.vue'
-import QuizCreateLayout from './layouts/QuizCreateLayout.vue'
+import QuizCreateLayout from '@/layouts/QuizCreateLayout.vue'
+
+/* stores */
 import { initAuthStore } from './stores'
-const app = createApp(App)
+
+/* plugins */
 import { plugin as VueTippy } from 'vue-tippy'
 import { MotionPlugin } from '@vueuse/motion'
-import TouchOutSide from '@/plugins/directives/VueTouchOutside'
 import VImage from '@/plugins/directives/image'
 import 'tippy.js/dist/tippy.css' // optional for styling
 import 'vue-awesome-paginate/dist/style.css'
-import { i18n } from './plugins/i18n'
+import { setupI18n } from './plugins/i18n'
 import Vue3Toastify from './plugins/toast'
 
+const app = createApp(App)
+
 const initApp = async () => {
+  await setupI18n(app)
   app.component('Icon', Icon)
   app.use(Vue3Toastify.Vue3Toastify, Vue3Toastify.options)
-  app.use(i18n)
   app.use(MotionPlugin)
-  app.use(TouchOutSide)
   app.use(VImage)
   app.use(
     VueTippy,

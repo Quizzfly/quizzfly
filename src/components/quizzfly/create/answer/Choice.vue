@@ -5,6 +5,7 @@ const { textarea, input } = useTextareaAutosize()
 defineProps<{
   index: number
   editMode?: boolean
+  isTrueFalse?: boolean
 }>()
 
 const answer = defineModel<any>()
@@ -73,7 +74,7 @@ onMounted(() => {
     <textarea
       ref="textarea"
       v-model="input"
-      :disabled="!editMode"
+      :disabled="!editMode || isTrueFalse"
       class="resize-none bg-transparent text-white text-lg w-full border-none outline-none text-input"
       placeholder="Enter your answer..."
       maxlength="80"
