@@ -105,6 +105,7 @@ const handleAddSlide = (type: string, quizType: string) => {
       >
         <template #item="{ element, index }">
           <div
+            :id="`question-${element.id}`"
             v-motion
             :initial="{ opacity: 0, y: 100 }"
             :enter="{ opacity: 1, y: 0, scale: 1 }"
@@ -125,7 +126,8 @@ const handleAddSlide = (type: string, quizType: string) => {
             </div>
 
             <div
-              class="w-full h-[100px] border-2 bg-white rounded-xl cursor-pointer relative p-2 flex justify-center items-center overflow-hidden"
+              class="w-full h-[100px] border-2 bg-white bg-cover bg-center rounded-xl cursor-pointer relative p-2 flex justify-center items-center overflow-hidden"
+              :style="{ backgroundImage: `url(${element.image})` }"
               :class="{
                 'border-primary': currentQuestion.id === element.id && !drag,
               }"
@@ -136,7 +138,7 @@ const handleAddSlide = (type: string, quizType: string) => {
               >
                 {{ element.type }}
               </div>
-              <p class="truncate text-ellipsis">{{ element.title }}</p>
+              <p class="truncate text-ellipsis bg-white rounded-sm px-2">{{ element.title }}</p>
             </div>
           </div>
         </template>
