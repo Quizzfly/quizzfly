@@ -4,6 +4,7 @@ export interface Question {
   content: string
   image: string
   link: string
+  theme: string
   type: 'quiz' | 'slide'
   quizType?: string
   answers?: any[]

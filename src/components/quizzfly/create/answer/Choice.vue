@@ -2,13 +2,20 @@
 import { useTextareaAutosize } from '@vueuse/core'
 const { textarea, input } = useTextareaAutosize()
 
-defineProps<{
+const props = defineProps<{
   index: number
   editMode?: boolean
   isTrueFalse?: boolean
+  modelValue: any
 }>()
 
-const answer = defineModel<any>()
+const emits = defineEmits<{
+  (e: 'update:modelValue', value: any): void
+}>()
+
+const updateAnswer = (value: any) => {
+  emits('update:modelValue', value)
+}
 
 const colorsHex = [
   {
@@ -29,15 +36,8 @@ const colorsHex = [
   },
 ]
 
-watch(
-  () => input.value,
-  (value) => {
-    answer.value.text = value
-  },
-)
-
 onMounted(() => {
-  input.value = answer.value.text
+  input.value = props.modelValue.text
 })
 </script>
 <template>
@@ -47,7 +47,7 @@ onMounted(() => {
   >
     <template v-if="editMode">
       <div
-        v-if="answer.isCorrect"
+        v-if="modelValue.isCorrect"
         v-motion
         :initial="{
           scale: 1.5,
@@ -61,13 +61,13 @@ onMounted(() => {
       >
         <span
           class="cursor-pointer i-solar-check-square-bold text-2xl"
-          @click="answer.isCorrect = !answer.isCorrect"
+          @click="updateAnswer({ ...modelValue, isCorrect: !modelValue.isCorrect })"
         ></span>
       </div>
       <div
         v-else
         class="min-w-5 h-5 cursor-pointer border-[1px] border-white rounded-sm text-2xl"
-        @click="answer.isCorrect = !answer.isCorrect"
+        @click="updateAnswer({ ...modelValue, isCorrect: !modelValue.isCorrect })"
       ></div>
     </template>
     <!-- prevent enter not break line -->
@@ -78,6 +78,7 @@ onMounted(() => {
       class="resize-none bg-transparent text-white text-lg w-full border-none outline-none text-input"
       placeholder="Enter your answer..."
       maxlength="80"
+      @update:model-value="updateAnswer({ ...modelValue, text: $event })"
       @keydown.enter.prevent
     />
   </div>
