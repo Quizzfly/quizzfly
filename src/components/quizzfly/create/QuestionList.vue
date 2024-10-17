@@ -127,7 +127,7 @@ const handleAddSlide = (type: string, quizType: string) => {
 
             <div
               class="w-full h-[100px] border-2 bg-white bg-cover bg-center rounded-xl cursor-pointer relative p-2 flex justify-center items-center overflow-hidden"
-              :style="{ backgroundImage: `url(${element.image})` }"
+              :style="{ backgroundImage: `url(${element.theme})` }"
               :class="{
                 'border-primary': currentQuestion.id === element.id && !drag,
               }"
