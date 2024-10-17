@@ -16,11 +16,11 @@ const emits = defineEmits<{
 </script>
 
 <template>
-  <div class="fixed flex top-0 right-0 left-0 bottom-0 bg-[rgba(0,0,0,0.6)]">
-    <div
-      class="bg-white w-[450px] h-full absolute right-0"
-      @click.prevent.self="emits('close')"
-    >
+  <div
+    class="fixed flex top-0 right-0 left-0 bottom-0 bg-[rgba(0,0,0,0.6)]"
+    @click.prevent.self="emits('close')"
+  >
+    <div class="bg-white w-[450px] h-full absolute right-0">
       <div class="flex items-center justify-between mb-8 p-4">
         <h2 class="text-3xl font-bold">Setting</h2>
         <span

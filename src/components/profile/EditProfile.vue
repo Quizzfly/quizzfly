@@ -114,7 +114,7 @@ const onChangeImg = (e: Event) => {
         <Button
           class="h-10 flex items-center gap-2 bg-slate-100 w-24"
           variant="secondary"
-          :disabled="isLoading ? true : false"
+          :disabled="isLoading"
           @click="onSubmit"
         >
           <span

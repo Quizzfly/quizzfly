@@ -132,7 +132,7 @@ const onSubmit = handleSubmit(async (values) => {
         </div>
 
         <Button
-          :disabled="isLoading ? true : false"
+          :disabled="isLoading"
           class="mt-6 w-full h-10 flex gap-2"
         >
           <span

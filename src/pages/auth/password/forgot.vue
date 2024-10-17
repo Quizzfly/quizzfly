@@ -142,7 +142,7 @@ const [email, emailAttrs] = defineField('email')
               :error="errors.email"
             />
             <Button
-              :disabled="isLoading ? true : false"
+              :disabled="isLoading"
               type="submit"
               class="mt-4 w-full h-10 bg-primary flex gap-2"
             >

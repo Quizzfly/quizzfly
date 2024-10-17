@@ -15,16 +15,15 @@ const quizzflys = computed(() => quizzflyStore.getQuizzflys)
     >
       <div class="p-3 flex gap-2 w-full">
         <!-- left -->
-        <div class="flex gap-5">
-          <div>
-            <img
-              class="w-[60px] h-[60px] object-cover rounded-sm"
-              :src="quizzfly.cover_image || '/assets/images/backgrounds/1.webp'"
-              alt=""
-            />
-          </div>
-          <!-- information -->
-          <div>
+        <div>
+          <img
+            class="w-[80px] h-[80px] object-cover rounded-sm"
+            src="https://images.unsplash.com/photo-1725992340772-47fd8f8df459?q=80&w=2400&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            alt=""
+          />
+        </div>
+        <div class="flex flex-col w-full justify-between">
+          <div class="flex items-center justify-between">
             <div class="flex item-center gap-3">
               <h2 class="title text-base font-medium">{{ quizzfly.title || 'Untitled' }}</h2>
               <Chip

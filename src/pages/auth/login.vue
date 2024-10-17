@@ -13,9 +13,9 @@ const { handleSubmit } = useForm({
 })
 
 const authStore = useAuthStore()
-const isCheckLogining = ref(false)
+const isLoading = ref(false)
 const onSubmit = handleSubmit(async (values) => {
-  isCheckLogining.value = true
+  isLoading.value = true
   authStore.login(values.email, values.password)
 })
 </script>
@@ -64,11 +64,11 @@ const onSubmit = handleSubmit(async (values) => {
           </RouterLink>
         </div>
         <Button
-          :disabled="isCheckLogining ? true : false"
+          :disabled="isLoading"
           class="mt-6 w-full h-10 bg-primary flex gap-2 items-center"
         >
           <span
-            v-if="isCheckLogining"
+            v-if="isLoading"
             class="i-svg-spinners-ring-resize"
           ></span>
           Sign in
