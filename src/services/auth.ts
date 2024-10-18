@@ -52,6 +52,13 @@ export const forgotPasswordApi = async (email: string): Promise<any> => {
   })
 }
 
+export const verifyResetPasswordApi = async (token: string): Promise<any> => {
+  return $api('/auth/verify-reset-password-link', {
+    method: 'GET',
+    params: { token },
+  })
+}
+
 interface ChangePasswordPayload {
   old_password: string
   new_password: string
