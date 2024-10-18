@@ -185,8 +185,8 @@ const [email, emailAttrs] = defineField('email')
     </div>
     <div class="flex-1 relative max-md:hidden">
       <img
-        class="absolute top-0 left-0 w-full h-full object-unset rounded-3xl"
-        src="@/assets/img/auth-bg.jpg"
+        class="absolute top-0 left-0 w-full h-full object-cover rounded-3xl"
+        src="@/assets/img/bg-image-1.jpg"
         alt=""
       />
     </div>
