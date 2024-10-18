@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/select'
 import { ref } from 'vue'
 
-const isPlaying = ref(false)
+// const isPlaying = ref(false)
 const audio = ref<HTMLAudioElement | null>(null)
 
 const isChechSelected = ref('')
