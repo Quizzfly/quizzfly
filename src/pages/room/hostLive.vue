@@ -1,15 +1,14 @@
 <script setup lang="ts">
 import ModalStartHostLive from '@/components/room/ModalStartHostLive.vue'
-import Setting from '@/components/room/Setting.vue'
-import { useFullscreen } from '@vueuse/core'
+import BarWrapper from '@/components/room/BarWrapper.vue'
+import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
 
-const el = ref<HTMLElement | null>(null)
-const { isFullscreen, exit, toggle } = useFullscreen(el)
+const quizzflyStore = useQuizzflyStore()
 
-const isShowSetting = ref(false)
-const closeModal = () => {
-  isShowSetting.value = false
-}
+const route = useRoute()
+onBeforeMount(() => {
+  quizzflyStore.getQuizzflyDetail(route.params.quizzflyId as string)
+})
 </script>
 <template>
   <div
@@ -17,28 +16,8 @@ const closeModal = () => {
     class="ralative img-test w-full h-screen p-20 flex flex-col gap-6 overflow-hidden items-center justify-center bg-gray-200 bg-cover transition-all duration-200 ease-in-out"
   >
     <ModalStartHostLive />
-
-    <div class="absolute right-6 bottom-6 flex gap-3 rounded bg-[rgba(0,0,0,0.24)] p-3">
-      <span
-        class="i-solar-settings-linear text-white w-8 h-6 cursor-pointer"
-        @click="isShowSetting = true"
-      ></span>
-      <span
-        v-if="!isFullscreen"
-        class="i-solar-full-screen-bold text-white w-8 h-6 cursor-pointer"
-        @click="toggle"
-      ></span>
-      <span
-        v-else
-        class="i-solar-quit-full-screen-square-outline text-white w-8 h-6 cursor-pointer"
-        @click="exit"
-      ></span>
-    </div>
+    <BarWrapper></BarWrapper>
   </div>
-  <Setting
-    v-if="isShowSetting"
-    @close="closeModal"
-  ></Setting>
 </template>
 <style scoped lang="scss">
 .img-test {

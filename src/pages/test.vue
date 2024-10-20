@@ -8,57 +8,98 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { ref } from 'vue'
+import { Slider } from '@/components/ui/slider'
 
-// const isPlaying = ref(false)
-const audio = ref<HTMLAudioElement | null>(null)
+// const audioFiles = import.meta.glob('@/assets/audio/*.mp3')
+const audioFiles = import.meta.glob('/assets/audio/*.mp3')
 
-const isChechSelected = ref('')
+onMounted(() => {
+  console.log(audioFiles.value, 'check audio')
+})
 
-const toggleAudio = () => {
-  console.log('hello check')
-  // isPlaying.value = !isPlaying.value
-  // if (isPlaying.value) {
-  audio.value?.play()
-  // } else {
-  //   audio.value?.pause()
-  // }
+const musicList = ref<{ value: string; label: string; src: string }[]>([])
+
+for (const path in audioFiles) {
+  const fileName = path.split('/').pop()?.replace('.mp3', '') || 'Unknown'
+  musicList.value.push({
+    value: fileName,
+    label: fileName,
+    src: path,
+  })
 }
 
+const isChechSelected = ref('')
+const audio = ref<HTMLAudioElement | null>(null)
+const volume = ref([30])
+
+const stopAudio = () => {
+  if (audio.value) {
+    audio.value.pause()
+    audio.value.currentTime = 0
+  }
+}
+
+const toggleAudio = (src: string) => {
+  if (audio.value) {
+    audio.value.src = src
+    audio.value.volume = volume.value[0] / 100
+    audio.value.play()
+  }
+}
+
+watch(volume, (val) => {
+  if (audio.value) {
+    audio.value.volume = val[0] / 100
+  }
+})
+
 watch(isChechSelected, (val) => {
-  if (val === 'en') {
-    toggleAudio()
+  const selectedSong = musicList.value.find((item) => item.value === val)
+  if (selectedSong) {
+    stopAudio()
+    toggleAudio(selectedSong.src)
   }
 })
 </script>
 
 <template>
   <div class="flex items-center justify-center mt-80">
-    {{ isChechSelected }}
-    <Select v-model="isChechSelected">
-      <SelectTrigger class="w-[200px] h-10">
-        <SelectValue
-          class="text-base"
-          placeholder="Select a language"
-        />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          <SelectLabel>Languages</SelectLabel>
-          <SelectItem value="en">
-            hello
-            <audio
-              ref="audio"
-              hidden
+    <div>
+      <Select v-model="isChechSelected">
+        <SelectTrigger class="w-[200px] h-10">
+          <SelectValue
+            class="text-base"
+            placeholder="Select a song"
+          />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Songs</SelectLabel>
+            <SelectItem
+              v-for="(song, index) in musicList"
+              :key="index"
+              :value="song.value"
             >
-              <source
-                src="@/assets/audio/City-shadows.mp3"
-                type="audio/mpeg"
-              />
-            </audio>
-          </SelectItem>
-        </SelectGroup>
-      </SelectContent>
-    </Select>
+              {{ song.label }}
+            </SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+
+      <div class="mt-4">
+        <label class="block mb-2">Volume: {{ volume[0] }}%</label>
+        <Slider
+          v-model="volume"
+          :max="100"
+          :min="0"
+          :step="2"
+        />
+      </div>
+
+      <audio
+        ref="audio"
+        hidden
+      />
+    </div>
   </div>
 </template>
