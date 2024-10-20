@@ -49,7 +49,9 @@ onMounted(() => {
             src="@/assets/img/bg-image-1.jpg"
             alt=""
           />
-          <div class="text-sm font-medium text-white">{{ quizzflyInfo?.title }}</div>
+          <div class="text-sm font-medium text-white">
+            {{ quizzflyInfo?.title }}
+          </div>
         </div>
         <div class="rounded h-full p-2 bg-[rgba(0,0,0,0.24)] w-32">
           <Button class="h-18 w-full h-full text-lg"> Start </Button>
