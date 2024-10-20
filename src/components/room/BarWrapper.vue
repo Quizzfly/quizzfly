@@ -5,8 +5,7 @@ import { Slider } from '../ui/slider'
 
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 
-const el = ref<HTMLElement | null>(null)
-const { isFullscreen, exit, toggle } = useFullscreen(el)
+const { isFullscreen, exit, toggle } = useFullscreen()
 
 const isShowSetting = ref(false)
 const isShowVolume = ref(false)
