@@ -9,12 +9,20 @@ export const roomRoute: RouteRecordRaw[] = [
     },
     component: () => import('@/pages/room/hostLive.vue'),
   },
-  //   {
-  //     path: 'create/:quizzflyId',
-  //     name: 'quizzfly-create',
-  //     meta: {
-  //       layout: 'QuizCreateLayout',
-  //     },
-  //     component: () => import('@/pages/quizzfly/create.vue'),
-  //   },
+  {
+    path: 'play/lobby/:code',
+    name: 'play-lobby',
+    meta: {
+      layout: 'GuestLayout',
+    },
+    component: () => import('@/pages/room/play/lobbyPlay.vue'),
+  },
+  {
+    path: 'play/instruction',
+    name: 'play-instruction',
+    meta: {
+      layout: 'GuestLayout',
+    },
+    component: () => import('@/pages/room/play/instructionsPlay.vue'),
+  },
 ]

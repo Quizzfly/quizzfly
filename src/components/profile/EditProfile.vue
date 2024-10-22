@@ -246,7 +246,6 @@ const onChangeImg = (e: Event) => {
                 </SelectGroup>
               </SelectContent>
             </Select>
-            <ErrorMessage :error="errors.name" />
           </div>
         </div>
       </div>
