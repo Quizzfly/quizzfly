@@ -33,3 +33,18 @@ export const UpdateInfoApi = async (data: any): Promise<BaseResponse<IUser>> => 
     body: data,
   })
 }
+
+export const requestDeleteApi = async (): Promise<BaseResponse<IUser>> => {
+  return $api('/users/request-delete', {
+    method: 'POST',
+  })
+}
+
+export const verifyDeleteApi = async (code: any): Promise<BaseResponse<IUser>> => {
+  return $api('/users/verify-delete', {
+    method: 'DELETE',
+    query: {
+      code: code,
+    },
+  })
+}

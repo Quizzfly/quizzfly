@@ -77,7 +77,10 @@ const [confirmNewPassword, confirmNewPasswordAttrs] = defineField('confirmNewPas
               type="password"
               class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
             />
-            <ErrorMessage :error="errors.oldPassword" />
+            <ErrorMessage
+              class="text-xs mt-0.5"
+              :error="errors.oldPassword"
+            />
           </div>
           <div class="form-data w-full font-medium text-base">
             <label
@@ -93,7 +96,10 @@ const [confirmNewPassword, confirmNewPasswordAttrs] = defineField('confirmNewPas
               type="password"
               class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
             />
-            <ErrorMessage :error="errors.newPassword" />
+            <ErrorMessage
+              class="text-xs mt-0.5"
+              :error="errors.newPassword"
+            />
           </div>
           <div class="form-data w-full font-medium text-base">
             <label
@@ -109,7 +115,10 @@ const [confirmNewPassword, confirmNewPasswordAttrs] = defineField('confirmNewPas
               type="password"
               class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
             />
-            <ErrorMessage :error="errors.confirmNewPassword" />
+            <ErrorMessage
+              class="text-xs mt-0.5"
+              :error="errors.confirmNewPassword"
+            />
           </div>
         </div>
       </div>
