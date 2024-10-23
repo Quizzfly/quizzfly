@@ -6,4 +6,9 @@ export const profileRoute: RouteRecordRaw[] = [
     name: 'profile',
     component: () => import('@/pages/profiles/index.vue'),
   },
+  {
+    path: '/delete-account',
+    name: 'delete-account',
+    component: () => import('@/pages/profiles/deleteAccount.vue'),
+  },
 ]

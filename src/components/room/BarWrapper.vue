@@ -13,13 +13,13 @@ const closeModal = () => {
   isShowSetting.value = false
 }
 
+const closeVolume = () => {
+  isShowVolume.value = false
+}
+
 const songSelected = ref()
 const volume = ref([30])
 const audio = ref<HTMLAudioElement | null>(null)
-
-// onMounted(() => {
-//   startAudio()
-// })
 
 watch(songSelected, () => {
   stopAudio()
@@ -53,7 +53,10 @@ watch(volume, (val) => {
 </script>
 
 <template>
-  <div class="absolute right-6 bottom-6 flex gap-3 rounded bg-[rgba(0,0,0,0.24)] p-3">
+  <div
+    class="absolute right-6 bottom-6 flex gap-3 rounded bg-[rgba(0,0,0,0.24)] p-3"
+    @click.prevent.self="closeVolume"
+  >
     <div class="flex items-center gap-2">
       <div
         class="flex gap-2"

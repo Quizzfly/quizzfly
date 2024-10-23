@@ -10,7 +10,6 @@ import {
 } from '@/components/ui/select'
 import { Slider } from '@/components/ui/slider'
 
-// const audioFiles = import.meta.glob('@/assets/audio/*.mp3')
 const audioFiles = import.meta.glob('/assets/audio/*.mp3')
 
 onMounted(() => {

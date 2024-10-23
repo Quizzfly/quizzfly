@@ -24,6 +24,6 @@ const { value, errorMessage } = useField(() => props.name) as any as {
   />
   <ErrorMessage
     :error="errorMessage"
-    class="mt-1"
+    class="mt-1 text-xs"
   />
 </template>

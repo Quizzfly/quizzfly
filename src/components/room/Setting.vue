@@ -12,22 +12,21 @@ import {
 import { musics } from '@/utils/roomSettings'
 
 const settingsMusic = defineModel<string>('music', { required: true, default: '' })
+
+const isCheckShowQA = ref(false)
+const isCheckAutoPlay = ref(false)
+
+const resetData = () => {
+  isCheckAutoPlay.value = false
+  isCheckShowQA.value = false
+}
 </script>
 
 <template>
-  <!-- <div
-    class="fixed flex top-0 right-0 left-0 bottom-0 bg-[rgba(0,0,0,0.6)]"
-    @click.prevent.self="emits('close')"
-  > -->
   <div class="bg-white h-full position right-0">
-    <!-- <div class="flex items-center justify-between mb-8 p-4">
-      <h2 class="text-3xl font-bold">Setting</h2>
-      <span
-        class="cursor-pointer i-solar-arrow-right-outline w-12 h-8"
-        @click="emits('close')"
-      ></span>
-    </div> -->
-    <div class="flex items-center gap-4 py-4 hover:bg-slate-100 cursor-pointer rounded border-y">
+    <div
+      class="flex items-center gap-4 py-4 px-2 hover:bg-slate-100 cursor-pointer rounded border-y"
+    >
       <div class="w-24">
         <img
           src="@/assets/img/bg-image-1.jpg"
@@ -42,7 +41,10 @@ const settingsMusic = defineModel<string>('music', { required: true, default: ''
             Questions and answer show on players devices.
           </p>
         </div>
-        <Switch id="shareKahoot" />
+        <Switch
+          id="shareKahoot"
+          v-model:checked="isCheckShowQA"
+        />
       </div>
     </div>
     <div class="flex flex-col gap-3 py-4 rounded border-b">
@@ -96,11 +98,30 @@ const settingsMusic = defineModel<string>('music', { required: true, default: ''
       </div>
     </div>
     <div
+      class="flex items-center gap-4 py-4 px-2 hover:bg-slate-100 cursor-pointer rounded border-y"
+    >
+      <div class="flex items-center justify-between w-full">
+        <div class="flex gap-2">
+          <span class="w-8 h-6 i-solar-chat-round-video-broken"></span>
+          <h3 class="text-base font-semibold">Auto play</h3>
+        </div>
+        <Switch
+          id="shareKahoot"
+          v-model:checked="isCheckAutoPlay"
+        />
+      </div>
+    </div>
+    <div
       class="absolute bottom-0 pr-10 py-8 flex flex-col gap-4 justify-center items-center w-full"
     >
       <p class="text-base font-medium text-slate-700">Your setting will be saved for next time.</p>
-      <a class="text-sm cursor-pointer text-primary font-medium underline">Reset to default</a>
+      <p
+        class="text-sm cursor-pointer text-primary font-medium underline"
+        @click="resetData"
+      >
+        Reset to default
+      </p>
+      >
     </div>
   </div>
-  <!-- </div> -->
 </template>

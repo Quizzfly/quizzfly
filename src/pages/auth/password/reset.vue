@@ -70,7 +70,6 @@ const openConfirmError = async () => {
     router.push('/login')
   }
 }
-
 const onSubmit = handleSubmit(async (values) => {
   isLoading.value = true
   try {
@@ -123,7 +122,7 @@ const onSubmit = handleSubmit(async (values) => {
             <label for="confirm-password">Confirm password</label>
             <Input
               v-model="confirmPassword"
-              placeholder="Enter email..."
+              placeholder="Enter password..."
               type="password"
               class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
               v-bind="confirmPasswordAttrs"

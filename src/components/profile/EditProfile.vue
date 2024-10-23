@@ -246,14 +246,16 @@ const onChangeImg = (e: Event) => {
                 </SelectGroup>
               </SelectContent>
             </Select>
-            <ErrorMessage :error="errors.name" />
           </div>
         </div>
       </div>
       <div class="flex flex-col gap-2">
-        <p class="text-base font-semibold underline underline-offset-2 cursor-pointer">
+        <RouterLink
+          :to="{ name: 'delete-account' }"
+          class="text-base text-red-400 font-semibold underline underline-offset-2 cursor-pointer"
+        >
           Delete account
-        </p>
+        </RouterLink>
         <p class="text-sm">
           If you delete your account, you'll lose access to all the quizzfly you created
         </p>
