@@ -13,12 +13,12 @@ import { musics } from '@/utils/roomSettings'
 
 const settingsMusic = defineModel<string>('music', { required: true, default: '' })
 
-const ischeckShowQA = ref(false)
-const ischeckAutoPlay = ref(false)
+const isCheckShowQA = ref(false)
+const isCheckAutoPlay = ref(false)
 
 const resetData = () => {
-  ischeckAutoPlay.value = false
-  ischeckShowQA.value = false
+  isCheckAutoPlay.value = false
+  isCheckShowQA.value = false
 }
 </script>
 
@@ -43,7 +43,7 @@ const resetData = () => {
         </div>
         <Switch
           id="shareKahoot"
-          v-model:checked="ischeckShowQA"
+          v-model:checked="isCheckShowQA"
         />
       </div>
     </div>
@@ -107,7 +107,7 @@ const resetData = () => {
         </div>
         <Switch
           id="shareKahoot"
-          v-model:checked="ischeckAutoPlay"
+          v-model:checked="isCheckAutoPlay"
         />
       </div>
     </div>
@@ -115,10 +115,12 @@ const resetData = () => {
       class="absolute bottom-0 pr-10 py-8 flex flex-col gap-4 justify-center items-center w-full"
     >
       <p class="text-base font-medium text-slate-700">Your setting will be saved for next time.</p>
-      <a
+      <p
         class="text-sm cursor-pointer text-primary font-medium underline"
         @click="resetData"
-        >Reset to default</a
+      >
+        Reset to default
+      </p>
       >
     </div>
   </div>

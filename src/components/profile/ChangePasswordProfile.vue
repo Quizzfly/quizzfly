@@ -1,15 +1,14 @@
 <script setup lang="ts">
 import { Button } from '../ui/button'
-import { Input } from '@/components/ui/input'
+import InputValidation from '@/components/base/InputValidation.vue'
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
 import { apiError } from '@/utils/exceptionHandler'
 import { showToast } from '@/utils/toast'
 import { changePasswordApi } from '@/services/auth'
-import ErrorMessage from '../base/ErrorMessage.vue'
 
 const isLoading = ref(false)
-const { errors, handleSubmit, defineField } = useForm({
+const { handleSubmit } = useForm({
   validationSchema: yup.object({
     oldPassword: yup.string().required('Old password is required'),
     newPassword: yup.string().required('New password is required'),
@@ -20,7 +19,7 @@ const { errors, handleSubmit, defineField } = useForm({
   }),
 })
 
-const onSubmit = handleSubmit(async (values) => {
+const onSubmit = handleSubmit(async (values, { resetForm }) => {
   isLoading.value = true
   try {
     await changePasswordApi({
@@ -29,7 +28,7 @@ const onSubmit = handleSubmit(async (values) => {
       confirm_new_password: values.confirmNewPassword,
     })
     isLoading.value = false
-    resetData()
+    resetForm()
     showToast({
       title: 'success',
       description: 'Change password success',
@@ -44,15 +43,11 @@ const onSubmit = handleSubmit(async (values) => {
   }
 })
 
-const resetData = () => {
-  oldPassword.value = ''
-  newPassword.value = ''
-  confirmNewPassword.value = ''
-}
-
-const [oldPassword, oldPasswordAttrs] = defineField('oldPassword')
-const [newPassword, newPasswordAttrs] = defineField('newPassword')
-const [confirmNewPassword, confirmNewPasswordAttrs] = defineField('confirmNewPassword')
+// const resetData = () => {
+//   oldPassword = ''
+//   newPassword.value = ''
+//   confirmNewPassword.value = ''
+// }
 </script>
 
 <template>
@@ -65,59 +60,44 @@ const [confirmNewPassword, confirmNewPasswordAttrs] = defineField('confirmNewPas
         <div class="form flex items-center flex-col w-full">
           <div class="form-data w-full font-medium text-base">
             <label
-              for="username"
+              for="oldPassword"
               class="font-medium text-sm"
               >Old password</label
             >
-            <Input
-              v-model="oldPassword"
+            <InputValidation
+              id="oldPassword"
               placeholder="Enter old password..."
-              v-bind="oldPasswordAttrs"
-              :invalid="errors.oldPassword"
               type="password"
+              name="oldPassword"
               class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
-            />
-            <ErrorMessage
-              class="text-xs mt-0.5"
-              :error="errors.oldPassword"
             />
           </div>
           <div class="form-data w-full font-medium text-base">
             <label
-              for="name"
+              for="newPassword"
               class="font-medium text-sm"
               >New password</label
             >
-            <Input
-              v-model="newPassword"
+            <InputValidation
+              id="newPassword"
               placeholder="Enter new password..."
-              v-bind="newPasswordAttrs"
-              :invalid="errors.newPassword"
               type="password"
+              name="newPassword"
               class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
-            />
-            <ErrorMessage
-              class="text-xs mt-0.5"
-              :error="errors.newPassword"
             />
           </div>
           <div class="form-data w-full font-medium text-base">
             <label
-              for="email"
+              for="confirmNewPassword"
               class="font-medium text-sm"
               >Confirm new password</label
             >
-            <Input
-              v-model="confirmNewPassword"
+            <InputValidation
+              id="confirmNewPassword"
               placeholder="Enter confirm new password..."
-              v-bind="confirmNewPasswordAttrs"
-              :invalid="errors.confirmNewPassword"
               type="password"
+              name="confirmNewPassword"
               class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
-            />
-            <ErrorMessage
-              class="text-xs mt-0.5"
-              :error="errors.confirmNewPassword"
             />
           </div>
         </div>

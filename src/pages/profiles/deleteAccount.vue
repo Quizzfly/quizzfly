@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import Button from '@/components/ui/button/Button.vue'
-import { Input } from '@/components/ui/input'
+import InputValidation from '@/components/base/InputValidation.vue'
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
 import { apiError } from '@/utils/exceptionHandler'
 import { showToast } from '@/utils/toast'
-import ErrorMessage from '@/components/base/ErrorMessage.vue'
 import { useAuthStore } from '@/stores/auth'
 import { requestDeleteApi, verifyDeleteApi } from '@/services/user'
 import { useRouter } from 'vue-router'
@@ -22,12 +21,11 @@ const userInfo = computed(() => {
 })
 
 const isLoading = ref(false)
-const { errors, handleSubmit, defineField } = useForm({
+const { handleSubmit } = useForm({
   validationSchema: yup.object({
     code: yup.string().required('Code is required'),
   }),
 })
-const [code, codeAttrs] = defineField('code')
 
 const handleResentEmail = async (time: number) => {
   isLoading.value = true
@@ -42,7 +40,6 @@ const handleResentEmail = async (time: number) => {
     isCountdown.value = true
     isLoading.value = false
     startTimer()
-    authStore.logout
   } catch (error) {
     showToast({
       title: 'Failed',
@@ -80,6 +77,7 @@ const onSubmit = handleSubmit(async (values) => {
       code: values.code,
     })
     isLoading.value = false
+    authStore.logout()
     showToast({
       title: 'success',
       description: 'Delete account success',
@@ -161,17 +159,12 @@ const onSubmit = handleSubmit(async (values) => {
             for="code"
             >Code</label
           >
-          <Input
+          <InputValidation
             id="code"
-            v-model="code"
+            name="code"
+            type="string"
             placeholder="Enter code..."
-            v-bind="codeAttrs"
-            :invalid="errors.code"
             class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
-          />
-          <ErrorMessage
-            class="text-xs mt-0.5"
-            :error="errors.code"
           />
         </div>
         <div class="flex gap-2 w-full justify-center items-center">
