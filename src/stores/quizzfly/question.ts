@@ -74,7 +74,7 @@ export const useQuestionsStore = defineStore({
     async addSlide(question: Question) {
       // Add a new question to the store
       try {
-        const { data } = await createSlideApi(useQuizzflyStore().getQuizzflyInfo.id, {
+        await createSlideApi(useQuizzflyStore().getQuizzflyInfo.id, {
           ...question,
           content: JSON.stringify(slideLayouts[0]),
         })

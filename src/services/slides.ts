@@ -1,4 +1,5 @@
 import type { BaseResponse } from '@/types/api'
+import type { IQuizzflyInfo } from '@/types/quizzfly'
 
 export const createSlideApi = async (
   quizzflyId: string,
