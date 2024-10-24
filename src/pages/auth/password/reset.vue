@@ -48,27 +48,25 @@ const verifyResetPassword = async (token: string) => {
 }
 
 const openConfirmSuccess = async () => {
-  const result = await confirmDialog.open({
+  await confirmDialog.open({
     title: 'Success',
     question: 'Reset password successful',
     onlyConfirm: true,
+    success: true,
   })
 
-  if (result) {
-    router.push('/login')
-  }
+  router.push('/login')
 }
 
 const openConfirmError = async () => {
-  const result = await confirmDialog.open({
+  await confirmDialog.open({
     title: 'Failed',
     question: 'Expired password recovery link',
     onlyConfirm: true,
+    error: true,
   })
 
-  if (result) {
-    router.push('/login')
-  }
+  router.push('/login')
 }
 const onSubmit = handleSubmit(async (values) => {
   isLoading.value = true

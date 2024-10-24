@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Button } from '@/components/ui/button'
 import {
   Select,
   SelectContent,
@@ -9,8 +10,20 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Slider } from '@/components/ui/slider'
+import { useConfirmDialog } from '@/stores/modal'
 
 const audioFiles = import.meta.glob('/assets/audio/*.mp3')
+
+const confirmDialog = useConfirmDialog()
+const openConfirm = async () => {
+  const result = await confirmDialog.open({
+    title: 'Are you sure?',
+    question: 'Do you really want to delete this item?',
+    onlyConfirm: true,
+    error: true,
+  })
+  console.log('result', result)
+}
 
 onMounted(() => {
   console.log(audioFiles.value, 'check audio')
@@ -100,5 +113,8 @@ watch(isChechSelected, (val) => {
         hidden
       />
     </div>
+
+    <!-- open modal -->
+    <Button @click="openConfirm">Open modal confirm</Button>
   </div>
 </template>

@@ -1,5 +1,18 @@
 <script setup lang="ts">
 import type { SlideLayout } from '@/modules/slide/layout'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import ImagePicker from '@/components/base/ImagePicker.vue'
+
+interface CustomComponent {
+  [key: string]: Component
+}
+
+const component: CustomComponent = {
+  input: Input,
+  textarea: Textarea,
+  image: ImagePicker,
+}
 
 defineProps<{
   layout: SlideLayout
@@ -15,74 +28,29 @@ const data = ref<LayoutItemStyle>({})
 <template>
   <div class="w-full h-full flex flex-col p-5 overflow-hidden">
     <!-- question -->
-    <div class="h-full">
-      <!-- <EditableText
-        :value="title"
-        :click-callback="handleFocusInputTitle"
+    <div class="flex items-center gap-5 h-full">
+      <template
+        v-for="(column, index) in layout.columns"
+        :key="index"
       >
-        <template #input="{ finishEditing }">
-          <Input
-            ref="titleInputRef"
-            v-model="title"
-            placeholder="Enter your question"
-            class="text-2xl font-medium h-12"
-            @blur="finishEditing"
-          />
-        </template>
-        <template #default="{}">
-          <p
-            class="py-1 px-2 rounded-lg border-2 border-transparent hover:border-primary text-2xl font-medium"
+        <div class="flex flex-col justify-center gap-4 w-full h-full">
+          <template
+            v-for="(item, i) in column"
+            :key="i"
           >
-            {{ title || 'Enter question' }}
-          </p>
-        </template>
-      </EditableText> -->
-      <div class="flex flex-col gap-1 h-full justify-center items-center">
-        <template
-          v-for="(row, index) in layout.rows"
-          :key="index"
-        >
-          <component
-            :is="row.element"
-            v-if="row.element !== 'group'"
-            v-model="data[row.label]"
-            v-bind="row.props"
-            class="w-full rounded-sm"
-          ></component>
-
-          <!-- render columns -->
-          <div
-            v-else
-            class="flex w-full items-center gap-1 justify-between"
-          >
-            <template
-              v-for="(group, groupIndex) in row.columns"
-              :key="groupIndex"
-            >
-              <!-- render each column -->
-              <div class="flex flex-col h-full w-full gap-1 items-center justify-center">
-                <template v-if="group.rows">
-                  <component
-                    :is="groupItem.element"
-                    v-for="(groupItem, groupItemIndex) in group.rows"
-                    :key="groupItemIndex"
-                    v-model="data[groupItem.label]"
-                    v-bind="groupItem.props"
-                    class="w-full rounded-sm"
-                  ></component>
-                </template>
-                <component
-                  :is="group.element"
-                  v-else-if="group.elementType"
-                  v-model="data[group.label]"
-                  v-bind="group.props"
-                  class="w-full rounded-sm"
-                ></component>
-              </div>
-            </template>
-          </div>
-        </template>
-      </div>
+            <component
+              :is="component[item.element]"
+              v-bind="item.props"
+              v-model="item.value"
+            />
+          </template>
+        </div>
+      </template>
     </div>
   </div>
 </template>
+<style scoped>
+.grid-col-custom {
+  grid-template-columns: repeat(v-bind('layout.columns.length'), 1fr);
+}
+</style>

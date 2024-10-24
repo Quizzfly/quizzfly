@@ -1,186 +1,137 @@
-import ImagePicker from '@/components/base/ImagePicker.vue'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-
-import type { Component } from 'vue'
-
 interface Row {
   id: number
-  element: 'group' | Component
-  elementType?: 'image' | 'video' | 'input' | 'textarea'
-  label: 'title' | 'description' | 'Image' | 'group'
+  element: 'input' | 'textarea' | 'image' | 'video'
   props?: any
-  columns?: Row[]
-  rows?: Row[]
+  value: string
 }
-
-// interface Column {
-//   id: number
-//   element: 'group' | Component
-//   elementType?: 'image' | 'video' | 'input' | 'textarea'
-//   rows?: Row[]
-// }
 
 export type SlideLayoutType = 'classic' | 'big-title' | 'big-media' | 'title-and-text' | 'quote'
 
 export interface SlideLayout {
   type: SlideLayoutType
-  rows: Row[]
+  columns: Array<Row[]>
 }
 
 export const classicLayout: SlideLayout = {
   type: 'classic',
-  rows: [
-    {
-      id: 1,
-      element: Input,
-      elementType: 'input',
-      label: 'title',
-      props: {
-        placeholder: 'Title',
+  columns: [
+    [
+      {
+        id: 1,
+        element: 'input',
+        value: '',
+        props: {
+          label: 'Title',
+          placeholder: 'Title',
+        },
       },
-    },
-    {
-      id: 2,
-      element: ImagePicker,
-      elementType: 'image',
-      label: 'Image',
-    },
-    {
-      id: 3,
-      element: Input,
-      elementType: 'textarea',
-      label: 'description',
-      props: {
-        placeholder: 'Description',
+      {
+        id: 2,
+        element: 'textarea',
+        value: '',
+        props: {
+          label: 'Description',
+          placeholder: 'Description',
+        },
       },
-    },
+      {
+        id: 3,
+        value: '',
+        element: 'image',
+        props: {
+          label: 'Image',
+        },
+      },
+    ],
   ],
 }
 
 export const bigTitleLayout: SlideLayout = {
   type: 'big-title',
-  rows: [
-    {
-      id: 1,
-      element: 'group',
-      label: 'group',
-      columns: [
-        {
-          id: 1,
-          element: 'group',
-          label: 'group',
-          rows: [
-            {
-              id: 1,
-              element: Input,
-              elementType: 'input',
-              label: 'title',
-              props: {
-                placeholder: 'Title',
-              },
-            },
-            {
-              id: 2,
-              element: Input,
-              elementType: 'input',
-              label: 'description',
-              props: {
-                placeholder: 'Description',
-              },
-            },
-          ],
+  columns: [
+    [
+      {
+        id: 1,
+        element: 'input',
+        value: '',
+        props: {
+          label: 'Title',
+          placeholder: 'Title',
         },
-        {
-          id: 2,
-          element: 'group',
-          label: 'group',
-          rows: [
-            {
-              id: 2,
-              element: ImagePicker,
-              elementType: 'image',
-              label: 'Image',
-            },
-          ],
+      },
+      {
+        id: 2,
+        element: 'textarea',
+        value: '',
+        props: {
+          label: 'Description',
+          placeholder: 'Description',
         },
-      ],
-    },
+      },
+    ],
+    [
+      {
+        id: 3,
+        element: 'image',
+        value: '',
+        props: {
+          label: 'Image',
+        },
+      },
+    ],
   ],
 }
 
 export const titleAndTextLayout: SlideLayout = {
   type: 'title-and-text',
-  rows: [
-    {
-      id: 1,
-      element: 'group',
-      label: 'group',
-      columns: [
-        {
-          id: 1,
-          element: 'group',
-          label: 'group',
-          rows: [
-            {
-              id: 1,
-              element: Input,
-              elementType: 'input',
-              label: 'title',
-              props: {
-                placeholder: 'Title',
-              },
-            },
-            {
-              id: 2,
-              element: Textarea,
-              elementType: 'textarea',
-              label: 'description',
-              props: {
-                placeholder: 'Description',
-              },
-            },
-          ],
+  columns: [
+    [
+      {
+        id: 1,
+        element: 'input',
+        value: '',
+        props: {
+          label: 'Title',
+          placeholder: 'Title',
         },
-        {
-          id: 2,
-          element: ImagePicker,
-          elementType: 'image',
+      },
+      {
+        id: 2,
+        element: 'textarea',
+        value: '',
+        props: {
+          label: 'Description',
+          placeholder: 'Description',
+        },
+      },
+    ],
+    [
+      {
+        id: 3,
+        element: 'image',
+        value: '',
+        props: {
           label: 'Image',
         },
-      ],
-    },
+      },
+    ],
   ],
 }
 
-export const quoteLayout: SlideLayout = {
+export const bigImage: SlideLayout = {
   type: 'quote',
-  rows: [
-    {
-      id: 1,
-      element: ImagePicker,
-      elementType: 'image',
-      label: 'Image',
-    },
-    {
-      id: 2,
-      element: Input,
-      elementType: 'input',
-      label: 'title',
-      props: {
-        placeholder: 'Title',
+  columns: [
+    [
+      {
+        id: 1,
+        element: 'image',
+        value: '',
+        props: {
+          label: 'Image',
+        },
       },
-    },
-    {
-      id: 3,
-      element: Input,
-      elementType: 'textarea',
-      label: 'description',
-      props: {
-        placeholder: 'Description',
-      },
-    },
+    ],
   ],
 }
 
-export const slideLayouts = [classicLayout, bigTitleLayout, titleAndTextLayout, quoteLayout]
+export const slideLayouts = [classicLayout, bigTitleLayout, titleAndTextLayout, bigImage]

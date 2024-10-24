@@ -7,6 +7,8 @@ interface IQuestion {
   actionCancel?: any
   data?: any
   onlyConfirm?: boolean
+  success?: boolean
+  error?: boolean
 }
 
 export const useConfirmDialog = defineStore({

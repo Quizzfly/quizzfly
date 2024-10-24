@@ -12,20 +12,18 @@ const quizzflyStore = useQuizzflyStore()
 const loadingStore = useLoadingStore()
 const questionsStore = useQuestionsStore()
 
-onBeforeMount(() => {
+onBeforeMount(async () => {
   loadingStore.setLoading(true)
   try {
-    quizzflyStore.getQuizzflyDetail(route.params.quizzflyId as string)
+    await quizzflyStore.getQuizzflyDetail(route.params.quizzflyId as string)
+    await questionsStore.fetchQuestions()
+    questionsStore.setCurrentQuestion(questionsStore.getSlides[0])
   } catch (error) {
     console.error(error)
   }
   setTimeout(() => {
     loadingStore.setLoading(false)
   }, 500)
-})
-
-onBeforeMount(() => {
-  questionsStore.setCurrentQuestion(questionsStore.getSlides[0])
 })
 
 const currentQuestion = computed<any>({
