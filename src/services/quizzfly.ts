@@ -13,6 +13,12 @@ export const getQuizzflyApi = async (id: string): Promise<BaseResponse<IQuizzfly
   })
 }
 
+export const getQuizzflyQuestionsApi = async (id: string): Promise<BaseResponse<IQuizzflyInfo>> => {
+  return $api(`/quizzfly/${id}/questions`, {
+    method: 'GET',
+  })
+}
+
 export const createQuizzflyApi = async (
   data: IQuizzflyInfo,
 ): Promise<BaseResponse<IQuizzflyInfo>> => {
