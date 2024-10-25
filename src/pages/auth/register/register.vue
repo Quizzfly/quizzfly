@@ -37,6 +37,7 @@ const openConfirm = async () => {
     title: 'Success',
     question: 'Registration successful check email to confirm account',
     onlyConfirm: true,
+    success: true,
   })
 
   if (result) {
@@ -47,14 +48,12 @@ const openConfirm = async () => {
 const onSubmit = handleSubmit(async (values) => {
   isLoading.value = true
   try {
-    const data = await registerApi({
+    await registerApi({
       email: values.email,
       name: values.name,
       password: values.password,
       confirm_password: values.confirmPassword,
     })
-    isLoading.value = false
-    console.log(data)
     openConfirm()
   } catch (error) {
     showToast({
@@ -62,6 +61,8 @@ const onSubmit = handleSubmit(async (values) => {
       description: apiError(error).message,
       variant: 'destructive',
     })
+  } finally {
+    isLoading.value = false
   }
 })
 </script>

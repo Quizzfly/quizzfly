@@ -3,6 +3,12 @@ import type { Question } from '@/types'
 import { defineStore } from 'pinia'
 import { v4 as uuidv4 } from 'uuid'
 import { useLoadingStore } from '../loading'
+import { getQuizzflyQuestionsApi } from '@/services/quizzfly'
+import { useQuizzflyStore } from './quizzfly'
+import { showToast } from '@/utils/toast'
+import { apiError } from '@/utils/exceptionHandler'
+import { createSlideApi } from '@/services/slides'
+import { slideLayouts } from '@/modules/slide/layout'
 
 export const useQuestionsStore = defineStore({
   id: 'question',
@@ -23,10 +29,18 @@ export const useQuestionsStore = defineStore({
     ] as Question[],
   }),
   actions: {
-    async fetchSlides() {
-      // Fetch questions from an API and update the store.
-      // const questions = await fetch('/api/questions');
-      // this.questions = await questions.json();
+    async fetchQuestions() {
+      const quizzflyStore = useQuizzflyStore()
+      try {
+        const { data } = await getQuizzflyQuestionsApi(quizzflyStore.getQuizzflyInfo.id)
+        this.updateQuestions(data)
+      } catch (error) {
+        console.error(error)
+        showToast({
+          description: apiError(error).message,
+          variant: 'destructive',
+        })
+      }
     },
 
     initAnswers(quizType: string) {
@@ -57,9 +71,21 @@ export const useQuestionsStore = defineStore({
       this.questions = questions
     },
 
-    addSlide(question: Question) {
+    async addSlide(question: Question) {
       // Add a new question to the store
-      this.questions.push(question)
+      try {
+        await createSlideApi(useQuizzflyStore().getQuizzflyInfo.id, {
+          ...question,
+          content: JSON.stringify(slideLayouts[0]),
+        })
+        this.questions.push(question)
+      } catch (error) {
+        console.error(error)
+        showToast({
+          description: apiError(error).message,
+          variant: 'destructive',
+        })
+      }
     },
 
     setCurrentQuestion(question: Question) {

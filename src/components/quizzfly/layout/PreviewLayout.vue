@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { SlideLayout } from '@/modules/slide/layout'
-// import type { SlideLayoutType } from '@/modules/slide/layout'
 
 const current = defineModel<SlideLayout>({ required: true })
 
@@ -20,7 +19,7 @@ const layoutItemStyle: LayoutItemStyle = {
   },
   image: {
     height: '100%',
-    width: '60px',
+    width: '100%',
   },
   textarea: {
     height: '20px',
@@ -29,49 +28,30 @@ const layoutItemStyle: LayoutItemStyle = {
 </script>
 <template>
   <div
-    class="w-full h-[80px] rounded-lg p-1 border-2 cursor-pointer"
+    class="border-2 rounded-lg w-full flex flex-col h-[80px] cursor-pointer p-2 overflow-hidden"
     :class="current.type === layout.type ? 'border-primary' : 'border-gray-200'"
     @click="current = layout"
   >
-    <div
-      v-if="layout.rows"
-      class="flex flex-col gap-1 h-full justify-center items-center"
-    >
+    <div class="flex items-center gap-5 h-full">
       <template
-        v-for="(row, index) in layout.rows"
+        v-for="(column, index) in layout.columns"
         :key="index"
       >
-        <div
-          v-if="!row.columns && row.elementType"
-          class="w-full bg-gray-200 rounded-sm"
-          :style="layoutItemStyle[row.elementType]"
-        ></div>
-
-        <!-- render columns -->
-        <div
-          v-else
-          class="flex w-full items-center h-full gap-1"
-        >
+        <div class="flex flex-col justify-center gap-1 w-full h-full">
           <template
-            v-for="(group, groupIndex) in row.columns"
-            :key="groupIndex"
+            v-for="(item, i) in column"
+            :key="i"
           >
-            <!-- render each column -->
-            <div class="flex flex-col h-full w-full gap-1 items-center justify-center">
-              <template v-if="group.rows">
-                <div
-                  v-for="(groupItem, groupItemIndex) in group.rows"
-                  :key="groupItemIndex"
-                  class="w-full bg-gray-200 rounded-sm"
-                  :style="layoutItemStyle[groupItem.elementType || 'input']"
-                ></div>
-              </template>
-              <div
-                v-else-if="group.elementType"
-                class="w-full bg-gray-200 rounded-sm"
-                :style="layoutItemStyle[group.elementType]"
-              ></div>
-            </div>
+            <!-- <component
+              :is="component[item.element]"
+              v-bind="item.props"
+              v-model="item.value"
+            /> -->
+            <div
+              :style="layoutItemStyle[item.element]"
+              class="bg-gray-200"
+            ></div>
+
           </template>
         </div>
       </template>
