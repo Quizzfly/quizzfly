@@ -17,13 +17,6 @@ const component: CustomComponent = {
 defineProps<{
   layout: SlideLayout
 }>()
-
-interface LayoutItemStyle {
-  [key: string]: {
-    [key: string]: string
-  }
-}
-const data = ref<LayoutItemStyle>({})
 </script>
 <template>
   <div class="w-full h-full flex flex-col p-5 overflow-hidden">
