@@ -9,7 +9,7 @@ export const useRoomStore = defineStore({
   id: 'room',
   state: () => ({
     isLoading: false,
-    detailRoom: {} as IRoom,
+    roomDetail: {} as IRoom,
     currentSetting: {
       quizzfly_id: '',
       is_show_question: false,
@@ -35,7 +35,7 @@ export const useRoomStore = defineStore({
       }
     },
     setDetailRoom(val: IRoom) {
-      this.detailRoom = val
+      this.roomDetail = val
     },
     async settingRoom(id: string, val: any) {
       this.isLoading = true
@@ -71,7 +71,7 @@ export const useRoomStore = defineStore({
     },
   },
   getters: {
-    getRoomInfo: (state) => state.detailRoom,
+    getRoomInfo: (state) => state.roomDetail,
     getIsLoading: (state) => state.isLoading,
     getCurrentSetting: (state) => state.currentSetting,
   },
