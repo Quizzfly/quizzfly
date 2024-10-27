@@ -17,7 +17,7 @@ import { Switch } from '../ui/switch'
             <label
               for="shareKahoot"
               class="font-normal text-base"
-              >Shares a kahoot with you</Label
+              >Shares a kahoot with you</label
             >
             <Switch id="shareKahoot" />
           </div>
@@ -27,7 +27,7 @@ import { Switch } from '../ui/switch'
             <label
               for="feature"
               class="font-normal text-base"
-              >Features your quizzfly to other users</Label
+              >Features your quizzfly to other users</label
             >
             <Switch id="feature" />
           </div>
@@ -37,7 +37,7 @@ import { Switch } from '../ui/switch'
             <label
               for="shareother"
               class="font-normal text-base"
-              >Shares your quizzfly with other users</Label
+              >Shares your quizzfly with other users</label
             >
             <Switch id="shareother" />
           </div>
@@ -47,7 +47,7 @@ import { Switch } from '../ui/switch'
             <label
               for="favourite"
               class="font-normal text-base"
-              >Favourites your quizzfly</Label
+              >Favourites your quizzfly</label
             >
             <Switch id="favourite" />
           </div>
@@ -70,7 +70,7 @@ import { Switch } from '../ui/switch'
                   class="font-normal text-base w-full"
                   >I have read and agree with the quizzfly? <span>terms and conditions</span> and
                   <span>privacy policy</span> and agree to quizzfly! collecting and processing my
-                  personal data as described in the <span>privacy policy</span></Label
+                  personal data as described in the <span>privacy policy</span></label
                 >
                 <Switch id="shareKahoot" />
               </div>
@@ -81,7 +81,7 @@ import { Switch } from '../ui/switch'
                   for="feature"
                   class="font-normal text-base"
                   >I want to receive marketing messages with recommendations and other relevant
-                  information from quizzfly!</Label
+                  information from quizzfly!</label
                 >
                 <Switch id="feature" />
               </div>
@@ -93,7 +93,7 @@ import { Switch } from '../ui/switch'
                   class="font-normal text-base"
                   >I want to receive relevant information, exclusive invitations and special offers
                   by quizzfly from third party companies. Quizzfly will never share my personal
-                  information with other companies.</Label
+                  information with other companies.</label
                 >
                 <Switch id="shareother" />
               </div>

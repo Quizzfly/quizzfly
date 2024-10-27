@@ -25,7 +25,7 @@ export const useConfirmDialog = defineStore({
           resolve,
           data,
         }
-      })
+      }) as Promise<{ isConfirmed: boolean; data: IQuestion }>
     },
     confirm(value: boolean) {
       this.confirmationResolver.resolve({

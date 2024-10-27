@@ -40,7 +40,7 @@ const openConfirm = async () => {
     success: true,
   })
 
-  if (result) {
+  if (result.isConfirmed) {
     router.push('/login')
   }
 }

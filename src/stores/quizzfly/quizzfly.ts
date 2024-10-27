@@ -9,6 +9,7 @@ import { showToast } from '@/utils/toast'
 import { defineStore } from 'pinia'
 import router from '@/routers/router'
 import { apiError } from '@/utils/exceptionHandler'
+import { createQuizApi } from '@/services/quizzes'
 
 export const useQuizzflyStore = defineStore({
   id: 'quizzfly',
@@ -29,11 +30,15 @@ export const useQuizzflyStore = defineStore({
     quizzflys: [] as IQuizzflyInfo[],
   }),
   actions: {
+    setIsUpdating(val: boolean) {
+      this.isUpdating = val
+    },
     async initQuizzflyDraft() {
       try {
         this.isUpdating = true
         const { data } = await createQuizzflyDraftApi(this.quizzflyInfo)
         this.setQuizzflyInfo(data)
+        await createQuizApi(data.id, { quiz_type: 'MULTIPLE_CHOICE' })
         router.push({
           name: 'quizzfly-create',
           params: { quizzflyId: data.id },

@@ -10,14 +10,14 @@ const emits = defineEmits<{
 const handleUpdateAnswer = (value: any) => {
   if (!questionsStore.getCurrentQuestionAnswers) return
 
-  const answersResetArr = questionsStore.getCurrentQuestionAnswers.map((item) => {
-    return {
-      ...item,
-      isCorrect: false,
-    }
-  })
+  // const answersResetArr = questionsStore.getCurrentQuestionAnswers.map((item) => {
+  //   return {
+  //     ...item,
+  //     isCorrect: false,
+  //   }
+  // })
 
-  questionsStore.updateCurrentQuestionAnswers(answersResetArr)
+  // questionsStore.updateCurrentQuestionAnswers(answersResetArr)
   questionsStore.updateCurrentQuestionAnswer(value)
 }
 </script>

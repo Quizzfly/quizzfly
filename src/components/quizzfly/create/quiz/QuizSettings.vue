@@ -11,11 +11,13 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { useQuestionsStore } from '@/stores/quizzfly/question'
 import { themeImages } from '@/utils/theme'
 import { quizOptions } from '@/utils/quiz'
+import type { Quiz, QuizType } from '@/types/question'
 
 const questionsStore = useQuestionsStore()
+const currentQuestion = computed(() => questionsStore.getCurrentQuestion as Quiz)
 
-const handleChangeQuizType = (quizType: string) => {
-  questionsStore.updateCurrentQuestion({ quizType })
+const handleChangeQuizType = (quizType: QuizType) => {
+  questionsStore.updateCurrentQuestion({ quiz_type: quizType })
   questionsStore.initAnswers(quizType)
 }
 </script>
@@ -33,8 +35,8 @@ const handleChangeQuizType = (quizType: string) => {
         <div class="mt-8">
           <span class="font-medium text-sm">Quiz type</span>
           <Select
-            :model-value="questionsStore.getCurrentQuestion.quizType"
-            @update:model-value="handleChangeQuizType"
+            :model-value="currentQuestion.quiz_type"
+            @update:model-value="handleChangeQuizType($event as QuizType)"
           >
             <SelectTrigger class="mt-3">
               <SelectValue placeholder="Question type" />
@@ -104,7 +106,7 @@ const handleChangeQuizType = (quizType: string) => {
               v-for="img in themeImages"
               :key="img"
               class="w-full object-cover rounded-md cursor-pointer border-2"
-              :class="{ 'border-primary': questionsStore.getCurrentQuestion.theme === img }"
+              :class="{ 'border-primary': currentQuestion.theme === img }"
               :src="img"
               alt=""
               @click="questionsStore.updateCurrentQuestion({ theme: img })"

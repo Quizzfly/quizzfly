@@ -2,16 +2,19 @@
 import Choice from '@/components/quizzfly/create/answer/Choice.vue'
 import TrueFalse from '@/components/quizzfly/create/answer/TrueFalse.vue'
 import { useQuestionsStore } from '@/stores/quizzfly/question'
+import type { Quiz } from '@/types/question'
+
 const questionsStore = useQuestionsStore()
+const currentQuestion = computed(() => questionsStore.getCurrentQuestion as Quiz)
 
 function initAnswers() {
   if (
-    questionsStore.getCurrentQuestion.answers?.length ||
-    !questionsStore.getCurrentQuestion.quizType
+    // currentQuestion.answers?.length ||
+    !currentQuestion.value.quiz_type
   )
     return
 
-  questionsStore.initAnswers(questionsStore.getCurrentQuestion.quizType)
+  questionsStore.initAnswers(currentQuestion.value.quiz_type)
 }
 onBeforeMount(() => {
   initAnswers()
@@ -20,7 +23,7 @@ onBeforeMount(() => {
 <template>
   <div class="">
     <div class="grid grid-cols-2 gap-4">
-      <template v-if="questionsStore.getCurrentQuestion.quizType === 'multiple_choice'">
+      <template v-if="currentQuestion.quiz_type === 'MULTIPLE_CHOICE'">
         <Choice
           v-for="(item, index) in questionsStore.getCurrentQuestionAnswers"
           :key="item.id"
@@ -36,7 +39,7 @@ onBeforeMount(() => {
         />
       </template>
 
-      <template v-else-if="questionsStore.getCurrentQuestion.quizType === 'true_false'">
+      <template v-else-if="currentQuestion.quiz_type === 'TRUE_FALSE'">
         <TrueFalse />
       </template>
     </div>

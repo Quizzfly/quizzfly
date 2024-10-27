@@ -1,5 +1,5 @@
-import type { Question } from '@/types'
 import type { BaseResponse } from '@/types/api'
+import type { Question } from '@/types/question'
 import type { IQuizzflyInfo } from '@/types/quizzfly'
 
 export const getQuizzflysApi = async (): Promise<BaseResponse<IQuizzflyInfo[]>> => {

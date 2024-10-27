@@ -2,20 +2,22 @@
 import draggable from 'vuedraggable'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import type { Question } from '@/types/question'
+import type { Question, QuizType } from '@/types/question'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { quizOptions } from '@/utils/quiz'
 import { useQuestionsStore } from '@/stores/quizzfly/question'
+import { useConfirmDialog } from '@/stores/modal'
 
 const currentQuestion = defineModel<Question>({ required: true })
 const questionsStore = useQuestionsStore()
+const confirmDialog = useConfirmDialog()
 
 defineProps<{
   slides: Question[]
 }>()
 
 const emits = defineEmits<{
-  (e: 'addSlide', type: 'quiz' | 'slide', quizType: string): void
+  (e: 'addSlide', type: 'quiz' | 'slide', quizType?: QuizType): void
 }>()
 
 const dragOptions = ref({
@@ -28,9 +30,24 @@ const dragOptions = ref({
 const drag = ref(false)
 const isShow = ref(false)
 
-const handleAddSlide = (type: string, quizType: string) => {
-  emits('addSlide', type as 'quiz' | 'slide', quizType)
+const handleAddSlide = (type: string, quizType?: QuizType) => {
+  emits('addSlide', type as 'quiz' | 'slide', quizType ?? undefined)
   isShow.value = false
+}
+
+const handleConfirmDelete = async (question: Question) => {
+  const result = await confirmDialog.open({
+    title: 'Are you sure?',
+    question: 'Do you really want to delete this item?',
+  })
+
+  if (result.isConfirmed) {
+    questionsStore.deleteQuestion(question)
+  }
+}
+
+const handleDuplicate = (question: Question) => {
+  questionsStore.duplicateQuestion(question)
 }
 </script>
 <template>
@@ -78,7 +95,7 @@ const handleAddSlide = (type: string, quizType: string) => {
               <Button
                 variant="secondary"
                 class="w-full mt-5"
-                @click="handleAddSlide('slide', 'impressed')"
+                @click="handleAddSlide('slide')"
               >
                 Add slide
               </Button>
@@ -88,11 +105,11 @@ const handleAddSlide = (type: string, quizType: string) => {
       </Popover>
     </div>
     <!-- slides list -->
-    <ScrollArea class="flex flex-col flex-auto overflow-y-auto gap-2 pr-2">
+    <ScrollArea class="max-md:overflow-x-auto flex flex-col flex-auto overflow-y-auto gap-2 pr-2">
       <draggable
         :model-value="slides"
         item-key="id"
-        class="flex flex-col gap-2 pr-2"
+        class="max-md:w-full flex md:flex-col gap-2 pr-2"
         :component-data="{
           tag: 'ul',
           type: 'transition-group',
@@ -109,7 +126,7 @@ const handleAddSlide = (type: string, quizType: string) => {
             v-motion
             :initial="{ opacity: 0, y: 100 }"
             :enter="{ opacity: 1, y: 0, scale: 1 }"
-            class="flex relative items-stretch"
+            class="max-md:w-[200px] flex relative items-stretch"
           >
             <div
               class="w-1 h-[40px] rounded-r-xl mt-8"
@@ -121,7 +138,31 @@ const handleAddSlide = (type: string, quizType: string) => {
               <div
                 class="text-xs rounded-sm text-gray-500 h-4 w-4 hover:bg-slate-200 cursor-pointer flex items-center justify-center"
               >
-                <span class="i-material-symbols-light-more-horiz text-xl"></span>
+                <Popover>
+                  <PopoverTrigger>
+                    <span class="i-material-symbols-light-more-horiz text-xl"></span>
+                  </PopoverTrigger>
+                  <PopoverContent>
+                    <div class="py-2 px-2">
+                      <!-- delete -->
+                      <div
+                        class="text-red-600 flex gap-1 px-2 items-center cursor-pointer hover:bg-gray-100 rounded-md p-1"
+                        @click="handleConfirmDelete(element)"
+                      >
+                        <span class="i-material-symbols-light-delete-outline text-xl"></span>
+                        <span class="text-xs">Delete</span>
+                      </div>
+
+                      <div
+                        class="flex gap-1 px-2 items-center cursor-pointer hover:bg-gray-100 rounded-md p-1"
+                        @click="handleDuplicate(element)"
+                      >
+                        <span class="i-material-symbols-light-content-copy-outline text-xl"></span>
+                        <span class="text-xs">Duplicate</span>
+                      </div>
+                    </div>
+                  </PopoverContent>
+                </Popover>
               </div>
             </div>
 
