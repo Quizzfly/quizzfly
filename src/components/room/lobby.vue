@@ -1,5 +1,17 @@
 <script setup lang="ts">
 import { Button } from '../ui/button'
+import { useRoomStore } from '@/stores/room'
+import QRCodeVue3 from 'qrcode-vue3'
+
+const roomStore = useRoomStore()
+
+const detailRoom = computed(() => {
+  return roomStore.getRoomInfo
+})
+
+onMounted(() => {
+  // console.log(detailRoom.value.roomPin, 'check detail')
+})
 </script>
 
 <template>
@@ -16,14 +28,39 @@ import { Button } from '../ui/button'
         </div>
         <div class="flex flex-col bg-white px-6 py-3 rounded">
           <p class="text-base font-medium">Game PIN:</p>
-          <h1 class="text-6xl font-extrabold">3323232</h1>
+          <h1 class="text-6xl font-extrabold">{{ detailRoom.room_pin }}</h1>
         </div>
       </div>
       <div class="bg-white w-28 h-28 rounded p-1">
-        <img
+        <!-- <img
           class="w-full h-full object-cover"
           src="@/assets/img/auth-bg.jpg"
           alt=""
+        /> -->
+        <QRCodeVue3
+          :width="250"
+          :height="250"
+          value="https://scholtz.sk"
+          :qr-options="{ typeNumber: 0, mode: 'Byte', errorCorrectionLevel: 'H' }"
+          :image-options="{ hideBackgroundDots: true, imageSize: 0.4, margin: 0 }"
+          :dots-options="{
+            type: 'dots',
+            color: '#26249a',
+            gradient: {
+              type: 'linear',
+              rotation: 0,
+              colorStops: [
+                { offset: 0, color: '#26249a' },
+                { offset: 1, color: '#26249a' },
+              ],
+            },
+          }"
+          :background-options="{ color: '#ffffff' }"
+          :corners-square-options="{ type: 'dot', color: '#000000' }"
+          :corners-dot-options="{ type: undefined, color: '#000000' }"
+          file-ext="png"
+          myclass="my-qur"
+          imgclass="img-qr"
         />
       </div>
     </div>
@@ -42,6 +79,7 @@ import { Button } from '../ui/button'
 
     <div class="w-full mt-16">
       <div
+        v-if="detailRoom.room_status === 'WAITING'"
         class="mr-auto ml-auto p-2 rounded bg-primary flex gap-1 items-center justify-center w-60"
       >
         <p class="text-xl font-medium text-white">Waiting for player</p>
