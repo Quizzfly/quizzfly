@@ -2,10 +2,10 @@
 import QuestionList from '@/components/quizzfly/create/QuestionList.vue'
 import SlideMain from '@/components/quizzfly/create/SlideMain.vue'
 import QuizMain from '@/components/quizzfly/create/QuizMain.vue'
-import { v4 as uuidv4 } from 'uuid'
 import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
 import { useLoadingStore } from '@/stores/loading'
 import { useQuestionsStore } from '@/stores/quizzfly/question'
+import type { QuizType } from '@/types/question'
 
 const route = useRoute()
 const quizzflyStore = useQuizzflyStore()
@@ -33,18 +33,15 @@ const currentQuestion = computed<any>({
   },
 })
 
-const handleAddSlide = (type: 'quiz' | 'slide', quizType: string) => {
-  questionsStore.addSlide({
-    id: uuidv4(),
-    title: '',
-    type: type,
-    quizType: quizType,
-    content: 'This is a quiz slide',
-    theme: '',
-    image: '',
-    link: 'https://picsum.photos/200/300',
-    answers: [],
-  })
+const handleAddSlide = (type: 'quiz' | 'slide', quizType?: QuizType) => {
+  if (type === 'quiz') {
+    questionsStore.addQuestion(type, {
+      quiz_type: quizType,
+    })
+  } else {
+    questionsStore.addQuestion(type)
+  }
+
   questionsStore.setCurrentQuestion(questionsStore.getSlides[questionsStore.getSlides.length - 1])
   nextTick(() => {
     document.getElementById(`question-${questionsStore.currentQuestion.id}`)?.scrollIntoView({
@@ -55,7 +52,7 @@ const handleAddSlide = (type: 'quiz' | 'slide', quizType: string) => {
 }
 </script>
 <template>
-  <div class="flex w-full items-stretch p-5 pl-0 gap-4">
+  <div class="max-md:flex-col-reverse flex w-full items-stretch p-5 pl-0 gap-4">
     <QuestionList
       v-model="currentQuestion"
       v-motion
@@ -66,7 +63,13 @@ const handleAddSlide = (type: 'quiz' | 'slide', quizType: string) => {
       :duration="300"
       @add-slide="handleAddSlide"
     />
-    <QuizMain v-if="currentQuestion.type === 'quiz'" />
-    <SlideMain v-else />
+    <QuizMain
+      v-if="currentQuestion && currentQuestion.quiz_type"
+      :key="currentQuestion.id"
+    />
+    <SlideMain
+      v-if="currentQuestion && !currentQuestion.quiz_type"
+      :key="currentQuestion.id"
+    />
   </div>
 </template>

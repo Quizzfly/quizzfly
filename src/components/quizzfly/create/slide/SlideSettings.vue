@@ -1,10 +1,17 @@
 <script setup lang="ts">
 import PreviewLayout from '@/components/quizzfly/layout/PreviewLayout.vue'
 import { slideLayouts, type SlideLayout } from '@/modules/slide/layout'
+import { useQuestionsStore } from '@/stores/quizzfly/question'
 
+const questionStore = useQuestionsStore()
 const currentLayout = defineModel<SlideLayout>('layout', {
   required: true,
 })
+
+const handleChangedLayout = (layout: SlideLayout) => {
+  currentLayout.value = layout
+  questionStore.updateCurrentQuestion({ content: JSON.stringify(currentLayout.value) })
+}
 </script>
 <template>
   <div class="md:min-w-[340px] w-[340px]">
@@ -16,8 +23,9 @@ const currentLayout = defineModel<SlideLayout>('layout', {
           <PreviewLayout
             v-for="layout in slideLayouts"
             :key="layout.type"
-            v-model="currentLayout"
+            :current="currentLayout"
             :layout="layout"
+            @select-layout="handleChangedLayout"
           />
         </div>
       </div>

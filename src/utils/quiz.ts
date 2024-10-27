@@ -1,21 +1,28 @@
-export const quizOptions = [
+import type { QuizType } from '@/types/question'
+
+interface QuizOption {
+  type: QuizType
+  name: string
+  icon: string
+}
+export const quizOptions: QuizOption[] = [
   {
-    type: 'multiple_choice',
+    type: 'MULTIPLE_CHOICE',
     name: 'Multi choice',
     icon: '/assets/icons/multiple-choice.svg',
   },
   {
-    type: 'true_false',
+    type: 'TRUE_FALSE',
     name: 'True or False',
     icon: '/assets/icons/true-false.svg',
   },
   {
-    type: 'slider',
+    type: 'SLIDER',
     name: 'Slider',
     icon: '/assets/icons/slider-answer.svg',
   },
   {
-    type: 'typing-answer',
+    type: 'TYPING_ANSWER',
     name: 'Typing answer',
     icon: '/assets/icons/typing-answer.svg',
   },

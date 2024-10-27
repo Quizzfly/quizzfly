@@ -3,6 +3,7 @@ import type { SlideLayout } from '@/modules/slide/layout'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import ImagePicker from '@/components/base/ImagePicker.vue'
+import { useQuestionsStore } from '@/stores/quizzfly/question'
 
 interface CustomComponent {
   [key: string]: Component
@@ -10,13 +11,19 @@ interface CustomComponent {
 
 const component: CustomComponent = {
   input: Input,
-  textarea: Textarea,
+  textarea: () => h(Textarea, { class: 'h-24' }),
   image: ImagePicker,
 }
 
-defineProps<{
+const props = defineProps<{
   layout: SlideLayout
 }>()
+
+const questionStore = useQuestionsStore()
+
+const handleUpdateModelValue = () => {
+  questionStore.updateCurrentQuestion({ content: JSON.stringify(props.layout) })
+}
 </script>
 <template>
   <div class="w-full h-full flex flex-col p-5 overflow-hidden">
@@ -35,6 +42,8 @@ defineProps<{
               :is="component[item.element]"
               v-bind="item.props"
               v-model="item.value"
+              @blur="handleUpdateModelValue"
+              @updated="handleUpdateModelValue"
             />
           </template>
         </div>
