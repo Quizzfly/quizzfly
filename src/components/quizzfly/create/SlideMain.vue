@@ -18,11 +18,17 @@ onBeforeMount(() => {
   <div class="max-md:flex-col flex w-full gap-4">
     <div class="flex-auto flex flex-col overflow-hidden">
       <div class="h-full border-2 rounded-xl bg-white border-primary">
-        <SlideEditor :layout="slideLayout!" />
+        <SlideEditor
+          v-if="slideLayout"
+          :layout="slideLayout"
+        />
       </div>
     </div>
 
     <!-- settings -->
-    <SlideSettings v-model:layout="slideLayout!" />
+    <SlideSettings
+      v-if="slideLayout"
+      v-model:layout="slideLayout"
+    />
   </div>
 </template>
