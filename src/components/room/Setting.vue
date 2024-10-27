@@ -9,17 +9,55 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select'
+import { useRoomStore } from '@/stores/room'
 import { musics } from '@/utils/roomSettings'
-
-const settingsMusic = defineModel<string>('music', { required: true, default: '' })
+const route = useRoute()
+const roomStore = useRoomStore()
 
 const isCheckShowQA = ref(false)
 const isCheckAutoPlay = ref(false)
+
+const detailRoom = computed(() => {
+  return roomStore.getRoomInfo
+})
+
+const quizzflyId = route.params.quizzflyId as string
+
+onBeforeMount(() => {
+  if (detailRoom.value.id) {
+    isCheckAutoPlay.value = detailRoom.value?.is_auto_play
+    isCheckShowQA.value = detailRoom.value?.is_show_question
+  } else {
+    const data = {
+      quizzfly_id: quizzflyId,
+      is_show_question: isCheckShowQA.value,
+      is_auto_play: isCheckAutoPlay.value,
+      lobby_music: 'string',
+    }
+    console.log(data, 'check data con')
+    roomStore.setCurrentSetting(data)
+  }
+})
+
+const settingsMusic = defineModel<string>('music', { required: true, default: '' })
 
 const resetData = () => {
   isCheckAutoPlay.value = false
   isCheckShowQA.value = false
 }
+
+watch([isCheckAutoPlay, isCheckShowQA], ([val1, val2]) => {
+  if (val1 || val2) {
+    const data = {
+      quizzfly_id: quizzflyId,
+      is_show_question: val2,
+      is_auto_play: val1,
+      lobby_music: 'string',
+    }
+    console.log(data, 'check data')
+    roomStore.setCurrentSetting(data)
+  }
+})
 </script>
 
 <template>

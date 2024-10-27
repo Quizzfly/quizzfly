@@ -1,16 +1,42 @@
 <script setup lang="ts">
 import { Button } from '@/components/ui/button'
 import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
+import { useRoomStore } from '@/stores/room'
+
+const route = useRoute()
+
+const roomStore = useRoomStore()
 
 const quizzflyStore = useQuizzflyStore()
+
+const settingCurrent = computed(() => {
+  return roomStore.getCurrentSetting
+})
 
 const quizzflyInfo = computed(() => {
   return quizzflyStore.getQuizzflyInfo
 })
 
+const quizzflyId = route.params.quizzflyId as string
+
 onMounted(() => {
   console.log(quizzflyInfo.value, 'check quizzlfy')
+  console.log(settingCurrent.value, 'check room info')
 })
+
+const onSubmit = () => {
+  if (settingCurrent.value.quizzfly_id) {
+    roomStore.initRoom(settingCurrent.value)
+  } else {
+    const data = {
+      quizzfly_id: quizzflyId,
+      is_show_question: false,
+      is_auto_play: false,
+      lobby_music: 'string',
+    }
+    roomStore.initRoom(data)
+  }
+}
 </script>
 
 <template>
@@ -54,7 +80,12 @@ onMounted(() => {
           </div>
         </div>
         <div class="rounded h-full p-2 bg-[rgba(0,0,0,0.24)] w-32">
-          <Button class="h-18 w-full h-full text-lg"> Start </Button>
+          <Button
+            class="h-18 w-full h-full text-lg"
+            @click="onSubmit"
+          >
+            Start
+          </Button>
         </div>
       </div>
     </div>

@@ -1,5 +1,7 @@
 export * from './user'
 export * from './exception'
+export * from './room'
+export * from './setting'
 
 export interface IPaging {
   current_page: number

@@ -10,6 +10,14 @@ export const roomRoute: RouteRecordRaw[] = [
     component: () => import('@/pages/room/hostLive.vue'),
   },
   {
+    path: 'lobby/:quizzflyId',
+    name: 'lobby',
+    meta: {
+      layout: 'RoomLayout',
+    },
+    component: () => import('@/pages/room/lobby.vue'),
+  },
+  {
     path: 'play/lobby/:code',
     name: 'play-lobby',
     meta: {

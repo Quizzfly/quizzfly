@@ -16,7 +16,7 @@ export const initMasterStore = async () => {
     // await Promise.all([masterStore.setMasterData(), masterStore.setEmojis()]);
   } catch (error) {
     showToast({
-      title: 'Fordgot password failed',
+      title: 'Forgot password failed',
       description: 'Xảy ra lỗi khi lấy dữ liệu',
       variant: 'destructive',
     })
