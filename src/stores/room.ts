@@ -33,10 +33,6 @@ export const useRoomStore = defineStore({
           variant: 'destructive',
         })
       }
-      setTimeout(() => {
-        this.isLoading = true
-      }, 5000)
-      this.isLoading = false
     },
     setDetailRoom(val: IRoom) {
       this.detailRoom = val

@@ -19,7 +19,6 @@ onMounted(() => {
 </script>
 <template>
   <div
-    ref="el"
     class="ralative img-test w-full h-screen p-20 flex flex-col gap-6 overflow-hidden items-center justify-center bg-gray-200 bg-cover transition-all duration-200 ease-in-out"
   >
     <Lobby />

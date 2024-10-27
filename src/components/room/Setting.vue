@@ -34,7 +34,6 @@ onBeforeMount(() => {
       is_auto_play: isCheckAutoPlay.value,
       lobby_music: 'string',
     }
-    console.log(data, 'check data con')
     roomStore.setCurrentSetting(data)
   }
 })
@@ -54,7 +53,6 @@ watch([isCheckAutoPlay, isCheckShowQA], ([val1, val2]) => {
       is_auto_play: val1,
       lobby_music: 'string',
     }
-    console.log(data, 'check data')
     roomStore.setCurrentSetting(data)
   }
 })

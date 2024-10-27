@@ -1,14 +1,14 @@
 import type { BaseResponse } from '@/types/api'
 import type { IRoom } from '@/types/room'
 
-interface roomInfo {
+interface RoomInfo {
   quizzfly_id: string
   is_show_question: boolean
   is_auto_play: boolean
   lobby_music: string
 }
 
-interface settingRoom {
+interface SettingRoom {
   is_show_question: boolean
   is_auto_play: boolean
   lobby_music: string
@@ -22,7 +22,7 @@ export const getDetailRoomApi = async (id: string): Promise<BaseResponse<IRoom>>
   })
 }
 
-export const createRoomApi = async (payload: roomInfo): Promise<BaseResponse<IRoom>> => {
+export const createRoomApi = async (payload: RoomInfo): Promise<BaseResponse<IRoom>> => {
   return $api('/rooms', {
     method: 'POST',
     body: payload,
@@ -31,7 +31,7 @@ export const createRoomApi = async (payload: roomInfo): Promise<BaseResponse<IRo
 
 export const settingRoomApi = async (
   id: string,
-  payload: settingRoom,
+  payload: SettingRoom,
 ): Promise<BaseResponse<IRoom>> => {
   return $api(`/rooms/${id}/settings`, {
     method: 'PUT',

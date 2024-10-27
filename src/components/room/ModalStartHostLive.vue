@@ -9,7 +9,7 @@ const roomStore = useRoomStore()
 
 const quizzflyStore = useQuizzflyStore()
 
-const settingCurrent = computed(() => {
+const currentSetting = computed(() => {
   return roomStore.getCurrentSetting
 })
 
@@ -19,14 +19,9 @@ const quizzflyInfo = computed(() => {
 
 const quizzflyId = route.params.quizzflyId as string
 
-onMounted(() => {
-  console.log(quizzflyInfo.value, 'check quizzlfy')
-  console.log(settingCurrent.value, 'check room info')
-})
-
 const onSubmit = () => {
-  if (settingCurrent.value.quizzfly_id) {
-    roomStore.initRoom(settingCurrent.value)
+  if (currentSetting.value.quizzfly_id) {
+    roomStore.initRoom(currentSetting.value)
   } else {
     const data = {
       quizzfly_id: quizzflyId,
