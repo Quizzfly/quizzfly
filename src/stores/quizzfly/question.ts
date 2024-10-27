@@ -1,7 +1,7 @@
 import type { Question, Quiz } from '@/types/question'
 import { defineStore } from 'pinia'
 import { v4 as uuidv4 } from 'uuid'
-import { getQuizzflyQuestionsApi } from '@/services/quizzfly'
+import { changeQuestionPositionApi, getQuizzflyQuestionsApi } from '@/services/quizzfly'
 import { useQuizzflyStore } from './quizzfly'
 import { showToast } from '@/utils/toast'
 import { apiError } from '@/utils/exceptionHandler'
@@ -12,7 +12,7 @@ import {
   updateSlideApi,
 } from '@/services/slides'
 import { slideLayouts } from '@/modules/slide/layout'
-import { createQuizApi, deleteQuizApi, duplicateQuizApi } from '@/services/quizzes'
+import { createQuizApi, deleteQuizApi, duplicateQuizApi, updateQuizApi } from '@/services/quizzes'
 
 export const useQuestionsStore = defineStore({
   id: 'question',
@@ -119,7 +119,9 @@ export const useQuestionsStore = defineStore({
           const { data } = await createQuizApi(useQuizzflyStore().getQuizzflyInfo.id, {
             quiz_type: (question as Quiz).quiz_type,
           })
+          data.type = 'QUIZ'
           this.questions.push(data)
+          this.setCurrentQuestion(data)
         } catch (error) {
           console.error(error)
           showToast({
@@ -135,7 +137,9 @@ export const useQuestionsStore = defineStore({
           ...question,
           content: JSON.stringify(slideLayouts[0]),
         })
+        data.type = 'SLIDE'
         this.questions.push(data)
+        this.setCurrentQuestion(data)
       } catch (error) {
         console.error(error)
         showToast({
@@ -150,28 +154,29 @@ export const useQuestionsStore = defineStore({
       this.currentQuestion = question
     },
 
-    async setCurrentQuestionImage() {
-      // Upload an image and set it as the current question's image
-      // const loadingStore = useLoadingStore()
-      // loadingStore.setLoading(true)
-      // try {
-      //   const formData = new FormData()
-      //   formData.append('file', file)
-      //   const { data } = await uploadFileApi(formData)
-      //   this.currentQuestion.theme = data.url
-      // } catch (error) {
-      //   console.error(error)
-      // }
-      // loadingStore.setLoading(false)
+    async changePosition(data: any) {
+      const quizzflyStore = useQuizzflyStore()
+      try {
+        quizzflyStore.setIsUpdating(true)
+        await changeQuestionPositionApi(useQuizzflyStore().getQuizzflyInfo.id, data)
+      } catch (error) {
+        console.error(error)
+        showToast({
+          description: apiError(error).message,
+          variant: 'destructive',
+        })
+      } finally {
+        quizzflyStore.setIsUpdating(false)
+      }
     },
 
-    async updateCurrentQuestion(question: Partial<Question>) {
+    async updateCurrentQuestion(questionType: 'quiz' | 'slide', question: Partial<Question>) {
       const quizzflyStore = useQuizzflyStore()
       quizzflyStore.setIsUpdating(true)
       // Merge partial data into the current question and update the question list
       const quizzflyStoreId = quizzflyStore.getQuizzflyInfo.id
-      if ((question as Quiz).quiz_type) {
-        //
+      if (questionType === 'quiz') {
+        await updateQuizApi(quizzflyStoreId, this.currentQuestion.id || '', question)
       } else {
         const { data } = await updateSlideApi(
           quizzflyStoreId,
@@ -183,7 +188,9 @@ export const useQuestionsStore = defineStore({
       console.log(question)
       this.currentQuestion = { ...this.currentQuestion, ...question }
       this.updateQuestionInList(this.currentQuestion)
-      quizzflyStore.setIsUpdating(false)
+      setTimeout(() => {
+        quizzflyStore.setIsUpdating(false)
+      }, 100)
     },
 
     updateQuestionInList(question: Question) {

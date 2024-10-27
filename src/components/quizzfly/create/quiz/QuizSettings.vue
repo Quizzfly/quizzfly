@@ -17,7 +17,7 @@ const questionsStore = useQuestionsStore()
 const currentQuestion = computed(() => questionsStore.getCurrentQuestion as Quiz)
 
 const handleChangeQuizType = (quizType: QuizType) => {
-  questionsStore.updateCurrentQuestion({ quiz_type: quizType })
+  questionsStore.updateCurrentQuestion('quiz', { quiz_type: quizType })
   questionsStore.initAnswers(quizType)
 }
 </script>
@@ -109,7 +109,7 @@ const handleChangeQuizType = (quizType: QuizType) => {
               :class="{ 'border-primary': currentQuestion.theme === img }"
               :src="img"
               alt=""
-              @click="questionsStore.updateCurrentQuestion({ theme: img })"
+              @click="questionsStore.updateCurrentQuestion('quiz', { theme: img })"
             />
           </div>
         </div>

@@ -22,6 +22,17 @@ export const deleteQuizApi = async (
   })
 }
 
+export const updateQuizApi = async (
+  quizzflyId: string,
+  quizId: string,
+  data: Partial<Quiz>,
+): Promise<BaseResponse<Quiz>> => {
+  return $api(`/quizzfly/${quizzflyId}/quizzes/${quizId}`, {
+    method: 'PUT',
+    body: data,
+  })
+}
+
 export const duplicateQuizApi = async (
   quizzflyId: string,
   quizId: string,

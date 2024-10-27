@@ -4,28 +4,58 @@ import EditableText from '@/components/base/EditableText.vue'
 import AnswerSetting from '@/components/quizzfly/create/quiz/AnswerSetting.vue'
 import { useQuestionsStore } from '@/stores/quizzfly/question'
 import type { Quiz } from '@/types/question'
+import { uploadFileApi } from '@/services/file'
+import { useLoadingStore } from '@/stores/loading'
+import { showToast } from '@/utils/toast'
 
 const questionsStore = useQuestionsStore()
 const currentQuestion = computed(() => questionsStore.getCurrentQuestion as Quiz)
+
+const questionContent = ref('')
+
+onBeforeMount(() => {
+  questionContent.value = currentQuestion.value.content
+})
 
 const handleClickTitle = () => {
   console.log('Do something')
 }
 
 const handleUpdateTitle = (value: string | number) => {
-  questionsStore.updateCurrentQuestion({ content: String(value) })
+  questionsStore.updateCurrentQuestion('quiz', { content: String(value) })
 }
 
 const imgRaw = ref<File>()
+
+const loadingStore = useLoadingStore()
 
 async function handleFileChange(event: Event) {
   const target = event.target as HTMLInputElement
   const file = target.files?.[0]
 
   if (file) {
+    loadingStore.setLoading(true)
+    const formData = new FormData()
+    formData.append('file', file)
     imgRaw.value = file
-    // await questionsStore.setCurrentQuestionImage(file)
+    try {
+      const { data } = await uploadFileApi(formData)
+      questionsStore.updateCurrentQuestion('quiz', { files: [data] })
+    } catch (error) {
+      showToast({
+        title: 'Error',
+        description: 'Error uploading image',
+        variant: 'destructive',
+      })
+    } finally {
+      loadingStore.setLoading(false)
+    }
   }
+}
+
+const handleBlur = (finishEditingCallback: () => void) => {
+  finishEditingCallback()
+  handleUpdateTitle(questionContent.value)
 }
 </script>
 <template>
@@ -33,23 +63,22 @@ async function handleFileChange(event: Event) {
     <!-- question -->
     <div class="">
       <EditableText
-        :value="currentQuestion.content"
+        :value="questionContent"
         :click-callback="handleClickTitle"
       >
         <template #input="{ finishEditing }">
           <Input
+            v-model="questionContent"
             placeholder="Enter your question"
             class="text-2xl font-medium h-12 bg-white"
-            :model-value="currentQuestion.content"
-            @update:model-value="handleUpdateTitle"
-            @blur="finishEditing"
+            @blur="handleBlur(finishEditing)"
           />
         </template>
         <template #default="{}">
           <p
             class="bg-white py-1 px-2 rounded-lg border-2 border-transparent hover:border-primary text-2xl font-medium"
           >
-            {{ currentQuestion.content || 'Enter question' }}
+            {{ questionContent || 'Enter question' }}
           </p>
         </template>
       </EditableText>
@@ -59,7 +88,7 @@ async function handleFileChange(event: Event) {
     <div class="flex justify-center flex-auto">
       <div
         class="w-[50%] h-full flex justify-center items-center bg-slate-100 rounded-lg bg-cover shadow-lg image-area"
-        :style="{ backgroundImage: `url(${currentQuestion.theme})` }"
+        :style="{ backgroundImage: `url(${currentQuestion.files[0]?.url})` }"
       >
         <div
           class="text-center"

@@ -11,7 +11,7 @@ interface CustomComponent {
 
 const component: CustomComponent = {
   input: Input,
-  textarea: () => h(Textarea, { class: 'h-24' }),
+  textarea: Textarea,
   image: ImagePicker,
 }
 
@@ -22,7 +22,7 @@ const props = defineProps<{
 const questionStore = useQuestionsStore()
 
 const handleUpdateModelValue = () => {
-  questionStore.updateCurrentQuestion({ content: JSON.stringify(props.layout) })
+  questionStore.updateCurrentQuestion('slide', { content: JSON.stringify(props.layout) })
 }
 </script>
 <template>

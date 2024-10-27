@@ -12,6 +12,10 @@ const quizzflyStore = useQuizzflyStore()
 const loadingStore = useLoadingStore()
 const questionsStore = useQuestionsStore()
 
+onBeforeUnmount(() => {
+  questionsStore.$reset()
+  quizzflyStore.$reset()
+})
 onBeforeMount(async () => {
   loadingStore.setLoading(true)
   try {

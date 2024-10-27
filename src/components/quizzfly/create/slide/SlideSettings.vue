@@ -10,7 +10,7 @@ const currentLayout = defineModel<SlideLayout>('layout', {
 
 const handleChangedLayout = (layout: SlideLayout) => {
   currentLayout.value = layout
-  questionStore.updateCurrentQuestion({ content: JSON.stringify(currentLayout.value) })
+  questionStore.updateCurrentQuestion('slide', { content: JSON.stringify(currentLayout.value) })
 }
 </script>
 <template>

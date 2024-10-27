@@ -47,3 +47,19 @@ export const updateQuizzflySettingsApi = async (
     body: data,
   })
 }
+
+interface ChangePositionPayload {
+  first_question_id: string
+  first_question_type: string
+  second_question_id: string
+  second_question_type: string
+}
+export const changeQuestionPositionApi = async (
+  quizzflyId: string,
+  data: ChangePositionPayload,
+): Promise<BaseResponse<Question[]>> => {
+  return $api(`/quizzfly/${quizzflyId}/questions/position`, {
+    method: 'PUT',
+    body: data,
+  })
+}

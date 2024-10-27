@@ -12,7 +12,7 @@ const currentQuestion = defineModel<Question>({ required: true })
 const questionsStore = useQuestionsStore()
 const confirmDialog = useConfirmDialog()
 
-defineProps<{
+const props = defineProps<{
   slides: Question[]
 }>()
 
@@ -48,6 +48,39 @@ const handleConfirmDelete = async (question: Question) => {
 
 const handleDuplicate = (question: Question) => {
   questionsStore.duplicateQuestion(question)
+}
+
+const handleChangePosition = (element: any, index: number) => {
+  console.log('element', element, index)
+  const data = {
+    first_question_id: '',
+    first_question_type: '',
+    second_question_id: '',
+    second_question_type: '',
+  }
+  if (!element?.moved) return
+
+  const questionsLength = props.slides.length
+  data.first_question_id = element.moved.element.id
+  data.first_question_type = element.moved.element.type
+
+  if (element.moved.newIndex == questionsLength - 1) {
+    data.second_question_id = props.slides[element.moved.newIndex - 1].id
+    data.second_question_type = props.slides[element.moved.newIndex - 1].type
+  } else if (element.moved.newIndex == 0) {
+    data.second_question_id = props.slides[1].id
+    data.second_question_type = props.slides[1].type
+  } else {
+    if (element.moved.newIndex > element.moved.oldIndex) {
+      data.second_question_id = props.slides[element.moved.newIndex - 1].id
+      data.second_question_type = props.slides[element.moved.newIndex - 1].type
+    } else {
+      data.second_question_id = props.slides[element.moved.newIndex + 1].id
+      data.second_question_type = props.slides[element.moved.newIndex + 1].type
+    }
+  }
+
+  questionsStore.changePosition(data)
 }
 </script>
 <template>
@@ -119,6 +152,7 @@ const handleDuplicate = (question: Question) => {
         @update:model-value="questionsStore.updateQuestions"
         @start="drag = true"
         @end="drag = false"
+        @change="handleChangePosition"
       >
         <template #item="{ element, index }">
           <div
@@ -179,7 +213,7 @@ const handleDuplicate = (question: Question) => {
               >
                 {{ element.type }}
               </div>
-              <p class="truncate text-ellipsis bg-white rounded-sm px-2">{{ element.title }}</p>
+              <p class="truncate text-ellipsis bg-white rounded-sm px-2">{{ element.id }}</p>
             </div>
           </div>
         </template>
