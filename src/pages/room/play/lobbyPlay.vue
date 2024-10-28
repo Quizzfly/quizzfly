@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import Lobby from '@/components/room/play/Lobby.vue'
-import Join from '@/components/room/play/Join.vue'
+import Lobby from '@/components/room/user/Lobby.vue'
+import Join from '@/components/room/user/Join.vue'
 
 const isCheckScreen = ref(false)
 </script>

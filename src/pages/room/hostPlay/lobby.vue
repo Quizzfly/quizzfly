@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import BarWrapper from '@/components/room/BarWrapper.vue'
 import Lobby from '@/components/room/lobby.vue'
-import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
+import { useRoomStore } from '@/stores/room'
 import { useLoadingStore } from '@/stores/loading'
 
 const loadingStore = useLoadingStore()
 
-const quizzflyStore = useQuizzflyStore()
+const roomStore = useRoomStore()
 
 const route = useRoute()
 onMounted(() => {
-  quizzflyStore.getQuizzflyDetail(route.params.quizzflyId as string)
+  roomStore.getRoomDetail(route.params.roomId as string)
   loadingStore.setLoading(true, false)
   setTimeout(() => {
     loadingStore.setLoading(false)

@@ -7,15 +7,23 @@ export const roomRoute: RouteRecordRaw[] = [
     meta: {
       layout: 'RoomLayout',
     },
-    component: () => import('@/pages/room/hostLive.vue'),
+    component: () => import('@/pages/room/hostPlay/hostLive.vue'),
   },
   {
-    path: 'lobby/:quizzflyId',
+    path: 'host-live/:roomId/lobby',
     name: 'lobby',
     meta: {
       layout: 'RoomLayout',
     },
-    component: () => import('@/pages/room/lobby.vue'),
+    component: () => import('@/pages/room/hostPlay/lobby.vue'),
+  },
+  {
+    path: 'host-live/:roomId/play',
+    name: 'host-live-play',
+    meta: {
+      layout: 'GuestLayout',
+    },
+    component: () => import('@/pages/room/hostPlay/showQuizzfly.vue'),
   },
   {
     path: 'play/lobby/:code',

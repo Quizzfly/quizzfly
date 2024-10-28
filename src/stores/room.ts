@@ -25,6 +25,7 @@ export const useRoomStore = defineStore({
         this.setDetailRoom(data)
         router.push({
           name: 'lobby',
+          params: { roomId: data.id },
         })
       } catch (error) {
         console.error(error)
@@ -53,7 +54,7 @@ export const useRoomStore = defineStore({
         })
       }
     },
-    async getQuizzflyDetail(id: string) {
+    async getRoomDetail(id: string) {
       try {
         const { data } = await getDetailRoomApi(id)
         this.setDetailRoom(data)
