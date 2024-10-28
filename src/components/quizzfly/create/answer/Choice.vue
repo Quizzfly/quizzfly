@@ -1,22 +1,27 @@
 <script setup lang="ts">
+import type { Answer } from '@/types/question'
 import { useTextareaAutosize } from '@vueuse/core'
 const { textarea, input } = useTextareaAutosize()
+import { useDebounceFn } from '@vueuse/core'
 
 const props = defineProps<{
   index: number
   editMode?: boolean
   isTrueFalse?: boolean
-  modelValue: any
+  modelValue: Answer
 }>()
 
 const emits = defineEmits<{
-  (e: 'update:modelValue', value: any): void
+  (e: 'update:modelValue', value: Answer): void
 }>()
 
-const updateAnswer = (value: any) => {
+const updateAnswer = useDebounceFn((value: Answer) => {
+  emits('update:modelValue', value)
+}, 500)
+
+const updateAnswerImmediate = (value: Answer) => {
   emits('update:modelValue', value)
 }
-
 const colorsHex = [
   {
     primary: '#3879ff',
@@ -37,7 +42,7 @@ const colorsHex = [
 ]
 
 onMounted(() => {
-  input.value = props.modelValue.text
+  input.value = props.modelValue.content.trim()
 })
 </script>
 <template>
@@ -47,7 +52,7 @@ onMounted(() => {
   >
     <template v-if="editMode">
       <div
-        v-if="modelValue.isCorrect"
+        v-if="modelValue.is_correct"
         v-motion
         :initial="{
           scale: 1.5,
@@ -61,13 +66,13 @@ onMounted(() => {
       >
         <span
           class="cursor-pointer i-solar-check-square-bold text-2xl"
-          @click="updateAnswer({ ...modelValue, isCorrect: !modelValue.isCorrect })"
+          @click="updateAnswerImmediate({ ...modelValue, is_correct: !modelValue.is_correct })"
         ></span>
       </div>
       <div
         v-else
         class="min-w-5 h-5 cursor-pointer border-[1px] border-white rounded-sm text-2xl"
-        @click="updateAnswer({ ...modelValue, isCorrect: !modelValue.isCorrect })"
+        @click="updateAnswerImmediate({ ...modelValue, is_correct: !modelValue.is_correct })"
       ></div>
     </template>
     <!-- prevent enter not break line -->
@@ -78,7 +83,7 @@ onMounted(() => {
       class="resize-none bg-transparent text-white text-lg w-full border-none outline-none text-input"
       placeholder="Enter your answer..."
       maxlength="80"
-      @update:model-value="updateAnswer({ ...modelValue, text: $event })"
+      @update:model-value="updateAnswer({ ...modelValue, content: $event })"
       @keydown.enter.prevent
     />
   </div>

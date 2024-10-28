@@ -7,6 +7,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { quizOptions } from '@/utils/quiz'
 import { useQuestionsStore } from '@/stores/quizzfly/question'
 import { useConfirmDialog } from '@/stores/modal'
+import PreviewLayout from '../layout/PreviewLayout.vue'
 
 const currentQuestion = defineModel<Question>({ required: true })
 const questionsStore = useQuestionsStore()
@@ -55,28 +56,39 @@ const handleChangePosition = (element: any, index: number) => {
   const data = {
     first_question_id: '',
     first_question_type: '',
+    first_question_index: '',
     second_question_id: '',
     second_question_type: '',
+    second_question_index: '',
   }
   if (!element?.moved) return
 
   const questionsLength = props.slides.length
-  data.first_question_id = element.moved.element.id
-  data.first_question_type = element.moved.element.type
 
-  if (element.moved.newIndex == questionsLength - 1) {
-    data.second_question_id = props.slides[element.moved.newIndex - 1].id
-    data.second_question_type = props.slides[element.moved.newIndex - 1].type
-  } else if (element.moved.newIndex == 0) {
-    data.second_question_id = props.slides[1].id
-    data.second_question_type = props.slides[1].type
-  } else {
+  data.first_question_index = element.moved.oldIndex
+  data.second_question_index = element.moved.newIndex
+
+  {
     if (element.moved.newIndex > element.moved.oldIndex) {
-      data.second_question_id = props.slides[element.moved.newIndex - 1].id
-      data.second_question_type = props.slides[element.moved.newIndex - 1].type
+      data.first_question_id = element.moved.element.id
+      data.first_question_type = element.moved.element.type
+      if (element.moved.newIndex == questionsLength - 1) {
+        data.second_question_id = props.slides[element.moved.newIndex - 1].id
+        data.second_question_type = props.slides[element.moved.newIndex - 1].type
+      } else {
+        data.second_question_id = props.slides[element.moved.newIndex - 1].id
+        data.second_question_type = props.slides[element.moved.newIndex - 1].type
+      }
     } else {
-      data.second_question_id = props.slides[element.moved.newIndex + 1].id
-      data.second_question_type = props.slides[element.moved.newIndex + 1].type
+      data.second_question_id = element.moved.element.id
+      data.second_question_type = element.moved.element.type
+      if (element.moved.newIndex == 0) {
+        data.first_question_id = props.slides[1].id
+        data.first_question_type = props.slides[1].type
+      } else {
+        data.first_question_id = props.slides[element.moved.newIndex + 1].id
+        data.first_question_type = props.slides[element.moved.newIndex + 1].type
+      }
     }
   }
 
@@ -142,7 +154,7 @@ const handleChangePosition = (element: any, index: number) => {
       <draggable
         :model-value="slides"
         item-key="id"
-        class="max-md:w-full flex md:flex-col gap-2 pr-2"
+        class="max-md:w-full flex md:flex-col gap-4 pr-2"
         :component-data="{
           tag: 'ul',
           type: 'transition-group',
@@ -167,7 +179,7 @@ const handleChangePosition = (element: any, index: number) => {
               :class="{ 'bg-primary ': currentQuestion.id === element.id }"
             ></div>
 
-            <div class="flex flex-col justify-around px-1 items-center">
+            <div class="flex flex-col justify-between px-1 items-center">
               <div class="text-xs font-medium">{{ index + 1 }}</div>
               <div
                 class="text-xs rounded-sm text-gray-500 h-4 w-4 hover:bg-slate-200 cursor-pointer flex items-center justify-center"
@@ -200,20 +212,43 @@ const handleChangePosition = (element: any, index: number) => {
               </div>
             </div>
 
-            <div
-              class="w-full h-[100px] border-2 bg-white bg-cover bg-center rounded-xl cursor-pointer relative p-2 flex justify-center items-center overflow-hidden"
-              :style="{ backgroundImage: `url(${element.theme})` }"
-              :class="{
-                'border-primary': currentQuestion.id === element.id && !drag,
-              }"
-              @click="currentQuestion = element"
-            >
-              <div
-                class="text-[10px] font-medium bg-slate-200 absolute top-2 left-2 px-2 py-[2px] rounded-sm"
-              >
-                {{ element.type }}
+            <div class="w-full">
+              <div>
+                <div class="flex justify-between items-center px-2">
+                  <span class="text-xs font-medium">{{ element.type.toLowerCase() }}</span>
+                  <span class="text-xs font-medium text-gray-500">1m</span>
+                </div>
               </div>
-              <p class="truncate text-ellipsis bg-white rounded-sm px-2">{{ element.id }}</p>
+              <div
+                class="w-full h-[100px] border-2 bg-white bg-cover bg-center rounded-xl cursor-pointer relative p-2 flex justify-center items-center overflow-hidden"
+                :style="{ backgroundImage: `url(${element.theme})` }"
+                :class="{
+                  'border-primary': currentQuestion.id === element.id && !drag,
+                }"
+                @click="currentQuestion = element"
+              >
+                <div
+                  v-if="element.type === 'QUIZ'"
+                  class="text-[10px] font-medium bg-slate-200 absolute top-2 left-2 px-2 py-[2px] rounded-sm"
+                >
+                  {{ element.quiz_type.toLowerCase() }}
+                </div>
+                <p
+                  class="truncate text-ellipsis bg-white rounded-sm px-2"
+                >
+                  {{ element.id }}
+                </p>
+                <!-- <p
+                  v-if="element.type === 'QUIZ'"
+                  class="truncate text-ellipsis bg-white rounded-sm px-2"
+                >
+                  {{ element.content }}
+                </p>
+                <PreviewLayout
+                  v-else
+                  :layout="JSON.parse(element.content)"
+                /> -->
+              </div>
             </div>
           </div>
         </template>

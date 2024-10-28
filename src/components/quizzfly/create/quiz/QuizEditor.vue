@@ -4,9 +4,11 @@ import EditableText from '@/components/base/EditableText.vue'
 import AnswerSetting from '@/components/quizzfly/create/quiz/AnswerSetting.vue'
 import { useQuestionsStore } from '@/stores/quizzfly/question'
 import type { Quiz } from '@/types/question'
-import { uploadFileApi } from '@/services/file'
-import { useLoadingStore } from '@/stores/loading'
 import { showToast } from '@/utils/toast'
+import { useTextareaAutosize } from '@vueuse/core'
+const { textarea, input } = useTextareaAutosize()
+import { Button } from '@/components/ui/button'
+import { createAnswerApi } from '@/services/quizzes'
 
 const questionsStore = useQuestionsStore()
 const currentQuestion = computed(() => questionsStore.getCurrentQuestion as Quiz)
@@ -25,37 +27,26 @@ const handleUpdateTitle = (value: string | number) => {
   questionsStore.updateCurrentQuestion('quiz', { content: String(value) })
 }
 
-const imgRaw = ref<File>()
-
-const loadingStore = useLoadingStore()
-
-async function handleFileChange(event: Event) {
-  const target = event.target as HTMLInputElement
-  const file = target.files?.[0]
-
-  if (file) {
-    loadingStore.setLoading(true)
-    const formData = new FormData()
-    formData.append('file', file)
-    imgRaw.value = file
-    try {
-      const { data } = await uploadFileApi(formData)
-      questionsStore.updateCurrentQuestion('quiz', { files: [data] })
-    } catch (error) {
-      showToast({
-        title: 'Error',
-        description: 'Error uploading image',
-        variant: 'destructive',
-      })
-    } finally {
-      loadingStore.setLoading(false)
-    }
-  }
-}
-
 const handleBlur = (finishEditingCallback: () => void) => {
   finishEditingCallback()
   handleUpdateTitle(questionContent.value)
+}
+
+const handleCreateAnswer = async () => {
+  try {
+    const { data } = await createAnswerApi(questionsStore.getCurrentQuestion.id, {
+      content: ' ',
+    })
+    questionsStore.updateCurrentQuestion('quiz', {
+      answers: [...currentQuestion.value.answers, data],
+    })
+  } catch (error) {
+    showToast({
+      title: 'Error',
+      description: 'Error creating answer',
+      variant: 'destructive',
+    })
+  }
 }
 </script>
 <template>
@@ -84,6 +75,15 @@ const handleBlur = (finishEditingCallback: () => void) => {
       </EditableText>
     </div>
 
+    <textarea
+      ref="textarea"
+      v-model="input"
+      class="resize-none bg-transparent text-white text-lg w-full border-none outline-none text-input"
+      placeholder="Enter your answer..."
+      maxlength="80"
+      @keydown.enter.prevent
+    />
+
     <!-- picture -->
     <div class="flex justify-center flex-auto">
       <div
@@ -100,7 +100,7 @@ const handleBlur = (finishEditingCallback: () => void) => {
             ref="inputRef"
             type="file"
             class="hidden"
-            @change="handleFileChange"
+            @change="questionsStore.updateQuestionFile('quiz', $event)"
           />
 
           <p
@@ -113,6 +113,18 @@ const handleBlur = (finishEditingCallback: () => void) => {
       </div>
     </div>
     <!-- answer -->
+    <Button
+      v-if="
+        currentQuestion &&
+        currentQuestion.answers.length < 4 &&
+        currentQuestion.type === 'QUIZ' &&
+        currentQuestion.quiz_type !== 'TRUE_FALSE'
+      "
+      class="w-fit"
+      color="primary"
+      @click="handleCreateAnswer"
+      >Add Answer</Button
+    >
     <AnswerSetting :key="currentQuestion.id" />
   </div>
 </template>

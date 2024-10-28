@@ -57,6 +57,10 @@ const handleClickCancel = () => {
         <span class="i-svg-spinners-tadpole"></span>
         <span>saving...</span>
       </div>
+      <div v-else class="flex items-center">
+        <span class="i-material-symbols-light-check-rounded text-2xl"></span>
+        <span>Saved</span>
+      </div>
     </div>
 
     <div class="flex items-center gap-3">

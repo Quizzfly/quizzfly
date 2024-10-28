@@ -8,9 +8,13 @@ const currentLayout = defineModel<SlideLayout>('layout', {
   required: true,
 })
 
-const handleChangedLayout = (layout: SlideLayout) => {
+const handleChangedLayout = async (layout: SlideLayout) => {
+  await questionStore.updateCurrentQuestion('slide', { content: JSON.stringify(layout) })
   currentLayout.value = layout
-  questionStore.updateCurrentQuestion('slide', { content: JSON.stringify(currentLayout.value) })
+  // to tracking currentLayout using nextTick
+  // nextTick(() => {
+  //   console.log('currentLayout', currentLayout.value)
+  // })
 }
 </script>
 <template>

@@ -16,9 +16,16 @@ import type { Quiz, QuizType } from '@/types/question'
 const questionsStore = useQuestionsStore()
 const currentQuestion = computed(() => questionsStore.getCurrentQuestion as Quiz)
 
-const handleChangeQuizType = (quizType: QuizType) => {
-  questionsStore.updateCurrentQuestion('quiz', { quiz_type: quizType })
-  questionsStore.initAnswers(quizType)
+const handleChangeQuizType = async (quizType: QuizType) => {
+  await questionsStore.updateQuestionSettings({ quiz_type: quizType })
+  if (quizType === 'TRUE_FALSE') {
+    try {
+      await questionsStore.clearAllAnswers()
+      questionsStore.initAnswers(quizType)
+    } catch (error) {
+      console.error(error)
+    }
+  }
 }
 </script>
 <template>
@@ -64,7 +71,12 @@ const handleChangeQuizType = (quizType: QuizType) => {
         <!-- time limit -->
         <div class="mt-8">
           <span class="font-medium text-sm">Time limit</span>
-          <Select>
+          <Select
+            :model-value="String(currentQuestion.time_limit)"
+            @update:model-value="
+              questionsStore.updateQuestionSettings({ time_limit: Number($event) })
+            "
+          >
             <SelectTrigger class="mt-3">
               <SelectValue placeholder="Time limit" />
             </SelectTrigger>
@@ -124,18 +136,23 @@ const handleChangeQuizType = (quizType: QuizType) => {
             class="flex items-center px-5 gap-5 w-full h-[100px] border-2 border-dashed rounded-md mt-5 overflow-hidden bg-cover bg-center"
           >
             <img
-              src="/assets/images/default.webp"
-              class="h-full w-10 object-contain"
+              :src="currentQuestion.files[0]?.url || '/assets/images/default.webp'"
+              class="h-12 w-12 rounded-sm object-cover"
               alt=""
             />
             <div>
               <p class="text-xs text-gray-500 font-light text-center">Drag and drop or</p>
               <input
+                ref="file"
                 type="file"
                 class="hidden"
+                @change="questionsStore.updateQuestionFile('quiz', $event)"
               />
 
-              <p class="text-xs text-primary text-center cursor-pointer mt-2 hover:underline">
+              <p
+                class="text-xs text-primary text-center cursor-pointer mt-2 hover:underline"
+                @click="$refs.file.click()"
+              >
                 Click to upload your image
               </p>
             </div>
