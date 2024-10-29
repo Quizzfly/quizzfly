@@ -1,6 +1,5 @@
-import type { Question, Quiz } from '@/types/question'
+import type { Answer, Question, Quiz, QuizType } from '@/types/question'
 import { defineStore } from 'pinia'
-import { v4 as uuidv4 } from 'uuid'
 import { changeQuestionPositionApi, getQuizzflyQuestionsApi } from '@/services/quizzfly'
 import { useQuizzflyStore } from './quizzfly'
 import { showToast } from '@/utils/toast'
@@ -12,7 +11,19 @@ import {
   updateSlideApi,
 } from '@/services/slides'
 import { slideLayouts } from '@/modules/slide/layout'
-import { createQuizApi, deleteQuizApi, duplicateQuizApi, updateQuizApi } from '@/services/quizzes'
+import {
+  createAnswerApi,
+  createQuizApi,
+  deleteAnswerApi,
+  deleteQuizApi,
+  duplicateQuizApi,
+  updateAnswerApi,
+  updateQuizApi,
+  updateQuizSettingsApi,
+} from '@/services/quizzes'
+import type { QuestionSetting } from '@/types/setting'
+import { useLoadingStore } from '../loading'
+import { uploadFileApi } from '@/services/file'
 
 export const useQuestionsStore = defineStore({
   id: 'question',
@@ -32,12 +43,13 @@ export const useQuestionsStore = defineStore({
           description: apiError(error).message,
           variant: 'destructive',
         })
+        throw error
       }
     },
 
-    initAnswers(quizType: string) {
+    async initAnswers(quizType: QuizType) {
       // Initialize answer options based on quiz type
-      const answers = this.generateAnswersByQuizType(quizType)
+      const answers = await this.generateAnswersByQuizType(quizType)
       this.updateCurrentQuestionAnswers(answers)
     },
 
@@ -90,20 +102,29 @@ export const useQuestionsStore = defineStore({
       }
     },
 
-    generateAnswersByQuizType(quizType: string) {
-      // Generate answers based on quiz type
-      switch (quizType) {
-        case 'multiple_choice':
-          return Array(4)
-            .fill(null)
-            .map(() => ({ id: uuidv4(), text: '', isCorrect: false }))
-        case 'true_false':
-          return [
-            { id: uuidv4(), text: 'True', isCorrect: false },
-            { id: uuidv4(), text: 'False', isCorrect: false },
-          ]
-        default:
-          return []
+    async generateAnswersByQuizType(quizType: QuizType) {
+      if (quizType === 'TRUE_FALSE') {
+        try {
+          const answers = await Promise.all(
+            [
+              { content: 'True', is_correct: false },
+              { content: 'False', is_correct: false },
+            ].map(async (answer) => {
+              const { data } = await createAnswerApi(this.currentQuestion.id || '', answer)
+              return data
+            }),
+          )
+
+          return answers
+        } catch (error) {
+          showToast({
+            description: apiError(error).message,
+            variant: 'destructive',
+          })
+        }
+        return []
+      } else {
+        return (this.currentQuestion as Quiz).answers || []
       }
     },
 
@@ -178,19 +199,13 @@ export const useQuestionsStore = defineStore({
       if (questionType === 'quiz') {
         await updateQuizApi(quizzflyStoreId, this.currentQuestion.id || '', question)
       } else {
-        const { data } = await updateSlideApi(
-          quizzflyStoreId,
-          this.currentQuestion.id || '',
-          question,
-        )
-        console.log(data)
+        await updateSlideApi(quizzflyStoreId, this.currentQuestion.id || '', question)
       }
-      console.log(question)
       this.currentQuestion = { ...this.currentQuestion, ...question }
       this.updateQuestionInList(this.currentQuestion)
       setTimeout(() => {
         quizzflyStore.setIsUpdating(false)
-      }, 100)
+      }, 200)
     },
 
     updateQuestionInList(question: Question) {
@@ -199,21 +214,33 @@ export const useQuestionsStore = defineStore({
       if (index !== -1) this.questions[index] = { ...this.questions[index], ...question }
     },
 
-    updateCurrentQuestionAnswers(answers: any[]) {
-      console.log(answers)
+    updateCurrentQuestionAnswers(answers: Answer[]) {
       // Update the current question's answers and sync with the main list
-      // this.currentQuestion.answers = answers
-      // this.updateQuestionInList(this.currentQuestion)
+      ;(this.currentQuestion as Quiz).answers = answers
+      this.updateQuestionInList(this.currentQuestion)
     },
 
-    updateCurrentQuestionAnswer(answer: any) {
-      console.log(answer)
+    async updateCurrentQuestionAnswer(answer: Answer) {
+      const quizzflyStore = useQuizzflyStore()
+      quizzflyStore.setIsUpdating(true)
       // Update a specific answer in the current question
-      // const index = this.findAnswerIndexById(answer.id)
-      // if (index !== -1 && this.currentQuestion.answers) {
-      //   this.currentQuestion.answers[index] = answer
-      //   this.updateCurrentQuestionAnswers(this.currentQuestion.answers)
-      // }
+      try {
+        const index = this.findAnswerIndexById(answer.id)
+        if (index !== -1 && (this.currentQuestion as Quiz).answers) {
+          const { data } = await updateAnswerApi(answer.id || '', answer)
+          ;(this.currentQuestion as Quiz).answers[index] = data
+          this.updateCurrentQuestionAnswers((this.currentQuestion as Quiz).answers)
+        }
+      } catch (error) {
+        console.error(error)
+        showToast({
+          description: apiError(error).message,
+          variant: 'destructive',
+        })
+      }
+      setTimeout(() => {
+        quizzflyStore.setIsUpdating(false)
+      }, 200)
     },
 
     findQuestionIndexById(id: string) {
@@ -221,10 +248,73 @@ export const useQuestionsStore = defineStore({
       return this.questions.findIndex((question) => question.id === id)
     },
 
-    // findAnswerIndexById(id: string) {
-    // Find the index of an answer in the current question by its ID
-    // return this.currentQuestion.answers?.findIndex((answer) => answer.id === id) ?? -1
-    // },
+    findAnswerIndexById(id: string) {
+      // Find the index of an answer in the current question by its ID
+      return (this.currentQuestion as Quiz).answers?.findIndex((answer) => answer.id === id) ?? -1
+    },
+
+    async updateQuestionSettings(data: Partial<QuestionSetting>) {
+      const quizzflyStore = useQuizzflyStore()
+      try {
+        quizzflyStore.setIsUpdating(true)
+        await updateQuizSettingsApi(
+          quizzflyStore.getQuizzflyInfo.id,
+          this.currentQuestion.id || '',
+          data,
+        )
+        this.currentQuestion = { ...this.currentQuestion, ...data }
+        this.updateQuestionInList(this.currentQuestion)
+      } catch (error) {
+        console.error(error)
+        showToast({
+          description: apiError(error).message,
+          variant: 'destructive',
+        })
+      } finally {
+        quizzflyStore.setIsUpdating(false)
+      }
+    },
+
+    async updateQuestionFile(questionType: 'quiz' | 'slide', file: File) {
+      const loadingStore = useLoadingStore()
+      // const target = event.target as HTMLInputElement
+      // const file = target.files?.[0]
+
+      if (file) {
+        loadingStore.setLoading(true)
+        const formData = new FormData()
+        formData.append('file', file)
+        try {
+          const { data } = await uploadFileApi(formData)
+          this.updateCurrentQuestion(questionType, { files: [data] })
+        } catch (error) {
+          showToast({
+            title: 'Error',
+            description: 'Error uploading image',
+            variant: 'destructive',
+          })
+        } finally {
+          loadingStore.setLoading(false)
+        }
+      }
+    },
+
+    async clearAllAnswers() {
+      // Clear all answers in the current question
+      try {
+        await Promise.all(
+          (this.currentQuestion as Quiz).answers?.map((answer) => deleteAnswerApi(answer.id)),
+        )
+        this.updateCurrentQuestionAnswers([])
+      } catch (error) {
+        console.error(error)
+        showToast({
+          description: apiError(error).message,
+          variant: 'destructive',
+        })
+        throw error
+      }
+    },
   },
   getters: {
     getSlideById: (state) => (id: string) => {
@@ -233,6 +323,5 @@ export const useQuestionsStore = defineStore({
     },
     getSlides: (state) => state.questions,
     getCurrentQuestion: (state) => state.currentQuestion,
-    getCurrentQuestionAnswers: () => [] as any,
   },
 })

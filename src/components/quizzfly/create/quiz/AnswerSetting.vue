@@ -5,14 +5,11 @@ import { useQuestionsStore } from '@/stores/quizzfly/question'
 import type { Quiz } from '@/types/question'
 
 const questionsStore = useQuestionsStore()
+
 const currentQuestion = computed(() => questionsStore.getCurrentQuestion as Quiz)
 
 function initAnswers() {
-  if (
-    // currentQuestion.answers?.length ||
-    !currentQuestion.value.quiz_type
-  )
-    return
+  if (currentQuestion.value.answers?.length || !currentQuestion.value.quiz_type) return
 
   questionsStore.initAnswers(currentQuestion.value.quiz_type)
 }
@@ -25,11 +22,16 @@ onBeforeMount(() => {
     <div class="grid grid-cols-2 gap-4">
       <template v-if="currentQuestion.quiz_type === 'MULTIPLE_CHOICE'">
         <Choice
-          v-for="(item, index) in questionsStore.getCurrentQuestionAnswers"
+          v-for="(item, index) in currentQuestion.answers"
           :key="item.id"
           v-motion
           :model-value="item"
           :index="index"
+          :class="{
+            'item-last-child':
+              index === currentQuestion.answers.length - 1 &&
+              currentQuestion.answers.length % 2 !== 0,
+          }"
           :initial="{ opacity: 0, y: 100 }"
           :enter="{ opacity: 1, y: 0, scale: 1 }"
           :delay="index * 100"
@@ -45,3 +47,8 @@ onBeforeMount(() => {
     </div>
   </div>
 </template>
+<style scoped>
+.item-last-child {
+  grid-column: span 2;
+}
+</style>

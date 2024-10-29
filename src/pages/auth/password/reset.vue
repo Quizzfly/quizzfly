@@ -32,7 +32,6 @@ const isLoading = ref(false)
 
 onMounted(() => {
   token.value = route.query.token
-  console.log(token.value, 'check token')
   if (!token) {
     router.push('/login')
   }

@@ -21,17 +21,17 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/profiles',
-    // beforeEnter: [authGuard],
+    beforeEnter: [authGuard],
     children: profileRoute,
   },
   {
     path: '/quizzfly',
-    // beforeEnter: [authGuard],
+    beforeEnter: [authGuard],
     children: quizzflyRoute,
   },
   {
     path: '/room',
-    // beforeEnter: [authGuard],
+    beforeEnter: [authGuard],
     children: roomRoute,
   },
   {

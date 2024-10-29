@@ -45,7 +45,6 @@ const settings = ref<Settings>({
 const imageRaw = ref<File>()
 
 const handleSaveSettings = async () => {
-  console.log('save settings')
   loadingStore.setLoading(true)
   try {
     const formData = new FormData()

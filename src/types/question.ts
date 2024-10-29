@@ -3,7 +3,7 @@ export type Question = Slide | Quiz
 export interface Slide {
   id: string
   content: string
-  files: File[]
+  files: FileMeta[]
   background_color: string
   prev_element_id: string
   created_at: string
@@ -19,16 +19,17 @@ export interface Quiz {
   time_limit: number
   point_multiplier: number
   quiz_type: QuizType
-  files: File[]
+  files: FileMeta[]
   prev_element_id: string
   quizzfly_id: string
   theme: string
   type: 'QUIZ' | 'SLIDE'
+  answers: Answer[]
 }
 
 export type QuizType = 'MULTIPLE_CHOICE' | 'TRUE_FALSE' | 'SLIDER' | 'TYPING_ANSWER'
 
-export interface File {
+export interface FileMeta {
   public_id: string
   original_filename: string
   format: string

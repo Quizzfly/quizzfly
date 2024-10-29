@@ -36,7 +36,6 @@ const handleForgot = async () => {
       variant: 'destructive',
     })
   }
-  console.log('hello')
 }
 
 const handleResentEmail = async (time: number) => {

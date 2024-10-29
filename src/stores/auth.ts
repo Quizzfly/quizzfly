@@ -39,7 +39,14 @@ export const useAuthStore = defineStore({
         const { data } = await loginApi(email, password)
         localStorage.setItem('access_token', data.access_token)
         localStorage.setItem('refresh_token', data.refresh_token)
-        location.reload()
+        const redirect = localStorage.getItem('redirect')
+        await this.setupAuth()
+        if (redirect) {
+          localStorage.removeItem('redirect')
+          router.push(redirect)
+        } else {
+          location.reload()
+        }
       } catch (error) {
         showToast({
           title: 'Login failed',

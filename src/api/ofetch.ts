@@ -12,8 +12,10 @@ async function refreshToken() {
         refreshToken: localStorage.getItem(config.key.refreshToken),
       },
     })
-    authStore.token.access = response.access.token
-    authStore.token.refresh = response.refresh.token
+
+    // TODO: Handle the response following your API response
+    authStore.token.access = response.data[config.key.accessToken]
+    authStore.token.refresh = response.data[config.key.refreshToken]
     localStorage.setItem(config.key.accessToken, authStore.token.access)
     localStorage.setItem(config.key.refreshToken, authStore.token.refresh)
     return true

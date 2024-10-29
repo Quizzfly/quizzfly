@@ -16,14 +16,14 @@ export const quizOptions: QuizOption[] = [
     name: 'True or False',
     icon: '/assets/icons/true-false.svg',
   },
-  {
-    type: 'SLIDER',
-    name: 'Slider',
-    icon: '/assets/icons/slider-answer.svg',
-  },
-  {
-    type: 'TYPING_ANSWER',
-    name: 'Typing answer',
-    icon: '/assets/icons/typing-answer.svg',
-  },
+  // {
+  //   type: 'SLIDER',
+  //   name: 'Slider',
+  //   icon: '/assets/icons/slider-answer.svg',
+  // },
+  // {
+  //   type: 'TYPING_ANSWER',
+  //   name: 'Typing answer',
+  //   icon: '/assets/icons/typing-answer.svg',
+  // },
 ]

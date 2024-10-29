@@ -9,7 +9,7 @@ const emits = defineEmits<{
 
 defineProps<{
   layout: SlideLayout
-  current: SlideLayout
+  current?: SlideLayout
 }>()
 
 interface LayoutItemStyle {
@@ -45,8 +45,8 @@ const handleSelectLayout = async (layout: SlideLayout) => {
 <template>
   <div
     class="border-2 rounded-lg w-full flex flex-col h-[80px] cursor-pointer p-2 overflow-hidden"
-    :class="current.type === layout.type ? 'border-primary' : 'border-gray-200'"
-    @click="handleSelectLayout(layout)"
+    :class="current?.type === layout.type ? 'border-primary' : 'border-gray-200'"
+    @click="current && handleSelectLayout(layout)"
   >
     <div class="flex items-center gap-5 h-full">
       <template

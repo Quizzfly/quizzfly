@@ -29,7 +29,6 @@ const confirmEmail = async (token: string) => {
     await confirmEmailApi(token)
     openConfirm()
   } catch (error: any) {
-    console.log(error, 'check error')
     showToast({
       title: 'Confirm failed',
       description: apiError(error).message,
