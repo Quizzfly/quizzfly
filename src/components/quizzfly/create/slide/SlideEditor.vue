@@ -19,10 +19,10 @@ const props = defineProps<{
   layout: SlideLayout
 }>()
 
-const questionStore = useQuestionsStore()
+const questionsStore = useQuestionsStore()
 
 const handleUpdateModelValue = () => {
-  questionStore.updateCurrentQuestion('slide', { content: JSON.stringify(props.layout) })
+  questionsStore.updateCurrentQuestion('slide', { content: JSON.stringify(props.layout) })
 }
 </script>
 <template>
@@ -42,6 +42,7 @@ const handleUpdateModelValue = () => {
               :is="component[item.element]"
               v-bind="item.props"
               v-model="item.value"
+              class="bg-white max-h-[60%]"
               @blur="handleUpdateModelValue"
               @updated="handleUpdateModelValue"
             />

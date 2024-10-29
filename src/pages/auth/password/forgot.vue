@@ -28,13 +28,14 @@ const handleForgot = async () => {
       variant: 'default',
     })
     isForgot.value = true
-    isLoading.value = false
   } catch (error) {
     showToast({
       title: 'Resend email failed',
       description: `${((error as any).data?.error?.message as string) || 'Send forgot password error'}`,
       variant: 'destructive',
     })
+  } finally {
+    isLoading.value = false
   }
 }
 

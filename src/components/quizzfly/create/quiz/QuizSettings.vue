@@ -151,10 +151,10 @@ const handleChangeQuizType = async (quizType: QuizType) => {
               v-for="img in themeImages"
               :key="img"
               class="w-full object-cover rounded-md cursor-pointer border-2"
-              :class="{ 'border-primary': currentQuestion.theme === img }"
+              :class="{ 'border-primary': currentQuestion.background_url === img }"
               :src="img"
               alt=""
-              @click="questionsStore.updateCurrentQuestion('quiz', { theme: img })"
+              @click="questionsStore.updateCurrentQuestion('quiz', { background_url: img })"
             />
           </div>
         </div>

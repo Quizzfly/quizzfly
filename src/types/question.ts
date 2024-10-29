@@ -4,7 +4,7 @@ export interface Slide {
   id: string
   content: string
   files: FileMeta[]
-  background_color: string
+  background_url: string
   prev_element_id: string
   created_at: string
   type: 'QUIZ' | 'SLIDE'
@@ -18,11 +18,11 @@ export interface Quiz {
   content: string
   time_limit: number
   point_multiplier: number
+  background_url: string
   quiz_type: QuizType
   files: FileMeta[]
   prev_element_id: string
   quizzfly_id: string
-  theme: string
   type: 'QUIZ' | 'SLIDE'
   answers: Answer[]
 }

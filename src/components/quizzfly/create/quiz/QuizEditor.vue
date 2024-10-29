@@ -1,8 +1,5 @@
 <script setup lang="ts">
-// import { Input } from '@/components/ui/input'
-// import EditableText from '@/components/base/EditableText.vue'
 import { useDropZone } from '@vueuse/core'
-
 import AnswerSetting from '@/components/quizzfly/create/quiz/AnswerSetting.vue'
 import { useQuestionsStore } from '@/stores/quizzfly/question'
 import type { Quiz } from '@/types/question'
@@ -10,14 +7,16 @@ import { showToast } from '@/utils/toast'
 import { useDebounceFn, useTextareaAutosize } from '@vueuse/core'
 import { Button } from '@/components/ui/button'
 import { createAnswerApi } from '@/services/quizzes'
+import { quizOptions } from '@/utils/quiz'
 
 const questionsStore = useQuestionsStore()
 const currentQuestion = computed(() => questionsStore.getCurrentQuestion as Quiz)
 
 const { textarea, input } = useTextareaAutosize({ input: currentQuestion.value.content })
-
 const questionContent = ref('')
 const dropZoneRef = ref<HTMLDivElement>()
+
+const enterCount = ref(0) // Enter key press count
 
 onBeforeMount(() => {
   questionContent.value = currentQuestion.value.content
@@ -31,11 +30,8 @@ function onDrop(files: File[] | null) {
 
 useDropZone(dropZoneRef, {
   onDrop,
-  // specify the types of data to be received.
   dataTypes: ['image/jpeg', 'image/png', 'image/gif'],
-  // control multi-file drop
   multiple: true,
-  // whether to prevent default behavior for unhandled events
   preventDefaultForUnhandled: false,
 })
 
@@ -67,33 +63,21 @@ const handleCreateAnswer = async () => {
     })
   }
 }
+
+// limit enter key press to 10 times
+const handleEnterPress = (event: KeyboardEvent) => {
+  if (event.key === 'Enter') {
+    if (enterCount.value < 10) {
+      enterCount.value++
+    } else {
+      event.preventDefault()
+    }
+  }
+}
 </script>
+
 <template>
   <div class="w-full h-full flex flex-col gap-10 p-5 overflow-hidden justify-between">
-    <!-- question -->
-    <!-- <div class="">
-      <EditableText
-        :value="questionContent"
-        :click-callback="handleClickTitle"
-      >
-        <template #input="{ finishEditing }">
-          <Input
-            v-model="questionContent"
-            placeholder="Enter your question"
-            class="text-2xl font-medium h-12 bg-white"
-            @blur="handleBlur(finishEditing)"
-          />
-        </template>
-        <template #default="{}">
-          <p
-            class="bg-white py-1 px-2 rounded-lg border-2 border-transparent hover:border-primary text-2xl font-medium"
-          >
-            {{ questionContent || 'Enter question' }}
-          </p>
-        </template>
-      </EditableText>
-    </div> -->
-
     <div class="relative">
       <textarea
         ref="textarea"
@@ -101,7 +85,7 @@ const handleCreateAnswer = async () => {
         class="resize-none bg-white rounded-md py-4 px-4 text-center border border-b-4 text-gray-700 font-medium text-2xl w-full shadow-sm outline-none"
         placeholder="Enter your answer..."
         maxlength="120"
-        @keydown.enter.prevent
+        @keydown="handleEnterPress"
         @update:model-value="handleUpdateTitle($event)"
       />
       <p
@@ -110,9 +94,9 @@ const handleCreateAnswer = async () => {
       >
         {{ 120 - input.length }} characters left
       </p>
+      <p class="text-right">Enter presses: {{ enterCount }}</p>
     </div>
 
-    <!-- picture -->
     <div class="flex justify-center flex-auto">
       <div
         ref="dropZoneRef"
@@ -121,7 +105,7 @@ const handleCreateAnswer = async () => {
       >
         <div
           class="text-center"
-          :class="{ 'hight-light': currentQuestion.theme }"
+          :class="{ 'hight-light': currentQuestion.background_url }"
         >
           <span class="i-solar-gallery-add-outline text-3xl text-gray-500"></span>
           <p class="text-xs text-gray-500 font-light text-center">Drag and drop or</p>
@@ -131,7 +115,6 @@ const handleCreateAnswer = async () => {
             class="hidden"
             @change="handleInputFileChange"
           />
-
           <p
             class="text-xs text-primary text-center cursor-pointer mt-2 hover:underline"
             @click="$refs.inputRef.click()"
@@ -141,11 +124,10 @@ const handleCreateAnswer = async () => {
         </div>
       </div>
     </div>
-    <!-- answer -->
     <Button
       v-if="
         currentQuestion &&
-        currentQuestion.answers?.length < 4 &&
+        currentQuestion.answers?.length < quizOptions.length &&
         currentQuestion.type === 'QUIZ' &&
         currentQuestion.quiz_type !== 'TRUE_FALSE'
       "
@@ -157,6 +139,7 @@ const handleCreateAnswer = async () => {
     <AnswerSetting :key="currentQuestion.id" />
   </div>
 </template>
+
 <style scoped>
 .image-area {
   background-color: rgba(220, 220, 220, 0.743);

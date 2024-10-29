@@ -51,6 +51,15 @@ export const bigTitleLayout: SlideLayout = {
   columns: [
     [
       {
+        id: 0,
+        element: 'input',
+        value: '',
+        props: {
+          label: 'Title',
+          placeholder: 'Title',
+        },
+      },
+      {
         id: 1,
         element: 'input',
         value: '',
