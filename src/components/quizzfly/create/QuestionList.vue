@@ -79,7 +79,7 @@ const handleDuplicate = (question: Question) => {
   questionsStore.duplicateQuestion(question)
 }
 
-const handleChangePosition = (element: any, index: number) => {
+const handleChangePosition = (element: any) => {
   const data = {
     first_question_id: '',
     first_question_type: '',
