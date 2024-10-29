@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import { every, isEmpty } from 'lodash-es'
 import draggable from 'vuedraggable'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import type { Question, QuizType } from '@/types/question'
+import type { Question, Quiz, QuizType } from '@/types/question'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { quizOptions } from '@/utils/quiz'
 import { useQuestionsStore } from '@/stores/quizzfly/question'
@@ -16,6 +17,33 @@ const confirmDialog = useConfirmDialog()
 const props = defineProps<{
   slides: Question[]
 }>()
+
+const slidesComputedWithValidateData = computed(() => {
+  return props.slides.map((item) => {
+    const isContentValid = (content: any): boolean => {
+      // Recursively check all `value` fields within nested arrays/objects
+      if (Array.isArray(content)) {
+        return every(content, isContentValid)
+      }
+      if (typeof content === 'object' && content !== null) {
+        return every(content, (value, key) =>
+          key === 'value' ? !isEmpty(value?.trim()) : isContentValid(value),
+        )
+      }
+      return true
+    }
+
+    const isCompleted =
+      item.type === 'QUIZ'
+        ? (item as Quiz).answers?.every((answer) => answer.content?.trim()) &&
+          (item as Quiz).answers?.length > 1 &&
+          item.content?.trim() &&
+          (item as Quiz).answers?.some((answer) => answer.is_correct)
+        : isContentValid(JSON.parse(item.content))
+
+    return { ...item, isCompleted }
+  })
+})
 
 const emits = defineEmits<{
   (e: 'addSlide', type: 'quiz' | 'slide', quizType?: QuizType): void
@@ -152,7 +180,7 @@ const handleChangePosition = (element: any, index: number) => {
     <!-- slides list -->
     <ScrollArea class="max-md:overflow-x-auto flex flex-col flex-auto overflow-y-auto gap-2 pr-2">
       <draggable
-        :model-value="slides"
+        :model-value="slidesComputedWithValidateData"
         item-key="id"
         class="max-md:w-full flex md:flex-col gap-4 pr-2"
         :component-data="{
@@ -174,17 +202,27 @@ const handleChangePosition = (element: any, index: number) => {
             :enter="{ opacity: 1, y: 0, scale: 1 }"
             class="max-md:w-[200px] flex relative items-stretch"
           >
+            <!-- alert -->
+            <div
+              v-if="!element.isCompleted"
+              v-tippy
+              :content="`This ${element.type.toLowerCase()} is not completed`"
+              :class="{ 'border-primary': currentQuestion.id === element.id }"
+              class="absolute top-1/2 z-10 -right-2 border-2 flex justify-center items-center w-5 h-5 bg-red-500 text-white text-xs px-1 rounded-full"
+            >
+              !
+            </div>
             <div
               class="w-1 h-[40px] rounded-r-xl mt-8"
               :class="{ 'bg-primary ': currentQuestion.id === element.id }"
             ></div>
 
-            <div class="flex flex-col justify-between px-1 items-center">
+            <div class="flex flex-col justify-between px-1 items-center pb-2">
               <div class="text-xs font-medium">{{ index + 1 }}</div>
               <div
                 class="text-xs rounded-sm text-gray-500 h-4 w-4 hover:bg-slate-200 cursor-pointer flex items-center justify-center"
               >
-                <Popover>
+                <Popover v-if="currentQuestion.id === element.id">
                   <PopoverTrigger>
                     <span class="i-material-symbols-light-more-horiz text-xl"></span>
                   </PopoverTrigger>
@@ -212,12 +250,14 @@ const handleChangePosition = (element: any, index: number) => {
               </div>
             </div>
 
-            <div class="w-full">
-              <div>
-                <div class="flex justify-between items-center px-2">
-                  <span class="text-xs font-medium">{{ element.type.toLowerCase() }}</span>
-                  <span class="text-xs font-medium text-gray-500">1m</span>
-                </div>
+            <div class="flex flex-col overflow-hidden w-full">
+              <div class="flex justify-between items-center px-2">
+                <span class="text-xs font-medium">{{ element.type.toLowerCase() }}</span>
+                <span
+                  v-if="currentQuestion.id === element.id"
+                  class="text-xs font-medium text-gray-500"
+                  >{{ element.time_limit }}s</span
+                >
               </div>
               <div
                 class="w-full h-[100px] border-2 bg-white bg-cover bg-center rounded-xl cursor-pointer relative p-2 flex justify-center items-center overflow-hidden"
@@ -231,14 +271,14 @@ const handleChangePosition = (element: any, index: number) => {
                   v-if="element.type === 'QUIZ'"
                   class="text-[10px] font-medium bg-slate-200 absolute top-2 left-2 px-2 py-[2px] rounded-sm"
                 >
-                  {{ element.quiz_type.toLowerCase() }}
+                  {{ element.quiz_type.toLowerCase().replace('_', ' ') }}
                 </div>
-                <p
+                <!-- <p
                   class="truncate text-ellipsis bg-white rounded-sm px-2"
                 >
                   {{ element.id }}
-                </p>
-                <!-- <p
+                </p> -->
+                <p
                   v-if="element.type === 'QUIZ'"
                   class="truncate text-ellipsis bg-white rounded-sm px-2"
                 >
@@ -247,7 +287,7 @@ const handleChangePosition = (element: any, index: number) => {
                 <PreviewLayout
                   v-else
                   :layout="JSON.parse(element.content)"
-                /> -->
+                />
               </div>
             </div>
           </div>

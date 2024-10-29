@@ -12,11 +12,41 @@ import { useQuestionsStore } from '@/stores/quizzfly/question'
 import { themeImages } from '@/utils/theme'
 import { quizOptions } from '@/utils/quiz'
 import type { Quiz, QuizType } from '@/types/question'
+import { useLoadingStore } from '@/stores/loading'
+import { useDropZone } from '@vueuse/core'
 
+const loadingStore = useLoadingStore()
 const questionsStore = useQuestionsStore()
 const currentQuestion = computed(() => questionsStore.getCurrentQuestion as Quiz)
 
+const dropZoneRef = ref<HTMLDivElement>()
+
+function onDrop(files: File[] | null) {
+  if (files) {
+    questionsStore.updateQuestionFile('quiz', files[0])
+  }
+}
+
+useDropZone(dropZoneRef, {
+  onDrop,
+  // specify the types of data to be received.
+  dataTypes: ['image/jpeg', 'image/png', 'image/gif'],
+  // control multi-file drop
+  multiple: true,
+  // whether to prevent default behavior for unhandled events
+  preventDefaultForUnhandled: false,
+})
+
+const handleInputFileChange = (e: Event) => {
+  const target = e.target as HTMLInputElement
+  const files = target.files
+  if (files) {
+    questionsStore.updateQuestionFile('quiz', files[0])
+  }
+}
+
 const handleChangeQuizType = async (quizType: QuizType) => {
+  loadingStore.setLoading(true)
   await questionsStore.updateQuestionSettings({ quiz_type: quizType })
   if (quizType === 'TRUE_FALSE') {
     try {
@@ -26,6 +56,9 @@ const handleChangeQuizType = async (quizType: QuizType) => {
       console.error(error)
     }
   }
+  setTimeout(() => {
+    loadingStore.setLoading(false)
+  }, 500)
 }
 </script>
 <template>
@@ -133,6 +166,7 @@ const handleChangeQuizType = async (quizType: QuizType) => {
           <span class="font-medium text-sm">Upload image</span>
           <p class="text-xs text-gray-500 font-light">We support png, gif, jpg and svg</p>
           <div
+            ref="dropZoneRef"
             class="flex items-center px-5 gap-5 w-full h-[100px] border-2 border-dashed rounded-md mt-5 overflow-hidden bg-cover bg-center"
           >
             <img
@@ -146,7 +180,7 @@ const handleChangeQuizType = async (quizType: QuizType) => {
                 ref="file"
                 type="file"
                 class="hidden"
-                @change="questionsStore.updateQuestionFile('quiz', $event)"
+                @change="handleInputFileChange"
               />
 
               <p

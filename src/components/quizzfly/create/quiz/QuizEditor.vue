@@ -1,36 +1,55 @@
 <script setup lang="ts">
-import { Input } from '@/components/ui/input'
-import EditableText from '@/components/base/EditableText.vue'
+// import { Input } from '@/components/ui/input'
+// import EditableText from '@/components/base/EditableText.vue'
+import { useDropZone } from '@vueuse/core'
+
 import AnswerSetting from '@/components/quizzfly/create/quiz/AnswerSetting.vue'
 import { useQuestionsStore } from '@/stores/quizzfly/question'
 import type { Quiz } from '@/types/question'
 import { showToast } from '@/utils/toast'
-import { useTextareaAutosize } from '@vueuse/core'
-const { textarea, input } = useTextareaAutosize()
+import { useDebounceFn, useTextareaAutosize } from '@vueuse/core'
 import { Button } from '@/components/ui/button'
 import { createAnswerApi } from '@/services/quizzes'
 
 const questionsStore = useQuestionsStore()
 const currentQuestion = computed(() => questionsStore.getCurrentQuestion as Quiz)
 
+const { textarea, input } = useTextareaAutosize({ input: currentQuestion.value.content })
+
 const questionContent = ref('')
+const dropZoneRef = ref<HTMLDivElement>()
 
 onBeforeMount(() => {
   questionContent.value = currentQuestion.value.content
 })
 
-const handleClickTitle = () => {
-  console.log('Do something')
+function onDrop(files: File[] | null) {
+  if (files) {
+    questionsStore.updateQuestionFile('quiz', files[0])
+  }
 }
 
-const handleUpdateTitle = (value: string | number) => {
+useDropZone(dropZoneRef, {
+  onDrop,
+  // specify the types of data to be received.
+  dataTypes: ['image/jpeg', 'image/png', 'image/gif'],
+  // control multi-file drop
+  multiple: true,
+  // whether to prevent default behavior for unhandled events
+  preventDefaultForUnhandled: false,
+})
+
+const handleInputFileChange = (e: Event) => {
+  const target = e.target as HTMLInputElement
+  const files = target.files
+  if (files) {
+    questionsStore.updateQuestionFile('quiz', files[0])
+  }
+}
+
+const handleUpdateTitle = useDebounceFn((value) => {
   questionsStore.updateCurrentQuestion('quiz', { content: String(value) })
-}
-
-const handleBlur = (finishEditingCallback: () => void) => {
-  finishEditingCallback()
-  handleUpdateTitle(questionContent.value)
-}
+}, 500)
 
 const handleCreateAnswer = async () => {
   try {
@@ -52,7 +71,7 @@ const handleCreateAnswer = async () => {
 <template>
   <div class="w-full h-full flex flex-col gap-10 p-5 overflow-hidden justify-between">
     <!-- question -->
-    <div class="">
+    <!-- <div class="">
       <EditableText
         :value="questionContent"
         :click-callback="handleClickTitle"
@@ -73,20 +92,30 @@ const handleCreateAnswer = async () => {
           </p>
         </template>
       </EditableText>
-    </div>
+    </div> -->
 
-    <textarea
-      ref="textarea"
-      v-model="input"
-      class="resize-none bg-transparent text-white text-lg w-full border-none outline-none text-input"
-      placeholder="Enter your answer..."
-      maxlength="80"
-      @keydown.enter.prevent
-    />
+    <div class="relative">
+      <textarea
+        ref="textarea"
+        v-model="input"
+        class="resize-none bg-white rounded-md py-4 px-4 text-center border border-b-4 text-gray-700 font-medium text-2xl w-full shadow-sm outline-none"
+        placeholder="Enter your answer..."
+        maxlength="120"
+        @keydown.enter.prevent
+        @update:model-value="handleUpdateTitle($event)"
+      />
+      <p
+        v-if="input"
+        class="text-right"
+      >
+        {{ 120 - input.length }} characters left
+      </p>
+    </div>
 
     <!-- picture -->
     <div class="flex justify-center flex-auto">
       <div
+        ref="dropZoneRef"
         class="w-[50%] h-full flex justify-center items-center bg-slate-100 rounded-lg bg-cover shadow-lg image-area"
         :style="{ backgroundImage: `url(${currentQuestion.files[0]?.url})` }"
       >
@@ -100,7 +129,7 @@ const handleCreateAnswer = async () => {
             ref="inputRef"
             type="file"
             class="hidden"
-            @change="questionsStore.updateQuestionFile('quiz', $event)"
+            @change="handleInputFileChange"
           />
 
           <p
@@ -116,7 +145,7 @@ const handleCreateAnswer = async () => {
     <Button
       v-if="
         currentQuestion &&
-        currentQuestion.answers.length < 4 &&
+        currentQuestion.answers?.length < 4 &&
         currentQuestion.type === 'QUIZ' &&
         currentQuestion.quiz_type !== 'TRUE_FALSE'
       "

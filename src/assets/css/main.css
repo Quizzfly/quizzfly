@@ -1,5 +1,9 @@
 /* THEME OPTIONS */
 @import './nprogress.css';
+:root {
+  --loader-width: 250px;
+  --loader-dot-size: 16px;
+}
 body {
   font-size: 14px;
   min-height: 100vh;

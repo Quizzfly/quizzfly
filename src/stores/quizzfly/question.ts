@@ -43,6 +43,7 @@ export const useQuestionsStore = defineStore({
           description: apiError(error).message,
           variant: 'destructive',
         })
+        throw error
       }
     },
 
@@ -275,10 +276,10 @@ export const useQuestionsStore = defineStore({
       }
     },
 
-    async updateQuestionFile(questionType: 'quiz' | 'slide', event: Event) {
+    async updateQuestionFile(questionType: 'quiz' | 'slide', file: File) {
       const loadingStore = useLoadingStore()
-      const target = event.target as HTMLInputElement
-      const file = target.files?.[0]
+      // const target = event.target as HTMLInputElement
+      // const file = target.files?.[0]
 
       if (file) {
         loadingStore.setLoading(true)
