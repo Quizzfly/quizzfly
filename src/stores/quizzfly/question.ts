@@ -50,7 +50,6 @@ export const useQuestionsStore = defineStore({
     async initAnswers(quizType: QuizType) {
       // Initialize answer options based on quiz type
       const answers = await this.generateAnswersByQuizType(quizType)
-      console.log(answers)
       this.updateCurrentQuestionAnswers(answers)
     },
 

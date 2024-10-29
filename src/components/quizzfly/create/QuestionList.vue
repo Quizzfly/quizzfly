@@ -80,7 +80,6 @@ const handleDuplicate = (question: Question) => {
 }
 
 const handleChangePosition = (element: any, index: number) => {
-  console.log('element', element, index)
   const data = {
     first_question_id: '',
     first_question_type: '',

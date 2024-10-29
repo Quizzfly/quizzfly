@@ -46,7 +46,6 @@ const setData = (data: any) => {
   username.value = data.user_info.username
   avatar.value = data.user_info.avatar
 
-  console.log(data, 'check setdata')
 }
 
 const onSubmit = handleSubmit(async () => {
@@ -68,7 +67,6 @@ const onSubmit = handleSubmit(async () => {
   }
   try {
     const { data: res } = await UpdateInfoApi(data)
-    console.log(res, 'check res')
     setData(res)
     authStore.setUser(res)
     isLoading.value = false
