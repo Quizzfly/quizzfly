@@ -81,14 +81,29 @@ export const useQuestionsStore = defineStore({
       // Duplicate a question by ID
       const quizzflyStore = useQuizzflyStore()
       try {
+        let duplicatedQuestion: Question
+
         if ((question as Quiz).quiz_type) {
+          // Duplicate a quiz question
           const { data } = await duplicateQuizApi(quizzflyStore.getQuizzflyInfo.id, question.id)
-          this.questions.push(data)
+          duplicatedQuestion = data
+          ;(duplicatedQuestion as Quiz).answers = []
+          duplicatedQuestion.type = 'QUIZ'
         } else {
-          // Duplicate a slide
+          // Duplicate a slide question
           const { data } = await duplicateSlideApi(quizzflyStore.getQuizzflyInfo.id, question.id)
-          this.questions.push(data)
+          duplicatedQuestion = data
+          duplicatedQuestion.type = 'SLIDE'
         }
+
+        // Find the original question index and insert the duplicated question right after
+        const originalIndex = this.findQuestionIndexById(question.id)
+        if (originalIndex !== -1) {
+          this.questions.splice(originalIndex + 1, 0, duplicatedQuestion)
+        } else {
+          this.questions.push(duplicatedQuestion)
+        }
+
         showToast({
           description: 'Question duplicated successfully',
           variant: 'default',
@@ -196,13 +211,21 @@ export const useQuestionsStore = defineStore({
       quizzflyStore.setIsUpdating(true)
       // Merge partial data into the current question and update the question list
       const quizzflyStoreId = quizzflyStore.getQuizzflyInfo.id
-      if (questionType === 'quiz') {
-        await updateQuizApi(quizzflyStoreId, this.currentQuestion.id || '', question)
-      } else {
-        await updateSlideApi(quizzflyStoreId, this.currentQuestion.id || '', question)
+      try {
+        if (questionType === 'quiz') {
+          await updateQuizApi(quizzflyStoreId, this.currentQuestion.id || '', question)
+        } else {
+          await updateSlideApi(quizzflyStoreId, this.currentQuestion.id || '', question)
+        }
+        this.currentQuestion = { ...this.currentQuestion, ...question }
+        this.updateQuestionInList(this.currentQuestion)
+      } catch (error) {
+        console.error(error)
+        showToast({
+          description: apiError(error).message,
+          variant: 'destructive',
+        })
       }
-      this.currentQuestion = { ...this.currentQuestion, ...question }
-      this.updateQuestionInList(this.currentQuestion)
       setTimeout(() => {
         quizzflyStore.setIsUpdating(false)
       }, 200)

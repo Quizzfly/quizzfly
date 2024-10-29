@@ -83,39 +83,35 @@ const handleChangePosition = (element: any) => {
   const data = {
     first_question_id: '',
     first_question_type: '',
-    first_question_index: '',
+    first_question_index: 0,
     second_question_id: '',
     second_question_type: '',
-    second_question_index: '',
+    second_question_index: 0,
   }
   if (!element?.moved) return
 
+  const oldIndex = element.moved.oldIndex
+  const newIndex = element.moved.newIndex
+
   const questionsLength = props.slides.length
+  data.first_question_id = element.moved.element.id
+  data.first_question_type = element.moved.element.type
+  data.first_question_index = oldIndex
+  data.second_question_index = newIndex
 
-  data.first_question_index = element.moved.oldIndex
-  data.second_question_index = element.moved.newIndex
-
-  {
-    if (element.moved.newIndex > element.moved.oldIndex) {
-      data.first_question_id = element.moved.element.id
-      data.first_question_type = element.moved.element.type
-      if (element.moved.newIndex == questionsLength - 1) {
-        data.second_question_id = props.slides[element.moved.newIndex - 1].id
-        data.second_question_type = props.slides[element.moved.newIndex - 1].type
-      } else {
-        data.second_question_id = props.slides[element.moved.newIndex - 1].id
-        data.second_question_type = props.slides[element.moved.newIndex - 1].type
-      }
+  if (newIndex === questionsLength - 1) {
+    data.second_question_id = props.slides[newIndex - 1].id
+    data.second_question_type = props.slides[newIndex - 1].type
+  } else if (newIndex === 0) {
+    data.second_question_id = props.slides[1].id
+    data.second_question_type = props.slides[1].type
+  } else {
+    if (newIndex > oldIndex) {
+      data.second_question_id = props.slides[newIndex - 1].id
+      data.second_question_type = props.slides[newIndex - 1].type
     } else {
-      data.second_question_id = element.moved.element.id
-      data.second_question_type = element.moved.element.type
-      if (element.moved.newIndex == 0) {
-        data.first_question_id = props.slides[1].id
-        data.first_question_type = props.slides[1].type
-      } else {
-        data.first_question_id = props.slides[element.moved.newIndex + 1].id
-        data.first_question_type = props.slides[element.moved.newIndex + 1].type
-      }
+      data.second_question_id = props.slides[newIndex + 1].id
+      data.second_question_type = props.slides[newIndex + 1].type
     }
   }
 
@@ -218,34 +214,24 @@ const handleChangePosition = (element: any) => {
 
             <div class="flex flex-col justify-between px-1 items-center pb-2">
               <div class="text-xs font-medium">{{ index + 1 }}</div>
-              <div
-                class="text-xs rounded-sm text-gray-500 h-4 w-4 hover:bg-slate-200 cursor-pointer flex items-center justify-center"
-              >
-                <Popover v-if="currentQuestion.id === element.id">
-                  <PopoverTrigger>
-                    <span class="i-material-symbols-light-more-horiz text-xl"></span>
-                  </PopoverTrigger>
-                  <PopoverContent>
-                    <div class="py-2 px-2">
-                      <!-- delete -->
-                      <div
-                        class="text-red-600 flex gap-1 px-2 items-center cursor-pointer hover:bg-gray-100 rounded-md p-1"
-                        @click="handleConfirmDelete(element)"
-                      >
-                        <span class="i-material-symbols-light-delete-outline text-xl"></span>
-                        <span class="text-xs">Delete</span>
-                      </div>
 
-                      <div
-                        class="flex gap-1 px-2 items-center cursor-pointer hover:bg-gray-100 rounded-md p-1"
-                        @click="handleDuplicate(element)"
-                      >
-                        <span class="i-material-symbols-light-content-copy-outline text-xl"></span>
-                        <span class="text-xs">Duplicate</span>
-                      </div>
-                    </div>
-                  </PopoverContent>
-                </Popover>
+              <!-- action -->
+              <div class="py-2 w-5">
+                <div v-if="element.id === currentQuestion.id">
+                  <div
+                    class="text-red-600 flex gap-1 items-center cursor-pointer hover:bg-gray-100 rounded-md"
+                    @click="handleConfirmDelete(element)"
+                  >
+                    <span class="i-material-symbols-light-delete-outline text-xl"></span>
+                  </div>
+
+                  <div
+                    class="mt-1 flex gap-1 items-center cursor-pointer hover:bg-gray-100 rounded-md"
+                    @click="handleDuplicate(element)"
+                  >
+                    <span class="i-material-symbols-light-content-copy-outline text-xl"></span>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -260,7 +246,7 @@ const handleChangePosition = (element: any) => {
               </div>
               <div
                 class="w-full h-[100px] border-2 bg-white bg-cover bg-center rounded-xl cursor-pointer relative p-2 flex justify-center items-center overflow-hidden"
-                :style="{ backgroundImage: `url(${element.theme})` }"
+                :style="{ backgroundImage: `url(${element.background_url})` }"
                 :class="{
                   'border-primary': currentQuestion.id === element.id && !drag,
                 }"
@@ -286,6 +272,7 @@ const handleChangePosition = (element: any) => {
                 <PreviewLayout
                   v-else
                   :layout="JSON.parse(element.content)"
+                  class="bg-white"
                 />
               </div>
             </div>

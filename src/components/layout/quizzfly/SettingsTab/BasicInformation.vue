@@ -15,7 +15,7 @@ onBeforeMount(() => {
   settingsData.value.title = quizzflyStore.getQuizzflyInfo.title
   settingsData.value.description = quizzflyStore.getQuizzflyInfo.description
   settingsData.value.is_public = quizzflyStore.getQuizzflyInfo.is_public
-  settingsData.value.coverImage = quizzflyStore.getQuizzflyInfo.cover_image || ''
+  settingsData.value.cover_image = quizzflyStore.getQuizzflyInfo.cover_image || ''
   imagePreview.value = quizzflyStore.getQuizzflyInfo.cover_image || ''
 })
 

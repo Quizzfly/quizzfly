@@ -45,7 +45,6 @@ const setData = (data: any) => {
   name.value = data.user_info.name
   username.value = data.user_info.username
   avatar.value = data.user_info.avatar
-
 }
 
 const onSubmit = handleSubmit(async () => {

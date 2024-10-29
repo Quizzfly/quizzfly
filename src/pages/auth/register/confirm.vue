@@ -25,6 +25,7 @@ const openConfirm = async () => {
 }
 
 const confirmEmail = async (token: string) => {
+  loadingStore.setLoading(true)
   try {
     await confirmEmailApi(token)
     openConfirm()
@@ -35,14 +36,13 @@ const confirmEmail = async (token: string) => {
       variant: 'destructive',
     })
   }
+  loadingStore.setLoading(false)
 }
 
 onBeforeMount(async () => {
   const token = route.query.token as string
-  loadingStore.setLoading(true)
   if (token) {
     await confirmEmail(token)
-    loadingStore.setLoading(false)
   } else {
     router.push({ name: 'login' })
   }

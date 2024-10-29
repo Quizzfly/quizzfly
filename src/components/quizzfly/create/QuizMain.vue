@@ -14,7 +14,7 @@ const isHightLightMain = ref(false)
       <div
         class="h-full border-2 rounded-xl bg-white theme-bg"
         :class="{ 'border-primary': isHightLightMain }"
-        :style="{ backgroundImage: `url(${currentQuestion.theme})` }"
+        :style="{ backgroundImage: `url(${currentQuestion.background_url})` }"
         @click="isHightLightMain = true"
       >
         <QuizEditor />
