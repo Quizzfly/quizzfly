@@ -150,7 +150,7 @@ const handleChangeQuizType = async (quizType: QuizType) => {
             <img
               v-for="img in themeImages"
               :key="img"
-              class="w-full object-cover rounded-md cursor-pointer border-2"
+              class="w-full h-[74px] object-cover rounded-md cursor-pointer border-2"
               :class="{ 'border-primary': currentQuestion.background_url === img }"
               :src="img"
               alt=""
