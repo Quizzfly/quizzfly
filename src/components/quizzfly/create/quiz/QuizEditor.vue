@@ -7,7 +7,6 @@ import { showToast } from '@/utils/toast'
 import { useDebounceFn, useTextareaAutosize } from '@vueuse/core'
 import { Button } from '@/components/ui/button'
 import { createAnswerApi } from '@/services/quizzes'
-import { quizOptions } from '@/utils/quiz'
 
 const questionsStore = useQuestionsStore()
 const currentQuestion = computed(() => questionsStore.getCurrentQuestion as Quiz)
@@ -94,7 +93,6 @@ const handleEnterPress = (event: KeyboardEvent) => {
       >
         {{ 120 - input.length }} characters left
       </p>
-      <p class="text-right">Enter presses: {{ enterCount }}</p>
     </div>
 
     <div class="flex justify-center flex-auto">
@@ -127,7 +125,7 @@ const handleEnterPress = (event: KeyboardEvent) => {
     <Button
       v-if="
         currentQuestion &&
-        currentQuestion.answers?.length < quizOptions.length &&
+        currentQuestion.answers?.length < 4 &&
         currentQuestion.type === 'QUIZ' &&
         currentQuestion.quiz_type !== 'TRUE_FALSE'
       "
