@@ -32,7 +32,6 @@ const isLoading = ref(false)
 
 onMounted(() => {
   token.value = route.query.token
-  console.log(token.value, 'check token')
   if (!token) {
     router.push('/login')
   }
@@ -76,7 +75,6 @@ const onSubmit = handleSubmit(async (values) => {
       password: values.password,
       confirm_password: values.confirmPassword,
     })
-    isLoading.value = false
     openConfirmSuccess()
   } catch (error) {
     showToast({
@@ -84,6 +82,8 @@ const onSubmit = handleSubmit(async (values) => {
       description: apiError(error).message,
       variant: 'destructive',
     })
+  } finally {
+    isLoading.value = false
   }
 })
 </script>

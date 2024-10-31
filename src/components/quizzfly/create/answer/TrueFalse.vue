@@ -1,29 +1,33 @@
 <script setup lang="ts">
 import Choice from '@/components/quizzfly/create/answer/Choice.vue'
 import { useQuestionsStore } from '@/stores/quizzfly/question'
+import type { Quiz } from '@/types/question'
+
 const questionsStore = useQuestionsStore()
 
 const emits = defineEmits<{
   (e: 'select', value: string): void
 }>()
 
+const currentQuestion = computed(() => questionsStore.getCurrentQuestion as Quiz)
+
 const handleUpdateAnswer = (value: any) => {
-  if (!questionsStore.getCurrentQuestionAnswers) return
+  if (!currentQuestion.value.answers) return
 
-  // const answersResetArr = questionsStore.getCurrentQuestionAnswers.map((item) => {
-  //   return {
-  //     ...item,
-  //     isCorrect: false,
-  //   }
-  // })
+  const answersResetArr = currentQuestion.value.answers.map((item) => {
+    return {
+      ...item,
+      is_correct: false,
+    }
+  })
 
-  // questionsStore.updateCurrentQuestionAnswers(answersResetArr)
+  questionsStore.updateCurrentQuestionAnswers(answersResetArr)
   questionsStore.updateCurrentQuestionAnswer(value)
 }
 </script>
 <template>
   <Choice
-    v-for="(item, index) in questionsStore.getCurrentQuestionAnswers"
+    v-for="(item, index) in currentQuestion.answers"
     :key="item.id"
     v-motion
     :model-value="item"

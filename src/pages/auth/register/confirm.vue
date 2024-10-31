@@ -25,25 +25,24 @@ const openConfirm = async () => {
 }
 
 const confirmEmail = async (token: string) => {
+  loadingStore.setLoading(true)
   try {
     await confirmEmailApi(token)
     openConfirm()
   } catch (error: any) {
-    console.log(error, 'check error')
     showToast({
       title: 'Confirm failed',
       description: apiError(error).message,
       variant: 'destructive',
     })
   }
+  loadingStore.setLoading(false)
 }
 
 onBeforeMount(async () => {
   const token = route.query.token as string
-  loadingStore.setLoading(true)
   if (token) {
     await confirmEmail(token)
-    loadingStore.setLoading(false)
   } else {
     router.push({ name: 'login' })
   }

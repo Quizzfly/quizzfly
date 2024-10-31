@@ -5,17 +5,21 @@ import QuizMain from '@/components/quizzfly/create/QuizMain.vue'
 import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
 import { useLoadingStore } from '@/stores/loading'
 import { useQuestionsStore } from '@/stores/quizzfly/question'
+import { useConfirmDialog } from '@/stores/modal'
 import type { QuizType } from '@/types/question'
 
 const route = useRoute()
+const router = useRouter()
 const quizzflyStore = useQuizzflyStore()
 const loadingStore = useLoadingStore()
 const questionsStore = useQuestionsStore()
+const confirmDialog = useConfirmDialog()
 
 onBeforeUnmount(() => {
   questionsStore.$reset()
   quizzflyStore.$reset()
 })
+
 onBeforeMount(async () => {
   loadingStore.setLoading(true)
   try {
@@ -24,10 +28,19 @@ onBeforeMount(async () => {
     questionsStore.setCurrentQuestion(questionsStore.getSlides[0])
   } catch (error) {
     console.error(error)
-  }
-  setTimeout(() => {
     loadingStore.setLoading(false)
-  }, 500)
+    await confirmDialog.open({
+      title: 'Error',
+      question: 'Have an error when fetching data!',
+      onlyConfirm: true,
+      error: true,
+    })
+    router.push({ name: 'quizzfly' })
+  } finally {
+    setTimeout(() => {
+      loadingStore.setLoading(false)
+    }, 500)
+  }
 })
 
 const currentQuestion = computed<any>({
@@ -56,7 +69,7 @@ const handleAddSlide = (type: 'quiz' | 'slide', quizType?: QuizType) => {
 }
 </script>
 <template>
-  <div class="max-md:flex-col-reverse flex w-full items-stretch p-5 pl-0 gap-4">
+  <div class="max-md:flex-col-reverse flex w-full items-stretch p-5 pl-0 gap-0">
     <QuestionList
       v-model="currentQuestion"
       v-motion
@@ -68,11 +81,11 @@ const handleAddSlide = (type: 'quiz' | 'slide', quizType?: QuizType) => {
       @add-slide="handleAddSlide"
     />
     <QuizMain
-      v-if="currentQuestion && currentQuestion.quiz_type"
+      v-if="currentQuestion && currentQuestion.type === 'QUIZ'"
       :key="currentQuestion.id"
     />
     <SlideMain
-      v-if="currentQuestion && !currentQuestion.quiz_type"
+      v-if="currentQuestion && currentQuestion.type === 'SLIDE'"
       :key="currentQuestion.id"
     />
   </div>

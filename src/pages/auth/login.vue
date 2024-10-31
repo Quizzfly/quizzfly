@@ -16,7 +16,8 @@ const authStore = useAuthStore()
 const isLoading = ref(false)
 const onSubmit = handleSubmit(async (values) => {
   isLoading.value = true
-  authStore.login(values.email, values.password)
+  await authStore.login(values.email, values.password)
+  isLoading.value = false
 })
 </script>
 <template>

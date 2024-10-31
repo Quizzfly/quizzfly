@@ -36,7 +36,6 @@ export const useQuizzflyStore = defineStore({
     async initQuizzflyDraft() {
       try {
         this.isUpdating = true
-        console.log(this.quizzflyInfo)
         const { data } = await createQuizzflyDraftApi(this.quizzflyInfo)
         this.setQuizzflyInfo(data)
         await createQuizApi(data.id, { quiz_type: 'MULTIPLE_CHOICE' })

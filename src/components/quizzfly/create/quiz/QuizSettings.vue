@@ -12,13 +12,53 @@ import { useQuestionsStore } from '@/stores/quizzfly/question'
 import { themeImages } from '@/utils/theme'
 import { quizOptions } from '@/utils/quiz'
 import type { Quiz, QuizType } from '@/types/question'
+import { useLoadingStore } from '@/stores/loading'
+import { useDropZone } from '@vueuse/core'
 
+const loadingStore = useLoadingStore()
 const questionsStore = useQuestionsStore()
 const currentQuestion = computed(() => questionsStore.getCurrentQuestion as Quiz)
 
-const handleChangeQuizType = (quizType: QuizType) => {
-  questionsStore.updateCurrentQuestion('quiz', { quiz_type: quizType })
-  questionsStore.initAnswers(quizType)
+const dropZoneRef = ref<HTMLDivElement>()
+
+function onDrop(files: File[] | null) {
+  if (files) {
+    questionsStore.updateQuestionFile('quiz', files[0])
+  }
+}
+
+useDropZone(dropZoneRef, {
+  onDrop,
+  // specify the types of data to be received.
+  dataTypes: ['image/jpeg', 'image/png', 'image/gif'],
+  // control multi-file drop
+  multiple: true,
+  // whether to prevent default behavior for unhandled events
+  preventDefaultForUnhandled: false,
+})
+
+const handleInputFileChange = (e: Event) => {
+  const target = e.target as HTMLInputElement
+  const files = target.files
+  if (files) {
+    questionsStore.updateQuestionFile('quiz', files[0])
+  }
+}
+
+const handleChangeQuizType = async (quizType: QuizType) => {
+  loadingStore.setLoading(true)
+  await questionsStore.updateQuestionSettings({ quiz_type: quizType })
+  if (quizType === 'TRUE_FALSE') {
+    try {
+      await questionsStore.clearAllAnswers()
+      questionsStore.initAnswers(quizType)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+  setTimeout(() => {
+    loadingStore.setLoading(false)
+  }, 500)
 }
 </script>
 <template>
@@ -64,7 +104,12 @@ const handleChangeQuizType = (quizType: QuizType) => {
         <!-- time limit -->
         <div class="mt-8">
           <span class="font-medium text-sm">Time limit</span>
-          <Select>
+          <Select
+            :model-value="String(currentQuestion.time_limit)"
+            @update:model-value="
+              questionsStore.updateQuestionSettings({ time_limit: Number($event) })
+            "
+          >
             <SelectTrigger class="mt-3">
               <SelectValue placeholder="Time limit" />
             </SelectTrigger>
@@ -105,11 +150,11 @@ const handleChangeQuizType = (quizType: QuizType) => {
             <img
               v-for="img in themeImages"
               :key="img"
-              class="w-full object-cover rounded-md cursor-pointer border-2"
-              :class="{ 'border-primary': currentQuestion.theme === img }"
+              class="w-full h-[74px] object-cover rounded-md cursor-pointer border-2"
+              :class="{ 'border-primary': currentQuestion.background_url === img }"
               :src="img"
               alt=""
-              @click="questionsStore.updateCurrentQuestion('quiz', { theme: img })"
+              @click="questionsStore.updateCurrentQuestion('quiz', { background_url: img })"
             />
           </div>
         </div>
@@ -121,21 +166,27 @@ const handleChangeQuizType = (quizType: QuizType) => {
           <span class="font-medium text-sm">Upload image</span>
           <p class="text-xs text-gray-500 font-light">We support png, gif, jpg and svg</p>
           <div
+            ref="dropZoneRef"
             class="flex items-center px-5 gap-5 w-full h-[100px] border-2 border-dashed rounded-md mt-5 overflow-hidden bg-cover bg-center"
           >
             <img
-              src="/assets/images/default.webp"
-              class="h-full w-10 object-contain"
+              :src="currentQuestion.files[0]?.url || '/assets/images/default.webp'"
+              class="h-12 w-12 rounded-sm object-cover"
               alt=""
             />
             <div>
               <p class="text-xs text-gray-500 font-light text-center">Drag and drop or</p>
               <input
+                ref="file"
                 type="file"
                 class="hidden"
+                @change="handleInputFileChange"
               />
 
-              <p class="text-xs text-primary text-center cursor-pointer mt-2 hover:underline">
+              <p
+                class="text-xs text-primary text-center cursor-pointer mt-2 hover:underline"
+                @click="$refs.file.click()"
+              >
                 Click to upload your image
               </p>
             </div>

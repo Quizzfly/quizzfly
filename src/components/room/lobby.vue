@@ -3,25 +3,19 @@ import { Button } from '../ui/button'
 import { useRoomStore } from '@/stores/room'
 import QRCodeVue3 from 'qrcode-vue3'
 
-// const route = useRoute()
-
 const roomStore = useRoomStore()
 
 const detailRoom = computed(() => {
   return roomStore.getRoomInfo
 })
 
-// const roomId = route.params.quizzflyId as string
-
-// onMounted(() => {
-// })
+onMounted(() => {
+  // console.log(detailRoom.value.roomPin, 'check detail')
+})
 </script>
 
 <template>
-  <div
-    v-if="detailRoom.id"
-    class="absolute top-24 flex flex-col justify-center items-center"
-  >
+  <div class="absolute top-24 flex flex-col justify-center items-center">
     <div class="flex items-center gap-2">
       <div class="flex gap-1">
         <div class="flex flex-col gap-1 bg-white p-6 rounded">
@@ -38,10 +32,15 @@ const detailRoom = computed(() => {
         </div>
       </div>
       <div class="bg-white w-28 h-28 rounded p-1">
+        <!-- <img
+          class="w-full h-full object-cover"
+          src="@/assets/img/auth-bg.jpg"
+          alt=""
+        /> -->
         <QRCodeVue3
           :width="250"
           :height="250"
-          :value="`https://quizzfly.site/play/lobby/${detailRoom.room_pin}`"
+          value="https://scholtz.sk"
           :qr-options="{ typeNumber: 0, mode: 'Byte', errorCorrectionLevel: 'H' }"
           :image-options="{ hideBackgroundDots: true, imageSize: 0.4, margin: 0 }"
           :dots-options="{
@@ -75,9 +74,7 @@ const detailRoom = computed(() => {
         <span class="text-2xl i-solar-lock-keyhole-minimalistic-bold"></span>
         <!-- <span class="text-2xl i-solar-lock-keyhole-minimalistic-unlocked-bold"></span> -->
       </div>
-      <Button class="text-xl p-6 font-semibold">
-        <RouterLink :to="{ name: 'host-live-play' }">Start</RouterLink>
-      </Button>
+      <Button class="text-xl p-6 font-semibold">Start</Button>
     </div>
 
     <div class="w-full mt-16">

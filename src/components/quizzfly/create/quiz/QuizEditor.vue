@@ -1,98 +1,109 @@
 <script setup lang="ts">
-import { Input } from '@/components/ui/input'
-import EditableText from '@/components/base/EditableText.vue'
+import { useDropZone } from '@vueuse/core'
 import AnswerSetting from '@/components/quizzfly/create/quiz/AnswerSetting.vue'
 import { useQuestionsStore } from '@/stores/quizzfly/question'
 import type { Quiz } from '@/types/question'
-import { uploadFileApi } from '@/services/file'
-import { useLoadingStore } from '@/stores/loading'
 import { showToast } from '@/utils/toast'
+import { useDebounceFn, useTextareaAutosize } from '@vueuse/core'
+import { Button } from '@/components/ui/button'
+import { createAnswerApi } from '@/services/quizzes'
 
 const questionsStore = useQuestionsStore()
 const currentQuestion = computed(() => questionsStore.getCurrentQuestion as Quiz)
 
+const { textarea, input } = useTextareaAutosize({ input: currentQuestion.value.content })
 const questionContent = ref('')
+const dropZoneRef = ref<HTMLDivElement>()
+
+const enterCount = ref(0) // Enter key press count
 
 onBeforeMount(() => {
   questionContent.value = currentQuestion.value.content
 })
 
-const handleClickTitle = () => {
-  console.log('Do something')
-}
-
-const handleUpdateTitle = (value: string | number) => {
-  questionsStore.updateCurrentQuestion('quiz', { content: String(value) })
-}
-
-const imgRaw = ref<File>()
-
-const loadingStore = useLoadingStore()
-
-async function handleFileChange(event: Event) {
-  const target = event.target as HTMLInputElement
-  const file = target.files?.[0]
-
-  if (file) {
-    loadingStore.setLoading(true)
-    const formData = new FormData()
-    formData.append('file', file)
-    imgRaw.value = file
-    try {
-      const { data } = await uploadFileApi(formData)
-      questionsStore.updateCurrentQuestion('quiz', { files: [data] })
-    } catch (error) {
-      showToast({
-        title: 'Error',
-        description: 'Error uploading image',
-        variant: 'destructive',
-      })
-    } finally {
-      loadingStore.setLoading(false)
-    }
+function onDrop(files: File[] | null) {
+  if (files) {
+    questionsStore.updateQuestionFile('quiz', files[0])
   }
 }
 
-const handleBlur = (finishEditingCallback: () => void) => {
-  finishEditingCallback()
-  handleUpdateTitle(questionContent.value)
+useDropZone(dropZoneRef, {
+  onDrop,
+  dataTypes: ['image/jpeg', 'image/png', 'image/gif'],
+  multiple: true,
+  preventDefaultForUnhandled: false,
+})
+
+const handleInputFileChange = (e: Event) => {
+  const target = e.target as HTMLInputElement
+  const files = target.files
+  if (files) {
+    questionsStore.updateQuestionFile('quiz', files[0])
+  }
+}
+
+const handleUpdateTitle = useDebounceFn((value) => {
+  questionsStore.updateCurrentQuestion('quiz', { content: String(value) })
+}, 500)
+
+const handleCreateAnswer = async () => {
+  try {
+    const { data } = await createAnswerApi(questionsStore.getCurrentQuestion.id, {
+      content: ' ',
+    })
+    questionsStore.updateCurrentQuestion('quiz', {
+      answers: [...currentQuestion.value.answers, data],
+    })
+  } catch (error) {
+    showToast({
+      title: 'Error',
+      description: 'Error creating answer',
+      variant: 'destructive',
+    })
+  }
+}
+
+// limit enter key press to 10 times
+const handleEnterPress = (event: KeyboardEvent) => {
+  if (event.key === 'Enter') {
+    if (enterCount.value < 10) {
+      enterCount.value++
+    } else {
+      event.preventDefault()
+    }
+  }
 }
 </script>
+
 <template>
   <div class="w-full h-full flex flex-col gap-10 p-5 overflow-hidden justify-between">
-    <!-- question -->
-    <div class="">
-      <EditableText
-        :value="questionContent"
-        :click-callback="handleClickTitle"
+    <div class="relative">
+      <textarea
+        ref="textarea"
+        v-model="input"
+        class="resize-none bg-white rounded-md py-4 px-4 text-center border border-b-4 text-gray-700 font-medium text-2xl w-full shadow-sm outline-none"
+        placeholder="Enter your answer..."
+        maxlength="120"
+        @keydown="handleEnterPress"
+        @update:model-value="handleUpdateTitle($event)"
+      />
+      <p
+        v-if="input"
+        class="text-right"
       >
-        <template #input="{ finishEditing }">
-          <Input
-            v-model="questionContent"
-            placeholder="Enter your question"
-            class="text-2xl font-medium h-12 bg-white"
-            @blur="handleBlur(finishEditing)"
-          />
-        </template>
-        <template #default="{}">
-          <p
-            class="bg-white py-1 px-2 rounded-lg border-2 border-transparent hover:border-primary text-2xl font-medium"
-          >
-            {{ questionContent || 'Enter question' }}
-          </p>
-        </template>
-      </EditableText>
+        {{ 120 - input.length }} characters left
+      </p>
     </div>
 
-    <!-- picture -->
     <div class="flex justify-center flex-auto">
       <div
+        ref="dropZoneRef"
         class="w-[50%] h-full flex justify-center items-center bg-slate-100 rounded-lg bg-cover shadow-lg image-area"
         :style="{ backgroundImage: `url(${currentQuestion.files[0]?.url})` }"
       >
         <div
           class="text-center"
-          :class="{ 'hight-light': currentQuestion.theme }"
+          :class="{ 'hight-light': currentQuestion.background_url }"
         >
           <span class="i-solar-gallery-add-outline text-3xl text-gray-500"></span>
           <p class="text-xs text-gray-500 font-light text-center">Drag and drop or</p>
@@ -100,9 +111,8 @@ const handleBlur = (finishEditingCallback: () => void) => {
             ref="inputRef"
             type="file"
             class="hidden"
-            @change="handleFileChange"
+            @change="handleInputFileChange"
           />
-
           <p
             class="text-xs text-primary text-center cursor-pointer mt-2 hover:underline"
             @click="$refs.inputRef.click()"
@@ -112,10 +122,22 @@ const handleBlur = (finishEditingCallback: () => void) => {
         </div>
       </div>
     </div>
-    <!-- answer -->
+    <Button
+      v-if="
+        currentQuestion &&
+        currentQuestion.answers?.length < 4 &&
+        currentQuestion.type === 'QUIZ' &&
+        currentQuestion.quiz_type !== 'TRUE_FALSE'
+      "
+      class="w-fit"
+      color="primary"
+      @click="handleCreateAnswer"
+      >Add Answer</Button
+    >
     <AnswerSetting :key="currentQuestion.id" />
   </div>
 </template>
+
 <style scoped>
 .image-area {
   background-color: rgba(220, 220, 220, 0.743);

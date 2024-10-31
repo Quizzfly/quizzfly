@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { uploadFileApi } from '@/services/file'
 import { useLoadingStore } from '@/stores/loading'
+import { useDropZone } from '@vueuse/core'
 
 const loadingStore = useLoadingStore()
 
@@ -13,10 +14,33 @@ const emits = defineEmits<{
   (e: 'updated'): void
 }>()
 
-const handleFileChange = async (e: Event) => {
-  const target = e.target as HTMLInputElement
-  const file = target.files?.[0]
+const dropZoneRef = ref<HTMLDivElement>()
 
+function onDrop(files: File[] | null) {
+  if (files) {
+    handleUploadFile(files[0])
+  }
+}
+
+useDropZone(dropZoneRef, {
+  onDrop,
+  // specify the types of data to be received.
+  dataTypes: ['image/jpeg', 'image/png', 'image/gif'],
+  // control multi-file drop
+  multiple: true,
+  // whether to prevent default behavior for unhandled events
+  preventDefaultForUnhandled: false,
+})
+
+const handleInputFileChange = (e: Event) => {
+  const target = e.target as HTMLInputElement
+  const files = target.files
+  if (files) {
+    handleUploadFile(files[0])
+  }
+}
+
+const handleUploadFile = async (file: File) => {
   if (file) {
     loadingStore.setLoading(true)
     try {
@@ -35,6 +59,7 @@ const handleFileChange = async (e: Event) => {
 <template>
   <div class="h-full w-full bg-slate-100 rounded-md">
     <div
+      ref="dropZoneRef"
       class="h-full flex justify-center items-center bg-slate-100 rounded-lg bg-cover image-area"
       :style="{ backgroundImage: `url(${modelValue})` }"
     >
@@ -48,7 +73,7 @@ const handleFileChange = async (e: Event) => {
           ref="inputRef"
           type="file"
           class="hidden"
-          @change="handleFileChange"
+          @change="handleInputFileChange"
         />
 
         <p

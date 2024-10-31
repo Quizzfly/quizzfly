@@ -2,15 +2,23 @@
 import PreviewLayout from '@/components/quizzfly/layout/PreviewLayout.vue'
 import { slideLayouts, type SlideLayout } from '@/modules/slide/layout'
 import { useQuestionsStore } from '@/stores/quizzfly/question'
+import type { Quiz } from '@/types/question'
+import { themeImages } from '@/utils/theme'
 
-const questionStore = useQuestionsStore()
+const questionsStore = useQuestionsStore()
+const currentQuestion = computed(() => questionsStore.getCurrentQuestion as Quiz)
+
 const currentLayout = defineModel<SlideLayout>('layout', {
   required: true,
 })
 
-const handleChangedLayout = (layout: SlideLayout) => {
+const handleChangedLayout = async (layout: SlideLayout) => {
+  await questionsStore.updateCurrentQuestion('slide', { content: JSON.stringify(layout) })
   currentLayout.value = layout
-  questionStore.updateCurrentQuestion('slide', { content: JSON.stringify(currentLayout.value) })
+  // to tracking currentLayout using nextTick
+  // nextTick(() => {
+  //   console.log('currentLayout', currentLayout.value)
+  // })
 }
 </script>
 <template>
@@ -26,6 +34,23 @@ const handleChangedLayout = (layout: SlideLayout) => {
             :current="currentLayout"
             :layout="layout"
             @select-layout="handleChangedLayout"
+          />
+        </div>
+      </div>
+
+      <div class="border-t-[1.2px] my-8 w-full"></div>
+      <!-- theme -->
+      <div>
+        <span class="font-medium text-sm">Select theme</span>
+        <div class="grid grid-cols-2 gap-2 mt-4">
+          <img
+            v-for="img in themeImages"
+            :key="img"
+            class="w-full object-cover rounded-md cursor-pointer border-2"
+            :class="{ 'border-primary': currentQuestion.background_url === img }"
+            :src="img"
+            alt=""
+            @click="questionsStore.updateCurrentQuestion('slide', { background_url: img })"
           />
         </div>
       </div>

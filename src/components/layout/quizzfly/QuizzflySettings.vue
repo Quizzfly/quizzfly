@@ -33,26 +33,25 @@ export interface Settings {
   title: string
   description: string
   is_public: boolean
-  coverImage: string
+  cover_image: string
 }
 
 const settings = ref<Settings>({
   title: '',
   description: '',
   is_public: false,
-  coverImage: '',
+  cover_image: '',
 })
 const imageRaw = ref<File>()
 
 const handleSaveSettings = async () => {
-  console.log('save settings')
   loadingStore.setLoading(true)
   try {
     const formData = new FormData()
     if (imageRaw.value) {
       formData.append('file', imageRaw.value)
       const { data } = await uploadFileApi(formData)
-      settings.value.coverImage = data.url
+      settings.value.cover_image = data.url
       imageRaw.value = undefined
     }
     quizzflyStore.updateQuizzflySettings(quizzflyStore.getQuizzflyInfo.id, settings.value)
