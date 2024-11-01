@@ -130,13 +130,19 @@ const handleChangeQuizType = async (quizType: QuizType) => {
         <!-- points -->
         <div class="mt-8">
           <span class="font-medium text-sm">Points</span>
-          <Select>
+          <Select
+            :model-value="String(currentQuestion.point_multiplier)"
+            @update:model-value="
+              questionsStore.updateQuestionSettings({ point_multiplier: Number($event) })
+            "
+          >
             <SelectTrigger class="mt-3">
               <SelectValue placeholder="Points" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="standard"> Standard </SelectItem>
+                <SelectItem value="1"> normal </SelectItem>
+                <SelectItem value="2"> Duplicate </SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>

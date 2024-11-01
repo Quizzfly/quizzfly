@@ -156,6 +156,8 @@ export const useQuestionsStore = defineStore({
             quiz_type: (question as Quiz).quiz_type,
           })
           data.type = 'QUIZ'
+          data.time_limit = 20
+          data.point_multiplier = 1
           this.questions.push(data)
           this.setCurrentQuestion(data)
         } catch (error) {
