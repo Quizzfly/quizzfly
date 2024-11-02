@@ -32,15 +32,10 @@ onMounted(() => {
         </div>
       </div>
       <div class="bg-white w-28 h-28 rounded p-1">
-        <!-- <img
-          class="w-full h-full object-cover"
-          src="@/assets/img/auth-bg.jpg"
-          alt=""
-        /> -->
         <QRCodeVue3
           :width="250"
           :height="250"
-          value="https://scholtz.sk"
+          :value="`https://quizzfly.site/room/play/lobby/${detailRoom.room_pin}`"
           :qr-options="{ typeNumber: 0, mode: 'Byte', errorCorrectionLevel: 'H' }"
           :image-options="{ hideBackgroundDots: true, imageSize: 0.4, margin: 0 }"
           :dots-options="{
@@ -74,10 +69,14 @@ onMounted(() => {
         <span class="text-2xl i-solar-lock-keyhole-minimalistic-bold"></span>
         <!-- <span class="text-2xl i-solar-lock-keyhole-minimalistic-unlocked-bold"></span> -->
       </div>
-      <Button class="text-xl p-6 font-semibold">Start</Button>
+      <Button class="text-xl p-6 font-semibold">
+        <RouterLink :to="{ name: 'host-live-play', params: { roomId: detailRoom?.id } }">
+          Start
+        </RouterLink>
+      </Button>
     </div>
 
-    <div class="w-full mt-16">
+    <div class="w-full mt-16 flex flex-col gap-3">
       <div
         v-if="detailRoom.room_status === 'WAITING'"
         class="mr-auto ml-auto p-2 rounded bg-primary flex gap-1 items-center justify-center w-60"
@@ -85,6 +84,7 @@ onMounted(() => {
         <p class="text-xl font-medium text-white">Waiting for player</p>
         <span class="text-white mt-1 i-svg-spinners-3-dots-bounce"></span>
       </div>
+      <div class="text-base">length{{ roomStore.getListMemberJoins.length }}</div>
     </div>
   </div>
 </template>

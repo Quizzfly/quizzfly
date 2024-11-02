@@ -157,7 +157,6 @@ watch([isCheckAutoPlay, isCheckShowQA], ([val1, val2]) => {
       >
         Reset to default
       </p>
-      >
     </div>
   </div>
 </template>

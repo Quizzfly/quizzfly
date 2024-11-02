@@ -19,11 +19,19 @@ export const roomRoute: RouteRecordRaw[] = [
   },
   {
     path: 'play/lobby/:code',
-    name: 'play-lobby',
+    name: 'play-lobby-code',
     meta: {
       layout: 'GuestLayout',
     },
     component: () => import('@/pages/room/play/lobbyPlay.vue'),
+  },
+  {
+    path: 'play/lobby',
+    name: 'play-lobby',
+    meta: {
+      layout: 'GuestLayout',
+    },
+    component: () => import('@/pages/room/play/pinCodePlay.vue'),
   },
   {
     path: 'play/instruction',
@@ -32,5 +40,13 @@ export const roomRoute: RouteRecordRaw[] = [
       layout: 'GuestLayout',
     },
     component: () => import('@/pages/room/play/instructionsPlay.vue'),
+  },
+  {
+    path: 'host-live/:roomId/play',
+    name: 'host-live-play',
+    meta: {
+      layout: 'GuestLayout',
+    },
+    component: () => import('@/pages/room/hostPlay/showQuizzfly.vue'),
   },
 ]
