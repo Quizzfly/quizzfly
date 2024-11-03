@@ -8,10 +8,6 @@ const roomStore = useRoomStore()
 const detailRoom = computed(() => {
   return roomStore.getRoomInfo
 })
-
-onMounted(() => {
-  // console.log(detailRoom.value.roomPin, 'check detail')
-})
 </script>
 
 <template>
@@ -35,7 +31,7 @@ onMounted(() => {
         <QRCodeVue3
           :width="250"
           :height="250"
-          :value="`https://quizzfly.site/room/play/lobby/${detailRoom.room_pin}`"
+          :value="`https://quizzfly.site/play/${detailRoom.room_pin}`"
           :qr-options="{ typeNumber: 0, mode: 'Byte', errorCorrectionLevel: 'H' }"
           :image-options="{ hideBackgroundDots: true, imageSize: 0.4, margin: 0 }"
           :dots-options="{

@@ -6,17 +6,11 @@ import { useLoadingStore } from '@/stores/loading'
 import { useSocketStore } from '@/stores/socket'
 import { useAuthStore } from '@/stores/auth'
 
-// const router = useRouter()
-
 const loadingStore = useLoadingStore()
 const socketStore = useSocketStore()
 const authStore = useAuthStore()
 
 const roomStore = useRoomStore()
-
-const getMessage = computed(() => {
-  return socketStore.getMessages
-})
 
 const detailRoom = computed(() => {
   return roomStore.getRoomInfo
@@ -25,10 +19,9 @@ const detailRoom = computed(() => {
 const roomPin = ref('')
 
 onMounted(() => {
-  console.log(detailRoom.value, 'check detail')
   roomPin.value = detailRoom.value.room_pin
-  // roomStore.getRoomDetail(route.params.roomId as string)X
   loadingStore.setLoading(true, false)
+
   setTimeout(() => {
     loadingStore.setLoading(false)
   }, 2000)
@@ -42,10 +35,6 @@ onMounted(() => {
 
     socketStore.handleCreateRoomData(data)
   }
-})
-
-watch(getMessage, (val: any) => {
-  console.log(val, 'check message')
 })
 </script>
 <template>

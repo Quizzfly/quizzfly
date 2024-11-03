@@ -1,5 +1,12 @@
 import { createWebHistory, createRouter, type RouteRecordRaw } from 'vue-router'
-import { authRoute, dashboardRoute, profileRoute, quizzflyRoute, roomRoute } from './modules'
+import {
+  authRoute,
+  dashboardRoute,
+  profileRoute,
+  quizzflyRoute,
+  roomRoute,
+  playRoute,
+} from './modules'
 import { authGuard } from './auth-guard'
 const { progress } = useIndicator()
 
@@ -33,6 +40,11 @@ const routes: RouteRecordRaw[] = [
     path: '/room',
     beforeEnter: [authGuard],
     children: roomRoute,
+  },
+  {
+    path: '/play',
+    beforeEnter: [authGuard],
+    children: playRoute,
   },
   {
     path: '/test',

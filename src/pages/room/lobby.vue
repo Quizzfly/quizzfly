@@ -14,10 +14,6 @@ const authStore = useAuthStore()
 
 const roomStore = useRoomStore()
 
-const getMessage = computed(() => {
-  return socketStore.getMessages
-})
-
 const detailRoom = computed(() => {
   return roomStore.getRoomInfo
 })
@@ -35,7 +31,6 @@ onMounted(() => {
 
   roomPin.value = detailRoom.value.room_pin
 
-  // roomStore.getRoomDetail(roomPin.value)
   loadingStore.setLoading(true, false)
   setTimeout(() => {
     loadingStore.setLoading(false)
@@ -50,10 +45,6 @@ onMounted(() => {
 
     socketStore.handleCreateRoomData(data)
   }
-})
-
-watch(getMessage, (val: any) => {
-  console.log(val, 'check message')
 })
 </script>
 <template>

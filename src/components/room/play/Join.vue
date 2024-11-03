@@ -11,6 +11,8 @@ const isLoading = ref(false)
 const router = useRouter()
 const route = useRoute()
 
+const pinCode = route.params.code as string
+
 const { handleSubmit } = useForm({
   validationSchema: yup.object({
     name: yup.string().required('name is required'),
@@ -22,8 +24,9 @@ const onSubmit = handleSubmit((values) => {
   router.push({
     name: 'play-instruction',
   })
+
   isLoading.value = false
-  console.log(values.name)
+
   if (pinCode) {
     const data = {
       roomPin: pinCode,
@@ -31,12 +34,6 @@ const onSubmit = handleSubmit((values) => {
     }
     socketStore.handleJoinRoomData(data)
   }
-})
-
-const pinCode = route.params.code as string
-
-onMounted(() => {
-  console.log(pinCode, 'chech pincode')
 })
 </script>
 

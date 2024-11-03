@@ -3,7 +3,9 @@ import BarWrapper from '@/components/room/BarWrapper.vue'
 // import PreDisplay from '@/components/room/PreDisplay.vue'
 import QuizzType from '@/components/room/QuizzType.vue'
 import { useLoadingStore } from '@/stores/loading'
+
 const loadingStore = useLoadingStore()
+
 onMounted(() => {
   loadingStore.setLoading(true, false)
   setTimeout(() => {

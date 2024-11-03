@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import Button from '../ui/button/Button.vue'
 import { Progress } from '@/components/ui/progress'
+
 const progress = ref(0)
+
 watchEffect((cleanupFn) => {
   const timer = setTimeout(() => (progress.value = 100), 5000)
   cleanupFn(() => clearTimeout(timer))

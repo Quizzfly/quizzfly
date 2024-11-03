@@ -6,6 +6,7 @@ import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
 const quizzflyStore = useQuizzflyStore()
 
 const route = useRoute()
+
 onBeforeMount(() => {
   quizzflyStore.getQuizzflyDetail(route.params.quizzflyId as string)
 })

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import Instructions from '@/components/room/play/Instructions.vue'
-// const isCheckScreen = ref(false)
 </script>
 
 <template>
