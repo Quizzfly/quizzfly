@@ -1,59 +1,64 @@
 import { defineStore } from 'pinia'
-import { Client } from '@stomp/stompjs'
-// import { getEndpointApi } from "@/services/master";
+import { io } from 'socket.io-client'
+import { useRoomStore } from './room'
 
 const BASE_URL_SOCKET = import.meta.env.VITE_BASE_URL_SOCKET
 
-// websocket store
 export const useSocketStore = defineStore({
   id: 'socket',
   state: () => ({
-    client: null as null | Client,
-    endpoint: '',
+    client: null as any,
+    connected: false,
     messages: {} as any,
   }),
   actions: {
-    async getEndpointApi(): Promise<any> {},
-    async setupSocketStore() {
-      try {
-        this.endpoint = (await this.getEndpointApi()).data
-        this.clearSocketStore()
-        this.client = new Client({
-          connectHeaders: {
-            login: 'admin',
-            passcode: 'admin',
-          },
-          brokerURL: BASE_URL_SOCKET,
-          heartbeatIncoming: 0,
-          heartbeatOutgoing: 20000,
-          reconnectDelay: 1000,
-          onConnect: (): void => {
-            this.client &&
-              this.client.subscribe(
-                `/queue/${this.endpoint}`,
-                (newContent: any) => {
-                  this.messages = JSON.parse(newContent.body) as any
-                  // handleNoti(message);
-                },
-                {
-                  durable: 'false',
-                  exclusive: 'false',
-                  'auto-delete': 'false',
-                  id: `${this.endpoint}`,
-                },
-              )
-          },
-        })
-        this.client.activate()
-      } catch (error) {
-        console.log(error)
-      }
+    setupSocketStore() {
+      const roomStore = useRoomStore()
+      this.clearSocketStore()
+
+      this.client = io(BASE_URL_SOCKET)
+
+      this.client.on('connect', () => {
+        this.connected = true
+        console.log('Connected to WebSocket server')
+      })
+
+      this.client.on('roomMembersJoin', (newContent: any) => {
+        console.log('Received roomMembersJoin:', newContent) // Debug
+        roomStore.setMemberJoins(newContent)
+      })
+
+      this.client.on('roomMembersCount', (newContent: any) => {
+        console.log('Received roomMembersCount:', newContent) // Debug
+        roomStore.setCountMemberJoin(newContent)
+      })
+
+      this.client.on('roomMembersLeave', (newContent: any) => {
+        console.log('Received roomMembersLeave:', newContent) // Debug
+        const index = roomStore.getListMemberJoins.findIndex(
+          (item: any) => item.socketId === newContent.socketId,
+        )
+        if (index !== -1) {
+          roomStore.getListMemberJoins.splice(index, 1)
+        }
+      })
+    },
+    handleCreateRoomData(data: any) {
+      console.log('Emitting createRoom with data:', data)
+      this.client.emit('createRoom', data)
+    },
+    handleJoinRoomData(data: any) {
+      console.log('Emitting joinRoom with data:', data)
+      this.client.emit('joinRoom', data)
+    },
+    handleLeaveRoomData(data: any) {
+      this.client.emit('leaveRoom', data)
     },
     clearSocketStore() {
       if (this.client) {
-        this.client.unsubscribe(`${this.endpoint}`)
-        this.client.deactivate()
+        this.client.disconnect()
         this.client = null
+        this.connected = false
       }
     },
   },

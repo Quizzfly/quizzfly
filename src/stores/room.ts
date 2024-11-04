@@ -16,6 +16,8 @@ export const useRoomStore = defineStore({
       is_auto_play: false,
       lobby_music: 'string',
     },
+    countMemberJoins: 0 as number,
+    listMemberJoins: [] as any,
   }),
   actions: {
     async initRoom(val: any) {
@@ -25,6 +27,7 @@ export const useRoomStore = defineStore({
         this.setDetailRoom(data)
         router.push({
           name: 'lobby',
+          params: { roomId: data.id },
         })
       } catch (error) {
         console.error(error)
@@ -36,6 +39,12 @@ export const useRoomStore = defineStore({
     },
     setDetailRoom(val: IRoom) {
       this.roomDetail = val
+    },
+    setCountMemberJoin(data: number) {
+      this.countMemberJoins = data
+    },
+    setMemberJoins(data: any) {
+      this.listMemberJoins.push(data)
     },
     async settingRoom(id: string, val: any) {
       this.isLoading = true
@@ -53,7 +62,7 @@ export const useRoomStore = defineStore({
         })
       }
     },
-    async getQuizzflyDetail(id: string) {
+    async getRoomDetail(id: string) {
       try {
         const { data } = await getDetailRoomApi(id)
         this.setDetailRoom(data)
@@ -74,5 +83,7 @@ export const useRoomStore = defineStore({
     getRoomInfo: (state) => state.roomDetail,
     getIsLoading: (state) => state.isLoading,
     getCurrentSetting: (state) => state.currentSetting,
+    getCountMemberJoins: (state) => state.countMemberJoins,
+    getListMemberJoins: (state) => state.listMemberJoins,
   },
 })

@@ -12,7 +12,6 @@ const handleClickCreateQuiz = async () => {
 </script>
 <template>
   <div class="p-8">
-    <!-- header -->
     <div class="flex justify-between items-center">
       <div>
         <div class="text-2xl font-medium">Hello, {{ authStore.getUser?.user_info.name }} 👋</div>

@@ -22,6 +22,7 @@ import 'tippy.js/dist/tippy.css' // optional for styling
 import 'vue-awesome-paginate/dist/style.css'
 import { setupI18n } from './plugins/i18n'
 import Vue3Toastify from './plugins/toast'
+import { useSocketStore } from './stores/socket'
 
 const app = createApp(App)
 
@@ -50,6 +51,8 @@ const initApp = async () => {
   app.component('QuizCreateLayout', QuizCreateLayout)
   app.component('RoomLayout', RoomLayout)
   app.use(createPinia())
+  useSocketStore().setupSocketStore()
+
   await initAuthStore()
   // await initWebSocketStore();
   // await initMasterStore();

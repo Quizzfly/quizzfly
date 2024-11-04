@@ -1,20 +1,42 @@
 <script setup lang="ts">
-import Input from '@/components/ui/input/Input.vue'
+import InputValidation from '@/components/base/InputValidation.vue'
 import Button from '@/components/ui/button/Button.vue'
+import { useForm } from 'vee-validate'
+import * as yup from 'yup'
 
 const isLoading = ref(false)
-const pinCode = ref('')
+const router = useRouter()
+
+const { handleSubmit } = useForm({
+  validationSchema: yup.object({
+    pinCode: yup.string().required('pinCode is required'),
+  }),
+})
+
+const onSubmit = handleSubmit((values) => {
+  isLoading.value = true
+  router.push({
+    name: 'play-lobby-code',
+    params: { code: values.pinCode },
+  })
+  isLoading.value = false
+})
 </script>
 
 <template>
-  <div class="bg-white w-80 rounded-xl p-6 flex flex-col gap-6 shadow">
-    <Input
-      v-model="pinCode"
+  <form
+    class="bg-white w-80 rounded-xl p-6 flex flex-col shadow"
+    @submit="onSubmit"
+  >
+    <InputValidation
+      type="string"
+      name="pinCode"
       placeholder="Enter code..."
       class="h-12 font-medium text-base bg-slate-50 border-slate-200 outline-none"
     />
     <Button
-      class="h-12 w-full font-medium text-base"
+      type="submit"
+      class="h-12 w-full font-medium text-base mt-2"
       :disabled="isLoading"
     >
       <span
@@ -23,7 +45,7 @@ const pinCode = ref('')
       ></span>
       Enter
     </Button>
-  </div>
+  </form>
   <div class="absolute bottom-4 mr-auto ml-auto">
     <div class="text-sm font-nomal text-white">
       Create your own quizzfly for FREE at <span class="font-semibold">quizzfly.site</span>

@@ -6,8 +6,6 @@ import { useLoadingStore } from '@/stores/loading'
 import { useSocketStore } from '@/stores/socket'
 import { useAuthStore } from '@/stores/auth'
 
-const router = useRouter()
-
 const loadingStore = useLoadingStore()
 const socketStore = useSocketStore()
 const authStore = useAuthStore()
@@ -21,17 +19,9 @@ const detailRoom = computed(() => {
 const roomPin = ref('')
 
 onMounted(() => {
-  const isReload = sessionStorage.getItem('isReloaded')
-
-  if (isReload) {
-    router.push({ name: 'host-live' })
-  } else {
-    sessionStorage.setItem('isReloaded', 'true')
-  }
-
   roomPin.value = detailRoom.value.room_pin
-
   loadingStore.setLoading(true, false)
+
   setTimeout(() => {
     loadingStore.setLoading(false)
   }, 2000)
