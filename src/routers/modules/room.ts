@@ -23,6 +23,6 @@ export const roomRoute: RouteRecordRaw[] = [
     meta: {
       layout: 'GuestLayout',
     },
-    component: () => import('@/pages/room/host-play/showQuizzfly.vue'),
+    component: () => import('@/pages/room/host-play/show-quizzfly.vue'),
   },
 ]

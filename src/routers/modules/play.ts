@@ -7,7 +7,7 @@ export const playRoute: RouteRecordRaw[] = [
     meta: {
       layout: 'GuestLayout',
     },
-    component: () => import('@/pages/room/member-play/lobbyPlay.vue'),
+    component: () => import('@/pages/room/member-play/lobby-play.vue'),
   },
   {
     path: '',
@@ -15,7 +15,7 @@ export const playRoute: RouteRecordRaw[] = [
     meta: {
       layout: 'GuestLayout',
     },
-    component: () => import('@/pages/room/member-play/pinCodePlay.vue'),
+    component: () => import('@/pages/room/member-play/code-play.vue'),
   },
   {
     path: 'instruction',
@@ -23,6 +23,6 @@ export const playRoute: RouteRecordRaw[] = [
     meta: {
       layout: 'GuestLayout',
     },
-    component: () => import('@/pages/room/member-play/instructionsPlay.vue'),
+    component: () => import('@/pages/room/member-play/instructions-play.vue'),
   },
 ]
