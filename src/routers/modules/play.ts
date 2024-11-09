@@ -12,17 +12,11 @@ export const playRoute: RouteRecordRaw[] = [
   {
     path: '',
     name: 'play-lobby',
-    meta: {
-      layout: 'GuestLayout',
-    },
     component: () => import('@/pages/room/member-play/code-play.vue'),
   },
   {
     path: 'instruction',
     name: 'play-instruction',
-    meta: {
-      layout: 'GuestLayout',
-    },
     component: () => import('@/pages/room/member-play/instructions-play.vue'),
   },
 ]

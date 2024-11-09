@@ -43,6 +43,10 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/play',
+    meta: {
+      layout: 'GuestLayout',
+      public: true,
+    },
     beforeEnter: [authGuard],
     children: playRoute,
   },

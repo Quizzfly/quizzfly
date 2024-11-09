@@ -10,6 +10,8 @@ import { apiError } from '@/utils/exceptionHandler'
 import Toaster from '@/components/ui/toast/Toaster.vue'
 import { showToast } from '@/utils/toast'
 import { useConfirmDialog } from '@/stores/modal'
+import { useAuthStore } from '@/stores/auth'
+import { googleTokenLogin } from 'vue3-google-login'
 
 const confirmDialog = useConfirmDialog()
 
@@ -31,6 +33,13 @@ const [name, nameAttrs] = defineField('name')
 const [confirmPassword, confirmPasswordAttrs] = defineField('confirmPassword')
 const isLoading = ref(false)
 const router = useRouter()
+const authStore = useAuthStore()
+
+const loginGoogle = () => {
+  googleTokenLogin().then((response) => {
+    authStore.loginGG(response.access_token)
+  })
+}
 
 const openConfirm = async () => {
   const result = await confirmDialog.open({
@@ -70,86 +79,93 @@ const onSubmit = handleSubmit(async (values) => {
   <Toaster />
   <div class="h-full flex p-8">
     <div class="flex-1 flex justify-center items-center">
-      <form
+      <div
         class="rounded-xl max-md:w-full max-sm:p-0 w-96"
         @submit.prevent="onSubmit"
       >
-        <div class="flex items-center gap-0.5 mb-4">
-          <h1 class="text-[344054] text-lg font-semibold">Register account</h1>
-        </div>
-        <div>
-          <h2 class="mt-1 text-[#667085]">Today is a new day. It's your day. You shape it.</h2>
-          <h2 class="mt-1 text-[#667085]">Sign in to start managing your projects</h2>
-        </div>
-        <div class="mt-6">
-          <div class="form-data">
-            <label for="email">Name</label>
-            <Input
-              v-model="name"
-              placeholder="Enter name..."
-              v-bind="nameAttrs"
-              :invalid="errors.name"
-              type="text"
-              class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
-            />
-            <ErrorMessage :error="errors.name" />
-          </div>
-          <div class="form-data">
-            <label for="email">Email</label>
-            <Input
-              v-model="email"
-              placeholder="Enter email..."
-              v-bind="emailAttrs"
-              :invalid="errors.email"
-              type="email"
-              class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
-            />
-            <ErrorMessage :error="errors.email" />
-          </div>
-          <div class="form-data">
-            <label for="email">Password</label>
-            <Input
-              v-model="password"
-              placeholder="Enter password..."
-              v-bind="passwordAttrs"
-              :invalid="errors.password"
-              type="password"
-              class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
-            />
-            <ErrorMessage :error="errors.password" />
-          </div>
-          <div class="form-data">
-            <label for="email">Confirm password</label>
-            <Input
-              v-model="confirmPassword"
-              placeholder="Enter confirm password..."
-              v-bind="confirmPasswordAttrs"
-              :invalid="errors.confirmPassword"
-              type="password"
-              class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
-            />
-            <ErrorMessage :error="errors.confirmPassword" />
-          </div>
-        </div>
-
-        <Button
-          :disabled="isLoading"
-          class="mt-6 w-full h-10 flex gap-2"
+        <form
+          class="rounded-xl max-md:w-full max-sm:p-0 w-96"
+          @submit.prevent="onSubmit"
         >
-          <span
-            v-if="isLoading"
-            class="i-svg-spinners-ring-resize"
-          ></span>
-          Sign Up
-        </Button>
-        <div class="flex items-center gap-2 w-full mt-8">
-          <span class="h-px bg-slate-200 w-full"></span>
-          <p class="text-base">Or</p>
-          <span class="h-px bg-slate-200 w-full"></span>
-        </div>
+          <div class="flex items-center gap-0.5 mb-4">
+            <h1 class="text-[344054] text-lg font-semibold">Register account</h1>
+          </div>
+          <div>
+            <h2 class="mt-1 text-[#667085]">Today is a new day. It's your day. You shape it.</h2>
+            <h2 class="mt-1 text-[#667085]">Sign in to start managing your projects</h2>
+          </div>
+          <div class="mt-6">
+            <div class="form-data">
+              <label for="email">Name</label>
+              <Input
+                v-model="name"
+                placeholder="Enter name..."
+                v-bind="nameAttrs"
+                :invalid="errors.name"
+                type="text"
+                class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
+              />
+              <ErrorMessage :error="errors.name" />
+            </div>
+            <div class="form-data">
+              <label for="email">Email</label>
+              <Input
+                v-model="email"
+                placeholder="Enter email..."
+                v-bind="emailAttrs"
+                :invalid="errors.email"
+                type="email"
+                class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
+              />
+              <ErrorMessage :error="errors.email" />
+            </div>
+            <div class="form-data">
+              <label for="email">Password</label>
+              <Input
+                v-model="password"
+                placeholder="Enter password..."
+                v-bind="passwordAttrs"
+                :invalid="errors.password"
+                type="password"
+                class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
+              />
+              <ErrorMessage :error="errors.password" />
+            </div>
+            <div class="form-data">
+              <label for="email">Confirm password</label>
+              <Input
+                v-model="confirmPassword"
+                placeholder="Enter confirm password..."
+                v-bind="confirmPasswordAttrs"
+                :invalid="errors.confirmPassword"
+                type="password"
+                class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
+              />
+              <ErrorMessage :error="errors.confirmPassword" />
+            </div>
+          </div>
+
+          <Button
+            :disabled="isLoading"
+            class="mt-6 w-full h-10 flex gap-2"
+          >
+            <span
+              v-if="isLoading"
+              class="i-svg-spinners-ring-resize"
+            ></span>
+            Sign Up
+          </Button>
+          <div class="flex items-center gap-2 w-full mt-8">
+            <span class="h-px bg-slate-200 w-full"></span>
+            <p class="text-base">Or</p>
+            <span class="h-px bg-slate-200 w-full"></span>
+          </div>
+        </form>
+
         <Button
           class="h-10 mt-8 w-full flex items-center gap-4 bg-slate-100"
           variant="secondary"
+          @click="loginGoogle()"
         >
           <img
             class="w-5"
@@ -167,7 +183,7 @@ const onSubmit = handleSubmit(async (values) => {
             Sign in
           </RouterLink>
         </div>
-      </form>
+      </div>
     </div>
     <div class="flex-1 relative max-md:hidden">
       <img

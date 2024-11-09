@@ -5,6 +5,7 @@ import { useRoomStore } from '@/stores/room'
 import { useLoadingStore } from '@/stores/loading'
 import { useSocketStore } from '@/stores/socket'
 import { useAuthStore } from '@/stores/auth'
+import type { IRoomSocket } from '@/types'
 
 const loadingStore = useLoadingStore()
 const socketStore = useSocketStore()
@@ -27,10 +28,10 @@ onMounted(() => {
   }, 2000)
 
   if (detailRoom.value.id) {
-    const data = {
+    const data: IRoomSocket = {
       roomPin: detailRoom.value.room_pin,
       userId: authStore.getUser?.id,
-      name: null,
+      name: '',
     }
 
     socketStore.handleCreateRoomData(data)

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { getInfoApi } from '@/services/user'
 import router from '@/routers/router'
-import { loginApi } from '@/services/auth'
+import { loginApi, loginGGApi } from '@/services/auth'
 import { showToast } from '@/utils/toast'
 import { apiError } from '@/utils/exceptionHandler'
 import type { IUser } from '@/types/user'
@@ -37,6 +37,27 @@ export const useAuthStore = defineStore({
     async login(email: string, password: string) {
       try {
         const { data } = await loginApi(email, password)
+        localStorage.setItem('access_token', data.access_token)
+        localStorage.setItem('refresh_token', data.refresh_token)
+        const redirect = localStorage.getItem('redirect')
+        await this.setupAuth()
+        if (redirect) {
+          localStorage.removeItem('redirect')
+          router.push(redirect)
+        } else {
+          location.reload()
+        }
+      } catch (error) {
+        showToast({
+          title: 'Login failed',
+          description: apiError(error).message,
+          variant: 'destructive',
+        })
+      }
+    },
+    async loginGG(access_token: string) {
+      try {
+        const { data } = await loginGGApi(access_token)
         localStorage.setItem('access_token', data.access_token)
         localStorage.setItem('refresh_token', data.refresh_token)
         const redirect = localStorage.getItem('redirect')

@@ -23,6 +23,19 @@ export const loginApi = async (
   )
 }
 
+export const loginGGApi = async (access_token: string): Promise<any> => {
+  return $api(
+    '/auth/google',
+    {
+      method: 'POST',
+      body: {
+        access_token,
+      },
+    },
+    false,
+  )
+}
+
 interface RegisterBody {
   email: string
   password: string
