@@ -22,12 +22,7 @@ const openConfirm = async () => {
     onlyConfirm: true,
     error: true,
   })
-  console.log('result', result)
 }
-
-onMounted(() => {
-  console.log(audioFiles.value, 'check audio')
-})
 
 const musicList = ref<{ value: string; label: string; src: string }[]>([])
 

@@ -83,7 +83,6 @@ export const useAuthStore = defineStore({
         if (access_token) {
           this.token.access = access_token
           const { data: user } = await getInfoApi()
-          console.log('LOG user', user)
           user && (this.user = user)
           this.isLoggedIn = true
         }

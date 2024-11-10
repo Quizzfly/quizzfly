@@ -32,7 +32,6 @@ const onSubmit = handleSubmit((values) => {
     }
     socketStore.handleJoinRoomData(data)
   }
-  console.log(message.value, 'check message')
   if (message.value.status === 'error') {
     showToast({
       title: 'Join failed',

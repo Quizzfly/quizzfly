@@ -17,7 +17,6 @@ const listMember = computed(() => {
 })
 
 const locked = computed(() => {
-  console.log(roomStore.getLockedRoom)
   return roomStore.getLockedRoom
 })
 

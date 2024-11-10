@@ -25,30 +25,25 @@ export const useSocketStore = defineStore({
 
       this.client.on('connect', () => {
         this.connected = true
-        console.log('Connected to WebSocket server')
       })
 
       this.client.on('playerJoined', (newContent: IMember) => {
         router.push({
           name: 'play-instruction',
         })
-        console.log('Received roomMembersJoin:', newContent) // Debug
         roomStore.setMemberJoins(newContent)
       })
 
       this.client.on('roomLocked', (newContent: IRoomLocked) => {
         this.message = newContent
-        console.log('Received response locked:', newContent) // Debug
         roomStore.setLockedRoom(newContent.locked)
       })
 
       this.client.on('exception', (newContent: any) => {
-        console.log('Received response locked:', newContent) // Debug
         this.message = newContent
       })
 
       this.client.on('playerLeft', (newContent: IMember) => {
-        console.log('Received roomMembersLeave:', newContent) // Debug
         const index = roomStore.getListMemberJoins.findIndex(
           (item: any) => item.socketId === newContent.new_player.socket_id,
         )
@@ -58,11 +53,9 @@ export const useSocketStore = defineStore({
       })
     },
     handleCreateRoomData(data: IRoomSocket) {
-      console.log('Emitting createRoom with data:', data)
       this.client.emit('createRoom', data)
     },
     handleJoinRoomData(data: IRoomSocket) {
-      console.log('Emitting joinRoom with data:', data)
       try {
         this.client.emit('joinRoom', data)
       } catch (error) {
@@ -77,11 +70,9 @@ export const useSocketStore = defineStore({
       this.client.emit('leaveRoom', data)
     },
     handleLockRoomData(data: ILocked) {
-      console.log('Emitting joinRoom with data:', data)
       this.client.emit('lockRoom', data)
     },
     handleUnlockRoomData(data: ILocked) {
-      console.log('Emitting joinRoom with data:', data)
       this.client.emit('unlockRoom', data)
     },
     clearSocketStore() {

@@ -4,7 +4,6 @@ import type { NavigationGuardWithThis } from 'vue-router'
 export const authGuard: NavigationGuardWithThis<any> = async (to, from, next) => {
   document.title = (to.meta?.title as string) || 'Home'
   const authStore = useAuthStore()
-  console.log('authGuard', authStore.getIsLoggedIn, to)
 
   const isLoggedIn = authStore.getIsLoggedIn
   const isPublicRoute = to.meta?.public
