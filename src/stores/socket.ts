@@ -14,7 +14,7 @@ export const useSocketStore = defineStore({
   state: () => ({
     client: null as any,
     connected: false,
-    messages: {} as any,
+    message: {} as any,
   }),
   actions: {
     setupSocketStore() {
@@ -37,14 +37,14 @@ export const useSocketStore = defineStore({
       })
 
       this.client.on('roomLocked', (newContent: IRoomLocked) => {
-        this.messages = newContent
+        this.message = newContent
         console.log('Received response locked:', newContent) // Debug
         roomStore.setLockedRoom(newContent.locked)
       })
 
       this.client.on('exception', (newContent: any) => {
         console.log('Received response locked:', newContent) // Debug
-        this.messages = newContent
+        this.message = newContent
       })
 
       this.client.on('playerLeft', (newContent: IMember) => {
@@ -93,6 +93,6 @@ export const useSocketStore = defineStore({
     },
   },
   getters: {
-    getMessages: (state) => state.messages,
+    getMessage: (state) => state.message,
   },
 })

@@ -14,7 +14,7 @@ const route = useRoute()
 const pinCode = route.params.code as string
 
 const message = computed(() => {
-  return socketStore.getMessages
+  return socketStore.getMessage
 })
 
 const { handleSubmit } = useForm({
