@@ -81,8 +81,10 @@ const handleUnlocked = () => {
           :width="250"
           :height="250"
           :value="`${hostOrigin}/play/${detailRoom.room_pin}`"
-          :qr-options="{ typeNumber: 0, mode: 'Byte', errorCorrectionLevel: 'H' }"
-          :image-options="{ hideBackgroundDots: true, imageSize: 0.4, margin: 0 }"
+        <QRCodeVue3
+          :width="250"
+          :height="250"
+          :value="`https://quizzfly.site/play/${detailRoom.room_pin}`"
           :dots-options="{
             type: 'dots',
             color: '#26249a',
@@ -149,6 +151,4 @@ const handleUnlocked = () => {
           <p class="text-base font-medium">{{ item.new_player.name }}</p>
         </div>
       </div>
-    </div>
-  </div>
 </template>

@@ -5,14 +5,12 @@ import { useForm } from 'vee-validate'
 import * as yup from 'yup'
 import { useSocketStore } from '@/stores/socket'
 import { showToast } from '@/utils/toast'
-
 const socketStore = useSocketStore()
 
 const isLoading = ref(false)
 const route = useRoute()
 
 const pinCode = route.params.code as string
-
 const message = computed(() => {
   return socketStore.getMessages
 })
@@ -25,8 +23,11 @@ const { handleSubmit } = useForm({
 
 const onSubmit = handleSubmit((values) => {
   isLoading.value = true
-  if (pinCode) {
-    const data = {
+    name: 'play-instruction',
+  })
+
+  isLoading.value = false
+
       roomPin: pinCode,
       name: values.name,
     }

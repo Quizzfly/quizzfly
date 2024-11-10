@@ -18,6 +18,8 @@ export const useRoomStore = defineStore({
     },
     listMemberJoins: [] as IMember[],
     locked: false,
+    countMemberJoins: 0 as number,
+    listMemberJoins: [] as any,
   }),
   actions: {
     async initRoom(val: any) {
@@ -45,6 +47,12 @@ export const useRoomStore = defineStore({
     },
     setLockedRoom(val: boolean) {
       this.locked = val
+    },
+    setCountMemberJoin(data: number) {
+      this.countMemberJoins = data
+    },
+    setMemberJoins(data: any) {
+      this.listMemberJoins.push(data)
     },
     async settingRoom(id: string, val: any) {
       this.isLoading = true
@@ -85,5 +93,7 @@ export const useRoomStore = defineStore({
     getCurrentSetting: (state) => state.currentSetting,
     getListMemberJoins: (state) => state.listMemberJoins,
     getLockedRoom: (state) => state.locked,
+    getCountMemberJoins: (state) => state.countMemberJoins,
+    getListMemberJoins: (state) => state.listMemberJoins,
   },
 })

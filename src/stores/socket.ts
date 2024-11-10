@@ -6,6 +6,7 @@ import { showToast } from '@/utils/toast'
 import { apiError } from '@/utils/exceptionHandler'
 
 const router = useRouter()
+import { useRoomStore } from './room'
 
 const BASE_URL_SOCKET = import.meta.env.VITE_BASE_URL_SOCKET
 
@@ -32,6 +33,7 @@ export const useSocketStore = defineStore({
         router.push({
           name: 'play-instruction',
         })
+      this.client.on('roomMembersJoin', (newContent: any) => {
         console.log('Received roomMembersJoin:', newContent) // Debug
         roomStore.setMemberJoins(newContent)
       })
@@ -51,6 +53,15 @@ export const useSocketStore = defineStore({
         console.log('Received roomMembersLeave:', newContent) // Debug
         const index = roomStore.getListMemberJoins.findIndex(
           (item: any) => item.socketId === newContent.new_player.socket_id,
+      this.client.on('roomMembersCount', (newContent: any) => {
+        console.log('Received roomMembersCount:', newContent) // Debug
+        roomStore.setCountMemberJoin(newContent)
+      })
+
+      this.client.on('roomMembersLeave', (newContent: any) => {
+        console.log('Received roomMembersLeave:', newContent) // Debug
+        const index = roomStore.getListMemberJoins.findIndex(
+          (item: any) => item.socketId === newContent.socketId,
         )
         if (index !== -1) {
           roomStore.getListMemberJoins.splice(index, 1)
@@ -72,6 +83,16 @@ export const useSocketStore = defineStore({
           variant: 'destructive',
         })
       }
+    handleCreateRoomData(data: any) {
+      console.log('Emitting createRoom with data:', data)
+      this.client.emit('createRoom', data)
+    },
+    handleJoinRoomData(data: any) {
+      console.log('Emitting joinRoom with data:', data)
+      this.client.emit('joinRoom', data)
+    },
+    handleLeaveRoomData(data: any) {
+      this.client.emit('leaveRoom', data)
     },
     handleLeaveRoomData(data: ILocked) {
       this.client.emit('leaveRoom', data)

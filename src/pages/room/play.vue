@@ -32,6 +32,10 @@ onMounted(() => {
       roomPin: detailRoom.value.room_pin,
       userId: authStore.getUser?.id,
       name: '',
+    const data = {
+      roomPin: detailRoom.value.room_pin,
+      userId: authStore.getUser?.id,
+      name: null,
     }
 
     socketStore.handleCreateRoomData(data)
