@@ -1,5 +1,5 @@
 import { getDetailRoomApi, createRoomApi, settingRoomApi } from '@/services/room'
-import type { IRoom } from '@/types/room'
+import type { IRoom, IMember } from '@/types/room'
 import { showToast } from '@/utils/toast'
 import { defineStore } from 'pinia'
 import router from '@/routers/router'
@@ -16,8 +16,8 @@ export const useRoomStore = defineStore({
       is_auto_play: false,
       lobby_music: 'string',
     },
-    countMemberJoins: 0 as number,
-    listMemberJoins: [] as any,
+    listMemberJoins: [] as IMember[],
+    locked: false,
   }),
   actions: {
     async initRoom(val: any) {
@@ -40,11 +40,11 @@ export const useRoomStore = defineStore({
     setDetailRoom(val: IRoom) {
       this.roomDetail = val
     },
-    setCountMemberJoin(data: number) {
-      this.countMemberJoins = data
-    },
     setMemberJoins(data: any) {
       this.listMemberJoins.push(data)
+    },
+    setLockedRoom(val: boolean) {
+      this.locked = val
     },
     async settingRoom(id: string, val: any) {
       this.isLoading = true
@@ -83,7 +83,7 @@ export const useRoomStore = defineStore({
     getRoomInfo: (state) => state.roomDetail,
     getIsLoading: (state) => state.isLoading,
     getCurrentSetting: (state) => state.currentSetting,
-    getCountMemberJoins: (state) => state.countMemberJoins,
     getListMemberJoins: (state) => state.listMemberJoins,
+    getLockedRoom: (state) => state.locked,
   },
 })

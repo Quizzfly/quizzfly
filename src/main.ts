@@ -23,6 +23,7 @@ import 'vue-awesome-paginate/dist/style.css'
 import { setupI18n } from './plugins/i18n'
 import Vue3Toastify from './plugins/toast'
 import { useSocketStore } from './stores/socket'
+import vue3GoogleLogin from 'vue3-google-login'
 
 const app = createApp(App)
 
@@ -52,6 +53,9 @@ const initApp = async () => {
   app.component('RoomLayout', RoomLayout)
   app.use(createPinia())
   useSocketStore().setupSocketStore()
+  app.use(vue3GoogleLogin, {
+    clientId: import.meta.env.VITE_GOOGLE_CLIENTID,
+  })
 
   await initAuthStore()
   // await initWebSocketStore();

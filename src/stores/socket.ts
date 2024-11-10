@@ -1,6 +1,11 @@
 import { defineStore } from 'pinia'
 import { io } from 'socket.io-client'
+import type { IRoomSocket, IMember, ILocked, IRoomLocked } from '@/types/room'
 import { useRoomStore } from './room'
+import { showToast } from '@/utils/toast'
+import { apiError } from '@/utils/exceptionHandler'
+
+const router = useRouter()
 
 const BASE_URL_SOCKET = import.meta.env.VITE_BASE_URL_SOCKET
 
@@ -9,7 +14,7 @@ export const useSocketStore = defineStore({
   state: () => ({
     client: null as any,
     connected: false,
-    messages: {} as any,
+    message: {} as any,
   }),
   actions: {
     setupSocketStore() {
@@ -20,39 +25,55 @@ export const useSocketStore = defineStore({
 
       this.client.on('connect', () => {
         this.connected = true
-        console.log('Connected to WebSocket server')
       })
 
-      this.client.on('roomMembersJoin', (newContent: any) => {
-        console.log('Received roomMembersJoin:', newContent) // Debug
+      this.client.on('playerJoined', (newContent: IMember) => {
+        router.push({
+          name: 'play-instruction',
+        })
         roomStore.setMemberJoins(newContent)
       })
 
-      this.client.on('roomMembersCount', (newContent: any) => {
-        console.log('Received roomMembersCount:', newContent) // Debug
-        roomStore.setCountMemberJoin(newContent)
+      this.client.on('roomLocked', (newContent: IRoomLocked) => {
+        this.message = newContent
+        roomStore.setLockedRoom(newContent.locked)
       })
 
-      this.client.on('roomMembersLeave', (newContent: any) => {
-        console.log('Received roomMembersLeave:', newContent) // Debug
+      this.client.on('exception', (newContent: any) => {
+        this.message = newContent
+      })
+
+      this.client.on('playerLeft', (newContent: IMember) => {
         const index = roomStore.getListMemberJoins.findIndex(
-          (item: any) => item.socketId === newContent.socketId,
+          (item: any) => item.socketId === newContent.new_player.socket_id,
         )
         if (index !== -1) {
           roomStore.getListMemberJoins.splice(index, 1)
         }
       })
     },
-    handleCreateRoomData(data: any) {
-      console.log('Emitting createRoom with data:', data)
+    handleCreateRoomData(data: IRoomSocket) {
       this.client.emit('createRoom', data)
     },
-    handleJoinRoomData(data: any) {
-      console.log('Emitting joinRoom with data:', data)
-      this.client.emit('joinRoom', data)
+    handleJoinRoomData(data: IRoomSocket) {
+      try {
+        this.client.emit('joinRoom', data)
+      } catch (error) {
+        showToast({
+          title: 'Join failed',
+          description: apiError(error).message,
+          variant: 'destructive',
+        })
+      }
     },
-    handleLeaveRoomData(data: any) {
+    handleLeaveRoomData(data: ILocked) {
       this.client.emit('leaveRoom', data)
+    },
+    handleLockRoomData(data: ILocked) {
+      this.client.emit('lockRoom', data)
+    },
+    handleUnlockRoomData(data: ILocked) {
+      this.client.emit('unlockRoom', data)
     },
     clearSocketStore() {
       if (this.client) {
@@ -63,6 +84,6 @@ export const useSocketStore = defineStore({
     },
   },
   getters: {
-    getMessages: (state) => state.messages,
+    getMessage: (state) => state.message,
   },
 })

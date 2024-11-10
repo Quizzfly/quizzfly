@@ -10,3 +10,27 @@ export interface IRoom {
   lobby_music: string
   quizzfly_id: string
 }
+
+export interface IRoomSocket {
+  roomPin: string
+  userId?: string
+  name: string
+}
+
+export interface IMember {
+  new_player: {
+    socket_id: string
+    user_id: string
+    name: string
+    role: string
+  }
+  total_player: number
+}
+
+export interface IRoomLocked {
+  locked: boolean
+}
+
+export interface ILocked {
+  roomPin: string
+}

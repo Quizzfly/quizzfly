@@ -2,11 +2,16 @@
 import Setting from '@/components/room/Setting.vue'
 import { useFullscreen } from '@vueuse/core'
 import { Slider } from '../ui/slider'
+import { useRoomStore } from '@/stores/room'
 
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 
+const roomStore = useRoomStore()
 const { isFullscreen, exit, toggle } = useFullscreen()
 
+const listMember = computed(() => {
+  return roomStore.getListMemberJoins
+})
 const isShowSetting = ref(false)
 const isShowVolume = ref(false)
 const closeModal = () => {
@@ -54,9 +59,16 @@ watch(volume, (val) => {
 
 <template>
   <div
-    class="absolute right-6 bottom-6 flex gap-3 rounded bg-[rgba(0,0,0,0.24)] p-3"
+    class="absolute items-center right-6 bottom-6 flex gap-3 rounded bg-[rgba(0,0,0,0.24)] p-3"
     @click.prevent.self="closeVolume"
   >
+    <div
+      v-if="listMember.length > 0"
+      class="flex items-center justify-center -mr-2"
+    >
+      <p class="text-base font-extrabold text-white">{{ listMember.length }}</p>
+      <span class="i-material-symbols-light-person w-8 h-6 text-white"></span>
+    </div>
     <div class="flex items-center gap-2">
       <div
         class="flex gap-2"
