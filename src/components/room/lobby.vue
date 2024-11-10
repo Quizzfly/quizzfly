@@ -2,6 +2,7 @@
 import { Button } from '../ui/button'
 import { useRoomStore } from '@/stores/room'
 import { useSocketStore } from '@/stores/socket'
+import type { ILocked } from '@/types'
 import QRCodeVue3 from 'qrcode-vue3'
 
 const roomStore = useRoomStore()
@@ -16,6 +17,7 @@ const listMember = computed(() => {
 })
 
 const locked = computed(() => {
+  console.log(roomStore.getLockedRoom)
   return roomStore.getLockedRoom
 })
 
@@ -24,9 +26,19 @@ onBeforeMount(() => {
   hostOrigin.value = window.location.origin
 })
 
-// const handleLocked = () => {
-//   socketStore.handleLockRoomData(detailRoom.value.room_pin)
-// }
+const handleLocked = () => {
+  const data: ILocked = {
+    roomPin: detailRoom.value.room_pin,
+  }
+  socketStore.handleLockRoomData(data)
+}
+
+const handleUnlocked = () => {
+  const data: ILocked = {
+    roomPin: detailRoom.value.room_pin,
+  }
+  socketStore.handleUnlockRoomData(data)
+}
 </script>
 
 <template>
@@ -102,12 +114,12 @@ onBeforeMount(() => {
         <span
           v-if="locked"
           class="text-2xl i-solar-lock-keyhole-minimalistic-bold"
-          @click="socketStore.handleUnlockRoomData(detailRoom.room_pin)"
+          @click="handleUnlocked()"
         ></span>
         <span
           v-else
           class="text-2xl i-solar-lock-keyhole-minimalistic-unlocked-bold"
-          @click="socketStore.handleLockRoomData(detailRoom.room_pin)"
+          @click="handleLocked()"
         ></span>
       </div>
       <Button class="text-xl p-6 font-semibold">
@@ -131,10 +143,10 @@ onBeforeMount(() => {
       >
         <div
           v-for="item in listMember"
-          :key="item.newPlayer.userId"
+          :key="item.new_player.user_id"
           class="p-3 rounded-full bg-primary cursor-pointer"
         >
-          <p class="text-base font-medium">{{ item.newPlayer.name }}</p>
+          <p class="text-base font-medium">{{ item.new_player.name }}</p>
         </div>
       </div>
     </div>

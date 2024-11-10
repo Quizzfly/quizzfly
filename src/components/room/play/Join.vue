@@ -4,14 +4,18 @@ import Button from '@/components/ui/button/Button.vue'
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
 import { useSocketStore } from '@/stores/socket'
+import { showToast } from '@/utils/toast'
 
 const socketStore = useSocketStore()
 
 const isLoading = ref(false)
-const router = useRouter()
 const route = useRoute()
 
 const pinCode = route.params.code as string
+
+const message = computed(() => {
+  return socketStore.getMessages
+})
 
 const { handleSubmit } = useForm({
   validationSchema: yup.object({
@@ -21,12 +25,6 @@ const { handleSubmit } = useForm({
 
 const onSubmit = handleSubmit((values) => {
   isLoading.value = true
-  router.push({
-    name: 'play-instruction',
-  })
-
-  isLoading.value = false
-
   if (pinCode) {
     const data = {
       roomPin: pinCode,
@@ -34,6 +32,16 @@ const onSubmit = handleSubmit((values) => {
     }
     socketStore.handleJoinRoomData(data)
   }
+  console.log(message.value, 'check message')
+  if (message.value.status === 'error') {
+    showToast({
+      title: 'Join failed',
+      description: message.value.message,
+      variant: 'destructive',
+    })
+  }
+
+  isLoading.value = false
 })
 </script>
 

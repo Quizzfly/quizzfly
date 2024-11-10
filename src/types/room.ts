@@ -18,11 +18,19 @@ export interface IRoomSocket {
 }
 
 export interface IMember {
-  newPlayer: {
-    socketId: string
-    userId: string
+  new_player: {
+    socket_id: string
+    user_id: string
     name: string
     role: string
   }
-  totalPlayer: number
+  total_player: number
+}
+
+export interface IRoomLocked {
+  locked: boolean
+}
+
+export interface ILocked {
+  roomPin: string
 }
