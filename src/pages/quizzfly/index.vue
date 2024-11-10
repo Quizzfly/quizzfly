@@ -7,12 +7,36 @@ import QuizzflyList from '@/components/quizzfly/list/QuizzflyList.vue'
 import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
 import QuizzflyFilter from '@/components/quizzfly/list/QuizzflyFilter.vue'
 
+import {
+  Pagination,
+  PaginationEllipsis,
+  PaginationList,
+  PaginationListItem,
+  PaginationNext,
+  PaginationPrev,
+} from '@/components/ui/pagination'
 const quizzflyStore = useQuizzflyStore()
 
 const search = useRouteQuery('k', '')
+const pageQuery = useRouteQuery<number>('page', 1)
+
+const pageQueryComputed = computed({
+  get: () => Number(pageQuery.value),
+  set: (value) => {
+    pageQuery.value = value
+    fetchQuizzflys()
+  },
+})
+
+const fetchQuizzflys = () => {
+  quizzflyStore.fetchQuizzflys({
+    page: pageQueryComputed.value,
+    keyword: search.value,
+  })
+}
 
 onBeforeMount(() => {
-  quizzflyStore.fetchQuizzflys()
+  fetchQuizzflys()
 })
 
 const handleClickCreateQuiz = async () => {
@@ -62,6 +86,50 @@ const debouncedFn = useDebounceFn((value) => {
     </div>
     <div class="flex-auto overflow-y-auto">
       <QuizzflyList />
+    </div>
+    <div
+      v-if="quizzflyStore.getQuizzflyMeta"
+      class="flex justify-center"
+    >
+      <Pagination
+        v-slot="{ page }"
+        v-model:page="pageQueryComputed"
+        :total="quizzflyStore.getQuizzflyMeta.total_records"
+        :items-per-page="quizzflyStore.getQuizzflyMeta.limit"
+        :sibling-count="1"
+        show-edges
+      >
+        <PaginationList
+          v-slot="{ items }"
+          class="flex items-center gap-1"
+        >
+          <PaginationPrev />
+
+          <template v-for="(item, index) in items">
+            <PaginationListItem
+              v-if="item.type === 'page'"
+              :key="index"
+              :value="item.value"
+              as-child
+            >
+              <Button
+                class="w-9 h-9 p-0 rounded-md"
+                :variant="item.value === page ? 'default' : 'outline'"
+                @click="pageQuery = Number(item.value)"
+              >
+                {{ item.value }}
+              </Button>
+            </PaginationListItem>
+            <PaginationEllipsis
+              v-else
+              :key="item.type"
+              :index="index"
+            />
+          </template>
+
+          <PaginationNext />
+        </PaginationList>
+      </Pagination>
     </div>
   </div>
 </template>

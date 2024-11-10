@@ -6,6 +6,9 @@ import { showToast } from '@/utils/toast'
 import { apiError } from '@/utils/exceptionHandler'
 import router from '@/routers/router'
 
+import { useAuthStore } from './auth'
+import type { SocketMessage } from '@/types/socket'
+
 const BASE_URL_SOCKET = import.meta.env.VITE_BASE_URL_SOCKET || 'https://api.quizzfly.site/rooms'
 
 export const useSocketStore = defineStore({
@@ -13,7 +16,7 @@ export const useSocketStore = defineStore({
   state: () => ({
     client: null as any,
     connected: false,
-    message: {} as any,
+    message: {} as SocketMessage,
   }),
   actions: {
     setupSocketStore() {
@@ -31,7 +34,6 @@ export const useSocketStore = defineStore({
       })
 
       this.client.on('roomLocked', (newContent: IRoomLocked) => {
-        this.message = newContent
         roomStore.setLockedRoom(newContent.locked)
       })
 
@@ -54,6 +56,22 @@ export const useSocketStore = defineStore({
         )
         if (index !== -1) {
           roomStore.getListMemberJoins.splice(index, 1)
+        }
+      })
+
+      this.client.on('nextQuestion', (newContent: any) => {
+        console.log('Received nextQuestion:', newContent) // Debug
+        this.message = {
+          event: 'nextQuestion',
+          data: newContent,
+        }
+      })
+
+      this.client.on('quizStarted', (newContent: any) => {
+        console.log('Received quizStarted:', newContent) // Debug
+        this.message = {
+          event: 'quizStarted',
+          data: newContent,
         }
       })
     },
@@ -94,6 +112,21 @@ export const useSocketStore = defineStore({
         title: 'Success',
         description: 'Unlock room success',
         variant: 'default',
+      })
+    },
+    handleStartQuestion() {
+      const roomStore = useRoomStore()
+      const authStore = useAuthStore()
+      this.client.emit('startQuiz', {
+        roomPin: roomStore.getRoomInfo.room_pin,
+        quizzflyId: roomStore.getRoomInfo.quizzfly_id,
+        hostId: authStore.getUser?.id || '',
+      })
+    },
+    handleNextQuestion() {
+      const roomStore = useRoomStore()
+      this.client.emit('nextQuestion', {
+        roomPin: roomStore.getRoomInfo.room_pin,
       })
     },
     clearSocketStore() {

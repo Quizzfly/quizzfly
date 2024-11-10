@@ -16,6 +16,23 @@ function initAnswers() {
 onBeforeMount(() => {
   initAnswers()
 })
+
+const handleUpdateAnswer = (value: any) => {
+  if (!currentQuestion.value.answers) return
+
+  const answersResetArr = currentQuestion.value.answers.map((item) => {
+    return {
+      ...item,
+      is_correct: false,
+    }
+  })
+
+  questionsStore.updateCurrentQuestionAnswers(answersResetArr)
+  questionsStore.updateCurrentQuestionAnswer({
+    ...value,
+    is_correct: true,
+  })
+}
 </script>
 <template>
   <div class="">
@@ -42,7 +59,11 @@ onBeforeMount(() => {
       </template>
 
       <template v-else-if="currentQuestion.quiz_type === 'TRUE_FALSE'">
-        <TrueFalse />
+        <TrueFalse
+          :edit-mode="true"
+          :answers="currentQuestion.answers"
+          @update:model-value="handleUpdateAnswer"
+        />
       </template>
     </div>
   </div>

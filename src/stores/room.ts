@@ -4,6 +4,7 @@ import { showToast } from '@/utils/toast'
 import { defineStore } from 'pinia'
 import router from '@/routers/router'
 import { apiError } from '@/utils/exceptionHandler'
+import { useQuizzflyStore } from './quizzfly/quizzfly'
 
 export const useRoomStore = defineStore({
   id: 'room',
@@ -23,12 +24,13 @@ export const useRoomStore = defineStore({
   actions: {
     async initRoom(val: any) {
       try {
+        const quizzflyStore = useQuizzflyStore()
         this.isLoading = true
         const { data } = await createRoomApi(val)
         this.setDetailRoom(data)
         router.push({
           name: 'lobby',
-          params: { roomId: data.id },
+          params: { quizzflyId: quizzflyStore.getQuizzflyInfo.id, roomId: data.id },
         })
       } catch (error) {
         console.error(error)
