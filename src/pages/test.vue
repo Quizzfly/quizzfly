@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
+// import { Button } from '@/components/ui/button'
 import {
   Select,
   SelectContent,
@@ -10,19 +10,19 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Slider } from '@/components/ui/slider'
-import { useConfirmDialog } from '@/stores/modal'
+// import { useConfirmDialog } from '@/stores/modal'
 
 const audioFiles = import.meta.glob('/assets/audio/*.mp3')
 
-const confirmDialog = useConfirmDialog()
-const openConfirm = async () => {
-  const result = await confirmDialog.open({
-    title: 'Are you sure?',
-    question: 'Do you really want to delete this item?',
-    onlyConfirm: true,
-    error: true,
-  })
-}
+// const confirmDialog = useConfirmDialog()
+// const openConfirm = async () => {
+//   const result = await confirmDialog.open({
+//     title: 'Are you sure?',
+//     question: 'Do you really want to delete this item?',
+//     onlyConfirm: true,
+//     error: true,
+//   })
+// }
 
 const musicList = ref<{ value: string; label: string; src: string }[]>([])
 
@@ -110,6 +110,6 @@ watch(isChechSelected, (val) => {
     </div>
 
     <!-- open modal -->
-    <Button @click="openConfirm">Open modal confirm</Button>
+    <!-- <Button @click="openConfirm">Open modal confirm</Button> -->
   </div>
 </template>
