@@ -7,7 +7,7 @@ import { apiError } from '@/utils/exceptionHandler'
 
 const router = useRouter()
 
-const BASE_URL_SOCKET = import.meta.env.VITE_BASE_URL_SOCKET
+const BASE_URL_SOCKET = import.meta.env.VITE_BASE_URL_SOCKET || 'https://api.quizzfly.site/rooms'
 
 export const useSocketStore = defineStore({
   id: 'socket',
