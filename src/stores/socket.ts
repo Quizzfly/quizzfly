@@ -6,7 +6,7 @@ import { showToast } from '@/utils/toast'
 import { apiError } from '@/utils/exceptionHandler'
 import router from '@/routers/router'
 
-const BASE_URL_SOCKET = import.meta.env.VITE_BASE_URL_SOCKET
+const BASE_URL_SOCKET = import.meta.env.VITE_BASE_URL_SOCKET || 'https://api.quizzfly.site/rooms'
 
 export const useSocketStore = defineStore({
   id: 'socket',
