@@ -52,7 +52,7 @@ const initApp = async () => {
   app.component('QuizCreateLayout', QuizCreateLayout)
   app.component('RoomLayout', RoomLayout)
   app.use(createPinia())
-  useSocketStore().setupSocketStore()
+  await useSocketStore().setupSocketStore()
   app.use(vue3GoogleLogin, {
     clientId: import.meta.env.VITE_GOOGLE_CLIENTID,
   })

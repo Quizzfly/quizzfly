@@ -40,8 +40,8 @@ export const useRoomStore = defineStore({
         })
       }
     },
-    setDetailRoom(val: IRoom) {
-      this.roomDetail = val
+    setDetailRoom(val: Partial<IRoom>) {
+      Object.assign(this.roomDetail, val)
     },
     setMemberJoins(data: any) {
       this.listMemberJoins.push(data)
