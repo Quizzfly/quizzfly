@@ -4,9 +4,11 @@ import Button from '@/components/ui/button/Button.vue'
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
 import { useSocketStore } from '@/stores/socket'
+import { useRoomStore } from '@/stores/room'
 import { showToast } from '@/utils/toast'
 
 const socketStore = useSocketStore()
+const roomStore = useRoomStore()
 
 const isLoading = ref(false)
 const route = useRoute()
@@ -39,6 +41,8 @@ const onSubmit = handleSubmit((values) => {
       variant: 'destructive',
     })
   }
+
+  roomStore.setMemberName(values.name)
 
   isLoading.value = false
 })

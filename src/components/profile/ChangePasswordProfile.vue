@@ -42,12 +42,6 @@ const onSubmit = handleSubmit(async (values, { resetForm }) => {
     })
   }
 })
-
-// const resetData = () => {
-//   oldPassword = ''
-//   newPassword.value = ''
-//   confirmNewPassword.value = ''
-// }
 </script>
 
 <template>

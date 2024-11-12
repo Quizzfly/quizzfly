@@ -2,8 +2,9 @@
 import { Button } from '../ui/button'
 import { useRoomStore } from '@/stores/room'
 import { useSocketStore } from '@/stores/socket'
-import type { ILocked } from '@/types'
+import type { ILocked, IMember, IKickMem } from '@/types'
 import QRCodeVue3 from 'qrcode-vue3'
+import { avatars } from '@/utils/avatar'
 
 const roomStore = useRoomStore()
 const socketStore = useSocketStore()
@@ -21,8 +22,16 @@ const locked = computed(() => {
 })
 
 const hostOrigin = ref('')
+const membersWithAvatars = ref<IMember[]>([])
 onBeforeMount(() => {
   hostOrigin.value = window.location.origin
+})
+
+watch(listMember.value, (val) => {
+  console.log(val, 'check list member')
+  if (val) {
+    addAvatarOnList(val)
+  }
 })
 
 const handleLocked = () => {
@@ -37,6 +46,23 @@ const handleUnlocked = () => {
     roomPin: detailRoom.value.room_pin,
   }
   socketStore.handleUnlockRoomData(data)
+}
+
+const addAvatarOnList = (data: IMember[]) => {
+  membersWithAvatars.value = data.map((member, index) => ({
+    ...member,
+    avatar: avatars[index % avatars.length],
+  }))
+  console.log(membersWithAvatars.value, 'checkmemberwith')
+}
+
+const removeMember = (item: IMember) => {
+  const data: IKickMem = {
+    roomPin: detailRoom.value.room_pin,
+    socketId: item.new_player.socket_id,
+  }
+
+  socketStore.handleKickMember(data)
 }
 </script>
 
@@ -109,18 +135,21 @@ const handleUnlocked = () => {
     </div>
 
     <div class="flex gap-2 justify-center items-center w-full text-center">
-      <div class="flex items-center justify-center p-2 bg-white rounded cursor-pointer">
-        <span
-          v-if="locked"
-          class="text-2xl i-solar-lock-keyhole-minimalistic-bold"
-          @click="handleUnlocked()"
-        ></span>
-        <span
-          v-else
-          class="text-2xl i-solar-lock-keyhole-minimalistic-unlocked-bold"
-          @click="handleLocked()"
-        ></span>
+      <div
+        v-if="locked"
+        class="flex items-center justify-center p-2 bg-white rounded cursor-pointer"
+        @click="handleUnlocked()"
+      >
+        <span class="text-2xl i-solar-lock-keyhole-minimalistic-bold"></span>
       </div>
+      <div
+        v-else
+        class="flex items-center justify-center p-2 bg-white rounded cursor-pointer"
+        @click="handleLocked()"
+      >
+        <span class="text-2xl i-solar-lock-keyhole-minimalistic-unlocked-bold"></span>
+      </div>
+
       <Button class="text-xl p-6 font-semibold">
         <RouterLink :to="{ name: 'host-live-play', params: { roomId: detailRoom?.id } }">
           Start
@@ -138,14 +167,28 @@ const handleUnlocked = () => {
       </div>
       <div
         v-if="listMember.length > 0"
-        class="flex flex-wrap gap-3 items-center mt-4"
+        class="flex flex-wrap gap-3 items-center mt-8 justify-center"
       >
         <div
-          v-for="item in listMember"
+          v-for="item in membersWithAvatars"
           :key="item.new_player.user_id"
-          class="p-3 rounded-full bg-primary cursor-pointer"
+          v-motion
+          :initial="{ opacity: 0, x: 100 }"
+          :enter="{ opacity: 1, x: 0, scale: 1 }"
+          :delay="800"
+          class="relative group py-2 px-4 rounded-full bg-primary cursor-pointer flex items-center justify-center gap-2"
         >
-          <p class="text-base font-medium">{{ item.new_player.name }}</p>
+          <img
+            class="w-8 h-8"
+            :src="item.avatar"
+          />
+          <p class="text-base font-bold text-white">{{ item.new_player.name }}</p>
+          <div
+            class="hidden group-hover:flex absolute bg-white -top-2 w-[18px] h-[18px] rounded-full text-[26px] font-semibold cursor-pointer items-center right-1"
+            @click="removeMember(item)"
+          >
+            <span class="i-material-symbols-light-close-small-outline"></span>
+          </div>
         </div>
       </div>
     </div>
