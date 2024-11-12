@@ -25,6 +25,7 @@ export interface IMember {
     role: string
   }
   total_player: number
+  avatar: string
 }
 
 export interface IRoomLocked {
@@ -33,4 +34,9 @@ export interface IRoomLocked {
 
 export interface ILocked {
   roomPin: string
+}
+
+export interface IKickMem {
+  roomPin: string
+  socketId: string
 }

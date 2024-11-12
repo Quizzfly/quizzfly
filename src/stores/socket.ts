@@ -1,11 +1,10 @@
 import { defineStore } from 'pinia'
 import { io } from 'socket.io-client'
-import type { IRoomSocket, IMember, ILocked, IRoomLocked } from '@/types/room'
+import type { IRoomSocket, IMember, ILocked, IRoomLocked, IKickMem } from '@/types/room'
 import { useRoomStore } from './room'
 import { showToast } from '@/utils/toast'
 import { apiError } from '@/utils/exceptionHandler'
-
-const router = useRouter()
+import router from '@/routers/router'
 
 const BASE_URL_SOCKET = import.meta.env.VITE_BASE_URL_SOCKET || 'https://api.quizzfly.site/rooms'
 
@@ -28,9 +27,6 @@ export const useSocketStore = defineStore({
       })
 
       this.client.on('playerJoined', (newContent: IMember) => {
-        router.push({
-          name: 'play-instruction',
-        })
         roomStore.setMemberJoins(newContent)
       })
 
@@ -51,6 +47,15 @@ export const useSocketStore = defineStore({
           roomStore.getListMemberJoins.splice(index, 1)
         }
       })
+
+      this.client.on('kickPlayer', (newContent: IMember) => {
+        const index = roomStore.getListMemberJoins.findIndex(
+          (item: any) => item.socketId === newContent.new_player.socket_id,
+        )
+        if (index !== -1) {
+          roomStore.getListMemberJoins.splice(index, 1)
+        }
+      })
     },
     handleCreateRoomData(data: IRoomSocket) {
       this.client.emit('createRoom', data)
@@ -58,6 +63,9 @@ export const useSocketStore = defineStore({
     handleJoinRoomData(data: IRoomSocket) {
       try {
         this.client.emit('joinRoom', data)
+        router.push({
+          name: 'play-instruction',
+        })
       } catch (error) {
         showToast({
           title: 'Join failed',
@@ -69,11 +77,24 @@ export const useSocketStore = defineStore({
     handleLeaveRoomData(data: ILocked) {
       this.client.emit('leaveRoom', data)
     },
+    handleKickMember(data: IKickMem) {
+      this.client.emit('kickPlayer', data)
+    },
     handleLockRoomData(data: ILocked) {
       this.client.emit('lockRoom', data)
+      showToast({
+        title: 'Success',
+        description: 'Lock room success',
+        variant: 'default',
+      })
     },
     handleUnlockRoomData(data: ILocked) {
       this.client.emit('unlockRoom', data)
+      showToast({
+        title: 'Success',
+        description: 'Unlock room success',
+        variant: 'default',
+      })
     },
     clearSocketStore() {
       if (this.client) {

@@ -10,6 +10,7 @@ export const useRoomStore = defineStore({
   state: () => ({
     isLoading: false,
     roomDetail: {} as IRoom,
+    memberName: '',
     currentSetting: {
       quizzfly_id: '',
       is_show_question: false,
@@ -45,6 +46,9 @@ export const useRoomStore = defineStore({
     },
     setLockedRoom(val: boolean) {
       this.locked = val
+    },
+    setMemberName(val: string) {
+      this.memberName = val
     },
     async settingRoom(id: string, val: any) {
       this.isLoading = true
@@ -85,5 +89,6 @@ export const useRoomStore = defineStore({
     getCurrentSetting: (state) => state.currentSetting,
     getListMemberJoins: (state) => state.listMemberJoins,
     getLockedRoom: (state) => state.locked,
+    getMemberName: (state) => state.memberName,
   },
 })
