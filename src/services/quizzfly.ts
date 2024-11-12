@@ -2,9 +2,16 @@ import type { BaseResponse } from '@/types/api'
 import type { Question } from '@/types/question'
 import type { IQuizzflyInfo } from '@/types/quizzfly'
 
-export const getQuizzflysApi = async (): Promise<BaseResponse<IQuizzflyInfo[]>> => {
+export const getQuizzflysApi = async ({
+  page = 1,
+  keyword = '',
+}): Promise<BaseResponse<IQuizzflyInfo[]>> => {
   return $api('/quizzfly', {
     method: 'GET',
+    params: {
+      page,
+      keyword,
+    },
   })
 }
 

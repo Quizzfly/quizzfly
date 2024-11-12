@@ -10,6 +10,7 @@ import { defineStore } from 'pinia'
 import router from '@/routers/router'
 import { apiError } from '@/utils/exceptionHandler'
 import { createQuizApi } from '@/services/quizzes'
+import type { IPaging } from '@/types'
 
 export const useQuizzflyStore = defineStore({
   id: 'quizzfly',
@@ -28,6 +29,7 @@ export const useQuizzflyStore = defineStore({
     } as IQuizzflyInfo,
     isUpdating: false,
     quizzflys: [] as IQuizzflyInfo[],
+    quizzflyMeta: null as IPaging | null,
   }),
   actions: {
     setIsUpdating(val: boolean) {
@@ -75,10 +77,11 @@ export const useQuizzflyStore = defineStore({
         this.isUpdating = false
       }, 500)
     },
-    async fetchQuizzflys() {
+    async fetchQuizzflys({ page = 1, keyword = '' }) {
       try {
-        const { data } = await getQuizzflysApi()
+        const { data, meta } = await getQuizzflysApi({ page, keyword })
         this.quizzflys = data
+        this.quizzflyMeta = meta as IPaging
       } catch (error) {
         console.error(error)
         showToast({
@@ -106,5 +109,6 @@ export const useQuizzflyStore = defineStore({
     getQuizzflyInfo: (state) => state.quizzflyInfo,
     getIsUpdating: (state) => state.isUpdating,
     getQuizzflys: (state) => state.quizzflys,
+    getQuizzflyMeta: (state) => state.quizzflyMeta,
   },
 })

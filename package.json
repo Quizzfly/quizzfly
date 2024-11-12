@@ -38,6 +38,7 @@
     "vee-validate": "^4.13.2",
     "vue": "3.5.10",
     "vue-awesome-paginate": "^1.1.46",
+    "vue-confetti-explosion": "^1.0.2",
     "vue-drag-scroller": "^1.8.1",
     "vue-i18n": "9",
     "vue-router": "^4.3.0",
