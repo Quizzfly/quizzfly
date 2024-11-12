@@ -59,7 +59,7 @@ watch(volume, (val) => {
 
 <template>
   <div
-    class="absolute items-center right-6 bottom-6 flex gap-3 rounded bg-[rgba(0,0,0,0.24)] p-3"
+    class="absolute items-center right-6 bottom-1 flex gap-3 rounded bg-[rgba(0,0,0,0.24)] p-3"
     @click.prevent.self="closeVolume"
   >
     <div

@@ -7,8 +7,9 @@ import { useSocketStore } from '@/stores/socket'
 import { useAuthStore } from '@/stores/auth'
 import type { IRoomSocket } from '@/types'
 
-const router = useRouter()
+const route = useRoute()
 
+const router = useRouter()
 const loadingStore = useLoadingStore()
 const socketStore = useSocketStore()
 const authStore = useAuthStore()
@@ -22,13 +23,17 @@ const detailRoom = computed(() => {
 const roomPin = ref('')
 
 onMounted(() => {
-  const isReload = sessionStorage.getItem('isReloaded')
-
-  if (isReload) {
+  console.log('detailRoom', route)
+  if (!detailRoom.value.id) {
     router.push({ name: 'host-live' })
-  } else {
-    sessionStorage.setItem('isReloaded', 'true')
   }
+  // const isReload = sessionStorage.getItem('isReloaded')
+
+  // if (isReload) {
+  //   router.push({ name: 'host-live' })
+  // } else {
+  //   sessionStorage.setItem('isReloaded', 'true')
+  // }
 
   roomPin.value = detailRoom.value.room_pin
 
@@ -41,7 +46,7 @@ onMounted(() => {
     const data: IRoomSocket = {
       roomPin: detailRoom.value.room_pin,
       userId: authStore.getUser?.id,
-      name: 'room',
+      name: 'name',
     }
 
     socketStore.handleCreateRoomData(data)

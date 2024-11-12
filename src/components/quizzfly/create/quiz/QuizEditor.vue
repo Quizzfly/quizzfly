@@ -66,7 +66,7 @@ const handleCreateAnswer = async () => {
 // limit enter key press to 10 times
 const handleEnterPress = (event: KeyboardEvent) => {
   if (event.key === 'Enter') {
-    if (enterCount.value < 10) {
+    if (enterCount.value < 3) {
       enterCount.value++
     } else {
       event.preventDefault()

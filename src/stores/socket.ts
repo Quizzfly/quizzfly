@@ -5,15 +5,17 @@ import { useRoomStore } from './room'
 import { showToast } from '@/utils/toast'
 import { apiError } from '@/utils/exceptionHandler'
 import router from '@/routers/router'
+import { useAuthStore } from './auth'
+import type { SocketMessage } from '@/types/socket'
 
-const BASE_URL_SOCKET = import.meta.env.VITE_BASE_URL_SOCKET
+const BASE_URL_SOCKET = import.meta.env.VITE_BASE_URL_SOCKET || 'https://api.quizzfly.site/rooms'
 
 export const useSocketStore = defineStore({
   id: 'socket',
   state: () => ({
     client: null as any,
     connected: false,
-    message: {} as any,
+    message: {} as SocketMessage,
   }),
   actions: {
     setupSocketStore() {
@@ -26,12 +28,19 @@ export const useSocketStore = defineStore({
         this.connected = true
       })
 
+      this.client.on('exception', (newContent: any) => {
+        showToast({
+          title: 'Error',
+          description: newContent?.message,
+          variant: 'destructive',
+        })
+      })
+
       this.client.on('playerJoined', (newContent: IMember) => {
         roomStore.setMemberJoins(newContent)
       })
 
       this.client.on('roomLocked', (newContent: IRoomLocked) => {
-        this.message = newContent
         roomStore.setLockedRoom(newContent.locked)
       })
 
@@ -54,6 +63,30 @@ export const useSocketStore = defineStore({
         )
         if (index !== -1) {
           roomStore.getListMemberJoins.splice(index, 1)
+        }
+      })
+
+      this.client.on('nextQuestion', (newContent: any) => {
+        console.log('Received nextQuestion:', newContent) // Debug
+        this.message = {
+          event: 'nextQuestion',
+          data: newContent,
+        }
+      })
+
+      this.client.on('quizStarted', (newContent: any) => {
+        console.log('Received quizStarted:', newContent) // Debug
+        this.message = {
+          event: 'quizStarted',
+          data: newContent,
+        }
+      })
+
+      this.client.on('summaryAnswer', (newContent: any) => {
+        console.log('Received summaryAnswer:', newContent) // Debug
+        this.message = {
+          event: 'summaryAnswer',
+          data: newContent,
         }
       })
     },
@@ -96,12 +129,34 @@ export const useSocketStore = defineStore({
         variant: 'default',
       })
     },
+    handleStartQuestion() {
+      const roomStore = useRoomStore()
+      const authStore = useAuthStore()
+      this.client.emit('startQuiz', {
+        roomPin: roomStore.getRoomInfo.room_pin,
+        quizzflyId: roomStore.getRoomInfo.quizzfly_id,
+        hostId: authStore.getUser?.id || '',
+      })
+    },
+    handleNextQuestion() {
+      const roomStore = useRoomStore()
+      this.client.emit('nextQuestion', {
+        roomPin: roomStore.getRoomInfo.room_pin,
+      })
+    },
     clearSocketStore() {
       if (this.client) {
         this.client.disconnect()
         this.client = null
         this.connected = false
       }
+    },
+    handleFinishQuestion(questionId: string) {
+      const roomStore = useRoomStore()
+      this.client.emit('finishQuestion', {
+        roomPin: roomStore.getRoomInfo.room_pin,
+        questionId,
+      })
     },
   },
   getters: {

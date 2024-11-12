@@ -39,6 +39,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/room',
     beforeEnter: [authGuard],
+    component: () => import('@/pages/room/index.vue'),
     children: roomRoute,
   },
   {

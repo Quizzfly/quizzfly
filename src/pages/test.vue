@@ -112,4 +112,5 @@ watch(isChechSelected, (val) => {
     <!-- open modal -->
     <!-- <Button @click="openConfirm">Open modal confirm</Button> -->
   </div>
+  <!-- <Ranking /> -->
 </template>

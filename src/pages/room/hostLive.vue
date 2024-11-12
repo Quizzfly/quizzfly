@@ -1,15 +1,6 @@
 <script setup lang="ts">
 import ModalStartHostLive from '@/components/room/ModalStartHostLive.vue'
 import BarWrapper from '@/components/room/BarWrapper.vue'
-import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
-
-const quizzflyStore = useQuizzflyStore()
-
-const route = useRoute()
-
-onBeforeMount(() => {
-  quizzflyStore.getQuizzflyDetail(route.params.quizzflyId as string)
-})
 </script>
 <template>
   <div

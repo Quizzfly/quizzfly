@@ -3,12 +3,15 @@ import type { Answer } from '@/types/question'
 import { useTextareaAutosize } from '@vueuse/core'
 const { textarea, input } = useTextareaAutosize()
 import { useDebounceFn } from '@vueuse/core'
+import ConfettiExplosion from 'vue-confetti-explosion'
+import { colorsHex } from '@/utils/theme'
 
 const props = defineProps<{
   index: number
   editMode?: boolean
   isTrueFalse?: boolean
   modelValue: Answer
+  isShowRightAnswer?: boolean
 }>()
 
 const emits = defineEmits<{
@@ -22,24 +25,6 @@ const updateAnswer = useDebounceFn((value: Answer) => {
 const updateAnswerImmediate = (value: Answer) => {
   emits('update:modelValue', value)
 }
-const colorsHex = [
-  {
-    primary: '#3879ff',
-    border: '#3459cf',
-  },
-  {
-    primary: '#f65655',
-    border: '#e72261',
-  },
-  {
-    primary: '#fe9820',
-    border: '#f58400',
-  },
-  {
-    primary: '#0fd18d',
-    border: '#00b775',
-  },
-]
 
 onMounted(() => {
   input.value = props.modelValue.content.trim()
@@ -47,9 +32,28 @@ onMounted(() => {
 </script>
 <template>
   <div
-    class="flex flex-row-reverse gap-5 relative py-6 min-h-[132px] items-center px-4 rounded-2xl text-white answer-item"
+    class="relative flex flex-row-reverse gap-5 py-6 min-h-[120px] items-center px-4 rounded-2xl text-white answer-item"
     :style="{ backgroundColor: colorsHex[index].primary }"
   >
+    <ConfettiExplosion
+      v-if="isShowRightAnswer && modelValue.is_correct"
+      :duration="5000"
+    />
+    <div
+      v-if="isShowRightAnswer && !modelValue.is_correct"
+      class="overlay-wrong absolute top-0 left-0 z-10 w-full h-[calc(100%+4px)] bg-gray-900 bg-opacity-60 rounded-2xl"
+    ></div>
+
+    <img
+      v-if="isShowRightAnswer && modelValue.is_correct"
+      v-motion
+      :initial="{ opacity: 0, x: -100 }"
+      :enter="{ opacity: 1, x: 0 }"
+      class="absolute top-0 right-10 w-[60px]"
+      src="@/assets/icons/check.png"
+      alt=""
+    />
+
     <template v-if="editMode">
       <div
         v-if="modelValue.is_correct"

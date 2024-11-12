@@ -1,33 +1,21 @@
 <script setup lang="ts">
 import Choice from '@/components/quizzfly/create/answer/Choice.vue'
-import { useQuestionsStore } from '@/stores/quizzfly/question'
-import type { Quiz } from '@/types/question'
+import type { Answer } from '@/types/question'
 
-const questionsStore = useQuestionsStore()
+defineProps<{
+  answers: Answer[]
+  editMode?: boolean
+  isShowRightAnswer?: boolean
+}>()
 
 const emits = defineEmits<{
   (e: 'select', value: string): void
+  (e: 'update:modelValue', value: any): void
 }>()
-
-const currentQuestion = computed(() => questionsStore.getCurrentQuestion as Quiz)
-
-const handleUpdateAnswer = (value: any) => {
-  if (!currentQuestion.value.answers) return
-
-  const answersResetArr = currentQuestion.value.answers.map((item) => {
-    return {
-      ...item,
-      is_correct: false,
-    }
-  })
-
-  questionsStore.updateCurrentQuestionAnswers(answersResetArr)
-  questionsStore.updateCurrentQuestionAnswer(value)
-}
 </script>
 <template>
   <Choice
-    v-for="(item, index) in currentQuestion.answers"
+    v-for="(item, index) in answers"
     :key="item.id"
     v-motion
     :model-value="item"
@@ -35,9 +23,10 @@ const handleUpdateAnswer = (value: any) => {
     :initial="{ opacity: 0, y: 100 }"
     :enter="{ opacity: 1, y: 0, scale: 1 }"
     :delay="index * 100"
-    :edit-mode="true"
+    :edit-mode="editMode"
     :is-true-false="true"
+    :is-show-right-answer="isShowRightAnswer"
     @select="emits('select', item.id)"
-    @update:model-value="handleUpdateAnswer"
+    @update:model-value="emits('update:modelValue', item)"
   />
 </template>
