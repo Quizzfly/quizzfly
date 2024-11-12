@@ -5,7 +5,6 @@ import { useForm } from 'vee-validate'
 import * as yup from 'yup'
 import { useSocketStore } from '@/stores/socket'
 import { useRoomStore } from '@/stores/room'
-import { showToast } from '@/utils/toast'
 
 const socketStore = useSocketStore()
 const roomStore = useRoomStore()
@@ -14,10 +13,6 @@ const isLoading = ref(false)
 const route = useRoute()
 
 const pinCode = route.params.code as string
-
-const message = computed(() => {
-  return socketStore.getMessage
-})
 
 const { handleSubmit } = useForm({
   validationSchema: yup.object({
@@ -33,13 +28,6 @@ const onSubmit = handleSubmit((values) => {
       name: values.name,
     }
     socketStore.handleJoinRoomData(data)
-  }
-  if (message.value.status === 'error') {
-    showToast({
-      title: 'Join failed',
-      description: message.value.message,
-      variant: 'destructive',
-    })
   }
 
   roomStore.setMemberName(values.name)

@@ -1,8 +1,4 @@
 <script setup lang="ts">
-import { useRoomStore } from '@/stores/room'
-
-const roomStore = useRoomStore()
-
 // onBeforeMount(() => {
 //   roomStore.getRoomDetail()
 // })

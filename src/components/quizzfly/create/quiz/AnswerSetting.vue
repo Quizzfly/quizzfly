@@ -35,7 +35,7 @@ const handleUpdateAnswer = (value: any) => {
 }
 </script>
 <template>
-  <div class="">
+  <div class="pb-8">
     <div class="grid grid-cols-2 gap-4">
       <template v-if="currentQuestion.quiz_type === 'MULTIPLE_CHOICE'">
         <Choice

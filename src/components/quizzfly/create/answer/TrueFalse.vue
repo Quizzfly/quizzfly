@@ -5,6 +5,7 @@ import type { Answer } from '@/types/question'
 defineProps<{
   answers: Answer[]
   editMode?: boolean
+  isShowRightAnswer?: boolean
 }>()
 
 const emits = defineEmits<{
@@ -24,6 +25,7 @@ const emits = defineEmits<{
     :delay="index * 100"
     :edit-mode="editMode"
     :is-true-false="true"
+    :is-show-right-answer="isShowRightAnswer"
     @select="emits('select', item.id)"
     @update:model-value="emits('update:modelValue', item)"
   />

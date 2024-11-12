@@ -18,7 +18,6 @@ function getRandomAvatar(): string {
 // Dữ liệu người dùng
 const users = ref<UserRanking[]>([
   { id: '1', name: 'Evelyn Fisher', score: 22541, imageUrl: getRandomAvatar(), stars: 128 },
-  { id: '2', name: 'Jordan Hill', score: 18698, imageUrl: getRandomAvatar(), stars: 118 },
   { id: '3', name: 'Shirley Daniels', score: 12256, imageUrl: getRandomAvatar(), stars: 88 },
   { id: '4', name: 'Eugene Stephens', score: 9863, imageUrl: getRandomAvatar(), stars: 52 },
   { id: '5', name: 'Madison Williams', score: 6777, imageUrl: getRandomAvatar(), stars: 28 },
@@ -67,7 +66,7 @@ const users = ref<UserRanking[]>([
           opacity: 1,
           y: 0,
         }"
-        :delay="index * 100"
+        :delay="(index + 1) * 100"
         class="flex items-center gap-4 p-4 bg-white border-b border-gray-200"
       >
         <div class="text-xl font-bold">{{ index + 2 }}</div>

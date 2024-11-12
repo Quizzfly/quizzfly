@@ -1,6 +1,5 @@
 <script setup lang="ts">
 // import { Button } from '@/components/ui/button'
-import Ranking from '@/components/room/play/Ranking.vue'
 import {
   Select,
   SelectContent,
@@ -113,5 +112,5 @@ watch(isChechSelected, (val) => {
     <!-- open modal -->
     <!-- <Button @click="openConfirm">Open modal confirm</Button> -->
   </div>
-  <Ranking />
+  <!-- <Ranking /> -->
 </template>

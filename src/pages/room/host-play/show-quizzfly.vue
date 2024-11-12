@@ -1,35 +1,17 @@
 <script setup lang="ts">
 import BarWrapper from '@/components/room/BarWrapper.vue'
-// import PreDisplay from '@/components/room/PreDisplay.vue'
-import QuizzType from '@/components/room/QuizzType.vue'
 import { useLoadingStore } from '@/stores/loading'
 import { useSocketStore } from '@/stores/socket'
-import type { Question } from '@/types/question'
 import HostPlayViewWrapper from '@/components/room/play/HostPlayViewWrapper.vue'
-import type { SocketData } from '@/types/socket'
-import { convertToSnakeCase } from '@/utils/convert'
+import type { SocketQuizStarted } from '@/types/socket'
 import Ranking from '@/components/room/play/Ranking.vue'
 
 const loadingStore = useLoadingStore()
 const socketStore = useSocketStore()
 
-const socketMessage = computed(() => {
-  return socketStore.getMessage
-})
-
-watch(socketMessage, (newVal) => {
-  console.log('socketMessage', newVal)
-})
-
 const isShowRanking = ref(false)
-const socketData = ref<SocketData>()
+const socketData = ref<SocketQuizStarted>()
 
-watch(socketMessage, (newVal) => {
-  console.log('socketMessage', newVal)
-  if (newVal.event === 'quizStarted' || newVal.event === 'nextQuestion') {
-    socketData.value = convertToSnakeCase(newVal.data)
-  }
-})
 onMounted(() => {
   loadingStore.setLoading(true, false)
   setTimeout(() => {
@@ -48,9 +30,9 @@ onMounted(() => {
     <Teleport to="body">
       <Ranking v-if="isShowRanking" />
     </Teleport>
+
     <!-- <PreDisplay /> -->
     <HostPlayViewWrapper
-      v-if="socketData"
       :socket-data="socketData"
       @show-ranking="isShowRanking = $event"
     />
@@ -61,5 +43,8 @@ onMounted(() => {
 .img-test {
   background: url('@/assets/img/bg-image-3.jpg');
   background-size: cover;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  background-color: rgba(255, 255, 255, 0.3);
 }
 </style>

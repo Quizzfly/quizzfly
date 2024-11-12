@@ -46,7 +46,7 @@ onMounted(() => {
     const data: IRoomSocket = {
       roomPin: detailRoom.value.room_pin,
       userId: authStore.getUser?.id,
-      name: 'quizzfly',
+      name: 'name',
     }
 
     socketStore.handleCreateRoomData(data)

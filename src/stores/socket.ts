@@ -5,7 +5,6 @@ import { useRoomStore } from './room'
 import { showToast } from '@/utils/toast'
 import { apiError } from '@/utils/exceptionHandler'
 import router from '@/routers/router'
-
 import { useAuthStore } from './auth'
 import type { SocketMessage } from '@/types/socket'
 
@@ -27,6 +26,14 @@ export const useSocketStore = defineStore({
 
       this.client.on('connect', () => {
         this.connected = true
+      })
+
+      this.client.on('exception', (newContent: any) => {
+        showToast({
+          title: 'Error',
+          description: newContent?.message,
+          variant: 'destructive',
+        })
       })
 
       this.client.on('playerJoined', (newContent: IMember) => {
@@ -71,6 +78,14 @@ export const useSocketStore = defineStore({
         console.log('Received quizStarted:', newContent) // Debug
         this.message = {
           event: 'quizStarted',
+          data: newContent,
+        }
+      })
+
+      this.client.on('summaryAnswer', (newContent: any) => {
+        console.log('Received summaryAnswer:', newContent) // Debug
+        this.message = {
+          event: 'summaryAnswer',
           data: newContent,
         }
       })
@@ -135,6 +150,13 @@ export const useSocketStore = defineStore({
         this.client = null
         this.connected = false
       }
+    },
+    handleFinishQuestion(questionId: string) {
+      const roomStore = useRoomStore()
+      this.client.emit('finishQuestion', {
+        roomPin: roomStore.getRoomInfo.room_pin,
+        questionId,
+      })
     },
   },
   getters: {
