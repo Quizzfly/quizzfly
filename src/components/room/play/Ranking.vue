@@ -1,13 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import type { SocketLeaderboard } from '@/types/socket'
 
-interface UserRanking {
-  id: string
-  name: string
-  score: number
-  imageUrl: string
-  stars: number
-}
+const props = defineProps<{
+  leaderboardData: SocketLeaderboard
+}>()
 
 // Hàm tạo avatar ngẫu nhiên
 function getRandomAvatar(): string {
@@ -15,13 +11,16 @@ function getRandomAvatar(): string {
   return `https://avatars.dicebear.com/api/avataaars/${randomSeed}.svg`
 }
 
-// Dữ liệu người dùng
-const users = ref<UserRanking[]>([
-  { id: '1', name: 'Evelyn Fisher', score: 22541, imageUrl: getRandomAvatar(), stars: 128 },
-  { id: '3', name: 'Shirley Daniels', score: 12256, imageUrl: getRandomAvatar(), stars: 88 },
-  { id: '4', name: 'Eugene Stephens', score: 9863, imageUrl: getRandomAvatar(), stars: 52 },
-  { id: '5', name: 'Madison Williams', score: 6777, imageUrl: getRandomAvatar(), stars: 28 },
-])
+// sort leaderboard by rank property
+const leaderboardArr = computed(() => {
+  const arr = [...props.leaderboardData.leader_board]
+  return arr
+    .sort((a, b) => b.rank - a.rank)
+    .map((item) => ({
+      ...item,
+      avatar: getRandomAvatar(),
+    }))
+})
 </script>
 
 <template>
@@ -47,16 +46,16 @@ const users = ref<UserRanking[]>([
           class="w-12 h-12 rounded-full"
         />
         <div class="flex-1">
-          <p class="font-semibold">{{ users[0].name }}</p>
+          <p class="font-semibold">{{ leaderboardArr[0].name }}</p>
         </div>
         <div class="text-yellow-400 text-3xl">🏆</div>
-        <p class="text-3xl font-bold">{{ users[0].score }}</p>
+        <p class="text-3xl font-bold">{{ leaderboardArr[0].score }}</p>
       </div>
 
       <!-- Các hạng còn lại -->
       <div
-        v-for="(user, index) in users.slice(1)"
-        :key="user.id"
+        v-for="(user, index) in leaderboardArr.slice(1)"
+        :key="user.user_id"
         v-motion
         :initial="{
           opacity: 0,

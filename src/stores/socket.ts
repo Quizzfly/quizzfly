@@ -6,7 +6,7 @@ import { showToast } from '@/utils/toast'
 import { apiError } from '@/utils/exceptionHandler'
 import router from '@/routers/router'
 import { useAuthStore } from './auth'
-import type { SocketMessage } from '@/types/socket'
+import type { SocketLeaderboard, SocketMessage, SocketResultAnswer } from '@/types/socket'
 
 const BASE_URL_SOCKET = import.meta.env.VITE_BASE_URL_SOCKET || 'https://api.quizzfly.site/rooms'
 
@@ -16,19 +16,23 @@ export const useSocketStore = defineStore({
     client: null as any,
     connected: false,
     message: {} as SocketMessage,
+    resolveCallback: null as any,
   }),
   actions: {
-    setupSocketStore() {
+    async setupSocketStore() {
       const roomStore = useRoomStore()
       this.clearSocketStore()
 
       this.client = io(BASE_URL_SOCKET)
 
       this.client.on('connect', () => {
+        console.log('Connected to socket server') // Debug
         this.connected = true
+        this.resolveCallback && this.resolveCallback()
       })
 
       this.client.on('exception', (newContent: any) => {
+        console.log('Received exception:', newContent) // Debug
         showToast({
           title: 'Error',
           description: newContent?.message,
@@ -89,17 +93,38 @@ export const useSocketStore = defineStore({
           data: newContent,
         }
       })
+
+      this.client.on('resultAnswer', (newContent: SocketResultAnswer) => {
+        console.log('Received resultAnswer:', newContent) // Debug
+        this.message = {
+          event: 'resultAnswer',
+          data: newContent,
+        }
+      })
+
+      this.client.on('updateLeaderBoard', (newContent: SocketLeaderboard) => {
+        console.log('Received updateLeaderBoard:', newContent) // Debug
+        this.message = {
+          event: 'updateLeaderBoard',
+          data: newContent,
+        }
+      })
+
+      await new Promise((resolve) => {
+        this.resolveCallback = resolve
+      })
     },
     handleCreateRoomData(data: IRoomSocket) {
       this.client.emit('createRoom', data)
     },
     handleJoinRoomData(data: IRoomSocket) {
       try {
+        console.log('Join room data:', data) // Debug
         this.client.emit('joinRoom', data)
-        router.push({
-          name: 'play-instruction',
-        })
       } catch (error) {
+        router.push({
+          name: 'play-lobby',
+        })
         showToast({
           title: 'Join failed',
           description: apiError(error).message,
@@ -154,6 +179,20 @@ export const useSocketStore = defineStore({
     handleFinishQuestion(questionId: string) {
       const roomStore = useRoomStore()
       this.client.emit('finishQuestion', {
+        roomPin: roomStore.getRoomInfo.room_pin,
+        questionId,
+      })
+    },
+    handleAnswerQuestion(data: { answerId: string; questionId: string }) {
+      const roomStore = useRoomStore()
+      this.client.emit('answerQuestion', {
+        roomPin: roomStore.getRoomInfo.room_pin,
+        ...data,
+      })
+    },
+    handleRequestLeaderboard(questionId: string) {
+      const roomStore = useRoomStore()
+      this.client.emit('updateLeaderboard', {
         roomPin: roomStore.getRoomInfo.room_pin,
         questionId,
       })
