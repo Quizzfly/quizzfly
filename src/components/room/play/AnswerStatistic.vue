@@ -10,6 +10,7 @@
         >
           <!-- Vote Count -->
           <img
+            v-if="option.correct"
             v-motion
             :initial="{ opacity: 0, x: -100 }"
             :enter="{ opacity: 1, x: 0 }"
@@ -55,6 +56,7 @@ const optionMapped = computed(() => {
       label: answer.content,
       votes: props.summaryAnswer.answers_count[answer.id],
       color: colorsHex[index].primary,
+      correct: props.summaryAnswer.correct_answer_id === answer.id,
     }
   })
 })

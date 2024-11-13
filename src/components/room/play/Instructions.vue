@@ -31,7 +31,9 @@ const memberName = computed(() => {
     >
       {{ memberName }}
     </div>
-    <h2 class="text-2xl font-bold text-white">You're in! See your nickname on screen</h2>
+    <h2 class="text-center text-2xl font-bold text-white">
+      You're in! See your nickname on screen
+    </h2>
   </div>
 </template>
 <style scoped>

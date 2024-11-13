@@ -1,7 +1,36 @@
 import type { Question } from './question'
 
-export type SocketEventName = 'nextQuestion' | 'quizStarted' | 'summaryAnswer'
+export type SocketEventName =
+  | 'nextQuestion'
+  | 'quizStarted'
+  | 'summaryAnswer'
+  | 'resultAnswer'
+  | 'updateLeaderBoard'
 
+export interface SocketLeaderboard {
+  room_pin: string
+  leader_board: LeaderboardEntry[]
+}
+
+interface LeaderboardEntry {
+  user_id: string
+  socket_id: string
+  name: string
+  role: string
+  score: number
+  total_score: string
+  rank: number
+}
+
+export interface SocketResultAnswer {
+  room_pin: string
+  score: number
+  total_score: number
+  correct: boolean
+  question_id: string
+  correct_answer_id: string
+  chosen_answer_id: string
+}
 export interface SocketSummaryAnswer {
   room_pin: string
   question_id: string
@@ -17,5 +46,5 @@ export interface SocketQuizStarted {
 
 export interface SocketMessage {
   event: SocketEventName
-  data: SocketQuizStarted | SocketSummaryAnswer
+  data: SocketQuizStarted | SocketSummaryAnswer | SocketResultAnswer | SocketLeaderboard
 }

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Button from '@/components/ui/button/Button.vue'
 import Answers from '../common/Answers.vue'
-import type { SocketQuizStarted, SocketSummaryAnswer } from '@/types/socket'
+import type { SocketLeaderboard, SocketQuizStarted, SocketSummaryAnswer } from '@/types/socket'
 import { useSocketStore } from '@/stores/socket'
 import type { Quiz } from '@/types/question'
 const socketStore = useSocketStore()
@@ -429,7 +429,7 @@ const socketMessage = computed(() => {
 })
 
 const emits = defineEmits<{
-  (e: 'showRanking', val: boolean): void
+  (e: 'showRanking', val: boolean, data?: SocketLeaderboard): void
 }>()
 
 const socketData = ref<SocketQuizStarted | null>(null)
@@ -445,10 +445,11 @@ const handleShowRightAnswer = async (time: number) => {
   isShowRightAnswer.value = false
 }
 
-const handleShowRanking = async (time: number) => {
-  emits('showRanking', true)
-  await handleShowRightAnswer(time)
-  // emits('showRanking', false)
+const handleShowRanking = async (time: number, val: SocketLeaderboard) => {
+  emits('showRanking', true, val)
+  await new Promise((resolve) => setTimeout(resolve, time))
+  emits('showRanking', false)
+  handleNextQuestion()
 }
 
 const handleNextQuestion = () => {
@@ -484,9 +485,9 @@ const handleNewQuestion = (data: SocketQuizStarted) => {
 
         await handleShowRightAnswer(6000)
 
-        await handleShowRanking(6000)
-
-        handleNextQuestion()
+        // request get leaderboard
+        if (!socketData.value?.question) return
+        socketStore.handleRequestLeaderboard(socketData.value?.question.id)
       }
     }, 1000)
   }
@@ -498,13 +499,18 @@ const handleSummaryAnswer = (val: SocketSummaryAnswer) => {
 
 watch(
   () => socketMessage.value,
-  (newVal) => {
+  async (newVal) => {
     if (newVal.event === 'summaryAnswer') {
       handleSummaryAnswer(newVal.data as SocketSummaryAnswer)
     }
 
     if (newVal.event === 'nextQuestion' || newVal.event === 'quizStarted') {
       handleNewQuestion(newVal.data as SocketQuizStarted)
+    }
+
+    if (newVal.event === 'updateLeaderBoard') {
+      console.log('updateLeaderBoard', newVal.data)
+      await handleShowRanking(6000, newVal.data as SocketLeaderboard)
     }
   },
   { immediate: true },

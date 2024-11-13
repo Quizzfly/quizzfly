@@ -2,8 +2,8 @@
 import BarWrapper from '@/components/room/BarWrapper.vue'
 import { useLoadingStore } from '@/stores/loading'
 import { useSocketStore } from '@/stores/socket'
-import HostPlayViewWrapper from '@/components/room/play/HostPlayViewWrapper.vue'
-import type { SocketQuizStarted } from '@/types/socket'
+import PlayHostView from '@/components/room/play/PlayHostView.vue'
+import type { SocketLeaderboard, SocketQuizStarted } from '@/types/socket'
 import Ranking from '@/components/room/play/Ranking.vue'
 
 const loadingStore = useLoadingStore()
@@ -11,35 +11,41 @@ const socketStore = useSocketStore()
 
 const isShowRanking = ref(false)
 const socketData = ref<SocketQuizStarted>()
+const leaderboardData = ref<SocketLeaderboard>()
 
 onMounted(() => {
   loadingStore.setLoading(true, false)
   setTimeout(() => {
     loadingStore.setLoading(false)
+    socketStore.handleStartQuestion()
   }, 2000)
-  socketStore.handleStartQuestion()
-  setTimeout(() => {
-    // socketStore.handleNextQuestion()
-  }, 3000)
 })
+
+const handleShowRanking = (value: boolean, data?: SocketLeaderboard) => {
+  isShowRanking.value = value
+  leaderboardData.value = data
+}
 </script>
 <template>
   <div
     class="ralative img-test w-full h-screen p-6 flex flex-col gap-6 overflow-hidden items-center justify-center bg-gray-200 bg-cover transition-all duration-200 ease-in-out"
   >
     <Teleport to="body">
-      <Ranking v-if="isShowRanking" />
+      <Ranking
+        v-if="isShowRanking && leaderboardData"
+        :leaderboard-data="leaderboardData"
+      />
     </Teleport>
 
     <!-- <PreDisplay /> -->
-    <HostPlayViewWrapper
+    <PlayHostView
       :socket-data="socketData"
-      @show-ranking="isShowRanking = $event"
+      @show-ranking="handleShowRanking"
     />
     <BarWrapper />
   </div>
 </template>
-<style scoped lang="scss">
+<style scoped>
 .img-test {
   background: url('@/assets/img/bg-image-3.jpg');
   background-size: cover;

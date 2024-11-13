@@ -3,13 +3,12 @@ import InputValidation from '@/components/base/InputValidation.vue'
 import Button from '@/components/ui/button/Button.vue'
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
-import { useSocketStore } from '@/stores/socket'
 import { useRoomStore } from '@/stores/room'
 
-const socketStore = useSocketStore()
 const roomStore = useRoomStore()
 
 const isLoading = ref(false)
+const router = useRouter()
 const route = useRoute()
 
 const pinCode = route.params.code as string
@@ -22,12 +21,11 @@ const { handleSubmit } = useForm({
 
 const onSubmit = handleSubmit((values) => {
   isLoading.value = true
+
+  localStorage.setItem('name', values.name)
   if (pinCode) {
-    const data = {
-      roomPin: pinCode,
-      name: values.name,
-    }
-    socketStore.handleJoinRoomData(data)
+    localStorage.setItem('roomPin', pinCode)
+    router.push({ name: 'play-instruction' })
   }
 
   roomStore.setMemberName(values.name)
