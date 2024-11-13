@@ -5,13 +5,24 @@ import { useSocketStore } from '@/stores/socket'
 import type { ILocked, IMember, IKickMem } from '@/types'
 import QRCodeVue3 from 'qrcode-vue3'
 import { avatars } from '@/utils/avatar'
+import { showToast } from '@/utils/toast'
 
-const roomStore = useRoomStore()
-const socketStore = useSocketStore()
+import { useLoadingStore } from '@/stores/loading'
+import { useAuthStore } from '@/stores/auth'
+import type { IRoomSocket } from '@/types'
+
+const route = useRoute()
+
+const router = useRouter()
+const loadingStore = useLoadingStore()
+const authStore = useAuthStore()
 
 const detailRoom = computed(() => {
   return roomStore.getRoomInfo
 })
+
+const roomStore = useRoomStore()
+const socketStore = useSocketStore()
 
 const listMember = computed(() => {
   return roomStore.getListMemberJoins
@@ -25,6 +36,32 @@ const hostOrigin = ref('')
 const membersWithAvatars = ref<IMember[]>([])
 onBeforeMount(() => {
   hostOrigin.value = window.location.origin
+})
+
+const roomPin = ref('')
+
+onMounted(() => {
+  console.log('detailRoom', route)
+  if (!detailRoom.value.id) {
+    router.push({ name: 'host-live' })
+  }
+
+  roomPin.value = detailRoom.value.room_pin
+
+  loadingStore.setLoading(true, false)
+  setTimeout(() => {
+    loadingStore.setLoading(false)
+  }, 2000)
+
+  if (detailRoom.value.id) {
+    const data: IRoomSocket = {
+      roomPin: detailRoom.value.room_pin,
+      userId: authStore.getUser?.id,
+      name: 'name',
+    }
+
+    socketStore.handleCreateRoomData(data)
+  }
 })
 
 watch(listMember.value, (val) => {
@@ -64,6 +101,23 @@ const removeMember = (item: IMember) => {
 
   socketStore.handleKickMember(data)
 }
+
+const copyCode = async () => {
+  try {
+    await navigator.clipboard.writeText(detailRoom.value.room_pin)
+    showToast({
+      title: 'success',
+      description: 'Copy pin code success',
+      variant: 'default',
+    })
+  } catch (err) {
+    showToast({
+      title: 'Error',
+      description: 'Failed to copy pin code',
+      variant: 'destructive',
+    })
+  }
+}
 </script>
 
 <template>
@@ -92,7 +146,12 @@ const removeMember = (item: IMember) => {
           class="flex flex-col bg-white px-6 py-3 rounded"
         >
           <p class="text-base font-medium">Game PIN:</p>
-          <h1 class="text-6xl font-extrabold">{{ detailRoom.room_pin }}</h1>
+          <h1
+            class="text-6xl font-extrabold py-3 px-4 rounded cursor-pointer hover:bg-slate-300"
+            @click="copyCode()"
+          >
+            {{ detailRoom.room_pin }}
+          </h1>
         </div>
       </div>
       <div
@@ -100,7 +159,7 @@ const removeMember = (item: IMember) => {
         :initial="{ opacity: 0, x: 100 }"
         :enter="{ opacity: 1, x: 0, scale: 1 }"
         :delay="2000"
-        class="bg-white w-28 h-28 rounded p-1"
+        class="bg-white w-32 h-32 rounded p-1"
       >
         <QRCodeVue3
           :width="250"
@@ -150,11 +209,9 @@ const removeMember = (item: IMember) => {
         <span class="text-2xl i-solar-lock-keyhole-minimalistic-unlocked-bold"></span>
       </div>
 
-      <Button class="text-xl p-6 font-semibold">
-        <RouterLink :to="{ name: 'host-live-play', params: { roomId: detailRoom?.id } }">
-          Start
-        </RouterLink>
-      </Button>
+      <RouterLink :to="{ name: 'host-live-play', params: { roomId: detailRoom?.id } }">
+        <Button class="text-xl p-6 font-semibold"> Start </Button>
+      </RouterLink>
     </div>
 
     <div class="w-full mt-16 flex flex-col gap-3">

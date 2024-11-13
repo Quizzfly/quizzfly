@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
 import { useRoomStore } from '@/stores/room'
 
+const emit = defineEmits(['start'])
 const route = useRoute()
 
 const roomStore = useRoomStore()
@@ -30,7 +31,12 @@ const onSubmit = () => {
       lobby_music: 'string',
     }
     roomStore.initRoom(data)
+    handleStartClick()
   }
+}
+
+const handleStartClick = () => {
+  emit('start')
 }
 </script>
 

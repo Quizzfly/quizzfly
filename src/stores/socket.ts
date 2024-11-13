@@ -1,6 +1,13 @@
 import { defineStore } from 'pinia'
 import { io } from 'socket.io-client'
-import type { IRoomSocket, IMember, ILocked, IRoomLocked, IKickMem } from '@/types/room'
+import type {
+  IRoomSocket,
+  IMember,
+  ILocked,
+  IRoomLocked,
+  IKickMem,
+  IKickPlayer,
+} from '@/types/room'
 import { useRoomStore } from './room'
 import { showToast } from '@/utils/toast'
 import { apiError } from '@/utils/exceptionHandler'
@@ -61,13 +68,16 @@ export const useSocketStore = defineStore({
         }
       })
 
-      this.client.on('kickPlayer', (newContent: IMember) => {
+      this.client.on('kickPlayer', (newContent: IKickPlayer) => {
+        console.log(newContent, 'check new content')
         const index = roomStore.getListMemberJoins.findIndex(
-          (item: any) => item.socketId === newContent.new_player.socket_id,
+          (item: any) => item.new_player.socket_id === newContent.player_left.socket_id,
         )
+        console.log(index, 'check index')
         if (index !== -1) {
           roomStore.getListMemberJoins.splice(index, 1)
         }
+        console.log(roomStore.getListMemberJoins, 'check get list member')
       })
 
       this.client.on('nextQuestion', (newContent: any) => {
