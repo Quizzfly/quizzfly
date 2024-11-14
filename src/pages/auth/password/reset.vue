@@ -17,7 +17,11 @@ const confirmDialog = useConfirmDialog()
 
 const { errors, handleSubmit, defineField } = useForm({
   validationSchema: yup.object({
-    password: yup.string().required('Password is required'),
+    password: yup
+      .string()
+      .required('Password is required')
+      .min(6, 'Password must be at least 6 characters')
+      .matches(/[A-Z]/, 'Password must contain uppercase letter'),
     confirmPassword: yup
       .string()
       .oneOf([yup.ref('password')], 'Passwords must match')
