@@ -14,6 +14,7 @@ export const roomRoute: RouteRecordRaw[] = [
     name: 'host-live-play',
     meta: {
       layout: 'GuestLayout',
+      redirectOnErrorRouterName: 'host-live',
     },
     component: () => import('@/pages/room/host-play/show-quizzfly.vue'),
   },

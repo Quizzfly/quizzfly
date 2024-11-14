@@ -5,9 +5,11 @@ import { useSocketStore } from '@/stores/socket'
 import PlayHostView from '@/components/room/play/PlayHostView.vue'
 import type { SocketLeaderboard, SocketQuizStarted } from '@/types/socket'
 import Ranking from '@/components/room/play/Ranking.vue'
+import { useRoomStore } from '@/stores/room'
 
 const loadingStore = useLoadingStore()
 const socketStore = useSocketStore()
+const roomStore = useRoomStore()
 
 const isShowRanking = ref(false)
 const socketData = ref<SocketQuizStarted>()
@@ -19,6 +21,10 @@ onMounted(() => {
     loadingStore.setLoading(false)
     socketStore.handleStartQuestion()
   }, 2000)
+})
+
+onBeforeUnmount(() => {
+  roomStore.$reset()
 })
 
 const handleShowRanking = (value: boolean, data?: SocketLeaderboard) => {

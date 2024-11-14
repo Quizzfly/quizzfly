@@ -28,7 +28,6 @@ export const useAuthStore = defineStore({
         access: '',
         refresh: '',
       }
-      // location.reload()
       router.push({ name: 'login' })
     },
     setUser(user: IUser) {
@@ -39,10 +38,12 @@ export const useAuthStore = defineStore({
         const { data } = await loginApi(email, password)
         localStorage.setItem('access_token', data.access_token)
         localStorage.setItem('refresh_token', data.refresh_token)
-        const redirect = localStorage.getItem('redirect')
+
+        const redirectQuery = router.currentRoute.value.query.redirect as string
+        const redirect = redirectQuery ? decodeURIComponent(redirectQuery) : ''
+
         await this.setupAuth()
         if (redirect) {
-          localStorage.removeItem('redirect')
           router.push(redirect)
         } else {
           location.reload()
@@ -60,10 +61,12 @@ export const useAuthStore = defineStore({
         const { data } = await loginGGApi(access_token)
         localStorage.setItem('access_token', data.access_token)
         localStorage.setItem('refresh_token', data.refresh_token)
-        const redirect = localStorage.getItem('redirect')
+
+        const redirectQuery = router.currentRoute.value.query.redirect as string
+        const redirect = redirectQuery ? decodeURIComponent(redirectQuery) : ''
+
         await this.setupAuth()
         if (redirect) {
-          localStorage.removeItem('redirect')
           router.push(redirect)
         } else {
           location.reload()

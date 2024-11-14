@@ -15,7 +15,7 @@ function getRandomAvatar(): string {
 const leaderboardArr = computed(() => {
   const arr = [...props.leaderboardData.leader_board]
   return arr
-    .sort((a, b) => b.rank - a.rank)
+    .sort((a, b) => Number(b.total_score) - Number(a.total_score))
     .map((item) => ({
       ...item,
       avatar: getRandomAvatar(),
@@ -49,7 +49,7 @@ const leaderboardArr = computed(() => {
           <p class="font-semibold">{{ leaderboardArr[0].name }}</p>
         </div>
         <div class="text-yellow-400 text-3xl">🏆</div>
-        <p class="text-3xl font-bold">{{ leaderboardArr[0].score }}</p>
+        <p class="text-3xl font-bold">{{ leaderboardArr[0].total_score }}</p>
       </div>
 
       <!-- Các hạng còn lại -->
@@ -79,7 +79,7 @@ const leaderboardArr = computed(() => {
         </div>
         <div class="text-gray-700 font-bold text-xl flex items-center gap-1">
           <span class="text-blue-600">⭐</span>
-          <span>{{ user.score }}</span>
+          <span>{{ user.total_score }}</span>
         </div>
       </div>
     </div>

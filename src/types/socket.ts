@@ -5,8 +5,12 @@ export type SocketEventName =
   | 'quizStarted'
   | 'summaryAnswer'
   | 'resultAnswer'
-  | 'updateLeaderBoard'
+  | 'updateLeaderboard'
+  | 'answerQuestion'
 
+export interface SocketUserAnswerQuestion {
+  noPlayerAnswered: number
+}
 export interface SocketLeaderboard {
   room_pin: string
   leader_board: LeaderboardEntry[]
@@ -46,5 +50,10 @@ export interface SocketQuizStarted {
 
 export interface SocketMessage {
   event: SocketEventName
-  data: SocketQuizStarted | SocketSummaryAnswer | SocketResultAnswer | SocketLeaderboard
+  data:
+    | SocketQuizStarted
+    | SocketSummaryAnswer
+    | SocketResultAnswer
+    | SocketLeaderboard
+    | SocketUserAnswerQuestion
 }
