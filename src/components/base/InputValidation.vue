@@ -7,14 +7,21 @@ const props = defineProps<{
   type: string
   placeholder: string
   required?: boolean
+  initialValue?: string
 }>()
 
 // The `name` is returned in a function because we want to make sure it stays reactive
 // If the name changes you want `useField` to be able to pick it up
 const { value, errorMessage } = useField(() => props.name) as any as {
-  value: string
+  value: Ref<string>
   errorMessage: string
 }
+
+onBeforeMount(() => {
+  if (props.initialValue) {
+    value.value = props.initialValue
+  }
+})
 </script>
 <template>
   <Input

@@ -85,7 +85,18 @@ const debouncedFn = useDebounceFn((value) => {
       <QuizzflyFilter />
     </div>
     <div class="flex-auto overflow-y-auto">
-      <QuizzflyList />
+      <div
+        v-if="!quizzflyStore.getIsFetching && quizzflyStore.getQuizzflys.length === 0"
+        class="h-full w-full flex flex-col justify-center items-center"
+      >
+        <img
+          class="w-[100px]"
+          src="@/assets/icons/empty.png"
+          alt=""
+        />
+        <p>No quizzfly found. Create one now!</p>
+      </div>
+      <QuizzflyList v-else />
     </div>
     <div
       v-if="quizzflyStore.getQuizzflyMeta"

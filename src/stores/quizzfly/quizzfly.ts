@@ -28,6 +28,7 @@ export const useQuizzflyStore = defineStore({
       deleted_at: null,
     } as IQuizzflyInfo,
     isUpdating: false,
+    isFetching: false,
     quizzflys: [] as IQuizzflyInfo[],
     quizzflyMeta: null as IPaging | null,
   }),
@@ -79,6 +80,7 @@ export const useQuizzflyStore = defineStore({
     },
     async fetchQuizzflys({ page = 1, keyword = '' }) {
       try {
+        this.isFetching = true
         const { data, meta } = await getQuizzflysApi({ page, keyword })
         this.quizzflys = data
         this.quizzflyMeta = meta as IPaging
@@ -89,6 +91,8 @@ export const useQuizzflyStore = defineStore({
           variant: 'destructive',
         })
         throw error
+      } finally {
+        this.isFetching = false
       }
     },
     async getQuizzflyDetail(id: string) {
@@ -110,5 +114,6 @@ export const useQuizzflyStore = defineStore({
     getIsUpdating: (state) => state.isUpdating,
     getQuizzflys: (state) => state.quizzflys,
     getQuizzflyMeta: (state) => state.quizzflyMeta,
+    getIsFetching: (state) => state.isFetching,
   },
 })

@@ -9,9 +9,11 @@ import { quizOptions } from '@/utils/quiz'
 import { useQuestionsStore } from '@/stores/quizzfly/question'
 import { useConfirmDialog } from '@/stores/modal'
 import PreviewLayout from '../layout/PreviewLayout.vue'
+import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
 
 const currentQuestion = defineModel<Question>({ required: true })
 const questionsStore = useQuestionsStore()
+const quizzflyStore = useQuizzflyStore()
 const confirmDialog = useConfirmDialog()
 
 const props = defineProps<{
@@ -116,6 +118,11 @@ const handleChangePosition = (element: any) => {
   }
 
   questionsStore.changePosition(data)
+}
+
+const selectQuestion = (question: Question) => {
+  if (quizzflyStore.getIsUpdating) return
+  currentQuestion.value = question
 }
 </script>
 <template>
@@ -239,7 +246,7 @@ const handleChangePosition = (element: any) => {
               <div class="flex justify-between items-center px-2">
                 <span class="text-xs font-medium">{{ element.type.toLowerCase() }}</span>
                 <span
-                  v-if="currentQuestion.id === element.id"
+                  v-if="currentQuestion.id === element.id && currentQuestion.type === 'QUIZ'"
                   class="text-xs font-medium text-gray-500"
                   >{{ element.time_limit }}s</span
                 >
@@ -250,19 +257,14 @@ const handleChangePosition = (element: any) => {
                 :class="{
                   'border-primary': currentQuestion.id === element.id && !drag,
                 }"
-                @click="currentQuestion = element"
+                @click="selectQuestion(element)"
               >
                 <div
                   v-if="element.type === 'QUIZ'"
                   class="text-[10px] font-medium bg-slate-200 absolute top-2 left-2 px-2 py-[2px] rounded-sm"
                 >
-                  {{ element.quiz_type.toLowerCase().replace('_', ' ') }}
+                  {{ element.quiz_type.toLowerCase().replace('_', ' ').replace('multiple ', '') }}
                 </div>
-                <!-- <p
-                  class="truncate text-ellipsis bg-white rounded-sm px-2"
-                >
-                  {{ element.id }}
-                </p> -->
                 <p
                   v-if="element.type === 'QUIZ'"
                   class="truncate text-ellipsis bg-white rounded-sm px-2"

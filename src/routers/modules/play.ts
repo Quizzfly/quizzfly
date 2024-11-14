@@ -17,6 +17,9 @@ export const playRoute: RouteRecordRaw[] = [
   {
     path: 'instruction',
     name: 'play-instruction',
+    meta: {
+      redirectOnErrorRouterName: 'play-lobby',
+    },
     component: () => import('@/pages/room/member-play/instructions-play.vue'),
   },
 ]

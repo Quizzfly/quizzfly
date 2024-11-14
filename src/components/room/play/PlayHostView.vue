@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import Button from '@/components/ui/button/Button.vue'
 import Answers from '../common/Answers.vue'
-import type { SocketLeaderboard, SocketQuizStarted, SocketSummaryAnswer } from '@/types/socket'
+import type {
+  SocketLeaderboard,
+  SocketQuizStarted,
+  SocketSummaryAnswer,
+  SocketUserAnswerQuestion,
+} from '@/types/socket'
 import { useSocketStore } from '@/stores/socket'
 import type { Quiz } from '@/types/question'
 const socketStore = useSocketStore()
@@ -436,6 +441,7 @@ const socketData = ref<SocketQuizStarted | null>(null)
 const isShowRightAnswer = ref(false)
 const timeCountdown = ref(0)
 const summaryAnswer = ref<SocketSummaryAnswer | null>(null)
+const usersAnswerCount = ref(0)
 
 let countdownInterval: ReturnType<typeof setInterval> | null = null
 
@@ -508,9 +514,13 @@ watch(
       handleNewQuestion(newVal.data as SocketQuizStarted)
     }
 
-    if (newVal.event === 'updateLeaderBoard') {
-      console.log('updateLeaderBoard', newVal.data)
+    if (newVal.event === 'updateLeaderboard') {
+      console.log('updateLeaderboard', newVal.data)
       await handleShowRanking(6000, newVal.data as SocketLeaderboard)
+    }
+
+    if (newVal.event === 'answerQuestion') {
+      usersAnswerCount.value = (newVal.data as SocketUserAnswerQuestion).noPlayerAnswered
     }
   },
   { immediate: true },
@@ -552,12 +562,15 @@ onUnmounted(() => {
         <div class="flex items-center justify-center rounded-sm h-full">
           <AnswerStatistic
             v-if="isShowRightAnswer && summaryAnswer && socketData?.question"
+            :key="socketData?.question?.id"
             :summary-answer="summaryAnswer"
             :current-question="socketData?.question"
           />
           <img
-            v-else
-            src="@/assets/img/bg-image-1.jpg"
+            v-else-if="
+              socketData?.question.type === 'QUIZ' && (socketData?.question as Quiz).files[0]?.url
+            "
+            :src="(socketData?.question as Quiz).files[0]?.url"
             class="w-[500px] object-cover rounded-sm"
             alt=""
           />
@@ -565,7 +578,7 @@ onUnmounted(() => {
 
         <div class="flex flex-col gap-3 justify-center items-center">
           <div class="p-4 rounded-full bg-primary w-[68px] h-[68px] text-center">
-            <p class="font-black text-white text-3xl tracking-wider">1</p>
+            <p class="font-black text-white text-3xl tracking-wider">{{ usersAnswerCount }}</p>
           </div>
           <div class="px-4 py-2 bg-primary rounded-full">
             <p class="flex items-center justify-center text-white font-semibold text-base">
