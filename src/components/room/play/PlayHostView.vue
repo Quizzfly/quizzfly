@@ -559,7 +559,7 @@ onUnmounted(() => {
           <p class="font-black text-white text-3xl tracking-wider">{{ timeCountdown }}</p>
         </div>
 
-        <div class="flex items-center justify-center rounded-sm h-full">
+        <div class="flex items-center justify-center rounded-sm h-full flex-auto">
           <AnswerStatistic
             v-if="isShowRightAnswer && summaryAnswer && socketData?.question"
             :key="socketData?.question?.id"
@@ -571,7 +571,7 @@ onUnmounted(() => {
               socketData?.question.type === 'QUIZ' && (socketData?.question as Quiz).files[0]?.url
             "
             :src="(socketData?.question as Quiz).files[0]?.url"
-            class="w-[500px] object-cover rounded-sm"
+            class="max-w-[80%] h-full object-contain rounded-sm"
             alt=""
           />
         </div>
