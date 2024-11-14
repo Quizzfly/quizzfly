@@ -10,8 +10,16 @@ import { changePasswordApi } from '@/services/auth'
 const isLoading = ref(false)
 const { handleSubmit } = useForm({
   validationSchema: yup.object({
-    oldPassword: yup.string().required('Old password is required'),
-    newPassword: yup.string().required('New password is required'),
+    oldPassword: yup
+      .string()
+      .required('Old password is required')
+      .min(6, 'Password must be at least 6 characters')
+      .matches(/[A-Z]/, 'Password must contain uppercase letter'),
+    newPassword: yup
+      .string()
+      .required('New password is required')
+      .min(6, 'Password must be at least 6 characters')
+      .matches(/[A-Z]/, 'Password must contain uppercase letter'),
     confirmNewPassword: yup
       .string()
       .oneOf([yup.ref('newPassword')], 'Passwords must match')

@@ -40,3 +40,15 @@ export interface IKickMem {
   roomPin: string
   socketId: string
 }
+
+export interface IKickPlayer {
+  player_left: {
+    socket_id: string
+    user_id: string
+    name: string
+    role: string
+    room_pin: string
+    total_core: number
+  }
+  total_player: number
+}
