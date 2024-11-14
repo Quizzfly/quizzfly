@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
 import { useRoomStore } from '@/stores/room'
 
-const emit = defineEmits(['start'])
+const emits = defineEmits(['start'])
 const route = useRoute()
 
 const roomStore = useRoomStore()
@@ -36,7 +36,7 @@ const onSubmit = () => {
 }
 
 const handleStartClick = () => {
-  emit('start')
+  emits('start')
 }
 </script>
 

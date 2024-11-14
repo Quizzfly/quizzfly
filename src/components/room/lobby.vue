@@ -11,18 +11,16 @@ import { useLoadingStore } from '@/stores/loading'
 import { useAuthStore } from '@/stores/auth'
 import type { IRoomSocket } from '@/types'
 
-const route = useRoute()
-
 const router = useRouter()
+
 const loadingStore = useLoadingStore()
 const authStore = useAuthStore()
+const roomStore = useRoomStore()
+const socketStore = useSocketStore()
 
 const detailRoom = computed(() => {
   return roomStore.getRoomInfo
 })
-
-const roomStore = useRoomStore()
-const socketStore = useSocketStore()
 
 const listMember = computed(() => {
   return roomStore.getListMemberJoins
@@ -32,16 +30,15 @@ const locked = computed(() => {
   return roomStore.getLockedRoom
 })
 
+const roomPin = ref('')
 const hostOrigin = ref('')
 const membersWithAvatars = ref<IMember[]>([])
+
 onBeforeMount(() => {
   hostOrigin.value = window.location.origin
 })
 
-const roomPin = ref('')
-
 onMounted(() => {
-  console.log('detailRoom', route)
   if (!detailRoom.value.id) {
     router.push({ name: 'host-live' })
   }
@@ -65,7 +62,6 @@ onMounted(() => {
 })
 
 watch(listMember.value, (val) => {
-  console.log(val, 'check list member')
   if (val) {
     addAvatarOnList(val)
   }
@@ -90,7 +86,6 @@ const addAvatarOnList = (data: IMember[]) => {
     ...member,
     avatar: avatars[index % avatars.length],
   }))
-  console.log(membersWithAvatars.value, 'checkmemberwith')
 }
 
 const removeMember = (item: IMember) => {
@@ -107,7 +102,7 @@ const copyCode = async () => {
     await navigator.clipboard.writeText(detailRoom.value.room_pin)
     showToast({
       title: 'success',
-      description: 'Copy pin code success',
+      description: 'Copy PIN code success',
       variant: 'default',
     })
   } catch (err) {

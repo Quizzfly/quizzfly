@@ -69,15 +69,12 @@ export const useSocketStore = defineStore({
       })
 
       this.client.on('kickPlayer', (newContent: IKickPlayer) => {
-        console.log(newContent, 'check new content')
         const index = roomStore.getListMemberJoins.findIndex(
           (item: any) => item.new_player.socket_id === newContent.player_left.socket_id,
         )
-        console.log(index, 'check index')
         if (index !== -1) {
           roomStore.getListMemberJoins.splice(index, 1)
         }
-        console.log(roomStore.getListMemberJoins, 'check get list member')
       })
 
       this.client.on('nextQuestion', (newContent: any) => {
