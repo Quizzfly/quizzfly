@@ -9,7 +9,11 @@ import { googleTokenLogin } from 'vue3-google-login'
 const { handleSubmit } = useForm({
   validationSchema: yup.object({
     email: yup.string().email().required('Email is required'),
-    password: yup.string().required('Password is required'),
+    password: yup
+      .string()
+      .required('Password is required')
+      .min(6, 'Password must be at least 6 characters')
+      .matches(/[A-Z]/, 'Password must contain uppercase letter'),
   }),
 })
 
