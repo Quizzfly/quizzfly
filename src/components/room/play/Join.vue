@@ -28,6 +28,8 @@ const onSubmit = handleSubmit((values) => {
     router.push({ name: 'play-instruction' })
   }
 
+  // roomStore.setMemberName(values.name)
+
   roomStore.setMemberName(values.name)
 
   isLoading.value = false

@@ -45,14 +45,12 @@ const quizzflys = computed(() => quizzflyStore.getQuizzflys)
           <div class="flex items-center justify-between">
             <div class="text-sm text-gray-500">@{{ quizzfly.username }}</div>
             <div class="flex gap-2">
-              <Button class="flex items-center h-6 w-17 text-xs">
-                <RouterLink
-                  target="_blank"
-                  :to="{ name: 'host-live', params: { quizzflyId: quizzfly.id } }"
-                >
-                  Host live
-                </RouterLink>
-              </Button>
+              <RouterLink
+                target="_blank"
+                :to="{ name: 'host-live', params: { quizzflyId: quizzfly.id } }"
+                ><Button class="flex items-center h-6 w-17 text-xs"> Host live</Button>
+              </RouterLink>
+
               <Button
                 variant="secondary"
                 class="flex items-center h-6 w-17 text-xs"
