@@ -6,6 +6,7 @@ import {
   quizzflyRoute,
   roomRoute,
   playRoute,
+  groupRoute,
 } from './modules'
 import { authGuard } from './auth-guard'
 const { progress } = useIndicator()
@@ -41,6 +42,12 @@ const routes: RouteRecordRaw[] = [
     beforeEnter: [authGuard],
     component: () => import('@/pages/room/index.vue'),
     children: roomRoute,
+  },
+  {
+    path: '/groups',
+    beforeEnter: [authGuard],
+    component: () => import('@/pages/groups/index.vue'),
+    children: groupRoute,
   },
   {
     path: '/play',

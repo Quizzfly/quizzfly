@@ -12,7 +12,7 @@ const menus = ref([
         class:
           'i-solar-users-group-rounded-line-duotone group-hover:i-solar-users-group-rounded-bold-duotone',
         title: 'Groups',
-        link: '/groups',
+        link: '/groups/owned-groups',
       },
       {
         class: 'i-solar-bolt-broken group-hover:i-solar-bolt-bold-duotone',
