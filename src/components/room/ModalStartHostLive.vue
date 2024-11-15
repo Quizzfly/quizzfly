@@ -23,6 +23,7 @@ const quizzflyId = route.params.quizzflyId as string
 const onSubmit = () => {
   if (currentSetting.value.quizzfly_id) {
     roomStore.initRoom(currentSetting.value)
+    emits('start')
   } else {
     const data = {
       quizzfly_id: quizzflyId,

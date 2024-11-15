@@ -91,6 +91,11 @@ export const useSocketStore = defineStore({
         if (index !== -1) {
           roomStore.getListMemberJoins.splice(index, 1)
         }
+
+        this.message = {
+          event: 'kickPlayer',
+          data: newContent,
+        }
       })
 
       this.client.on('nextQuestion', (newContent: any) => {
