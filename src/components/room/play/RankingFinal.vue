@@ -226,7 +226,7 @@ onMounted(() => {
             <p class="font-semibold text-lg">
               {{ user.name }}
             </p>
-            <div class="flex">
+            <div class="flex gap-1">
               <span class="font-semibold text-primary"> {{ user.total_score }} </span> point
             </div>
           </div>
