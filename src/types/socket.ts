@@ -1,12 +1,19 @@
 import type { Question } from './question'
+import type { IKickPlayer } from './room'
 
 export type SocketEventName =
   | 'nextQuestion'
   | 'quizStarted'
   | 'summaryAnswer'
   | 'resultAnswer'
-  | 'updateLeaderBoard'
+  | 'updateLeaderboard'
+  | 'answerQuestion'
+  | 'noMoreQuestions'
+  | 'kickPlayer'
 
+export interface SocketUserAnswerQuestion {
+  no_player_answered: number
+}
 export interface SocketLeaderboard {
   room_pin: string
   leader_board: LeaderboardEntry[]
@@ -46,5 +53,11 @@ export interface SocketQuizStarted {
 
 export interface SocketMessage {
   event: SocketEventName
-  data: SocketQuizStarted | SocketSummaryAnswer | SocketResultAnswer | SocketLeaderboard
+  data:
+    | SocketQuizStarted
+    | SocketSummaryAnswer
+    | SocketResultAnswer
+    | SocketLeaderboard
+    | SocketUserAnswerQuestion
+    | IKickPlayer
 }

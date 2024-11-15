@@ -8,7 +8,7 @@ interface QuizOption {
 export const quizOptions: QuizOption[] = [
   {
     type: 'MULTIPLE_CHOICE',
-    name: 'Multi choice',
+    name: 'Choice',
     icon: '/assets/icons/multiple-choice.svg',
   },
   {

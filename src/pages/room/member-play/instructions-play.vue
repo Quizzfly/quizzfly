@@ -56,6 +56,10 @@ watch(socketMessage, (val) => {
       isSentAnswer.value = true
       resultAnswer.value = val.data as SocketResultAnswer
     }
+
+    if (val.event === 'kickPlayer') {
+      router.push({ name: 'play-lobby' })
+    }
   }
 })
 

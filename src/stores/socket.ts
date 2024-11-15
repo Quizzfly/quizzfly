@@ -13,7 +13,12 @@ import { showToast } from '@/utils/toast'
 import { apiError } from '@/utils/exceptionHandler'
 import router from '@/routers/router'
 import { useAuthStore } from './auth'
-import type { SocketLeaderboard, SocketMessage, SocketResultAnswer } from '@/types/socket'
+import type {
+  SocketLeaderboard,
+  SocketMessage,
+  SocketResultAnswer,
+  SocketUserAnswerQuestion,
+} from '@/types/socket'
 
 const BASE_URL_SOCKET = import.meta.env.VITE_BASE_URL_SOCKET || 'https://api.quizzfly.site/rooms'
 
@@ -39,7 +44,22 @@ export const useSocketStore = defineStore({
       })
 
       this.client.on('exception', (newContent: any) => {
-        console.log('Received exception:', newContent) // Debug
+        this.message = newContent
+        console.log('Received exception:', newContent, router.currentRoute.value) // Debug
+
+        const redirectOnErrorRouterName =
+          (router.currentRoute.value.meta.redirectOnErrorRouterName as string) || 'home'
+
+        switch (router.currentRoute.value.name) {
+          case 'play-instruction':
+            localStorage.removeItem('roomPin')
+            break
+        }
+
+        router.push({
+          name: redirectOnErrorRouterName,
+        })
+
         showToast({
           title: 'Error',
           description: newContent?.message,
@@ -53,10 +73,6 @@ export const useSocketStore = defineStore({
 
       this.client.on('roomLocked', (newContent: IRoomLocked) => {
         roomStore.setLockedRoom(newContent.locked)
-      })
-
-      this.client.on('exception', (newContent: any) => {
-        this.message = newContent
       })
 
       this.client.on('playerLeft', (newContent: IMember) => {
@@ -74,6 +90,11 @@ export const useSocketStore = defineStore({
         )
         if (index !== -1) {
           roomStore.getListMemberJoins.splice(index, 1)
+        }
+
+        this.message = {
+          event: 'kickPlayer',
+          data: newContent,
         }
       })
 
@@ -109,10 +130,18 @@ export const useSocketStore = defineStore({
         }
       })
 
-      this.client.on('updateLeaderBoard', (newContent: SocketLeaderboard) => {
-        console.log('Received updateLeaderBoard:', newContent) // Debug
+      this.client.on('updateLeaderboard', (newContent: SocketLeaderboard) => {
+        console.log('Received updateLeaderboard:', newContent) // Debug
         this.message = {
-          event: 'updateLeaderBoard',
+          event: 'updateLeaderboard',
+          data: newContent,
+        }
+      })
+
+      this.client.on('answerQuestion', (newContent: SocketUserAnswerQuestion) => {
+        console.log('Received answerQuestion:', newContent) // Debug
+        this.message = {
+          event: 'answerQuestion',
           data: newContent,
         }
       })

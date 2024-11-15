@@ -8,6 +8,7 @@ import { useRoomStore } from '@/stores/room'
 const roomStore = useRoomStore()
 
 const isLoading = ref(false)
+const currentName = localStorage.getItem('name')
 const router = useRouter()
 const route = useRoute()
 
@@ -44,6 +45,7 @@ const onSubmit = handleSubmit((values) => {
     <InputValidation
       type="string"
       name="name"
+      :initial-value="currentName || ''"
       placeholder="Enter nickname..."
       class="h-12 font-medium text-base bg-slate-50 border-slate-200 outline-none"
     />

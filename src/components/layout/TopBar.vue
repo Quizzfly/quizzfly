@@ -5,7 +5,7 @@ const authStore = useAuthStore()
 </script>
 <template>
   <div
-    class="md:hidden fixed top-0 left-0 z-[999] w-full h-[54px] items-center px-7 flex justify-between border-b"
+    class="hidden fixed top-0 left-0 z-[999] w-full h-[54px] items-center px-7 justify-between border-b"
   >
     <div class="navbar__left flex items-center text-xl font-semibold">
       <span class="text-black">Q</span>

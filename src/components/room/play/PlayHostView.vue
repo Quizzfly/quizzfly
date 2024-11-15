@@ -1,12 +1,16 @@
 <script setup lang="ts">
-import Button from '@/components/ui/button/Button.vue'
 import Answers from '../common/Answers.vue'
-import type { SocketLeaderboard, SocketQuizStarted, SocketSummaryAnswer } from '@/types/socket'
+import type {
+  SocketLeaderboard,
+  SocketQuizStarted,
+  SocketSummaryAnswer,
+  SocketUserAnswerQuestion,
+} from '@/types/socket'
 import { useSocketStore } from '@/stores/socket'
 import type { Quiz } from '@/types/question'
 const socketStore = useSocketStore()
 import AnswerStatistic from './AnswerStatistic.vue'
-
+import { useRoomStore } from '@/stores/room'
 // const socketData = ref({
 //   room_pin: '738995',
 //   start_time: 1731299260380,
@@ -424,18 +428,23 @@ import AnswerStatistic from './AnswerStatistic.vue'
 //   ],
 // })
 
+const roomStore = useRoomStore()
+const isAutoPlay = computed(() => roomStore.getCurrentSetting.is_auto_play)
+
 const socketMessage = computed(() => {
   return socketStore.getMessage
 })
 
 const emits = defineEmits<{
   (e: 'showRanking', val: boolean, data?: SocketLeaderboard): void
+  (e: 'showFinalRanking', val: boolean, data?: SocketLeaderboard): void
 }>()
 
 const socketData = ref<SocketQuizStarted | null>(null)
 const isShowRightAnswer = ref(false)
 const timeCountdown = ref(0)
 const summaryAnswer = ref<SocketSummaryAnswer | null>(null)
+const usersAnswerCount = ref(0)
 
 let countdownInterval: ReturnType<typeof setInterval> | null = null
 
@@ -446,10 +455,16 @@ const handleShowRightAnswer = async (time: number) => {
 }
 
 const handleShowRanking = async (time: number, val: SocketLeaderboard) => {
+  if (lastQuestionId.value === socketData.value?.question?.id) {
+    emits('showFinalRanking', true, val)
+    return
+  }
   emits('showRanking', true, val)
   await new Promise((resolve) => setTimeout(resolve, time))
-  emits('showRanking', false)
-  handleNextQuestion()
+
+  if (isAutoPlay.value) {
+    handleNextQuestion()
+  }
 }
 
 const handleNextQuestion = () => {
@@ -483,7 +498,7 @@ const handleNewQuestion = (data: SocketQuizStarted) => {
 
         handleFinishQuestion()
 
-        await handleShowRightAnswer(6000)
+        await handleShowRightAnswer(10000)
 
         // request get leaderboard
         if (!socketData.value?.question) return
@@ -497,6 +512,7 @@ const handleSummaryAnswer = (val: SocketSummaryAnswer) => {
   summaryAnswer.value = val
 }
 
+const lastQuestionId = ref<string | null>(null)
 watch(
   () => socketMessage.value,
   async (newVal) => {
@@ -505,12 +521,25 @@ watch(
     }
 
     if (newVal.event === 'nextQuestion' || newVal.event === 'quizStarted') {
+      emits('showRanking', false)
+      if (newVal.event === 'quizStarted') {
+        const numberOfQuestions = (newVal.data as SocketQuizStarted).questions.length
+        lastQuestionId.value = (newVal.data as SocketQuizStarted).questions[
+          numberOfQuestions - 1
+        ].id
+      }
+
       handleNewQuestion(newVal.data as SocketQuizStarted)
     }
 
-    if (newVal.event === 'updateLeaderBoard') {
-      console.log('updateLeaderBoard', newVal.data)
-      await handleShowRanking(6000, newVal.data as SocketLeaderboard)
+    if (newVal.event === 'updateLeaderboard') {
+      console.log('updateLeaderboard', newVal.data)
+      await handleShowRanking(10000, newVal.data as SocketLeaderboard)
+    }
+
+    if (newVal.event === 'answerQuestion') {
+      console.log('answerQuestion', newVal.data)
+      usersAnswerCount.value = (newVal.data as SocketUserAnswerQuestion).no_player_answered
     }
   },
   { immediate: true },
@@ -536,36 +565,32 @@ onUnmounted(() => {
           </p>
         </div>
       </div>
-      <div class="absolute top-0 right-0">
-        <Button
-          variant="secondary"
-          class="font-extrabold text-xl px-8 py-7"
-          >Next</Button
-        >
-      </div>
 
       <div class="flex items-center justify-between w-full h-full">
         <div class="flex justify-center p-4 rounded-full bg-primary w-[68px] h-[68px]">
           <p class="font-black text-white text-3xl tracking-wider">{{ timeCountdown }}</p>
         </div>
 
-        <div class="flex items-center justify-center rounded-sm h-full">
+        <div class="flex items-center justify-center rounded-sm h-full flex-auto">
           <AnswerStatistic
             v-if="isShowRightAnswer && summaryAnswer && socketData?.question"
+            :key="socketData?.question?.id"
             :summary-answer="summaryAnswer"
             :current-question="socketData?.question"
           />
           <img
-            v-else
-            src="@/assets/img/bg-image-1.jpg"
-            class="w-[500px] object-cover rounded-sm"
+            v-else-if="
+              socketData?.question.type === 'QUIZ' && (socketData?.question as Quiz).files[0]?.url
+            "
+            :src="(socketData?.question as Quiz).files[0]?.url"
+            class="max-w-[80%] h-full object-contain rounded-sm"
             alt=""
           />
         </div>
 
         <div class="flex flex-col gap-3 justify-center items-center">
           <div class="p-4 rounded-full bg-primary w-[68px] h-[68px] text-center">
-            <p class="font-black text-white text-3xl tracking-wider">1</p>
+            <p class="font-black text-white text-3xl tracking-wider">{{ usersAnswerCount }}</p>
           </div>
           <div class="px-4 py-2 bg-primary rounded-full">
             <p class="flex items-center justify-center text-white font-semibold text-base">
