@@ -12,7 +12,7 @@ export type SocketEventName =
   | 'kickPlayer'
 
 export interface SocketUserAnswerQuestion {
-  noPlayerAnswered: number
+  no_player_answered: number
 }
 export interface SocketLeaderboard {
   room_pin: string

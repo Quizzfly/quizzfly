@@ -539,7 +539,7 @@ watch(
 
     if (newVal.event === 'answerQuestion') {
       console.log('answerQuestion', newVal.data)
-      usersAnswerCount.value = (newVal.data as SocketUserAnswerQuestion).noPlayerAnswered
+      usersAnswerCount.value = (newVal.data as SocketUserAnswerQuestion).no_player_answered
     }
   },
   { immediate: true },
