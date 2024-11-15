@@ -71,7 +71,7 @@ const leaderboardArr = computed(() => {
               {{ user.name }}
             </p>
             <div class="flex">
-              <span class="font-semibold"> {{ user.total_score }} </span>point
+              <span class="font-semibold"> {{ user.total_score }} </span> point
             </div>
           </div>
         </div>

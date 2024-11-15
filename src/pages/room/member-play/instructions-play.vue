@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import Instructions from '@/components/room/play/Instructions.vue'
 import PlayUserBlock from '@/components/room/play/PlayUserBlock.vue'
-import type { SocketQuizStarted, SocketResultAnswer } from '@/types/socket'
+import type { SocketLeaderboard, SocketQuizStarted, SocketResultAnswer } from '@/types/socket'
 import PlayLoading from '@/components/room/play/PlayLoading.vue'
 import PlayUserResult from '@/components/room/play/PlayUserResult.vue'
-
+import RankingFinal from '@/components/room/play/RankingFinal.vue'
 import { useSocketStore } from '@/stores/socket'
 import { useRoomStore } from '@/stores/room'
 import type { IKickPlayer } from '@/types'
@@ -22,6 +22,9 @@ const isGameStarted = ref(false)
 const isSentAnswer = ref(false)
 const isShowResult = ref(false)
 const resultAnswer = ref<SocketResultAnswer | null>(null)
+const leaderboardData = ref<SocketLeaderboard>()
+const isShowFinalRanking = ref(false)
+const lastQuestionId = ref<string | null>(null)
 
 onBeforeMount(() => {
   const name = localStorage.getItem('name')
@@ -50,6 +53,11 @@ watch(socketMessage, (val) => {
       isSentAnswer.value = false
       isShowResult.value = false
       socketData.value = val.data as SocketQuizStarted
+
+      if (val.event === 'quizStarted') {
+        const numberOfQuestions = (val.data as SocketQuizStarted).questions.length
+        lastQuestionId.value = (val.data as SocketQuizStarted).questions[numberOfQuestions - 1].id
+      }
     }
 
     if (val.event === 'resultAnswer') {
@@ -63,6 +71,14 @@ watch(socketMessage, (val) => {
       if (socketId && socketId === (val.data as IKickPlayer).player_left.name) {
         localStorage.removeItem('roomPin')
         router.push({ name: 'play-lobby' })
+      }
+    }
+
+    if (val.event === 'updateLeaderboard') {
+      if (lastQuestionId.value === socketData.value?.question.id) {
+        console.log('show final ranking')
+        isShowFinalRanking.value = true
+        leaderboardData.value = val.data as SocketLeaderboard
       }
     }
   }
@@ -92,6 +108,17 @@ const handleSendAnswer = (answerId: string) => {
       v-if="isShowResult && resultAnswer"
       :result-answer="resultAnswer"
     />
+    <Teleport to="body">
+      <div
+        v-if="isShowFinalRanking && leaderboardData"
+        class="fixed top-0 left-0 w-full h-full z-[99]"
+      >
+        <RankingFinal
+          :is-to-home="true"
+          :leaderboard-data="leaderboardData"
+        />
+      </div>
+    </Teleport>
   </div>
 </template>
 <style lang="scss" scoped>
