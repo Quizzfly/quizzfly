@@ -88,7 +88,7 @@ const leaderboardArr = computed(() => {
           alt=""
         />
         <img
-          v-else
+          v-else-if="index === 2"
           class="w-12 h-12 rounded-full ml-auto"
           src="@/assets/icons/svg/bronze.svg"
           alt=""
