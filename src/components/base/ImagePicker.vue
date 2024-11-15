@@ -55,6 +55,11 @@ const handleUploadFile = async (file: File) => {
     loadingStore.setLoading(false)
   }
 }
+
+const inputRef = ref()
+const handleClick = () => {
+  inputRef.value.click()
+}
 </script>
 <template>
   <div class="h-full w-full bg-slate-100 rounded-md">
@@ -78,7 +83,7 @@ const handleUploadFile = async (file: File) => {
 
         <p
           class="text-xs text-primary text-center cursor-pointer mt-2 hover:underline"
-          @click="$refs.inputRef.click()"
+          @click="handleClick()"
         >
           Click to upload your image
         </p>
