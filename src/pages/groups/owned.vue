@@ -3,9 +3,10 @@ import { useRouteQuery } from '@vueuse/router'
 import { useDebounceFn } from '@vueuse/core'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import QuizzflyList from '@/components/quizzfly/list/QuizzflyList.vue'
-import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
+import GroupList from '@/components/group/list/GroupList.vue'
+import { useGroupStore } from '@/stores/group'
 import QuizzflyFilter from '@/components/quizzfly/list/QuizzflyFilter.vue'
+import ModelCreateGroup from '@/components/group/ModalCreateGroup.vue'
 
 import {
   Pagination,
@@ -15,37 +16,46 @@ import {
   PaginationNext,
   PaginationPrev,
 } from '@/components/ui/pagination'
-const quizzflyStore = useQuizzflyStore()
+const groupStore = useGroupStore()
 
 const search = useRouteQuery('k', '')
 const pageQuery = useRouteQuery<number>('page', 1)
+const isShowModal = ref(false)
+
+const closeModal = () => {
+  isShowModal.value = false
+}
+
+const openModal = () => {
+  isShowModal.value = true
+}
 
 const pageQueryComputed = computed({
   get: () => Number(pageQuery.value),
   set: (value) => {
     pageQuery.value = value
-    fetchQuizzflys()
+    fetchGroups()
   },
 })
 
-const fetchQuizzflys = () => {
-  quizzflyStore.fetchQuizzflys({
+const fetchGroups = () => {
+  groupStore.fetchGroups({
     page: pageQueryComputed.value,
     keyword: search.value,
   })
 }
 
 onBeforeMount(() => {
-  fetchQuizzflys()
+  fetchGroups()
 })
-
-const handleClickCreateQuiz = async () => {
-  await quizzflyStore.initQuizzflyDraft()
-}
 
 const debouncedFn = useDebounceFn((value) => {
   search.value = value
 }, 500)
+
+const handleCreated = () => {
+  fetchGroups()
+}
 </script>
 <template>
   <div class="w-full p-8 flex flex-col gap-6 overflow-hidden h-full">
@@ -69,7 +79,7 @@ const debouncedFn = useDebounceFn((value) => {
         </div>
       </div>
       <!-- right -->
-      <Button @click="handleClickCreateQuiz">
+      <Button @click="openModal">
         <span class="i-material-symbols-light-add text-2xl"></span>
         Create Group
       </Button>
@@ -85,17 +95,17 @@ const debouncedFn = useDebounceFn((value) => {
       <QuizzflyFilter />
     </div>
     <div class="flex-auto overflow-y-auto">
-      <QuizzflyList />
+      <GroupList />
     </div>
     <div
-      v-if="quizzflyStore.getQuizzflyMeta"
+      v-if="groupStore.getGroupMeta"
       class="flex justify-center"
     >
       <Pagination
         v-slot="{ page }"
         v-model:page="pageQueryComputed"
-        :total="quizzflyStore.getQuizzflyMeta.total_records"
-        :items-per-page="quizzflyStore.getQuizzflyMeta.limit"
+        :total="groupStore.getGroupMeta.total_records"
+        :items-per-page="groupStore.getGroupMeta.limit"
         :sibling-count="1"
         show-edges
       >
@@ -131,5 +141,10 @@ const debouncedFn = useDebounceFn((value) => {
         </PaginationList>
       </Pagination>
     </div>
+    <ModelCreateGroup
+      v-if="isShowModal"
+      @close="closeModal"
+      @handle-created="handleCreated"
+    />
   </div>
 </template>
