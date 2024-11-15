@@ -68,6 +68,7 @@ export const useSocketStore = defineStore({
       })
 
       this.client.on('playerJoined', (newContent: IMember) => {
+        localStorage.setItem('socketId', newContent.new_player.socket_id)
         roomStore.setMemberJoins(newContent)
       })
 

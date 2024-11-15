@@ -7,6 +7,7 @@ import PlayUserResult from '@/components/room/play/PlayUserResult.vue'
 
 import { useSocketStore } from '@/stores/socket'
 import { useRoomStore } from '@/stores/room'
+import type { IKickPlayer } from '@/types'
 
 const socketMessage = computed(() => {
   return socketStore.getMessage
@@ -58,7 +59,11 @@ watch(socketMessage, (val) => {
     }
 
     if (val.event === 'kickPlayer') {
-      router.push({ name: 'play-lobby' })
+      const socketId = localStorage.getItem('name')
+      if (socketId && socketId === (val.data as IKickPlayer).player_left.name) {
+        localStorage.removeItem('roomPin')
+        router.push({ name: 'play-lobby' })
+      }
     }
   }
 })
