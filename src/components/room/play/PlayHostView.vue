@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import Button from '@/components/ui/button/Button.vue'
 import Answers from '../common/Answers.vue'
 import type {
   SocketLeaderboard,
@@ -11,7 +10,7 @@ import { useSocketStore } from '@/stores/socket'
 import type { Quiz } from '@/types/question'
 const socketStore = useSocketStore()
 import AnswerStatistic from './AnswerStatistic.vue'
-
+import { useRoomStore } from '@/stores/room'
 // const socketData = ref({
 //   room_pin: '738995',
 //   start_time: 1731299260380,
@@ -429,12 +428,16 @@ import AnswerStatistic from './AnswerStatistic.vue'
 //   ],
 // })
 
+const roomStore = useRoomStore()
+const isAutoPlay = computed(() => roomStore.getCurrentSetting.is_auto_play)
+
 const socketMessage = computed(() => {
   return socketStore.getMessage
 })
 
 const emits = defineEmits<{
   (e: 'showRanking', val: boolean, data?: SocketLeaderboard): void
+  (e: 'showFinalRanking', val: boolean, data?: SocketLeaderboard): void
 }>()
 
 const socketData = ref<SocketQuizStarted | null>(null)
@@ -452,10 +455,16 @@ const handleShowRightAnswer = async (time: number) => {
 }
 
 const handleShowRanking = async (time: number, val: SocketLeaderboard) => {
+  if (lastQuestionId.value === socketData.value?.question?.id) {
+    emits('showFinalRanking', true, val)
+    return
+  }
   emits('showRanking', true, val)
   await new Promise((resolve) => setTimeout(resolve, time))
-  emits('showRanking', false)
-  handleNextQuestion()
+
+  if (isAutoPlay.value) {
+    handleNextQuestion()
+  }
 }
 
 const handleNextQuestion = () => {
@@ -489,7 +498,7 @@ const handleNewQuestion = (data: SocketQuizStarted) => {
 
         handleFinishQuestion()
 
-        await handleShowRightAnswer(6000)
+        await handleShowRightAnswer(10000)
 
         // request get leaderboard
         if (!socketData.value?.question) return
@@ -503,6 +512,7 @@ const handleSummaryAnswer = (val: SocketSummaryAnswer) => {
   summaryAnswer.value = val
 }
 
+const lastQuestionId = ref<string | null>(null)
 watch(
   () => socketMessage.value,
   async (newVal) => {
@@ -511,15 +521,24 @@ watch(
     }
 
     if (newVal.event === 'nextQuestion' || newVal.event === 'quizStarted') {
+      emits('showRanking', false)
+      if (newVal.event === 'quizStarted') {
+        const numberOfQuestions = (newVal.data as SocketQuizStarted).questions.length
+        lastQuestionId.value = (newVal.data as SocketQuizStarted).questions[
+          numberOfQuestions - 1
+        ].id
+      }
+
       handleNewQuestion(newVal.data as SocketQuizStarted)
     }
 
     if (newVal.event === 'updateLeaderboard') {
       console.log('updateLeaderboard', newVal.data)
-      await handleShowRanking(6000, newVal.data as SocketLeaderboard)
+      await handleShowRanking(10000, newVal.data as SocketLeaderboard)
     }
 
     if (newVal.event === 'answerQuestion') {
+      console.log('answerQuestion', newVal.data)
       usersAnswerCount.value = (newVal.data as SocketUserAnswerQuestion).noPlayerAnswered
     }
   },
@@ -545,13 +564,6 @@ onUnmounted(() => {
             {{ socketData?.question?.content }}
           </p>
         </div>
-      </div>
-      <div class="absolute top-0 right-0">
-        <Button
-          variant="secondary"
-          class="font-extrabold text-xl px-8 py-7"
-          >Next</Button
-        >
       </div>
 
       <div class="flex items-center justify-between w-full h-full">

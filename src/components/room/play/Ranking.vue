@@ -1,14 +1,19 @@
 <script setup lang="ts">
 import type { SocketLeaderboard } from '@/types/socket'
+import { Button } from '@/components/ui/button'
+import { useSocketStore } from '@/stores/socket'
+import { avatars } from '@/utils/avatar'
 
 const props = defineProps<{
   leaderboardData: SocketLeaderboard
 }>()
 
+const socketStore = useSocketStore()
+
 // Hàm tạo avatar ngẫu nhiên
 function getRandomAvatar(): string {
-  const randomSeed = Math.random().toString(36).substring(2, 15)
-  return `https://avatars.dicebear.com/api/avataaars/${randomSeed}.svg`
+  // random avatar in avatars array
+  return avatars[Math.floor(Math.random() * avatars.length)]
 }
 
 // sort leaderboard by rank property
@@ -28,59 +33,66 @@ const leaderboardArr = computed(() => {
     v-motion
     :initial="{ opacity: 0, y: 20 }"
     :enter="{ opacity: 1, y: 0 }"
-    class="fixed top-0 left-0 z-10 w-screen h-screen bg-primary gap-20 flex flex-col justify-center items-center"
+    class="fixed top-0 left-0 z-10 py-10 w-screen h-screen bg-primary gap-20 flex flex-col justify-center items-center"
     style="
       background-image: url(https://res.cloudinary.com/dtpqh6cau/image/upload/v1731232429/s1zpq8kstwkvsav9ltow.jpg);
     "
   >
+    <Button
+      class="absolute top-4 right-4"
+      variant="outline"
+      color="white"
+      @click="socketStore.handleNextQuestion"
+      >Next</Button
+    >
     <div class="px-40 rounded-sm flex justify-center items-center h-20 bg-white">
       <p class="text-3xl italic font-bold">Ranking</p>
     </div>
-    <div class="w-[80%] max-w-[700px] bg-blue-500 rounded-lg shadow-lg overflow-hidden">
-      <!-- Hạng nhất -->
-      <div class="flex items-center gap-4 p-4 bg-blue-700 text-white">
-        <div class="text-2xl font-bold">1</div>
-        <img
-          src="https://avataaars.io/?avatarStyle=Circle&topType=Turban&accessoriesType=Kurt&hatColor=Gray01&facialHairType=BeardMajestic&facialHairColor=BrownDark&clotheType=ShirtScoopNeck&clotheColor=Pink&eyeType=Side&eyebrowType=AngryNatural&mouthType=Twinkle&skinColor=Tanned"
-          alt="avatar"
-          class="w-12 h-12 rounded-full"
-        />
-        <div class="flex-1">
-          <p class="font-semibold">{{ leaderboardArr[0].name }}</p>
-        </div>
-        <div class="text-yellow-400 text-3xl">🏆</div>
-        <p class="text-3xl font-bold">{{ leaderboardArr[0].total_score }}</p>
-      </div>
 
-      <!-- Các hạng còn lại -->
+    <div
+      class="flex flex-col overflow-y-auto gap-4 w-full max-w-[600px] bg-[#EFEEFC] h-full rounded-[40px] p-5 transform -translate-y-8"
+    >
       <div
-        v-for="(user, index) in leaderboardArr.slice(1)"
+        v-for="(user, index) in leaderboardArr"
         :key="user.user_id"
-        v-motion
-        :initial="{
-          opacity: 0,
-          y: 20,
-        }"
-        :enter="{
-          opacity: 1,
-          y: 0,
-        }"
-        :delay="(index + 1) * 100"
-        class="flex items-center gap-4 p-4 bg-white border-b border-gray-200"
+        class="w-full h-[92px] bg-white rounded-[20px] flex items-center p-4"
       >
-        <div class="text-xl font-bold">{{ index + 2 }}</div>
+        <p>
+          {{ index + 1 }}
+        </p>
+        <div class="flex items-center ml-5 gap-5">
+          <img
+            class="w-12 h-12 rounded-full"
+            :src="user.avatar"
+            alt=""
+          />
+          <div>
+            <p class="font-semibold text-lg">
+              {{ user.name }}
+            </p>
+            <div class="flex">
+              <span class="font-semibold"> {{ user.total_score }} </span>point
+            </div>
+          </div>
+        </div>
         <img
-          src="https://avataaars.io/?avatarStyle=Circle&topType=Turban&accessoriesType=Kurt&hatColor=Gray01&facialHairType=BeardMajestic&facialHairColor=BrownDark&clotheType=ShirtScoopNeck&clotheColor=Pink&eyeType=Side&eyebrowType=AngryNatural&mouthType=Twinkle&skinColor=Tanned"
-          alt="avatar"
-          class="w-10 h-10 rounded-full"
+          v-if="index === 0"
+          class="w-12 h-12 rounded-full ml-auto"
+          src="@/assets/icons/svg/gold.svg"
+          alt=""
         />
-        <div class="flex-1">
-          <p class="font-semibold">{{ user.name }}</p>
-        </div>
-        <div class="text-gray-700 font-bold text-xl flex items-center gap-1">
-          <span class="text-blue-600">⭐</span>
-          <span>{{ user.total_score }}</span>
-        </div>
+        <img
+          v-else-if="index === 1"
+          class="w-12 h-12 rounded-full ml-auto"
+          src="@/assets/icons/svg/silver.svg"
+          alt=""
+        />
+        <img
+          v-else
+          class="w-12 h-12 rounded-full ml-auto"
+          src="@/assets/icons/svg/bronze.svg"
+          alt=""
+        />
       </div>
     </div>
   </div>

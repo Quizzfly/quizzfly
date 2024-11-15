@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/select'
 import { Slider } from '@/components/ui/slider'
 // import { useConfirmDialog } from '@/stores/modal'
-
+// import RankingFinal from '@/components/room/play/RankingFinal.vue';
 const audioFiles = import.meta.glob('/assets/audio/*.mp3')
 
 // const confirmDialog = useConfirmDialog()
@@ -113,4 +113,5 @@ watch(isChechSelected, (val) => {
     <!-- <Button @click="openConfirm">Open modal confirm</Button> -->
   </div>
   <!-- <Ranking /> -->
+  <!-- <RankingFinal /> -->
 </template>
