@@ -6,6 +6,7 @@ import ConfettiExplosion from 'vue-confetti-explosion'
 
 const props = defineProps<{
   leaderboardData: SocketLeaderboard
+  isToHome?: boolean
 }>()
 
 // Hàm tạo avatar ngẫu nhiên
@@ -55,7 +56,7 @@ onMounted(() => {
       background-image: url(https://res.cloudinary.com/dtpqh6cau/image/upload/v1731232429/s1zpq8kstwkvsav9ltow.jpg);
     "
   >
-    <RouterLink :to="{ name: 'host-live' }">
+    <RouterLink :to="{ name: isToHome ? 'play-lobby' : 'host-live' }">
       <Button
         class="absolute top-4 right-4"
         variant="outline"
@@ -226,7 +227,7 @@ onMounted(() => {
               {{ user.name }}
             </p>
             <div class="flex">
-              <span class="font-semibold"> {{ user.total_score }} </span>point
+              <span class="font-semibold text-primary"> {{ user.total_score }} </span> point
             </div>
           </div>
         </div>
