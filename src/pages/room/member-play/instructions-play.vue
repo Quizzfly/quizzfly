@@ -59,7 +59,7 @@ watch(socketMessage, (val) => {
     }
 
     if (val.event === 'kickPlayer') {
-      const socketId = localStorage.getItem('name')
+      const socketId = localStorage.getItem('name') // TODO - use socketId
       if (socketId && socketId === (val.data as IKickPlayer).player_left.name) {
         localStorage.removeItem('roomPin')
         router.push({ name: 'play-lobby' })
