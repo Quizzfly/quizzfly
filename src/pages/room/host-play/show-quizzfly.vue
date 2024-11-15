@@ -41,7 +41,7 @@ const handleShowFinalRanking = (value: boolean, data?: SocketLeaderboard) => {
 </script>
 <template>
   <div
-    class="ralative img-test w-full h-screen p-6 flex flex-col gap-6 overflow-hidden items-center justify-center bg-gray-200 bg-cover transition-all duration-200 ease-in-out"
+    class="ralative img-test w-full h-screen flex flex-col gap-6 overflow-hidden items-center justify-center bg-gray-200 bg-cover transition-all duration-200 ease-in-out"
   >
     <Teleport to="body">
       <Ranking
@@ -70,7 +70,7 @@ const handleShowFinalRanking = (value: boolean, data?: SocketLeaderboard) => {
 </template>
 <style scoped>
 .img-test {
-  background: url('@/assets/img/bg-image-3.jpg');
+  /* background: url('@/assets/img/bg-image-3.jpg'); */
   background-size: cover;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);

@@ -551,14 +551,17 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="h-full w-full">
+  <div
+    :style="{ backgroundImage: `url(${socketData?.question?.background_url})` }"
+    class="h-full w-full bg-cover p-6"
+  >
     <div
       v-if="isShowRightAnswer"
       v-motion-fade
       class="bg-overlay"
     ></div>
     <div class="relative top-0 flex flex-col gap-16 justify-between pb-10 h-full w-full">
-      <div class="flex items-center justify-center gap-8 mr-32 w-auto">
+      <div class="flex items-center justify-center gap-8 w-auto">
         <div class="rounded bg-white p-4">
           <p class="font-black text-2xl text-center">
             {{ socketData?.question?.content }}
