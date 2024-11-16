@@ -33,7 +33,7 @@ const leaderboardArr = computed(() => {
     v-motion
     :initial="{ opacity: 0, y: 20 }"
     :enter="{ opacity: 1, y: 0 }"
-    class="fixed top-0 left-0 z-10 py-10 w-screen h-screen bg-primary gap-20 flex flex-col justify-center items-center"
+    class="fixed top-0 left-0 z-10 py-10 w-screen h-dvh bg-primary gap-20 flex flex-col justify-center items-center"
     style="
       background-image: url(https://res.cloudinary.com/dtpqh6cau/image/upload/v1731232429/s1zpq8kstwkvsav9ltow.jpg);
     "
