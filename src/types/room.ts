@@ -24,8 +24,13 @@ export interface IMember {
     name: string
     role: string
   }
+  player_left?: {
+    socket_id: string
+    user_id: string
+    name: string
+    role: string
+  }
   total_player: number
-  avatar: string
 }
 
 export interface IRoomLocked {

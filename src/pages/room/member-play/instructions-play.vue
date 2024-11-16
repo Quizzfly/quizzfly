@@ -94,7 +94,9 @@ const handleSendAnswer = (answerId: string) => {
 </script>
 
 <template>
-  <div class="relative bg w-full h-full flex flex-col justify-center items-center bg-cover gap-8">
+  <div
+    class="bg w-full layout-full overflow-hidden flex flex-col justify-center items-center bg-cover gap-8"
+  >
     <Instructions v-if="!isGameStarted" />
     <PlayUserBlock
       v-else-if="socketData"
@@ -125,5 +127,15 @@ const handleSendAnswer = (answerId: string) => {
 .bg {
   background: url('@/assets/img/bg-image-5.jpg');
   background-size: cover;
+}
+
+.layout-full {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  max-height: -webkit-fill-available;
+  overflow: hidden;
 }
 </style>

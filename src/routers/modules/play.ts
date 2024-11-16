@@ -4,9 +4,6 @@ export const playRoute: RouteRecordRaw[] = [
   {
     path: ':code',
     name: 'play-lobby-code',
-    meta: {
-      layout: 'GuestLayout',
-    },
     component: () => import('@/pages/room/member-play/lobby-play.vue'),
   },
   {
