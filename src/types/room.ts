@@ -31,6 +31,7 @@ export interface IMember {
     role: string
   }
   total_player: number
+  avatar: string
 }
 
 export interface IRoomLocked {
