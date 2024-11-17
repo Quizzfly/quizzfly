@@ -40,7 +40,7 @@ const menus = ref([
       class="flex items-center gap-2 group cursor-pointer hover:text-[#0061ff] hover:bg-[#eff7ff] py-3 px-2 rounded-xl transition-all duration-200"
     >
       <span class="group-hover:i-solar-graph-bold-duotone i-solar-graph-linear text-xl"></span>
-      <span class="font-medium">Dashboard</span>
+      <span class="font-base">Dashboard</span>
     </RouterLink>
 
     <template
@@ -60,7 +60,7 @@ const menus = ref([
             class="text-xl"
             :class="sub.class"
           ></span>
-          <span class="font-medium">{{ sub.title }}</span>
+          <span class="font-base">{{ sub.title }}</span>
         </RouterLink>
       </div>
     </template>
@@ -70,5 +70,6 @@ const menus = ref([
 .router-link-active {
   background-color: #eff7ff;
   color: #0061ff;
+  font-weight: 500;
 }
 </style>

@@ -11,7 +11,9 @@ import { createAnswerApi } from '@/services/quizzes'
 const questionsStore = useQuestionsStore()
 const currentQuestion = computed(() => questionsStore.getCurrentQuestion as Quiz)
 
-const { textarea, input } = useTextareaAutosize({ input: currentQuestion.value.content.trim() })
+const { textarea, input } = useTextareaAutosize({
+  input: currentQuestion.value.content?.trim() || '',
+})
 const questionContent = ref('')
 const dropZoneRef = ref<HTMLDivElement>()
 
