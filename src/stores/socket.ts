@@ -43,6 +43,16 @@ export const useSocketStore = defineStore({
         this.resolveCallback && this.resolveCallback()
       })
 
+      this.client.on('disconnect', () => {
+        console.log('Disconnected from socket server') // Debug
+        this.connected = false
+      })
+
+      this.client.on('connect_error', () => {
+        console.log('Connection error') // Debug
+        this.connected = false
+      })
+
       this.client.on('exception', (newContent: any) => {
         this.message = newContent
         console.log('Received exception:', newContent, router.currentRoute.value) // Debug

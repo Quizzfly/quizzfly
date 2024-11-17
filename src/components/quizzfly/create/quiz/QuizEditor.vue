@@ -87,7 +87,7 @@ const handleEnterPress = (event: KeyboardEvent) => {
         placeholder="Enter your answer..."
         maxlength="120"
         @keydown="handleEnterPress"
-        @update:model-value="handleUpdateTitle($event.trim() + ' ')"
+        @update:model-value="handleUpdateTitle($event.trim())"
       />
       <p
         v-if="input"
@@ -107,7 +107,7 @@ const handleEnterPress = (event: KeyboardEvent) => {
         <div
           v-if="currentQuestion.files[0]?.url"
           class="absolute -top-2 -right-2 cursor-pointer flex justify-center items-center bg-white h-6 w-6 rounded-full shadow-md"
-          @click="questionsStore.updateCurrentQuestion('quiz', { background_url: '' })"
+          @click="questionsStore.updateCurrentQuestion('quiz', { files: [] })"
         >
           <span class="text-xl i-material-symbols-light-close-rounded"></span>
         </div>

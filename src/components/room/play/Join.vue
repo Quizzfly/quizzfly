@@ -48,6 +48,7 @@ const onSubmit = handleSubmit((values) => {
       :initial-value="currentName || ''"
       placeholder="Enter nickname..."
       class="h-12 font-medium text-base bg-slate-50 border-slate-200 outline-none"
+      @keydown.enter="onSubmit"
     />
     <Button
       type="submit"

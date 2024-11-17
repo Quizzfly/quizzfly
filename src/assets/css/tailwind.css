@@ -7,6 +7,11 @@
     * {
       @apply border-border;
     }
+
+    input,
+    textarea {
+      font-size: 16px;
+    }
     body {
       @apply bg-background text-foreground;
     }
@@ -80,4 +85,10 @@
 @layer tailwind-utilities {
   @tailwind components;
   @tailwind utilities;
+}
+
+@layer components {
+  .btn-gradient {
+    @apply cursor-pointer bg-gradient-to-r from-[#62eed3] to-purple-500 text-white font-medium shadow-lg rounded-full p-[1.5px];
+  }
 }
