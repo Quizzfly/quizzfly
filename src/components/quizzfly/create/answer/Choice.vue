@@ -69,13 +69,13 @@ onMounted(() => {
         }"
       >
         <span
-          class="cursor-pointer i-solar-check-square-bold text-2xl"
+          class="cursor-pointer i-solar-check-circle-bold text-2xl"
           @click="updateAnswerImmediate({ ...modelValue, is_correct: !modelValue.is_correct })"
         ></span>
       </div>
       <div
         v-else
-        class="min-w-5 h-5 cursor-pointer border-[1px] border-white rounded-sm text-2xl"
+        class="min-w-5 h-5 cursor-pointer border-[1px] border-white rounded-full text-2xl"
         @click="updateAnswerImmediate({ ...modelValue, is_correct: !modelValue.is_correct })"
       ></div>
     </template>
@@ -84,10 +84,10 @@ onMounted(() => {
       ref="textarea"
       v-model="input"
       :disabled="!editMode || isTrueFalse"
-      class="resize-none bg-transparent text-white text-lg w-full border-none outline-none text-input"
+      class="resize-none bg-transparent text-white text-2xl font-semibold w-full border-none outline-none text-input"
       placeholder="Enter your answer..."
       maxlength="80"
-      @update:model-value="updateAnswer({ ...modelValue, content: $event })"
+      @update:model-value="updateAnswer({ ...modelValue, content: $event.trim() + ' ' })"
       @keydown.enter.prevent
     />
   </div>

@@ -87,7 +87,7 @@ export const useQuestionsStore = defineStore({
           // Duplicate a quiz question
           const { data } = await duplicateQuizApi(quizzflyStore.getQuizzflyInfo.id, question.id)
           duplicatedQuestion = data
-          ;(duplicatedQuestion as Quiz).answers = []
+          // ;(duplicatedQuestion as Quiz).answers = []
           duplicatedQuestion.type = 'QUIZ'
         } else {
           // Duplicate a slide question
@@ -250,6 +250,16 @@ export const useQuestionsStore = defineStore({
       quizzflyStore.setIsUpdating(true)
       // Update a specific answer in the current question
       try {
+        // reset all answers to false if the answer is correct
+        if (answer.is_correct) {
+          ;(this.currentQuestion as Quiz).answers = (this.currentQuestion as Quiz).answers?.map(
+            (a) => ({
+              ...a,
+              is_correct: false,
+            }),
+          )
+        }
+
         const index = this.findAnswerIndexById(answer.id)
         if (index !== -1 && (this.currentQuestion as Quiz).answers) {
           const { data } = await updateAnswerApi(answer.id || '', answer)
