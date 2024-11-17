@@ -78,7 +78,7 @@ export const useQuizzflyStore = defineStore({
         this.isUpdating = false
       }, 500)
     },
-    async fetchQuizzflys({ page = 1, keyword = '' }) {
+    async fetchQuizzflys({ page = 1, keyword = '' }: { page?: number; keyword?: string } = {}) {
       try {
         this.isFetching = true
         const { data, meta } = await getQuizzflysApi({ page, keyword })
