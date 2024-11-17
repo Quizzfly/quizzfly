@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import BaseModal from '../base/BaseModal.vue'
+import BaseModal from '@/components/base/BaseModal.vue'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import InputValidation from '@/components/base/InputValidation.vue'
-import ImagePicker from '../base/ImagePicker.vue'
+import ImagePicker from '@/components/base/ImagePicker.vue'
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
 import { useGroupStore } from '@/stores/group'

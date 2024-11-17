@@ -54,7 +54,9 @@ const initApp = async () => {
   app.use(createPinia())
   await useSocketStore().setupSocketStore()
   app.use(vue3GoogleLogin, {
-    clientId: import.meta.env.VITE_GOOGLE_CLIENTID || '563447497067-u78208rfehdrpj8moabi9tdp4r581nrq.apps.googleusercontent.com',
+    clientId:
+      import.meta.env.VITE_GOOGLE_CLIENTID ||
+      '563447497067-u78208rfehdrpj8moabi9tdp4r581nrq.apps.googleusercontent.com',
   })
 
   await initAuthStore()

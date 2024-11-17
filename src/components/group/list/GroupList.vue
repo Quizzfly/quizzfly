@@ -13,9 +13,12 @@ const groups = computed(() => groupStore.getGroups)
       v-for="group in groups"
       :key="group.group.id"
     >
-      <div class="p-3 flex gap-4 w-full">
+      <RouterLink
+        :to="{ name: 'group-detail', params: { groupId: group.group.id } }"
+        class="p-3 flex gap-4 w-full cursor-pointer"
+      >
         <!-- left -->
-        <div class="w-[80px]">
+        <div class="w-[80px] h-[80px]">
           <img
             class="w-[80px] h-[80px] object-cover rounded-sm"
             :src="
@@ -25,9 +28,9 @@ const groups = computed(() => groupStore.getGroups)
             alt=""
           />
         </div>
-        <div class="flex flex-col gap-3">
+        <div class="flex flex-col gap-3 w-full justify-between">
           <div class="flex items-center justify-between">
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 w-full">
               <h2 class="title text-base font-medium">{{ group.group.name || 'Untitled' }}</h2>
               <Chip
                 :name="group.role"
@@ -39,13 +42,13 @@ const groups = computed(() => groupStore.getGroups)
             {{ group.group.description }}
           </div>
         </div>
-      </div>
+      </RouterLink>
     </Card>
   </div>
 </template>
 <style scoped>
 .title {
-  width: 100px;
+  width: 200px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;

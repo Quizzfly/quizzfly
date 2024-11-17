@@ -8,11 +8,7 @@ import type { IPaging } from '@/types'
 export const useGroupStore = defineStore({
   id: 'group',
   state: () => ({
-    groupInfo: {
-      name: '',
-      description: '',
-      background: '',
-    },
+    groupInfo: {} as IGroup,
     isUpdating: false,
     groups: [] as IGroup[],
     groupMeta: null as IPaging | null,
