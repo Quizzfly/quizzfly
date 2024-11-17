@@ -122,35 +122,34 @@ const onChangeImg = (e: Event) => {
         </Button>
       </div>
       <div class="body flex items-start gap-8">
-        <div class="img relative w-32 h-32 cursor-pointer rounded">
+        <div
+          class="img relative min-w-32 w-32 h-32 cursor-pointer rounded"
+          @click="showChooseImg()"
+        >
+          <img
+            v-if="avatar"
+            class="w-full h-full rounded-lg object-cover"
+            :src="avatar"
+          />
+          <img
+            v-else
+            class="w-full rounded-lg"
+            src="@/assets/img/avatar.jpg"
+            alt=""
+          />
+          <input
+            ref="refInput"
+            type="file"
+            accept="image/jpeg, image/png, image/jpg"
+            class="hidden"
+            @change="onChangeImg"
+          />
           <div
-            class="image w-32 h-32"
-            @click="showChooseImg()"
+            class="absolute bg-slate-50 w-6 h-6 flex items-center justify-center rounded-full -right-3 -bottom-2 shadow"
           >
-            <img
-              v-if="avatar"
-              class="w-full h-full rounded object-cover"
-              :src="avatar"
-            />
-            <img
-              v-else
-              class="w-full"
-              src="@/assets/img/avatar.jpg"
-              alt=""
-            />
-            <input
-              ref="refInput"
-              type="file"
-              accept="image/jpeg, image/png, image/jpg"
-              class="hidden"
-              @change="onChangeImg"
-            />
-            <div
-              class="absolute bg-slate-50 w-6 h-6 flex items-center justify-center rounded-full -right-3 -bottom-2 shadow"
-            >
-              <Icon icon="hugeicons:edit-02" />
-            </div>
+            <Icon icon="hugeicons:edit-02" />
           </div>
+          <!-- </div> -->
         </div>
         <div class="form flex items-center gap-4 flex-col w-full">
           <div class="form-data w-full">

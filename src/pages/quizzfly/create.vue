@@ -6,6 +6,7 @@ import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
 import { useLoadingStore } from '@/stores/loading'
 import { useQuestionsStore } from '@/stores/quizzfly/question'
 import { useConfirmDialog } from '@/stores/modal'
+import { Button } from '@/components/ui/button'
 import type { QuizType } from '@/types/question'
 
 const route = useRoute()
@@ -70,6 +71,22 @@ const handleAddSlide = (type: 'quiz' | 'slide', quizType?: QuizType) => {
 </script>
 <template>
   <div class="max-md:flex-col-reverse flex w-full items-stretch p-5 pl-0 gap-0">
+    <Teleport to="body">
+      <div
+        class="md:hidden z-50 flex flex-col fixed top-0 left-0 w-full h-full bg-slate-100 gap-10 justify-center items-center"
+      >
+        <img
+          class="w-1/2"
+          src="/assets/images/work-at-home.png"
+          alt=""
+        />
+        <p class="text-center font-medium">Please use a larger screen to create a quiz</p>
+        <RouterLink :to="{ name: 'quizzfly' }">
+          <Button>Back to home</Button>
+        </RouterLink>
+      </div>
+    </Teleport>
+
     <QuestionList
       v-model="currentQuestion"
       v-motion

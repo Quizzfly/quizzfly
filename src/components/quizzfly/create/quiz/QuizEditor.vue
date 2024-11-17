@@ -11,7 +11,7 @@ import { createAnswerApi } from '@/services/quizzes'
 const questionsStore = useQuestionsStore()
 const currentQuestion = computed(() => questionsStore.getCurrentQuestion as Quiz)
 
-const { textarea, input } = useTextareaAutosize({ input: currentQuestion.value.content })
+const { textarea, input } = useTextareaAutosize({ input: currentQuestion.value.content.trim() })
 const questionContent = ref('')
 const dropZoneRef = ref<HTMLDivElement>()
 
@@ -85,7 +85,7 @@ const handleEnterPress = (event: KeyboardEvent) => {
         placeholder="Enter your answer..."
         maxlength="120"
         @keydown="handleEnterPress"
-        @update:model-value="handleUpdateTitle($event)"
+        @update:model-value="handleUpdateTitle($event.trim() + ' ')"
       />
       <p
         v-if="input"
@@ -98,9 +98,18 @@ const handleEnterPress = (event: KeyboardEvent) => {
     <div class="flex justify-center flex-auto">
       <div
         ref="dropZoneRef"
-        class="w-[50%] h-full flex justify-center items-center bg-slate-100 rounded-lg bg-cover shadow-lg image-area"
+        class="relative w-[50%] h-full flex justify-center items-center bg-slate-100 rounded-lg bg-cover shadow-lg image-area"
         :style="{ backgroundImage: `url(${currentQuestion.files[0]?.url})` }"
       >
+        <!-- delete image btn -->
+        <div
+          v-if="currentQuestion.files[0]?.url"
+          class="absolute -top-2 -right-2 cursor-pointer flex justify-center items-center bg-white h-6 w-6 rounded-full shadow-md"
+          @click="questionsStore.updateCurrentQuestion('quiz', { background_url: '' })"
+        >
+          <span class="text-xl i-material-symbols-light-close-rounded"></span>
+        </div>
+
         <div
           class="text-center"
           :class="{ 'hight-light': currentQuestion.background_url }"

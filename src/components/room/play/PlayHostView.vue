@@ -569,7 +569,7 @@ onUnmounted(() => {
         </div>
       </div>
 
-      <div class="flex items-center justify-between w-full h-full">
+      <div class="flex items-center justify-between w-full h-full overflow-hidden">
         <div class="flex justify-center p-4 rounded-full bg-primary w-[68px] h-[68px]">
           <p class="font-black text-white text-3xl tracking-wider">{{ timeCountdown }}</p>
         </div>
@@ -586,7 +586,7 @@ onUnmounted(() => {
               socketData?.question.type === 'QUIZ' && (socketData?.question as Quiz).files[0]?.url
             "
             :src="(socketData?.question as Quiz).files[0]?.url"
-            class="max-w-[80%] h-full object-contain rounded-sm"
+            class="h-full object-contain rounded-sm"
             alt=""
           />
         </div>

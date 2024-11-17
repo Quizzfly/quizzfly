@@ -50,13 +50,6 @@ const quizzflys = computed(() => quizzflyStore.getQuizzflys)
                 :to="{ name: 'host-live', params: { quizzflyId: quizzfly.id } }"
                 ><Button class="flex items-center h-6 w-17 text-xs"> Host live</Button>
               </RouterLink>
-
-              <Button
-                variant="secondary"
-                class="flex items-center h-6 w-17 text-xs"
-              >
-                Play solo
-              </Button>
             </div>
           </div>
         </div>
