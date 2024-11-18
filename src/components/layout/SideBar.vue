@@ -29,9 +29,9 @@ const toggleSidebar = () => {
   <div
     :class="{
       'w-20 min-w-20': isCollapsed,
-      '': !isCollapsed,
+      'min-w-[250px] w-[250px]': !isCollapsed,
     }"
-    class="max-md:hidden group overflow-hidden whitespace-nowrap min-w-[250px] w-[250px] relative py-3 flex flex-col border-r p-4 gap-2 transition-all duration-400"
+    class="max-md:hidden group overflow-hidden whitespace-nowrap relative py-3 flex flex-col border-r p-4 gap-2 transition-all duration-400"
   >
     <div
       :class="{
