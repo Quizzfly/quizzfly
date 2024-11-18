@@ -577,7 +577,6 @@ onUnmounted(() => {
         <div class="flex items-center justify-center rounded-sm h-full flex-auto">
           <AnswerStatistic
             v-if="isShowRightAnswer && summaryAnswer && socketData?.question"
-            :key="socketData?.question?.id"
             :summary-answer="summaryAnswer"
             :current-question="socketData?.question"
           />

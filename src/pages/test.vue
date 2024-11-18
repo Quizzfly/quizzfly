@@ -10,6 +10,18 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Slider } from '@/components/ui/slider'
+// import confetti from 'canvas-confetti'
+import Confetti from '@/components/base/Confetti.vue'
+
+const isShowConfetti = ref(false)
+const onExplore = () => {
+  isShowConfetti.value = true
+  // confetti({
+  //   particleCount: 150,
+  //   spread: 100,
+  //   origin: { y: 0.6 },
+  // })
+}
 // import { useConfirmDialog } from '@/stores/modal'
 // import RankingFinal from '@/components/room/play/RankingFinal.vue';
 const audioFiles = import.meta.glob('/assets/audio/*.mp3')
@@ -71,6 +83,13 @@ watch(isChechSelected, (val) => {
 
 <template>
   <div class="flex items-center justify-center mt-80">
+    <div class="flex flex-col items-center gap-4">
+      <Button @click="onExplore">Explore</Button>
+    </div>
+    <Confetti
+      v-if="isShowConfetti"
+      class="fixed top-40 right-40 z-40"
+    />
     <div>
       <Select v-model="isChechSelected">
         <SelectTrigger class="w-[200px] h-10">
