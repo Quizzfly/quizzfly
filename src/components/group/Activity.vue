@@ -3,6 +3,17 @@ import Card from '../ui/card/Card.vue'
 import Avatar from '../ui/avatar/Avatar.vue'
 import Input from '../ui/input/Input.vue'
 import Button from '../ui/button/Button.vue'
+import MCreateGroup from '@/components/group/modal/MCreateGroup.vue'
+
+const isShowModal = ref(false)
+
+const openModal = () => {
+  isShowModal.value = true
+}
+
+const closeModal = () => {
+  isShowModal.value = false
+}
 </script>
 
 <template>
@@ -20,7 +31,12 @@ import Button from '../ui/button/Button.vue'
             placeholder="Search..."
           />
         </div>
-        <Button class="h-10 bg-primary flex items-center"> Post </Button>
+        <Button
+          class="h-10 bg-primary flex items-center"
+          @click="openModal"
+        >
+          Post
+        </Button>
       </div>
     </Card>
     <Card>
@@ -39,6 +55,10 @@ import Button from '../ui/button/Button.vue'
         <div class="text-x font-medium">Chào các bạn đã đến với lớp học vinahouse</div>
       </div>
     </Card>
+    <MCreateGroup
+      v-if="isShowModal"
+      @close="closeModal"
+    />
   </div>
 </template>
 

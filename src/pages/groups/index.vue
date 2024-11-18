@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import GroupList from '@/components/group/list/GroupList.vue'
 import { useGroupStore } from '@/stores/group'
 import QuizzflyFilter from '@/components/quizzfly/list/QuizzflyFilter.vue'
-import ModelCreateGroup from '@/components/group/modal/ModalCreateGroup.vue'
+import ModelCreateGroup from '@/components/group/modal/MCreateGroup.vue'
 
 import {
   Pagination,
