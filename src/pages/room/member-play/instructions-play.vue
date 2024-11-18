@@ -18,11 +18,21 @@ const socketStore = useSocketStore()
 const roomStore = useRoomStore()
 const socketData = ref<SocketQuizStarted>()
 
+const socketIdLocalStorage = localStorage.getItem('socketId')
 const isGameStarted = ref(false)
 const isSentAnswer = ref(false)
 const isShowResult = ref(false)
 const resultAnswer = ref<SocketResultAnswer | null>(null)
 const leaderboardData = ref<SocketLeaderboard>()
+const currentTotalScore = computed(() => {
+  if (!socketIdLocalStorage) {
+    return 0
+  }
+  return (
+    leaderboardData.value?.leader_board.find((item) => item.socket_id === socketIdLocalStorage)
+      ?.total_score || 0
+  )
+})
 const isShowFinalRanking = ref(false)
 const lastQuestionId = ref<string | null>(null)
 
@@ -75,10 +85,10 @@ watch(socketMessage, (val) => {
     }
 
     if (val.event === 'updateLeaderboard') {
+      leaderboardData.value = val.data as SocketLeaderboard
       if (lastQuestionId.value === socketData.value?.question.id) {
         console.log('show final ranking')
         isShowFinalRanking.value = true
-        leaderboardData.value = val.data as SocketLeaderboard
       }
     }
   }
@@ -121,6 +131,25 @@ const handleSendAnswer = (answerId: string) => {
         />
       </div>
     </Teleport>
+    <div
+      v-if="isGameStarted"
+      class="w-full h-[64px] text-lg px-4 flex justify-between items-center bg-white"
+    >
+      <div class="flex gap-2 items-center">
+        <img
+          v-image
+          class="w-10 h-10 border rounded-full"
+          src=""
+          alt="avatar"
+        />
+        <p class="font-bold">
+          {{ roomStore.getMemberName }}
+        </p>
+      </div>
+      <div>
+        <p class="font-bold">{{ currentTotalScore }}</p>
+      </div>
+    </div>
   </div>
 </template>
 <style lang="scss" scoped>
