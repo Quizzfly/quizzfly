@@ -41,7 +41,7 @@ const handleShowFinalRanking = (value: boolean, data?: SocketLeaderboard) => {
 </script>
 <template>
   <div
-    class="ralative img-test w-full h-screen flex flex-col gap-6 overflow-hidden items-center justify-center bg-gray-200 bg-cover transition-all duration-200 ease-in-out"
+    class="relative img-test w-full h-screen flex flex-col gap-6 overflow-hidden items-center justify-center bg-gray-200 bg-cover transition-all duration-200 ease-in-out"
   >
     <Teleport to="body">
       <Ranking

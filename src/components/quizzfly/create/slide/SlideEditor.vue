@@ -4,19 +4,31 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import ImagePicker from '@/components/base/ImagePicker.vue'
 import { useQuestionsStore } from '@/stores/quizzfly/question'
+import Text from '@/components/base/Text.vue'
 
 interface CustomComponent {
   [key: string]: Component
 }
 
-const component: CustomComponent = {
-  input: Input,
-  textarea: Textarea,
-  image: ImagePicker,
-}
+const component = computed<CustomComponent>(() => {
+  if (props.isEdit) {
+    return {
+      input: Input,
+      textarea: Textarea,
+      image: ImagePicker,
+    }
+  }
+
+  return {
+    input: Text,
+    textarea: Text,
+    image: ImagePicker,
+  }
+})
 
 const props = defineProps<{
   layout: SlideLayout
+  isEdit?: boolean
 }>()
 
 const questionsStore = useQuestionsStore()
@@ -38,14 +50,36 @@ const handleUpdateModelValue = () => {
             v-for="(item, i) in column"
             :key="i"
           >
-            <component
-              :is="component[item.element]"
-              v-bind="item.props"
-              v-model="item.value"
-              class="bg-white max-h-[60%]"
-              @blur="handleUpdateModelValue"
-              @updated="handleUpdateModelValue"
-            />
+            <template v-if="item.element !== 'image'">
+              <component
+                :is="component[item.element]"
+                v-bind="item.props"
+                v-model="item.value"
+                :class="{
+                  'font-bold text-2xl px-5 py-2 rounded-md border-b-4 border-gray-200': !isEdit,
+                }"
+                class="bg-white max-h-[60%]"
+                @blur="handleUpdateModelValue"
+              />
+            </template>
+
+            <template v-else>
+              <component
+                :is="component[item.element]"
+                v-if="isEdit"
+                v-bind="item.props"
+                v-model="item.value"
+                class="w-full h-full"
+                @updated="handleUpdateModelValue"
+                @deleted="handleUpdateModelValue"
+              />
+              <img
+                v-else
+                v-image
+                :src="item.value"
+                class="w-full h-full object-cover rounded-md"
+              />
+            </template>
           </template>
         </div>
       </template>

@@ -26,6 +26,7 @@ onBeforeMount(() => {
         <SlideEditor
           v-if="slideLayout"
           :layout="slideLayout"
+          :is-edit="true"
         />
       </div>
     </div>
