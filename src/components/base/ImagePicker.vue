@@ -5,13 +5,19 @@ import { useDropZone } from '@vueuse/core'
 
 const loadingStore = useLoadingStore()
 
-defineProps<{
+interface Props {
   modelValue: string
-}>()
+  allowUpload?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  allowUpload: true,
+})
 
 const emits = defineEmits<{
-  (e: 'update:modelValue', value: string): void
+  (e: 'update:modelValue', value: string | File): void
   (e: 'updated'): void
+  (e: 'deleted'): void
 }>()
 
 const dropZoneRef = ref<HTMLDivElement>()
@@ -44,11 +50,16 @@ const handleUploadFile = async (file: File) => {
   if (file) {
     loadingStore.setLoading(true)
     try {
-      const formData = new FormData()
-      formData.append('file', file)
-      const { data } = await uploadFileApi(formData)
-      emits('update:modelValue', data.url)
-      emits('updated')
+      if (props.allowUpload) {
+        const formData = new FormData()
+        formData.append('file', file)
+        const { data } = await uploadFileApi(formData)
+        emits('update:modelValue', data.url)
+        emits('updated')
+      } else {
+        emits('update:modelValue', file)
+        emits('updated')
+      }
     } catch (error) {
       console.error(error)
     }
@@ -60,12 +71,32 @@ const inputRef = ref()
 const handleClick = () => {
   inputRef.value.click()
 }
+
+const handleDelete = () => {
+  emits('update:modelValue', '')
+  emits('deleted')
+}
 </script>
 <template>
-  <div class="h-full w-full bg-slate-100 rounded-md">
+  <div
+    class="relative h-full w-full bg-slate-100 rounded-md"
+    @click="handleClick()"
+  >
+    <!-- remove btn -->
+    <div
+      v-if="modelValue"
+      class="absolute top-2 right-2"
+    >
+      <button
+        class="w-6 h-6 flex justify-center items-center p-1 rounded-full bg-white text-gray-500"
+        @click.stop="handleDelete"
+      >
+        <span class="text-2xl i-material-symbols-light-close-rounded"></span>
+      </button>
+    </div>
     <div
       ref="dropZoneRef"
-      class="h-full flex justify-center items-center bg-slate-100 rounded-lg bg-cover image-area"
+      class="h-full flex justify-center items-center bg-slate-100 rounded-lg bg-cover image-area bg-center"
       :style="{ backgroundImage: `url(${modelValue})` }"
     >
       <div
@@ -81,10 +112,7 @@ const handleClick = () => {
           @change="handleInputFileChange"
         />
 
-        <p
-          class="text-xs text-primary text-center cursor-pointer mt-2 hover:underline"
-          @click="handleClick()"
-        >
+        <p class="text-xs text-primary text-center cursor-pointer mt-2 hover:underline">
           Click to upload your image
         </p>
       </div>

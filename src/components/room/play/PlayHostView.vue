@@ -11,6 +11,8 @@ import type { Quiz } from '@/types/question'
 const socketStore = useSocketStore()
 import AnswerStatistic from './AnswerStatistic.vue'
 import { useRoomStore } from '@/stores/room'
+import SlideEditor from '@/components/quizzfly/create/slide/SlideEditor.vue'
+import { Button } from '@/components/ui/button'
 // const socketData = ref({
 //   room_pin: '738995',
 //   start_time: 1731299260380,
@@ -555,59 +557,83 @@ onUnmounted(() => {
     :style="{ backgroundImage: `url(${socketData?.question?.background_url})` }"
     class="h-full w-full bg-cover p-6"
   >
+    <!-- QUIZ -->
     <div
-      v-if="isShowRightAnswer"
-      v-motion-fade
-      class="bg-overlay"
-    ></div>
-    <div class="relative top-0 flex flex-col gap-16 justify-between pb-10 h-full w-full">
-      <div class="flex items-center justify-center gap-8 w-auto">
-        <div class="rounded bg-white p-4">
-          <p class="font-black text-2xl text-center">
-            {{ socketData?.question?.content }}
-          </p>
-        </div>
-      </div>
-
-      <div class="flex items-center justify-between w-full h-full overflow-hidden">
-        <div class="flex justify-center p-4 rounded-full bg-primary w-[68px] h-[68px]">
-          <p class="font-black text-white text-3xl tracking-wider">{{ timeCountdown }}</p>
-        </div>
-
-        <div class="flex items-center justify-center rounded-sm h-full flex-auto">
-          <AnswerStatistic
-            v-if="isShowRightAnswer && summaryAnswer && socketData?.question"
-            :summary-answer="summaryAnswer"
-            :current-question="socketData?.question"
-          />
-          <img
-            v-else-if="
-              socketData?.question.type === 'QUIZ' && (socketData?.question as Quiz).files[0]?.url
-            "
-            :src="(socketData?.question as Quiz).files[0]?.url"
-            class="h-full object-contain rounded-sm"
-            alt=""
-          />
-        </div>
-
-        <div class="flex flex-col gap-3 justify-center items-center">
-          <div class="p-4 rounded-full bg-primary w-[68px] h-[68px] text-center">
-            <p class="font-black text-white text-3xl tracking-wider">{{ usersAnswerCount }}</p>
-          </div>
-          <div class="px-4 py-2 bg-primary rounded-full">
-            <p class="flex items-center justify-center text-white font-semibold text-base">
-              Answers
+      v-if="socketData?.question?.type === 'QUIZ'"
+      class="w-full h-full"
+    >
+      <div
+        v-if="isShowRightAnswer"
+        v-motion-fade
+        class="bg-overlay"
+      ></div>
+      <div class="relative top-0 flex flex-col gap-16 justify-between pb-10 h-full w-full">
+        <div class="flex items-center justify-center gap-8 w-auto">
+          <div class="rounded bg-white p-4">
+            <p class="font-black text-2xl text-center">
+              {{ socketData?.question?.content }}
             </p>
           </div>
         </div>
+
+        <div class="flex items-center justify-between w-full h-full overflow-hidden">
+          <div class="flex justify-center p-4 rounded-full bg-primary w-[68px] h-[68px]">
+            <p class="font-black text-white text-3xl tracking-wider">{{ timeCountdown }}</p>
+          </div>
+
+          <div class="flex items-center justify-center rounded-sm h-full flex-auto">
+            <AnswerStatistic
+              v-if="isShowRightAnswer && summaryAnswer && socketData?.question"
+              :summary-answer="summaryAnswer"
+              :current-question="socketData?.question"
+            />
+            <img
+              v-else-if="
+                socketData?.question.type === 'QUIZ' && (socketData?.question as Quiz).files[0]?.url
+              "
+              :src="(socketData?.question as Quiz).files[0]?.url"
+              class="h-full object-contain rounded-sm"
+              alt=""
+            />
+          </div>
+
+          <div class="flex flex-col gap-3 justify-center items-center">
+            <div class="p-4 rounded-full bg-primary w-[68px] h-[68px] text-center">
+              <p class="font-black text-white text-3xl tracking-wider">{{ usersAnswerCount }}</p>
+            </div>
+            <div class="px-4 py-2 bg-primary rounded-full">
+              <p class="flex items-center justify-center text-white font-semibold text-base">
+                Answers
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="">
+          <Answers
+            v-if="socketData?.question"
+            :current-question="socketData?.question"
+            :is-show-right-answer="isShowRightAnswer"
+          />
+        </div>
       </div>
-      <div class="">
-        <Answers
-          v-if="socketData?.question"
-          :current-question="socketData?.question"
-          :is-show-right-answer="isShowRightAnswer"
-        />
-      </div>
+    </div>
+
+    <!-- SLIDE -->
+    <div
+      v-else-if="socketData?.question?.type === 'SLIDE' && socketData?.question"
+      class="w-full h-full relative"
+    >
+      <Button
+        class="absolute -top-5 right-4"
+        variant="outline"
+        color="white"
+        @click="socketStore.handleNextQuestion"
+        >Next</Button
+      >
+      <SlideEditor
+        class="w-full h-full"
+        :layout="JSON.parse(socketData?.question?.content)"
+      />
     </div>
   </div>
 </template>
