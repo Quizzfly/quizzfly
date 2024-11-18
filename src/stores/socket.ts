@@ -43,6 +43,16 @@ export const useSocketStore = defineStore({
         this.resolveCallback && this.resolveCallback()
       })
 
+      this.client.on('disconnect', () => {
+        console.log('Disconnected from socket server') // Debug
+        this.connected = false
+      })
+
+      this.client.on('connect_error', () => {
+        console.log('Connection error') // Debug
+        this.connected = false
+      })
+
       this.client.on('exception', (newContent: any) => {
         this.message = newContent
         console.log('Received exception:', newContent, router.currentRoute.value) // Debug
@@ -78,7 +88,7 @@ export const useSocketStore = defineStore({
 
       this.client.on('playerLeft', (newContent: IMember) => {
         const index = roomStore.getListMemberJoins.findIndex(
-          (item: any) => item.socketId === newContent.new_player.socket_id,
+          (item) => item.new_player.socket_id === newContent?.player_left?.socket_id,
         )
         if (index !== -1) {
           roomStore.getListMemberJoins.splice(index, 1)
@@ -87,7 +97,7 @@ export const useSocketStore = defineStore({
 
       this.client.on('kickPlayer', (newContent: IKickPlayer) => {
         const index = roomStore.getListMemberJoins.findIndex(
-          (item: any) => item.new_player.socket_id === newContent.player_left.socket_id,
+          (item) => item.new_player.socket_id === newContent.player_left.socket_id,
         )
         if (index !== -1) {
           roomStore.getListMemberJoins.splice(index, 1)

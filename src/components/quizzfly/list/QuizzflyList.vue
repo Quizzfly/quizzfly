@@ -8,7 +8,7 @@ const quizzflyStore = useQuizzflyStore()
 const quizzflys = computed(() => quizzflyStore.getQuizzflys)
 </script>
 <template>
-  <div class="grid grid-cols-[repeat(auto-fill,49%)] max-md:grid-cols-1 gap-5">
+  <div class="grid grid-cols-2 max-md:grid-cols-1 gap-5">
     <Card
       v-for="quizzfly in quizzflys"
       :key="quizzfly.id"
@@ -17,11 +17,9 @@ const quizzflys = computed(() => quizzflyStore.getQuizzflys)
         <!-- left -->
         <div>
           <img
+            v-image
             class="w-[80px] h-[80px] object-cover rounded-sm"
-            :src="
-              quizzfly.cover_image ||
-              'https://images.unsplash.com/photo-1725992340772-47fd8f8df459?q=80&w=2400&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-            "
+            :src="quizzfly.cover_image || ''"
             alt=""
           />
         </div>
@@ -50,13 +48,6 @@ const quizzflys = computed(() => quizzflyStore.getQuizzflys)
                 :to="{ name: 'host-live', params: { quizzflyId: quizzfly.id } }"
                 ><Button class="flex items-center h-6 w-17 text-xs"> Host live</Button>
               </RouterLink>
-
-              <Button
-                variant="secondary"
-                class="flex items-center h-6 w-17 text-xs"
-              >
-                Play solo
-              </Button>
             </div>
           </div>
         </div>

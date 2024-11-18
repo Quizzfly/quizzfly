@@ -4,12 +4,12 @@ const handleImage = {
   mounted(el: HTMLImageElement, binding: DirectiveBinding): void {
     // Thêm sự kiện onload vào hình ảnh
     const srcDefault =
-      binding.arg === 'avatar' ? '/assets/images/avatar.jpg' : '/assets/images/default.webp'
+      binding.arg === 'avatar' ? '/assets/images/avatar.jpg' : '/assets/images/default.png'
 
     let img = new Image() as HTMLImageElement | null
     if (!img) return
     img.style.objectFit = 'cover'
-    img.src = binding.value ?? srcDefault
+    img.src = el.src ?? srcDefault
     img.onload = () => {
       // Khi ảnh được tải lên thành công, gán đường dẫn vào src
       // el.src = binding.value

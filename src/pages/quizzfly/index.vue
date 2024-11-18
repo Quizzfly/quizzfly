@@ -90,7 +90,7 @@ const debouncedFn = useDebounceFn((value) => {
         class="h-full w-full flex flex-col justify-center items-center"
       >
         <img
-          class="w-[100px]"
+          class="w-[200px]"
           src="@/assets/icons/empty.png"
           alt=""
         />

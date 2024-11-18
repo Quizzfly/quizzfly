@@ -29,7 +29,9 @@ const onSubmit = handleSubmit((values) => {
     @submit="onSubmit"
   >
     <InputValidation
-      type="string"
+      type="text"
+      pattern="^[0-9]{6,10}$"
+      inputmode="numeric"
       name="pinCode"
       placeholder="Enter code..."
       class="h-12 font-medium text-base bg-slate-50 border-slate-200 outline-none"

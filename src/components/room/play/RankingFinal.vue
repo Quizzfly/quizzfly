@@ -3,6 +3,7 @@ import { avatars } from '@/utils/avatar'
 import type { SocketLeaderboard } from '@/types/socket'
 import { Button } from '@/components/ui/button'
 import ConfettiExplosion from 'vue-confetti-explosion'
+import confetti from 'canvas-confetti'
 
 const props = defineProps<{
   leaderboardData: SocketLeaderboard
@@ -43,6 +44,18 @@ const delayTime = computed(() => {
 onMounted(() => {
   setTimeout(() => {
     isShowConfetti.value = true
+    confetti({
+      particleCount: 150,
+      angle: 60,
+      spread: 55,
+      origin: { x: 0 },
+    })
+    confetti({
+      particleCount: 150,
+      angle: 120,
+      spread: 55,
+      origin: { x: 1 },
+    })
   }, delayTime.value.first + 500)
 })
 </script>
