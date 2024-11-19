@@ -10,7 +10,6 @@ const props = defineProps<{
 
 const socketStore = useSocketStore()
 
-// Hàm tạo avatar ngẫu nhiên
 function getRandomAvatar(): string {
   // random avatar in avatars array
   return avatars[Math.floor(Math.random() * avatars.length)]
