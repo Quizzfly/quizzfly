@@ -1,5 +1,5 @@
-import { createGroupApi, getGroupsApi } from '@/services/group'
-import type { IGroup, IGroupCreate } from '@/types/group'
+import { createGroupApi, getGroupsApi, getMemberGroupApi } from '@/services/group'
+import type { IGroup, IGroupCreate, IMemberGroup } from '@/types/group'
 import { showToast } from '@/utils/toast'
 import { defineStore } from 'pinia'
 import { apiError } from '@/utils/exceptionHandler'
@@ -12,6 +12,7 @@ export const useGroupStore = defineStore({
     isUpdating: false,
     groups: [] as IGroup[],
     groupMeta: null as IPaging | null,
+    listMembers: [] as IMemberGroup[],
   }),
   actions: {
     setIsUpdating(val: boolean) {
@@ -31,9 +32,6 @@ export const useGroupStore = defineStore({
       }
       this.isUpdating = false
     },
-    setGroupInfo(val: IGroup) {
-      this.groupInfo = { ...this.groupInfo, ...val }
-    },
     async fetchGroups({ page = 1, keyword = '' }) {
       try {
         const { data, meta } = await getGroupsApi({ page, keyword })
@@ -48,11 +46,29 @@ export const useGroupStore = defineStore({
         throw error
       }
     },
+    async listMemberGroups(idGroup: string) {
+      try {
+        const { data } = await getMemberGroupApi(idGroup)
+        this.setMembersGroup(data)
+      } catch (error) {
+        showToast({
+          description: apiError(error).message,
+          variant: 'destructive',
+        })
+      }
+    },
+    setGroupInfo(val: IGroup) {
+      this.groupInfo = { ...this.groupInfo, ...val }
+    },
+    setMembersGroup(val: any) {
+      this.listMembers = val
+    },
   },
   getters: {
     getGroupInfo: (state) => state.groupInfo,
     getIsUpdating: (state) => state.isUpdating,
     getGroups: (state) => state.groups,
     getGroupMeta: (state) => state.groupMeta,
+    getMemberGroup: (state) => state.listMembers,
   },
 })

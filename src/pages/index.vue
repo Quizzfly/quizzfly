@@ -82,7 +82,7 @@ const handleOpenHostLive = (quizzflyId: string) => {
         </PopoverContent>
       </Popover>
       <RouterLink
-        :to="{ name: 'owned-groups', query: { create: 'true' } }"
+        :to="{ name: 'groups', query: { create: 'true' } }"
         class="h-9 btn-gradient"
       >
         <div class="flex items-center h-full w-full bg-white text-black rounded-full px-3 py-[6px]">

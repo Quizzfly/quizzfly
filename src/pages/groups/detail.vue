@@ -7,6 +7,7 @@ import Button from '@/components/ui/button/Button.vue'
 import Activity from '@/components/group/Activity.vue'
 import Shared from '@/components/group/Shared.vue'
 import Assignments from '@/components/group/Assignments.vue'
+import MInviteMember from '@/components/group/modal/MInviteMember.vue'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -17,18 +18,32 @@ import {
 } from '@/components/ui/breadcrumb'
 
 const groupStore = useGroupStore()
+const route = useRoute()
+
+const idGroup = route.params.groupId as string
 
 const infoGroup = computed(() => {
   return groupStore.getGroupInfo
 })
 
-const avatars = [
-  'https://d1hjkbq40fs2x4.cloudfront.net/2017-08-21/files/landscape-photography_1645-t.jpg',
-  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBS9bJEXw5AYRgmLY_9Nyr79oQFPYEtJjmhA&s',
-  'DK',
-  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBS9bJEXw5AYRgmLY_9Nyr79oQFPYEtJjmhA&s',
-  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBS9bJEXw5AYRgmLY_9Nyr79oQFPYEtJjmhA&s',
-]
+const listMembers = computed(() => {
+  return groupStore.getMemberGroup
+})
+
+onBeforeMount(() => {
+  groupStore.listMemberGroups(idGroup)
+  console.log(listMembers.value, 'check list member')
+})
+
+const isShowModal = ref(false)
+
+const closeModal = () => {
+  isShowModal.value = false
+}
+
+const openModal = () => {
+  isShowModal.value = true
+}
 </script>
 
 <template>
@@ -62,7 +77,7 @@ const avatars = [
         <div class="flex items-center">
           <div class="flex">
             <div
-              v-for="(item, index) in avatars"
+              v-for="(item, index) in listMembers"
               :key="index"
             >
               <Avatar
@@ -70,15 +85,18 @@ const avatars = [
                 :class="{ '-ml-[20px]': index > 0 }"
                 class="border-2"
               >
-                <AvatarImage :src="item" />
-                <AvatarFallback>{{ item }}</AvatarFallback>
+                <AvatarImage
+                  v-if="item?.avatar"
+                  :src="item?.avatar"
+                />
+                <AvatarFallback>{{ item.name }}</AvatarFallback>
               </Avatar>
             </div>
             <Avatar
-              v-if="avatars.length > 4"
+              v-if="listMembers.length > 4"
               class="-ml-[20px]"
             >
-              <AvatarFallback>+{{ avatars.length - 4 }}</AvatarFallback>
+              <AvatarFallback>+{{ listMembers.length - 4 }}</AvatarFallback>
             </Avatar>
           </div>
           <div
@@ -102,7 +120,16 @@ const avatars = [
           <TabsContent value="shared"> <Shared /> </TabsContent>
           <TabsContent value="assignment"> <Assignments /> </TabsContent>
         </Tabs>
-        <Button class="absolute top-0 right-0 h-10 bg-primary flex items-center"> Invite </Button>
+        <Button
+          class="absolute top-0 right-0 h-10 bg-primary flex items-center"
+          @click="openModal"
+        >
+          Invite
+        </Button>
+        <MInviteMember
+          v-if="isShowModal"
+          @close="closeModal"
+        />
       </div>
     </Card>
   </div>

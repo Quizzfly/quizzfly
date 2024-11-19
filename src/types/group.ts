@@ -16,3 +16,12 @@ export interface IGroupCreate {
   description: string
   background: string
 }
+
+export interface IMemberGroup {
+  id: string
+  name: string
+  username: string
+  email: string
+  avatar: string
+  role_in_group: string
+}
