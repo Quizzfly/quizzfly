@@ -15,7 +15,7 @@ const menus = ref([
         class:
           'i-solar-users-group-rounded-line-duotone group-hover/item1:i-solar-users-group-rounded-bold-duotone',
         title: 'Groups',
-        link: '/groups/owned-groups',
+        link: '/groups',
       },
       {
         class: 'i-solar-bolt-broken group-hover/item1:i-solar-bolt-bold-duotone',

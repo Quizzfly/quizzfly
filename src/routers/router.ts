@@ -46,7 +46,6 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/groups',
     beforeEnter: [authGuard],
-    component: () => import('@/pages/groups/index.vue'),
     children: groupRoute,
   },
   {
