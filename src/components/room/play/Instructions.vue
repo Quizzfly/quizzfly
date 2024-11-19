@@ -8,7 +8,7 @@ const memberName = computed(() => {
 </script>
 
 <template>
-  <div class="flex flex-col items-center justify-center h-full">
+  <div class="flex flex-col items-center justify-center h-full px-5">
     <div
       v-motion
       class="w-32 h-32"
@@ -27,7 +27,7 @@ const memberName = computed(() => {
       :initial="{ opacity: 0, x: 100 }"
       :enter="{ opacity: 1, x: 0, scale: 1 }"
       :delay="800"
-      class="text-3xl mt-3 mb-6 font-extrabold text-white"
+      class="text-3xl mt-3 mb-6 font-extrabold text-white text-center"
     >
       {{ memberName }}
     </div>

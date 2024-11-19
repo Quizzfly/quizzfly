@@ -7,7 +7,7 @@ import PlayUserResult from '@/components/room/play/PlayUserResult.vue'
 import RankingFinal from '@/components/room/play/RankingFinal.vue'
 import { useSocketStore } from '@/stores/socket'
 import { useRoomStore } from '@/stores/room'
-import type { IKickPlayer } from '@/types'
+import type { IKickPlayer, IMember } from '@/types'
 
 const socketMessage = computed(() => {
   return socketStore.getMessage
@@ -18,19 +18,17 @@ const socketStore = useSocketStore()
 const roomStore = useRoomStore()
 const socketData = ref<SocketQuizStarted>()
 
-const socketIdLocalStorage = localStorage.getItem('socketId')
+const socketIdLocalStorage = ref('')
 const isGameStarted = ref(false)
 const isSentAnswer = ref(false)
 const isShowResult = ref(false)
 const resultAnswer = ref<SocketResultAnswer | null>(null)
 const leaderboardData = ref<SocketLeaderboard>()
 const currentTotalScore = computed(() => {
-  if (!socketIdLocalStorage) {
-    return 0
-  }
   return (
-    leaderboardData.value?.leader_board.find((item) => item.socket_id === socketIdLocalStorage)
-      ?.total_score || 0
+    leaderboardData.value?.leader_board.find(
+      (item) => item.socket_id === socketIdLocalStorage.value,
+    )?.total_score || 0
   )
 })
 const isShowFinalRanking = ref(false)
@@ -58,6 +56,10 @@ onBeforeMount(() => {
 
 watch(socketMessage, (val) => {
   if (val) {
+    if (val.event === 'playerJoined') {
+      socketIdLocalStorage.value = (val.data as IMember).new_player.socket_id
+    }
+
     if (val.event === 'quizStarted' || val.event === 'nextQuestion') {
       isGameStarted.value = true
       isSentAnswer.value = false
@@ -135,19 +137,19 @@ const handleSendAnswer = (answerId: string) => {
       v-if="isGameStarted"
       class="w-full h-[64px] text-lg px-4 flex justify-between items-center bg-white"
     >
-      <div class="flex gap-2 items-center">
+      <div class="max-w-[50%] overflow-hidden flex gap-2 items-center">
         <img
           v-image
-          class="w-10 h-10 border rounded-full"
+          class="w-10 h-10 border rounded-full object-cover"
           src=""
           alt="avatar"
         />
-        <p class="font-bold">
+        <p class="font-bold text-ellipsis overflow-hidden whitespace-nowrap">
           {{ roomStore.getMemberName }}
         </p>
       </div>
       <div>
-        <p class="font-bold">{{ currentTotalScore }}</p>
+        <p class="font-bold text-3xl">{{ currentTotalScore }}</p>
       </div>
     </div>
   </div>

@@ -1,5 +1,5 @@
 import type { Question } from './question'
-import type { IKickPlayer } from './room'
+import type { IKickPlayer, IMember } from './room'
 
 export type SocketEventName =
   | 'nextQuestion'
@@ -10,6 +10,7 @@ export type SocketEventName =
   | 'answerQuestion'
   | 'noMoreQuestions'
   | 'kickPlayer'
+  | 'playerJoined'
 
 export interface SocketUserAnswerQuestion {
   no_player_answered: number
@@ -60,4 +61,5 @@ export interface SocketMessage {
     | SocketLeaderboard
     | SocketUserAnswerQuestion
     | IKickPlayer
+    | IMember
 }
