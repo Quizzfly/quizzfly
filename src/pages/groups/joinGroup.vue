@@ -8,7 +8,7 @@ const confirmDialog = useConfirmDialog()
 const route = useRoute()
 const router = useRouter()
 
-const idGroup = route.query.idGroup as string
+const groupId = route.query.idGroup as string
 
 onBeforeMount(() => {
   openConfirm()
@@ -28,13 +28,13 @@ const openConfirm = async () => {
 
 const handleJoinGroup = async () => {
   try {
-    await joinGroupApi(idGroup)
+    await joinGroupApi(groupId)
     showToast({
       title: 'Success',
-      description: 'Join group success',
+      description: 'Group joined success',
       variant: 'default',
     })
-    router.push({ name: 'group-detail', params: { groupId: idGroup } })
+    router.push({ name: 'group-detail', params: { groupId: groupId } })
   } catch (error) {
     console.error(error)
     showToast({

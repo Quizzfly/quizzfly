@@ -46,7 +46,7 @@ export const getMemberGroupApi = async (id: string): Promise<BaseResponse<IGroup
   })
 }
 
-export const detailGroupApi = async (id: string): Promise<BaseResponse<IGroup>> => {
+export const getGroupDetailApi = async (id: string): Promise<BaseResponse<IGroup>> => {
   return $api(`/groups/${id}`, {
     method: 'GET',
   })
@@ -54,6 +54,6 @@ export const detailGroupApi = async (id: string): Promise<BaseResponse<IGroup>> 
 
 export const deleteGroupApi = async (id: string): Promise<BaseResponse<IGroup>> => {
   return $api(`/groups/${id}`, {
-    method: 'GET',
+    method: 'DELETE',
   })
 }

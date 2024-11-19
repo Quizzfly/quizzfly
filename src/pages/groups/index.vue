@@ -144,7 +144,7 @@ const handleCreated = () => {
     <ModelCreateGroup
       v-if="isShowModal"
       @close="closeModal"
-      @handle-created="handleCreated"
+      @created="handleCreated"
     />
   </div>
 </template>

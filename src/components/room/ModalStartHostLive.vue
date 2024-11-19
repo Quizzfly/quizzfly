@@ -3,7 +3,9 @@ import { Button } from '@/components/ui/button'
 import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
 import { useRoomStore } from '@/stores/room'
 
-const emits = defineEmits(['start'])
+const emits = defineEmits<{
+  (e: 'start'): void
+}>()
 const route = useRoute()
 
 const roomStore = useRoomStore()

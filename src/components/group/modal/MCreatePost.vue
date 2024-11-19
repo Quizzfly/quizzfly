@@ -1,14 +1,17 @@
 <script lang="ts" setup>
 import BaseModal from '@/components/base/BaseModal.vue'
 import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
+import TextareaValidation from '@/components/base/TextareaValidation.vue'
 import InputValidation from '@/components/base/InputValidation.vue'
 import ImagePicker from '@/components/base/ImagePicker.vue'
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
 import { useGroupStore } from '@/stores/group'
 
-const emits = defineEmits(['close', 'handleCreated'])
+const emits = defineEmits<{
+  (e: 'close'): void
+  (e: 'created'): void
+}>()
 const groupStore = useGroupStore()
 
 const isLoading = ref(false)
@@ -32,7 +35,7 @@ const onSubmit = handleSubmit(async (values) => {
   await groupStore.initGroup(data)
   isLoading.value = false
   emits('close')
-  emits('handleCreated')
+  emits('created')
 })
 </script>
 
@@ -53,16 +56,17 @@ const onSubmit = handleSubmit(async (values) => {
             <InputValidation
               id="name"
               placeholder="Enter name..."
-              type="name"
+              type="text"
               name="name"
               class="h-12 mt-1 bg-slate-50 border-slate-200 outline-none"
             />
           </div>
           <div class="form-data">
             <label for="description">Description</label>
-            <Textarea
+            <TextareaValidation
               id="description"
-              v-model="description"
+              type="text"
+              name="description"
               placeholder="Enter description..."
               class="h-28 mt-1 bg-slate-50 border-slate-200 outline-none"
             />

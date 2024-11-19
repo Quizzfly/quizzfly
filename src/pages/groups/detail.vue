@@ -20,9 +20,9 @@ import {
 const groupStore = useGroupStore()
 const route = useRoute()
 
-const idGroup = route.params.groupId as string
+const groupId = route.params.groupId as string
 
-const infoGroup = computed(() => {
+const groupInfo = computed(() => {
   return groupStore.getGroupInfo
 })
 
@@ -31,8 +31,7 @@ const listMembers = computed(() => {
 })
 
 onBeforeMount(() => {
-  groupStore.listMemberGroups(idGroup)
-  console.log(listMembers.value, 'check list member')
+  groupStore.listMemberGroups(groupId)
 })
 
 const isShowModal = ref(false)
@@ -62,10 +61,10 @@ const openModal = () => {
     <Card class="flex flex-col gap-12 p-6 h-full">
       <div class="flex items-center justify-between">
         <h3
-          v-if="infoGroup.group?.name"
+          v-if="groupInfo.group?.name"
           class="text-base font-semibold"
         >
-          {{ infoGroup.group?.name }}
+          {{ groupInfo.group?.name }}
         </h3>
 
         <h3
@@ -89,7 +88,7 @@ const openModal = () => {
                   v-if="item?.avatar"
                   :src="item?.avatar"
                 />
-                <AvatarFallback>{{ item.name }}</AvatarFallback>
+                <AvatarFallback>{{ item.name.charAt(0).toUpperCase() }}</AvatarFallback>
               </Avatar>
             </div>
             <Avatar

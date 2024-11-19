@@ -24,7 +24,6 @@
     "@vueuse/router": "^11.1.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
-    "flowbite": "^2.5.2",
     "flowbite-vue": "^0.1.6",
     "lodash-es": "^4.17.21",
     "nprogress": "^0",

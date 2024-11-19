@@ -16,8 +16,10 @@ import { apiError } from '@/utils/exceptionHandler'
 
 const route = useRoute()
 
-const emits = defineEmits(['close'])
-const idGroup = route.params.groupId as string
+const emits = defineEmits<{
+  (e: 'close'): void
+}>()
+const groupId = route.params.groupId as string
 
 const isLoading = ref(false)
 const listEmails = ref([])
@@ -25,7 +27,7 @@ const listEmails = ref([])
 const onSubmit = async () => {
   isLoading.value = false
   try {
-    await inviteGroupApi(idGroup, listEmails.value)
+    await inviteGroupApi(groupId, listEmails.value)
     showToast({
       title: 'Success',
       description: 'Invite members success',
