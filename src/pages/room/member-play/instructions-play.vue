@@ -137,14 +137,14 @@ const handleSendAnswer = (answerId: string) => {
       v-if="isGameStarted"
       class="w-full h-[64px] text-lg px-4 flex justify-between items-center bg-white"
     >
-      <div class="flex gap-2 items-center">
+      <div class="max-w-[50%] overflow-hidden flex gap-2 items-center">
         <img
           v-image
           class="w-10 h-10 border rounded-full object-cover"
           src=""
           alt="avatar"
         />
-        <p class="font-bold">
+        <p class="font-bold text-ellipsis overflow-hidden whitespace-nowrap">
           {{ roomStore.getMemberName }}
         </p>
       </div>
