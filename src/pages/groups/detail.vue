@@ -58,7 +58,7 @@ const openModal = () => {
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
-    <Card class="flex flex-col gap-12 p-6 h-full">
+    <Card class="flex flex-col gap-12 p-6 h-full overflow-auto">
       <div class="flex items-center justify-between">
         <h3
           v-if="groupInfo.group?.name"
@@ -123,7 +123,7 @@ const openModal = () => {
           class="absolute top-0 right-0 h-10 bg-primary flex items-center"
           @click="openModal"
         >
-          Invite
+          Invite Member
         </Button>
         <MInviteMember
           v-if="isShowModal"
@@ -134,4 +134,29 @@ const openModal = () => {
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 6px;
+  border: 2px solid #f0f0f0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+.scrollable-element {
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f0f0f0;
+}
+</style>

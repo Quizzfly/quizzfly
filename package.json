@@ -31,6 +31,7 @@
     "pinia": "^2.1.7",
     "qrcode-vue3": "^1.7.1",
     "radix-vue": "^1.9.5",
+    "sanitize-html": "^2.13.1",
     "socket.io-client": "^4.8.1",
     "swrv": "^1.0.4",
     "tailwind-merge": "^2.5.2",
