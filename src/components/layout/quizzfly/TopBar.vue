@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
 import QuizzflySettings from './QuizzflySettings.vue'
 import ThemeSetting from './ThemeSetting.vue'
+import AICreateButton from './AICreateButton.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -67,6 +68,7 @@ const handleClickCancel = () => {
     </div>
 
     <div class="flex items-center gap-3">
+      <AICreateButton />
       <ThemeSetting />
       <Button
         variant="secondary"

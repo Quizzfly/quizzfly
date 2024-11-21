@@ -12,6 +12,18 @@
     textarea {
       font-size: 16px;
     }
+
+    .text-gradient {
+      background: linear-gradient(90deg, #37d2c0, #7286ff);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .gradient-from-primary {
+      background: linear-gradient(90deg, #37d2c0, #7286ff);
+    }
+
     body {
       @apply bg-background text-foreground;
     }

@@ -60,13 +60,11 @@ const handleAddSlide = (type: 'quiz' | 'slide', quizType?: QuizType) => {
     questionsStore.addQuestion(type)
   }
 
-  questionsStore.setCurrentQuestion(questionsStore.getSlides[questionsStore.getSlides.length - 1])
-  nextTick(() => {
-    document.getElementById(`question-${questionsStore.currentQuestion.id}`)?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'center',
-    })
-  })
+  // set current question to the last question and scroll to it
+  questionsStore.setCurrentQuestion(
+    questionsStore.getSlides[questionsStore.getSlides.length - 1],
+    true,
+  )
 }
 </script>
 <template>

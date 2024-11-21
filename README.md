@@ -25,7 +25,7 @@ Quizzfly is a quiz app that allows you to create quizzes and play quizzes. It is
 <table align="center">
   <tr>
     <td align="center" width="100%" colspan="2">
-      <img src="docs/images/image.png" alt="Preview" title="Preview">
+      <img src="docs/images/image-3.png" alt="Preview" title="Preview">
     </td>
   </tr>
   <tr>
@@ -52,15 +52,28 @@ Quizzfly is a quiz app that allows you to create quizzes and play quizzes. It is
 - [X] 📦 [Vue Composition Collection (Vueuse)](https://vueuse.org/)
 - [X] 🪝 Built-in Awesome Component & Layout
 
+## Contributors ✨
+
+Thanks go to these wonderful people 💼
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/huynamboz"><img src="https://avatars.githubusercontent.com/u/38585889?v=4" width="100px;" alt="huynamboz"/><br /><sub><b>huynamboz</b></sub></a><br /><a href="https://github.com/all-contributors/all-contributors/commits?author=huynamboz" title="Documentation">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://hsyoonhs.github.io"><img src="https://avatars.githubusercontent.com/u/89646192?v=4" width="100px;" alt="Dblue"/><br /><sub><b>Dblue</b></sub></a><br /><a href="https://github.com/all-contributors/all-contributors/commits?author=trungdong11" title="Contribute">💻</a></td>
+    </tr>
+  </tbody>
+</table>
 ## Getting Started
 
 ### Installation
 
-you can direct to clone this repository and just make change on [`app/`](https://github.com/viandwi24/nuxt3-awesome-starter/tree/v2/app) folder as your main project folder.
-
 - clone this repository
   ```bash
-  git clone https://github.com/viandwi24/nuxt3-awesome-starter
+  git clone https://github.com/Quizzfly/quizzfly
   ```
 - install dependencies
   ```bash
