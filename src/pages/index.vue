@@ -2,20 +2,15 @@
 import { Button } from '@/components/ui/button'
 import { useAuthStore } from '@/stores/auth'
 import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { useConfirmDialog } from '@/stores/modal'
 const authStore = useAuthStore()
 const quizzflyStore = useQuizzflyStore()
 const quizzflys = computed(() => quizzflyStore.getQuizzflys)
+const confirmDialog = useConfirmDialog()
 
 const handleClickCreateQuiz = async () => {
   await quizzflyStore.initQuizzflyDraft()
 }
-
-const handleCreateWithAI = async () => {
-  await quizzflyStore.initQuizzflyDraft()
-}
-
-const allowCreateWithAI = ref(false)
 
 onBeforeMount(() => {
   quizzflyStore.fetchQuizzflys()
@@ -23,6 +18,17 @@ onBeforeMount(() => {
 
 const handleOpenHostLive = (quizzflyId: string) => {
   window.open(`/room/host-live/${quizzflyId}`, '_blank')
+}
+
+const handleOpenCreateWithAI = async () => {
+  const { isConfirmed } = await confirmDialog.open({
+    title: 'Create with AI✨',
+    question: 'Are you sure you want to create with AI?',
+  })
+
+  if (isConfirmed) {
+    quizzflyStore.initQuizzflyDraft()
+  }
 }
 </script>
 <template>
@@ -52,35 +58,13 @@ const handleOpenHostLive = (quizzflyId: string) => {
     <!-- Buttons -->
     <div class="flex gap-4 mt-4">
       <!-- Ask AI button with gradient border -->
-      <Popover>
-        <PopoverTrigger>
-          <button
-            class="px-4 h-9 gradient-from-primary text-white font-medium rounded-full shadow-lg hover:bg-indigo-300 transition"
-          >
-            ✨ Create with AI
-          </button>
-        </PopoverTrigger>
-        <PopoverContent>
-          <!-- prompt -->
-          <div class="p-5 w-[400px] max-md:w-full">
-            <p class="font-medium">Create with AI ✨</p>
+      <button
+        class="px-4 h-9 gradient-from-primary text-white font-medium rounded-full shadow-lg hover:bg-indigo-300 transition"
+        @click="handleOpenCreateWithAI"
+      >
+        ✨ Create with AI
+      </button>
 
-            <textarea
-              class="w-full h-24 mt-3 p-3 border rounded-lg"
-              placeholder="Type your prompt here"
-            ></textarea>
-            <div class="mt-5 flex justify-end gap-3">
-              <Button
-                class="text-xs w-full rounded-lg"
-                :disabled="!allowCreateWithAI"
-                @click="handleCreateWithAI"
-              >
-                Upgrade your plan to use AI 🚀
-              </Button>
-            </div>
-          </div>
-        </PopoverContent>
-      </Popover>
       <RouterLink
         :to="{ name: 'groups', query: { create: 'true' } }"
         class="h-9 btn-gradient"
@@ -225,15 +209,4 @@ const handleOpenHostLive = (quizzflyId: string) => {
     </div>
   </div>
 </template>
-<style scoped>
-.text-gradient {
-  background: linear-gradient(90deg, #37d2c0, #7286ff);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.gradient-from-primary {
-  background: linear-gradient(90deg, #37d2c0, #7286ff);
-}
-</style>
+<style scoped></style>

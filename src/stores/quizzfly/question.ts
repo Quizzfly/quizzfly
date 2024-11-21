@@ -148,12 +148,17 @@ export const useQuestionsStore = defineStore({
       this.questions = questions
     },
 
+    async addMultipleQuestions(questions: Question[]) {
+      // Add multiple questions to the list
+      this.questions.push(...questions)
+    },
+
     async addQuestion(questionType: 'quiz' | 'slide', question?: Partial<Question>) {
       if (questionType === 'quiz') {
         // Create a quiz
         try {
           const { data } = await createQuizApi(useQuizzflyStore().getQuizzflyInfo.id, {
-            quiz_type: (question as Quiz).quiz_type,
+            ...question,
           })
           data.type = 'QUIZ'
           data.time_limit = 20
@@ -187,9 +192,18 @@ export const useQuestionsStore = defineStore({
       }
     },
 
-    setCurrentQuestion(question: Question) {
+    setCurrentQuestion(question: Question, forceScroll = false) {
       // Set the current question
       this.currentQuestion = question
+
+      if (forceScroll) {
+        nextTick(() => {
+          document.getElementById(`question-${question.id}`)?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+          })
+        })
+      }
     },
 
     async changePosition(data: any) {
