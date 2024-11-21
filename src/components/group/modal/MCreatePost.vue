@@ -3,6 +3,7 @@ import BaseModal from '@/components/base/BaseModal.vue'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import Button from '@/components/ui/button/Button.vue'
+
 // import { useForm } from 'vee-validate'
 // import * as yup from 'yup'
 // import { useGroupStore } from '@/stores/group'
@@ -10,6 +11,7 @@ import Button from '@/components/ui/button/Button.vue'
 const emits = defineEmits<{
   (e: 'close'): void
   (e: 'created'): void
+  (e: 'openQuizzflys'): void
 }>()
 // const groupStore = useGroupStore()
 
@@ -82,6 +84,7 @@ const onSubmit = async () => {
         </div>
         <div
           class="flex mt-14 h-11 items-center justify-center cursor-pointer rounded-full border border-primary"
+          @click="emits('openQuizzflys')"
         >
           <p class="text-primary">Click to choose the quizzfly you want to share</p>
         </div>

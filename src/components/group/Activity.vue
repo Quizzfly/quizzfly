@@ -3,8 +3,10 @@ import Card from '../ui/card/Card.vue'
 import Avatar from '../ui/avatar/Avatar.vue'
 import Button from '../ui/button/Button.vue'
 import MCreatePost from '@/components/group/modal/MCreatePost.vue'
+import MListQuizzfly from './modal/MListQuizzfly.vue'
 
 const isShowModal = ref(false)
+const isShowQuizzlfyModal = ref(false)
 
 const openModal = () => {
   isShowModal.value = true
@@ -12,6 +14,16 @@ const openModal = () => {
 
 const closeModal = () => {
   isShowModal.value = false
+}
+
+const openQuizzflysModal = () => {
+  isShowQuizzlfyModal.value = true
+  isShowModal.value = false
+}
+
+const closeQuizzflysModal = () => {
+  isShowQuizzlfyModal.value = false
+  isShowModal.value = true
 }
 </script>
 
@@ -123,7 +135,12 @@ const closeModal = () => {
     </Card>
     <MCreatePost
       v-if="isShowModal"
+      @open-quizzflys="openQuizzflysModal"
       @close="closeModal"
+    />
+    <MListQuizzfly
+      v-if="isShowQuizzlfyModal"
+      @close="closeQuizzflysModal"
     />
   </div>
 </template>

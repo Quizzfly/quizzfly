@@ -8,7 +8,7 @@ const groupStore = useGroupStore()
 const groups = computed(() => groupStore.getGroups)
 </script>
 <template>
-  <div class="grid grid-cols-[repeat(auto-fill,49%)] max-md:grid-cols-1 gap-5">
+  <div class="grid grid-cols-2 max-md:grid-cols-1 gap-5">
     <Card
       v-for="group in groups"
       :key="group.group.id"
@@ -18,7 +18,7 @@ const groups = computed(() => groupStore.getGroups)
         class="p-3 flex gap-4 w-full cursor-pointer"
       >
         <!-- left -->
-        <div class="w-[80px] h-[80px]">
+        <div>
           <img
             class="w-[80px] h-[80px] object-cover rounded-sm"
             :src="
