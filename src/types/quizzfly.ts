@@ -11,4 +11,5 @@ export interface IQuizzflyInfo {
   updated_at: string
   deleted_at: null
   username: string
+  avatar: string
 }

@@ -8,6 +8,8 @@ import Activity from '@/components/group/Activity.vue'
 import Shared from '@/components/group/Shared.vue'
 import Assignments from '@/components/group/Assignments.vue'
 import MInviteMember from '@/components/group/modal/MInviteMember.vue'
+import { ScrollArea } from '@/components/ui/scroll-area'
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -58,79 +60,81 @@ const openModal = () => {
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
-    <Card class="flex flex-col gap-12 p-6 h-full">
-      <div class="flex items-center justify-between">
-        <h3
-          v-if="groupInfo.group?.name"
-          class="text-base font-semibold"
-        >
-          {{ groupInfo.group?.name }}
-        </h3>
+    <ScrollArea>
+      <Card class="flex flex-col gap-12 p-6 h-full overflow-auto">
+        <div class="flex items-center justify-between">
+          <h3
+            v-if="groupInfo.group?.name"
+            class="text-base font-semibold"
+          >
+            {{ groupInfo.group?.name }}
+          </h3>
 
-        <h3
-          v-else
-          class="text-base font-semibold"
-        >
-          Community
-        </h3>
-        <div class="flex items-center">
-          <div class="flex">
-            <div
-              v-for="(item, index) in listMembers"
-              :key="index"
-            >
-              <Avatar
-                v-if="index < 4"
-                :class="{ '-ml-[20px]': index > 0 }"
-                class="border-2"
+          <h3
+            v-else
+            class="text-base font-semibold"
+          >
+            Community
+          </h3>
+          <div class="flex items-center">
+            <div class="flex">
+              <div
+                v-for="(item, index) in listMembers"
+                :key="index"
               >
-                <AvatarImage
-                  v-if="item?.avatar"
-                  :src="item?.avatar"
-                />
-                <AvatarFallback>{{ item.name.charAt(0).toUpperCase() }}</AvatarFallback>
+                <Avatar
+                  v-if="index < 4"
+                  :class="{ '-ml-[20px]': index > 0 }"
+                  class="border-2"
+                >
+                  <AvatarImage
+                    v-if="item?.avatar"
+                    :src="item?.avatar"
+                  />
+                  <AvatarFallback>{{ item.name.charAt(0).toUpperCase() }}</AvatarFallback>
+                </Avatar>
+              </div>
+              <Avatar
+                v-if="listMembers.length > 4"
+                class="-ml-[20px]"
+              >
+                <AvatarFallback>+{{ listMembers.length - 4 }}</AvatarFallback>
               </Avatar>
             </div>
-            <Avatar
-              v-if="listMembers.length > 4"
-              class="-ml-[20px]"
+            <div
+              class="ml-6 cursor-pointer w-8 h-8 rounded-xl flex items-center justify-center border"
             >
-              <AvatarFallback>+{{ listMembers.length - 4 }}</AvatarFallback>
-            </Avatar>
-          </div>
-          <div
-            class="ml-6 cursor-pointer w-8 h-8 rounded-xl flex items-center justify-center border"
-          >
-            <span class="i-solar-menu-dots-bold rotate-90"></span>
+              <span class="i-solar-menu-dots-bold rotate-90"></span>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="w-full relative">
-        <Tabs
-          default-value="activicy"
-          class=""
-        >
-          <TabsList class="mb-8">
-            <TabsTrigger value="activicy"> Activity </TabsTrigger>
-            <TabsTrigger value="shared"> Shared </TabsTrigger>
-            <TabsTrigger value="assignment"> Assignments </TabsTrigger>
-          </TabsList>
-          <TabsContent value="activicy"> <Activity /> </TabsContent>
-          <TabsContent value="shared"> <Shared /> </TabsContent>
-          <TabsContent value="assignment"> <Assignments /> </TabsContent>
-        </Tabs>
-        <Button
-          class="absolute top-0 right-0 h-10 bg-primary flex items-center"
-          @click="openModal"
-        >
-          Invite
-        </Button>
-        <MInviteMember
-          v-if="isShowModal"
-          @close="closeModal"
-        />
-      </div>
-    </Card>
+        <div class="w-full relative">
+          <Tabs
+            default-value="activicy"
+            class=""
+          >
+            <TabsList class="mb-8">
+              <TabsTrigger value="activicy"> Activity </TabsTrigger>
+              <TabsTrigger value="shared"> Shared </TabsTrigger>
+              <TabsTrigger value="assignment"> Assignments </TabsTrigger>
+            </TabsList>
+            <TabsContent value="activicy"> <Activity /> </TabsContent>
+            <TabsContent value="shared"> <Shared /> </TabsContent>
+            <TabsContent value="assignment"> <Assignments /> </TabsContent>
+          </Tabs>
+          <Button
+            class="absolute top-0 right-0 h-10 bg-primary flex items-center"
+            @click="openModal"
+          >
+            Invite Member
+          </Button>
+          <MInviteMember
+            v-if="isShowModal"
+            @close="closeModal"
+          />
+        </div>
+      </Card>
+    </ScrollArea>
   </div>
 </template>
 
