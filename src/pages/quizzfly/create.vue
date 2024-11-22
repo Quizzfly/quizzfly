@@ -9,7 +9,6 @@ import { useConfirmDialog } from '@/stores/modal'
 import { Button } from '@/components/ui/button'
 import type { QuizType } from '@/types/question'
 import { driver } from 'driver.js'
-import 'driver.js/dist/driver.css'
 
 const route = useRoute()
 const router = useRouter()
