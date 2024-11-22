@@ -63,6 +63,8 @@ const handleChangeQuizType = async (quizType: QuizType) => {
 </script>
 <template>
   <div
+    id="tour-item"
+    data-tour="6"
     class="md:min-w-[340px] w-[340px] bg-white border h-full rounded-xl p-8 flex flex-col overflow-hidden"
   >
     <div class="flex items-center justify-between">

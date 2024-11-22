@@ -81,8 +81,10 @@ const handleEnterPress = (event: KeyboardEvent) => {
   <div class="w-full h-full flex flex-col gap-10 p-5 overflow-hidden justify-between">
     <div class="relative">
       <textarea
+        id="tour-item"
         ref="textarea"
         v-model="input"
+        data-tour="4"
         class="resize-none bg-white rounded-md py-4 px-4 text-center border border-b-4 text-gray-700 font-medium text-2xl w-full shadow-sm outline-none"
         placeholder="Enter your answer..."
         maxlength="120"
@@ -140,6 +142,8 @@ const handleEnterPress = (event: KeyboardEvent) => {
         currentQuestion.type === 'QUIZ' &&
         currentQuestion.quiz_type !== 'TRUE_FALSE'
       "
+      id="tour-item"
+      data-tour="5"
       class="w-fit"
       color="primary"
       @click="handleCreateAnswer"

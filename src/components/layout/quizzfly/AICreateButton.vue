@@ -92,6 +92,8 @@ const handleCreateWithAI = handleSubmit(async (value) => {
   <Popover>
     <PopoverTrigger>
       <button
+        id="tour-item"
+        data-tour="1"
         class="flex items-center gap-2 px-4 h-9 gradient-from-primary text-white font-medium rounded-full shadow-lg hover:bg-indigo-300 transition"
       >
         ✨ Create with AI
