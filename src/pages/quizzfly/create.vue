@@ -8,6 +8,7 @@ import { useQuestionsStore } from '@/stores/quizzfly/question'
 import { useConfirmDialog } from '@/stores/modal'
 import { Button } from '@/components/ui/button'
 import type { QuizType } from '@/types/question'
+import { driver } from 'driver.js'
 
 const route = useRoute()
 const router = useRouter()
@@ -44,6 +45,82 @@ onBeforeMount(async () => {
   }
 })
 
+onMounted(() => {
+  if (localStorage.getItem('quizzfly-tour')) {
+    return
+  }
+  const driverObj = driver({
+    onDestroyStarted: async () => {
+      if (!driverObj.hasNextStep()) {
+        localStorage.setItem('quizzfly-tour', 'true')
+        driverObj.destroy()
+      }
+    },
+    onCloseClick: () => {
+      localStorage.setItem('quizzfly-tour', 'true')
+      driverObj.destroy()
+    },
+    showProgress: true,
+    steps: [
+      {
+        element: '#tour-item[data-tour="1"]',
+        popover: {
+          title: 'Create quiz with AI',
+          description: 'You can create a quiz with AI by clicking this button.',
+          side: 'left',
+          align: 'start',
+        },
+      },
+      {
+        element: '#tour-item[data-tour="2"]',
+        popover: {
+          title: 'Add new Quiz or Slide',
+          description: 'You can add a new quiz or slide by clicking these buttons.',
+          side: 'bottom',
+          align: 'start',
+        },
+      },
+      {
+        element: '#tour-item[data-tour="3"]',
+        popover: {
+          title: 'All your questions here',
+          description: 'You can see all your questions here and click on the question to edit it.',
+          side: 'bottom',
+          align: 'start',
+        },
+      },
+      {
+        element: '#tour-item[data-tour="4"]',
+        popover: {
+          title: 'Add question content',
+          description: 'You can add question content here.',
+          side: 'left',
+          align: 'start',
+        },
+      },
+      {
+        element: '#tour-item[data-tour="5"]',
+        popover: {
+          title: 'Add question answer',
+          description: 'You can add question answer here.',
+          side: 'top',
+          align: 'start',
+        },
+      },
+      {
+        element: '#tour-item[data-tour="6"]',
+        popover: {
+          title: 'Settings for quiz',
+          description: 'You can change the settings for the quiz here.',
+          side: 'top',
+          align: 'start',
+        },
+      },
+    ],
+  })
+
+  driverObj.drive()
+})
 const currentQuestion = computed<any>({
   get: () => questionsStore.getCurrentQuestion,
   set: (value) => {
@@ -60,13 +137,11 @@ const handleAddSlide = (type: 'quiz' | 'slide', quizType?: QuizType) => {
     questionsStore.addQuestion(type)
   }
 
-  questionsStore.setCurrentQuestion(questionsStore.getSlides[questionsStore.getSlides.length - 1])
-  nextTick(() => {
-    document.getElementById(`question-${questionsStore.currentQuestion.id}`)?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'center',
-    })
-  })
+  // set current question to the last question and scroll to it
+  questionsStore.setCurrentQuestion(
+    questionsStore.getSlides[questionsStore.getSlides.length - 1],
+    true,
+  )
 }
 </script>
 <template>

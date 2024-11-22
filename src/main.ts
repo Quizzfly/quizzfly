@@ -5,6 +5,7 @@ import './assets/css/main.css'
 import './assets/css/tailwind.css'
 import router from './routers/router'
 import { Icon } from '@iconify/vue'
+import 'driver.js/dist/driver.css'
 
 /* layouts */
 import DefaultLayout from '@/layouts/DefaultLayout.vue'

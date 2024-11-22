@@ -1,16 +1,26 @@
-import type { Answer, FileMeta, Quiz, QuizType } from '@/types/question'
+import type { Answer, FileMeta, Question, Quiz } from '@/types/question'
 import type { BaseResponse } from '@/types/api'
 import type { QuestionSetting } from '@/types/setting'
 
 export const createQuizApi = async (
   quizzflyId: string,
-  data: {
-    quiz_type: QuizType
-  },
+  data: Partial<Quiz>,
 ): Promise<BaseResponse<Quiz>> => {
   return $api(`/quizzfly/${quizzflyId}/quizzes`, {
     method: 'POST',
     body: data,
+  })
+}
+
+export const createMultipleQuizApi = async (
+  quizzflyId: string,
+  data: Partial<Quiz>[],
+): Promise<BaseResponse<Question[]>> => {
+  return $api(`/quizzfly/${quizzflyId}/quizzes/batch`, {
+    method: 'POST',
+    body: {
+      quizzes: data,
+    },
   })
 }
 
