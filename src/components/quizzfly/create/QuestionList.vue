@@ -135,7 +135,11 @@ const selectQuestion = (question: Question) => {
         @update:open="isShow = $event"
       >
         <PopoverTrigger>
-          <Button class="rounded-full w-[150px]">
+          <Button
+            id="tour-item"
+            data-tour="2"
+            class="rounded-full w-[150px]"
+          >
             <span class="i-material-symbols-light-add text-2xl"></span>
             Add quiz
           </Button>
@@ -180,7 +184,11 @@ const selectQuestion = (question: Question) => {
       </Popover>
     </div>
     <!-- slides list -->
-    <ScrollArea class="max-md:overflow-x-auto flex flex-col flex-auto overflow-y-auto gap-2 pr-2">
+    <ScrollArea
+      id="tour-item"
+      data-tour="3"
+      class="max-md:overflow-x-auto flex flex-col flex-auto overflow-y-auto gap-2 pr-2"
+    >
       <draggable
         :model-value="slidesComputedWithValidateData"
         item-key="id"

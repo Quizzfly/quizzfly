@@ -23,3 +23,11 @@ textarea {
 textarea::-webkit-scrollbar {
   display: none;
 }
+
+.driver-popover * {
+  font-family: inherit !important;
+}
+
+.driver-popover-title {
+  font-weight: 600 !important;
+}
