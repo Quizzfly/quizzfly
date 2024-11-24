@@ -30,6 +30,7 @@ export const useQuizzflyStore = defineStore({
     isUpdating: false,
     isFetching: false,
     quizzflys: [] as IQuizzflyInfo[],
+    quizzflyShared: {} as IQuizzflyInfo,
     quizzflyMeta: null as IPaging | null,
   }),
   actions: {
@@ -108,6 +109,9 @@ export const useQuizzflyStore = defineStore({
         throw error
       }
     },
+    setQuizzflyShared(val: any) {
+      this.quizzflyShared = val
+    },
   },
   getters: {
     getQuizzflyInfo: (state) => state.quizzflyInfo,
@@ -115,5 +119,6 @@ export const useQuizzflyStore = defineStore({
     getQuizzflys: (state) => state.quizzflys,
     getQuizzflyMeta: (state) => state.quizzflyMeta,
     getIsFetching: (state) => state.isFetching,
+    getQuizzflyShared: (state) => state.quizzflyShared,
   },
 })

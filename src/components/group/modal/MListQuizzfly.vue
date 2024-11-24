@@ -91,7 +91,7 @@ const onSubmit = async () => {
             </span>
           </div>
           <ScrollArea class="rounded-xl border p-4 gap-3 bg-slate-100 h-72">
-            <QuizzflyGroupList />
+            <QuizzflyGroupList @close="emits('close')" />
           </ScrollArea>
         </div>
         <div class="flex items-center justify-center gap-2">
