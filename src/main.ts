@@ -25,6 +25,7 @@ import { setupI18n } from './plugins/i18n'
 import Vue3Toastify from './plugins/toast'
 import { useSocketStore } from './stores/socket'
 import vue3GoogleLogin from 'vue3-google-login'
+import sanitizeHTML from 'sanitize-html'
 
 const app = createApp(App)
 
@@ -59,6 +60,7 @@ const initApp = async () => {
       import.meta.env.VITE_GOOGLE_CLIENTID ||
       '563447497067-u78208rfehdrpj8moabi9tdp4r581nrq.apps.googleusercontent.com',
   })
+  app.config.globalProperties.$sanitize = sanitizeHTML
 
   await initAuthStore()
   // await initWebSocketStore();

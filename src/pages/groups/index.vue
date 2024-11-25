@@ -4,7 +4,7 @@ import { useDebounceFn } from '@vueuse/core'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import GroupList from '@/components/group/list/GroupList.vue'
-import { useGroupStore } from '@/stores/group'
+import { useGroupStore } from '@/stores/group/group'
 import QuizzflyFilter from '@/components/quizzfly/list/QuizzflyFilter.vue'
 import ModelCreateGroup from '@/components/group/modal/MCreateGroup.vue'
 
@@ -95,8 +95,22 @@ const handleCreated = () => {
       <QuizzflyFilter />
     </div>
     <div class="flex-auto overflow-y-auto">
-      <GroupList />
+      <div
+        v-if="!groupStore.getIsFetching && groupStore.getGroups.length === 0"
+        class="h-full w-full flex flex-col justify-center items-center"
+      >
+        <img
+          class="w-[200px]"
+          src="@/assets/icons/empty.png"
+          alt=""
+        />
+        <p>No group found. Create one now!</p>
+      </div>
+      <GroupList v-else />
     </div>
+    <!-- <div class="flex-auto overflow-y-auto">
+        <GroupList />
+      </div> -->
     <div
       v-if="groupStore.getGroupMeta"
       class="flex justify-center"

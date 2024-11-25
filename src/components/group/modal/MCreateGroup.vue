@@ -6,7 +6,7 @@ import InputValidation from '@/components/base/InputValidation.vue'
 import ImagePicker from '@/components/base/ImagePicker.vue'
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
-import { useGroupStore } from '@/stores/group'
+import { useGroupStore } from '@/stores/group/group'
 
 const emits = defineEmits<{
   (e: 'close'): void
@@ -16,12 +16,11 @@ const groupStore = useGroupStore()
 
 const isLoading = ref(false)
 const background = ref('')
-const description = ref('')
 
 const { handleSubmit } = useForm({
   validationSchema: yup.object({
     name: yup.string().required('Name is required'),
-    description: yup.string(),
+    description: yup.string().required('Description is required'),
   }),
 })
 
@@ -29,7 +28,7 @@ const onSubmit = handleSubmit(async (values) => {
   isLoading.value = true
   const data = {
     name: values.name,
-    description: description.value,
+    description: values.description,
     background: background.value,
   }
   await groupStore.initGroup(data)

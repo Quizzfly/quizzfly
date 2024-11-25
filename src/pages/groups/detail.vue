@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { useGroupStore } from '@/stores/group'
+import { useGroupStore } from '@/stores/group/group'
+import { usePostStore } from '@/stores/group/post'
 import Card from '@/components/ui/card/Card.vue'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -20,6 +21,7 @@ import {
 } from '@/components/ui/breadcrumb'
 
 const groupStore = useGroupStore()
+const postStore = usePostStore()
 const route = useRoute()
 
 const groupId = route.params.groupId as string
@@ -34,6 +36,8 @@ const listMembers = computed(() => {
 
 onBeforeMount(() => {
   groupStore.listMemberGroups(groupId)
+  groupStore.getDetailGroup(groupId)
+  postStore.fetchPosts(1, groupId)
 })
 
 const isShowModal = ref(false)
@@ -56,7 +60,7 @@ const openModal = () => {
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbPage>Comunity</BreadcrumbPage>
+          <BreadcrumbPage>{{ groupInfo.name }}</BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
@@ -64,17 +68,17 @@ const openModal = () => {
       <Card class="flex flex-col gap-12 p-6 h-full overflow-auto">
         <div class="flex items-center justify-between">
           <h3
-            v-if="groupInfo.group?.name"
+            v-if="groupInfo.name"
             class="text-base font-semibold"
           >
-            {{ groupInfo.group?.name }}
+            {{ groupInfo.name }}
           </h3>
 
           <h3
             v-else
             class="text-base font-semibold"
           >
-            Community
+            Title
           </h3>
           <div class="flex items-center">
             <div class="flex">

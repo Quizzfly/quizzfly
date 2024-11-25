@@ -1,9 +1,22 @@
 <script setup lang="ts">
-import { useGroupStore } from '@/stores/group'
+import { useGroupStore } from '@/stores/group/group'
 import { Card } from '@/components/ui/card'
 import Chip from '@/components/base/Chip.vue'
+import { useConfirmDialog } from '@/stores/modal'
 
+const confirmDialog = useConfirmDialog()
 const groupStore = useGroupStore()
+
+const handleDeleteGroup = async (id: string) => {
+  const result = await confirmDialog.open({
+    title: 'Are you want to delete this group?',
+    question: 'All data in your group will be lost',
+  })
+
+  if (result.isConfirmed) {
+    groupStore.handleDeleteGroup(id)
+  }
+}
 
 const groups = computed(() => groupStore.getGroups)
 </script>
@@ -18,7 +31,7 @@ const groups = computed(() => groupStore.getGroups)
         class="p-3 flex gap-4 w-full cursor-pointer"
       >
         <!-- left -->
-        <div>
+        <div class="min-w-20">
           <img
             class="w-[80px] h-[80px] object-cover rounded-sm"
             :src="
@@ -37,6 +50,17 @@ const groups = computed(() => groupStore.getGroups)
                 color="#df223a"
               />
             </div>
+            <div
+              class="relative group cursor-pointer w-6 h-6 rounded-lg flex items-center justify-center border"
+            >
+              <span class="i-solar-menu-dots-bold rotate-90"></span>
+              <div
+                class="hidden group-hover:block absolute rounded-md cursor-pointer py-1 px-1.5 shadow-md top-6 right-0 bg-white"
+                @click.prevent.stop="handleDeleteGroup(group.group.id)"
+              >
+                <p class="py-1 px-3 text-xs text-red-500 hover:bg-slate-100 rounded-sm">Delete</p>
+              </div>
+            </div>
           </div>
           <div class="description text-sm text-gray-500 whitespace-normal">
             {{ group.group.description }}
@@ -48,7 +72,7 @@ const groups = computed(() => groupStore.getGroups)
 </template>
 <style scoped>
 .title {
-  width: 200px;
+  width: 100px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;

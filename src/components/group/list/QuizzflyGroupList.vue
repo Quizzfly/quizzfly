@@ -1,21 +1,32 @@
 <script setup lang="ts">
 import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
 import { Card } from '@/components/ui/card'
-// import { Button } from '@/components/ui/button'
-// import Chip from '@/components/base/Chip.vue'
 import Avatar from '@/components/ui/avatar/Avatar.vue'
+import { type IQuizzflyInfo } from '@/types/quizzfly'
+
+const emits = defineEmits<{
+  (e: 'close'): void
+}>()
 
 const quizzflyStore = useQuizzflyStore()
 
 const quizzflys = computed(() => quizzflyStore.getQuizzflys)
+
+const handleQuizzflyShared = (data: IQuizzflyInfo) => {
+  quizzflyStore.setQuizzflyShared(data)
+  emits('close')
+}
 </script>
 <template>
-  <div class="max-md:grid-cols-1 gap-5">
+  <div class="max-md:grid-cols-1 gap-3 flex flex-col">
     <Card
       v-for="quizzfly in quizzflys"
       :key="quizzfly.id"
     >
-      <div class="flex w-full h-98 cursor-pointer">
+      <div
+        class="flex w-full h-98 cursor-pointer"
+        @click="handleQuizzflyShared(quizzfly)"
+      >
         <!-- left -->
         <div>
           <img

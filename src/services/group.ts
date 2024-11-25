@@ -1,5 +1,5 @@
 import type { BaseResponse } from '@/types/api'
-import type { IGroup } from '@/types/group'
+import type { IGroup, IPost, ICreatePost } from '@/types/group'
 
 interface GroupInfo {
   name: string
@@ -54,6 +54,39 @@ export const getGroupDetailApi = async (id: string): Promise<BaseResponse<IGroup
 
 export const deleteGroupApi = async (id: string): Promise<BaseResponse<IGroup>> => {
   return $api(`/groups/${id}`, {
+    method: 'DELETE',
+  })
+}
+
+//post
+export const createPostApi = async (
+  idGroup: string,
+  data: ICreatePost,
+): Promise<BaseResponse<IPost>> => {
+  return $api(`/groups/${idGroup}/posts`, {
+    method: 'POST',
+    body: data,
+  })
+}
+
+export const getPostsApi = async (page = 1, idGroup: string): Promise<BaseResponse<IPost[]>> => {
+  return $api(`/groups/${idGroup}/posts`, {
+    method: 'GET',
+    params: { page },
+  })
+}
+
+export const getPostDetailApi = async (
+  idGroup: string,
+  idPost: string,
+): Promise<BaseResponse<IPost>> => {
+  return $api(`/groups/${idGroup}/posts/${idPost}`, {
+    method: 'GET',
+  })
+}
+
+export const deletePostApi = async (idPost: string): Promise<BaseResponse<IPost>> => {
+  return $api(`/posts/${idPost}`, {
     method: 'DELETE',
   })
 }
