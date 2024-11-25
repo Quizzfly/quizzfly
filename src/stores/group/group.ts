@@ -95,7 +95,6 @@ export const useGroupStore = defineStore({
       }
     },
     setGroupInfo(val: IGroup) {
-      console.log(val, 'check val group')
       this.groupInfo = { ...this.groupInfo, ...val }
     },
     setMembersGroup(val: any) {

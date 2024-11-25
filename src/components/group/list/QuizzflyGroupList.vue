@@ -1,9 +1,6 @@
 <script setup lang="ts">
-import { defineEmits } from 'vue'
 import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
 import { Card } from '@/components/ui/card'
-// import { Button } from '@/components/ui/button'
-// import Chip from '@/components/base/Chip.vue'
 import Avatar from '@/components/ui/avatar/Avatar.vue'
 import { type IQuizzflyInfo } from '@/types/quizzfly'
 

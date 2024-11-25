@@ -8,6 +8,7 @@ import { useAuthStore } from '@/stores/auth'
 import { usePostStore } from '@/stores/group/post'
 import { formatDateTime } from '@/utils/time'
 import { useConfirmDialog } from '@/stores/modal'
+import sanitizeHtml from 'sanitize-html'
 
 const confirmDialog = useConfirmDialog()
 const authStore = useAuthStore()
@@ -121,8 +122,7 @@ const handleDeletePost = async (id: string) => {
           <div class="h-px w-full bg-slate-200"></div>
           <div class="px-6 py-4">
             <div class="flex flex-col gap-2">
-              <!-- <div class="text-x font-medium">Chào các bạn đã đến với lớp học vinahouse</div> -->
-              <p v-html="item?.content"></p>
+              <p v-html="sanitizeHtml(item?.content)"></p>
               <img
                 class="h-64 w-full rounded-xl object-cover"
                 src="@/assets/img/bg-image-1.jpg"

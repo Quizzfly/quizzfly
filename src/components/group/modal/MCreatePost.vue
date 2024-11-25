@@ -37,7 +37,7 @@ const closeModal = () => {
 }
 
 const content = ref('')
-const type = ref('')
+const type = ref<'SHARE' | 'POST'>('POST')
 const files = ref([])
 const onSubmit = async () => {
   isLoading.value = true
@@ -54,7 +54,6 @@ const onSubmit = async () => {
     quizzfly_id: quizzflyShared.value?.id,
     files: files.value,
   }
-  console.log(data, 'check data')
   postStore.createPost(idGroup, data)
   isLoading.value = false
   emits('created')
