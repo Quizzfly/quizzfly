@@ -21,7 +21,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { useQuestionsStore } from '@/stores/quizzfly/question'
 import { showToast } from '@/utils/toast'
-import { createQuizUseAIApi } from '@/services/gemini'
+import { createQuizUseAIApi, getModelList, type Model } from '@/services/ai'
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
 import { createMultipleQuizApi } from '@/services/quizzes'
@@ -41,7 +41,15 @@ interface Option {
   quizTypes: string[]
 }
 
+onBeforeMount(async () => {
+  const data = await getModelList()
+  modelAI.value = data
+  model.value = data[0].value
+})
+
+const modelAI = ref<Model[]>([])
 const language = ref('Vietnamese')
+const model = ref()
 const option = ref<Option>({
   theme: '',
   numberOfQuestion: 1,
@@ -60,7 +68,7 @@ const isLoading = ref(false)
 const handleCreateWithAI = handleSubmit(async (value) => {
   isLoading.value = true
   try {
-    const quizzes = await createQuizUseAIApi(language.value, {
+    const quizzes = await createQuizUseAIApi(model.value, language.value, {
       ...option.value,
       theme: value.theme,
     })
@@ -190,6 +198,33 @@ const handleCreateWithAI = handleSubmit(async (value) => {
         >
           Free plan only supports creating 5 quiz at a time
         </p>
+
+        <p class="mt-5 mb-1 font-medium">Model <span class="text-red-500">*</span></p>
+        <Select v-model="model">
+          <SelectTrigger>
+            <SelectValue placeholder="Model AI" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectItem
+                v-for="(modelItem, index) in modelAI"
+                :key="index"
+                :value="modelItem.value"
+                :disabled="modelItem.premium"
+              >
+                <div class="flex items-center gap-2">
+                  <img
+                    class="w-5 h-5 rounded-sm object-cover"
+                    :src="modelItem.logo"
+                    alt=""
+                  />
+                  {{ modelItem.name }}
+                  <span v-if="modelItem.premium">👑</span>
+                </div>
+              </SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
 
         <div class="mt-5 flex justify-end gap-3">
           <Button
