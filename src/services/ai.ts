@@ -11,7 +11,7 @@ export const createQuizUseAIApi = async (
   language: string,
   option: Option,
 ): Promise<Quiz[]> => {
-  return $api(`http://localhost:3000/api/ai/quizzes`, {
+  return $api(`https://hinam.nuxt.dev/api/ai/quizzes`, {
     method: 'POST',
     body: {
       model,
@@ -29,7 +29,7 @@ export interface Model {
 }
 
 export const getModelList = async (): Promise<Model[]> => {
-  return $api(`http://localhost:3000/api/ai/models`, {
+  return $api(`https://hinam.nuxt.dev/api/ai/models`, {
     method: 'GET',
   })
 }
