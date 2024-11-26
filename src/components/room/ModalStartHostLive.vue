@@ -49,9 +49,9 @@ const handleStartClick = () => {
     :initial="{ opacity: 0, y: 100 }"
     :enter="{ opacity: 1, y: 0, scale: 1 }"
     :delay="200"
-    class="w-full rounded-xl p-20 flex gap-12 justify-between bg-[rgba(5,39,69,0.8)] backdrop-blur-[12px] box-border"
+    class="w-full max-md:p-5 max-md:flex-col rounded-xl p-20 flex gap-12 justify-between bg-[rgba(5,39,69,0.8)] backdrop-blur-[12px] box-border"
   >
-    <div class="w-2/4">
+    <div class="max-md:w-full w-2/4">
       <img
         v-if="quizzflyInfo.cover_image"
         v-motion
@@ -72,7 +72,7 @@ const handleStartClick = () => {
         class="rounded-xl w-4/5"
       />
     </div>
-    <div class="w-2/4 flex flex-col gap-16">
+    <div class="max-md:w-full w-2/4 flex flex-col gap-16">
       <div class="flex flex-col gap-3">
         <div
           v-motion
@@ -88,7 +88,7 @@ const handleStartClick = () => {
           :initial="{ opacity: 0, x: 100 }"
           :enter="{ opacity: 1, x: 0, scale: 1 }"
           :delay="500"
-          class="text-white font-medium text-lg"
+          class="max-md:text-sm text-white font-medium text-lg"
         >
           Bring friendly competition to this Quizzfly. Players go head-to-head and compete for a top
           spot on the podium. Players who answer the quickest and get the most correct answers will

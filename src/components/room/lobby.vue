@@ -117,8 +117,8 @@ const copyCode = async () => {
 
 <template>
   <div class="absolute top-24 flex flex-col justify-center items-center">
-    <div class="flex items-center gap-2">
-      <div class="flex gap-1">
+    <div class="max-md:flex-col flex items-center gap-2">
+      <div class="flex max-md:flex-col gap-1">
         <div
           v-motion
           :initial="{ opacity: 0, x: -100 }"
@@ -228,13 +228,13 @@ const copyCode = async () => {
           :initial="{ opacity: 0, x: 100 }"
           :enter="{ opacity: 1, x: 0, scale: 1 }"
           :delay="800"
-          class="relative group py-2 px-4 rounded-full bg-primary cursor-pointer flex items-center justify-center gap-2"
+          class="relative group py-2 px-4 rounded-full bg-white cursor-pointer flex items-center justify-center gap-2"
         >
           <img
             class="w-8 h-8"
             :src="item.avatar"
           />
-          <p class="text-base font-bold text-white">{{ item.new_player.name }}</p>
+          <p class="text-base font-bold">{{ item.new_player.name }}</p>
           <div
             class="hidden group-hover:flex absolute bg-white -top-2 w-[18px] h-[18px] rounded-full text-[26px] font-semibold cursor-pointer items-center right-1"
             @click="removeMember(item)"

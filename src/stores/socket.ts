@@ -77,6 +77,20 @@ export const useSocketStore = defineStore({
         })
       })
 
+      this.client.on('roomCanceled', (newContent: IRoomSocket) => {
+        console.log('Received roomCanceled:', newContent) // Debug
+        const redirectOnErrorRouterName =
+          (router.currentRoute.value.meta.redirectOnErrorRouterName as string) || 'home'
+        router.push({
+          name: redirectOnErrorRouterName,
+        })
+        showToast({
+          title: 'Room canceled',
+          description: 'Room has been canceled by host',
+          variant: 'destructive',
+        })
+      })
+
       this.client.on('playerJoined', (newContent: IMember) => {
         this.message = {
           event: 'playerJoined',
