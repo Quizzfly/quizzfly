@@ -8,10 +8,13 @@ import { useAuthStore } from '@/stores/auth'
 import { usePostStore } from '@/stores/group/post'
 import { formatDateTime } from '@/utils/time'
 import { useConfirmDialog } from '@/stores/modal'
+import FormSend from './comment/FormSend.vue'
 
 const confirmDialog = useConfirmDialog()
 const authStore = useAuthStore()
 const postStore = usePostStore()
+const router = useRouter()
+const route = useRoute()
 
 const getUser = computed(() => {
   return authStore.getUser
@@ -20,6 +23,8 @@ const getUser = computed(() => {
 const listPosts = computed(() => {
   return postStore.getPosts
 })
+
+const groupId = route.params.groupId as string
 
 const isShowModal = ref(false)
 const isShowQuizzlfyModal = ref(false)
@@ -51,6 +56,10 @@ const handleDeletePost = async (id: string) => {
   if (result.isConfirmed) {
     postStore.handleDeleteGroup(id)
   }
+}
+
+const handPosted = () => {
+  postStore.fetchPosts(1, groupId)
 }
 </script>
 
@@ -92,12 +101,12 @@ const handleDeletePost = async (id: string) => {
           <div class="p-6 flex items-center gap-2 w-full justify-between">
             <div class="flex items-center gap-2">
               <Avatar class="w-10 h-10">
-                <AvatarImage src="" />
-                <AvatarFallback>M</AvatarFallback>
+                <AvatarImage :src="item.member.avatar" />
+                <AvatarFallback>{{ item.member.name.charAt(0).toUpperCase() }}</AvatarFallback>
               </Avatar>
               <div class="flex flex-col gap-0">
                 <div class="flex items-center gap-2">
-                  <h4 class="text-base font-semibold">Trung dong</h4>
+                  <h4 class="text-base font-semibold">{{ item.member.name }}</h4>
                   <p class="text-x font-normal text-slate-600">posted a message</p>
                 </div>
                 <p class="text-x text-slate-600">Host</p>
@@ -120,54 +129,122 @@ const handleDeletePost = async (id: string) => {
           </div>
           <div class="h-px w-full bg-slate-200"></div>
           <div class="px-6 py-4">
-            <div class="flex flex-col gap-2">
+            <div class="flex flex-col gap-4">
               <p v-html="$sanitize(item?.content)"></p>
-              <img
-                class="h-64 w-full rounded-xl object-cover"
-                src="@/assets/img/bg-image-1.jpg"
-                alt=""
-              />
+
+              <div
+                v-if="item.files.length"
+                class="flex h-[328px] overflow-hidden w-full gap-1"
+              >
+                <div class="overflow-hidden flex-1 h-full">
+                  <img
+                    :src="item.files[0].url"
+                    class="w-full h-full object-cover cursor-pointer rounded-lg"
+                    alt="image Item"
+                  />
+                </div>
+                <div
+                  class="overflow-hidden flex-1 grid gap-1"
+                  :class="`grid__${item.files.length > 5 ? 4 : item.files.length - 1}`"
+                >
+                  <div
+                    v-for="(image, index) in item.files.slice(1, 5)"
+                    :key="index"
+                    class="image w-full h-full object-cover cursor-pointer rounded-lg relative"
+                  >
+                    <img
+                      :src="image.url"
+                      class="w-full h-full object-cover cursor-pointer rounded-lg"
+                      alt="Service"
+                    />
+                    <div
+                      v-if="index == 3 && item.files.length > 5"
+                      class="bg-black bg-opacity-30 rounded-lg absolute w-full h-full top-0 left-0 right-0 bottom-0 flex items-center justify-center text-base font-bold text-white"
+                    >
+                      + {{ item.files.length - 5 }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <Card v-if="item.quizzfly?.id">
+                <div class="flex w-full h-28">
+                  <div>
+                    <img
+                      v-image
+                      class="w-[188px] h-28 object-cover rounded-s-md"
+                      :src="item.quizzfly.cover_image || ''"
+                      alt=""
+                    />
+                  </div>
+                  <div class="flex justify-between items-center w-full">
+                    <div class="flex flex-col w-full justify-between p-3 h-full">
+                      <div class="flex items-center justify-between">
+                        <div class="flex item-center gap-1">
+                          <span
+                            class="i-material-symbols-light-grid-view-outline-rounded h-6 w-6"
+                          ></span>
+                          <h2 class="title text-base font-medium">
+                            {{ item.quizzfly.title || 'Untitled' }}
+                          </h2>
+                        </div>
+                      </div>
+                      <div class="flex items-center gap-2">
+                        <div class="flex gap-1 items-center">
+                          <Avatar class="h-6 w-6">
+                            <AvatarImage :src="item.member?.avatar" />
+                            <AvatarFallback>{{
+                              item.member.name.charAt(0).toUpperCase()
+                            }}</AvatarFallback>
+                          </Avatar>
+                          <p class="text-sm text-gray-500">{{ item.member.name }}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mr-3 flex items-center gap-2">
+                      <Button
+                        class="h-8 w-20"
+                        @click.prevent.stop="
+                          router.push({
+                            name: 'host-live',
+                            params: { quizzflyId: item.quizzfly.id },
+                          })
+                        "
+                      >
+                        Play
+                      </Button>
+                      <Button
+                        variant="secondary"
+                        class="h-8 w-20"
+                        @click.prevent.stop="
+                          router.push({
+                            name: 'quizzfly-create',
+                            params: { quizzflyId: item.quizzfly.id },
+                          })
+                        "
+                      >
+                        Edit
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </Card>
             </div>
             <div class="flex items-center gap-6 mt-6">
               <div class="flex items-center gap-1 cursor-pointer">
                 <span class="text-slate-500 i-solar-like-broken h-5 w-5"></span>
-                <p class="font-x text-slate-600">12 Likes</p>
+                <p class="font-x text-slate-600">{{ item.react_count }} Likes</p>
               </div>
               <div class="flex items-center gap-1 cursor-pointer">
                 <span
                   class="i-material-symbols-light-add-comment-outline h-5 w-5 text-slate-500"
                 ></span>
-                <p class="font-x text-slate-600">25 Comments</p>
+                <p class="font-x text-slate-600">{{ item.comment_count }} Comments</p>
               </div>
             </div>
           </div>
           <div class="h-px w-full bg-slate-300"></div>
-          <div class="flex items-center justify-between p-6 gap-12 w-full">
-            <div class="flex items-center gap-2 w-full">
-              <Avatar>
-                <AvatarImage src="" />
-                <AvatarFallback>M</AvatarFallback>
-              </Avatar>
-              <div
-                class="w-full flex items-center cursor-pointer h-11 border rounded-full px-6 py-3 text-sm font-normal text-gray-600"
-                @click="openModal"
-              >
-                Write your comment...
-              </div>
-            </div>
-            <div class="flex items-center gap-2">
-              <div
-                class="flex items-center justify-center rounded-full w-10 h-10 border cursor-pointer"
-              >
-                <span class="i-material-symbols-light-attach-file w-6 h-6"></span>
-              </div>
-              <div
-                class="flex items-center justify-center border-primary rounded-full w-10 h-10 border cursor-pointer"
-              >
-                <span class="i-material-symbols-light-send-rounded w-7 h-7 text-primary"></span>
-              </div>
-            </div>
-          </div>
+          <FormSend :member="item.member" />
         </div>
       </Card>
     </div>
@@ -176,6 +253,7 @@ const handleDeletePost = async (id: string) => {
       v-if="isShowModal"
       @open-quizzflys="openQuizzflysModal"
       @close="closeModal"
+      @create="handPosted()"
     />
     <MListQuizzfly
       v-if="isShowQuizzlfyModal"
@@ -184,4 +262,32 @@ const handleDeletePost = async (id: string) => {
   </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.grid__0 {
+  display: none;
+}
+.grid__1 {
+  grid-template-columns: repeat(1, 1fr);
+  grid-template-rows: repeat(1, 1fr);
+}
+.grid__2 {
+  grid-template-columns: auto;
+  grid-template-rows: 162px 162px;
+
+  & > img {
+    width: 100%;
+  }
+}
+.grid__3 {
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 162px);
+
+  & > .image:nth-child(3) {
+    grid-column: 1 / span 2;
+  }
+}
+.grid__4 {
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 162px);
+}
+</style>

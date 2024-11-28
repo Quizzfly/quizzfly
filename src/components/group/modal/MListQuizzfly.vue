@@ -36,33 +36,9 @@ const debouncedFn = useDebounceFn((value) => {
   search.value = value
 }, 500)
 
-// const route = useRoute()
-
 const emits = defineEmits<{
   (e: 'close'): void
 }>()
-
-const isLoading = ref(false)
-
-const onSubmit = async () => {
-  isLoading.value = false
-  //   try {
-  //     await inviteGroupApi(groupId, listEmails.value)
-  //     showToast({
-  //       title: 'Success',
-  //       description: 'Invite members success',
-  //       variant: 'default',
-  //     })
-  //   } catch (error) {
-  //     console.error(error)
-  //     showToast({
-  //       description: apiError(error).message,
-  //       variant: 'destructive',
-  //     })
-  //   }
-  isLoading.value = true
-  emits('close')
-}
 </script>
 
 <template>
@@ -72,10 +48,7 @@ const onSubmit = async () => {
       @click.stop
     >
       <div class="text-4xl w-full text-center font-semibold">Select Quizzfly</div>
-      <form
-        class="mt-10 flex flex-col gap-10"
-        @submit.prevent="onSubmit"
-      >
+      <form class="mt-10 flex flex-col gap-10">
         <div class="flex flex-col gap-6 w-full">
           <div class="relative max-w-full items-center">
             <Input

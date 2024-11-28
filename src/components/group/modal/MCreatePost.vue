@@ -9,8 +9,9 @@ import sanitizeHtml from 'sanitize-html'
 import { type ICreatePost } from '@/types/group'
 import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
 import { usePostStore } from '@/stores/group/post'
-import ImagePicker from '@/components/base/ImagePicker.vue'
 import ScrollArea from '@/components/ui/scroll-area/ScrollArea.vue'
+import { uploadMultiFileApi } from '@/services/file'
+import { showToast } from '@/utils/toast'
 
 const quizzflyStore = useQuizzflyStore()
 const postStore = usePostStore()
@@ -38,9 +39,58 @@ const closeModal = () => {
 
 const content = ref('')
 const type = ref<'SHARE' | 'POST'>('POST')
-const files = ref([])
+const refImage = ref<HTMLInputElement | null>(null)
+const listImage = ref<string[]>([])
+const ImageUpload = ref<File[]>([])
+
+const onChangeBg = (e: Event) => {
+  const target = e.target as HTMLInputElement
+  const files = target?.files
+
+  if (files && files.length > 0) {
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i]
+      ImageUpload.value.push(file)
+      listImage.value.push(URL.createObjectURL(file))
+    }
+  }
+}
+
+const showChooseImage = () => {
+  refImage.value?.click()
+}
+
+const removeBg = (data: string) => {
+  const index = listImage.value.indexOf(data)
+  if (index > -1) {
+    ImageUpload.value.splice(index, 1)
+    listImage.value.splice(index, 1)
+  }
+}
+
 const onSubmit = async () => {
   isLoading.value = true
+  const listImageUpload = [] as any
+
+  if (ImageUpload.value.length > 0) {
+    const formData = new FormData()
+
+    for (let i = 0; i < ImageUpload.value.length; i++) {
+      formData.append('files', ImageUpload.value[i])
+    }
+
+    try {
+      await uploadMultiFileApi(formData).then((res) => {
+        listImageUpload.push(...res.data)
+      })
+    } catch (error) {
+      showToast({
+        description: 'Upload files failed',
+        variant: 'destructive',
+      })
+    }
+  }
+
   if (quizzflyShared.value.id) {
     type.value = 'SHARE'
     idQuizzfly.value = quizzflyShared.value.id
@@ -48,15 +98,17 @@ const onSubmit = async () => {
     type.value = 'POST'
     idQuizzfly.value = ''
   }
+
   const data: ICreatePost = {
     type: type.value,
     content: sanitizeHtml(content.value),
     quizzfly_id: quizzflyShared.value?.id,
-    files: files.value,
+    files: listImageUpload,
   }
-  postStore.createPost(idGroup, data)
-  isLoading.value = false
+
+  await postStore.createPost(idGroup, data)
   emits('created')
+  isLoading.value = false
   closeModal()
 }
 
@@ -69,11 +121,11 @@ const handleRemoveQuizzfly = () => {
 <template>
   <BaseModal @click="closeModal()">
     <form
-      class="post-container bg-white w-[700px] mx-auto my-11 rounded-3xl shadow-lg p-6 flex flex-col gap-6"
-      @submit="onSubmit"
+      class="post-container bg-white w-[700px] mx-auto my-11 rounded-3xl shadow-lg py-6 flex flex-col gap-6"
+      @submit.prevent="onSubmit"
       @click.stop
     >
-      <div class="flex items-center justify-between">
+      <div class="flex items-center justify-between px-6">
         <div
           class="cursor-pointer -ml-2"
           @click="closeModal()"
@@ -84,93 +136,145 @@ const handleRemoveQuizzfly = () => {
           <span class="i-solar-menu-dots-bold rotate-90"></span>
         </div>
       </div>
-      <ScrollArea>
-        <div class="flex flex-col gap-8 overflow-y-auto overflow-hidden">
+      <ScrollArea class="flex px-6 flex-col gap-8 overflow-y-auto overflow-hidden">
+        <div class="flex flex-col gap-8">
           <div class="flex flex-col h-52">
             <div class="form-data h-52">
               <QuillEditor
                 v-model:content="content"
                 content-type="html"
                 theme="snow"
-                toolbar="full"
               />
             </div>
           </div>
-          <div class="form-data pt-14 flex flex-auto justify-center h-44">
-            <ImagePicker v-model="files[0]" />
-          </div>
           <div
-            :class="{ 'h-auto rounded-lg px-4 py-3': quizzflyShared?.id }"
-            class="hover:bg-slate-100 flex h-11 items-center justify-center cursor-pointer rounded-full border border-primary"
-            @click="emits('openQuizzflys')"
+            v-if="quizzflyShared?.id || listImage.length > 0"
+            class="mt-12 flex flex-col gap-6"
           >
-            <div
-              v-if="quizzflyShared?.id"
-              class="w-full"
+            <ScrollArea
+              v-if="listImage.length > 0"
+              class="h-[300px] overflow-hidden overflow-y-auto"
             >
-              <Card>
-                <div class="flex w-full h-98 cursor-pointer">
-                  <!-- left -->
-                  <div>
-                    <img
-                      v-image
-                      class="w-[148px] h-[98px] object-cover rounded-s-md"
-                      :src="quizzflyShared.cover_image || ''"
-                      alt=""
-                    />
-                  </div>
-                  <div class="flex justify-between items-center w-full">
-                    <div class="flex flex-col w-full justify-between p-3 h-full">
-                      <div class="flex items-center justify-between">
-                        <div class="flex item-center gap-1">
-                          <span
-                            class="i-material-symbols-light-grid-view-outline-rounded h-6 w-6"
-                          ></span>
-                          <h2 class="title text-base font-medium">
-                            {{ quizzflyShared.title || 'Untitled' }}
-                          </h2>
-                        </div>
-                      </div>
-                      <div class="flex items-center gap-2">
-                        <div class="flex gap-1 items-center">
-                          <Avatar class="h-7 w-7">
-                            <AvatarImage :src="quizzflyShared.avatar" />
-                            <AvatarFallback>{{
-                              quizzflyShared.username.charAt(0).toUpperCase()
-                            }}</AvatarFallback>
-                          </Avatar>
-                          <div class="text-sm text-gray-500">@{{ quizzflyShared.username }}</div>
-                        </div>
-                        <div class="flex gap-1 items-center">
-                          <span class="i-material-symbols-light-person h-5 w-5"></span>
-                          <p class="text-sm text-gray-500">private</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="mr-3">
-                      <Button
-                        variant="secondary"
-                        class="h-8"
-                        @click.prevent.stop="handleRemoveQuizzfly"
-                      >
-                        Remove
-                      </Button>
-                    </div>
+              <div
+                class="rounded-lg px-4 py-3 flex flex-col items-center justify-center cursor-pointer border border-primary gap-4"
+              >
+                <div
+                  v-for="item in listImage"
+                  :key="item"
+                  class="relative w-full"
+                >
+                  <img
+                    class="h-[200px] w-full object-cover rounded-lg"
+                    :src="item"
+                  />
+                  <div
+                    class="flex items-center justify-center absolute -top-2 -right-2 cursor-pointer w-7 h-7 rounded-full bg-slate-100"
+                    @click="removeBg(item)"
+                  >
+                    <span
+                      class="i-material-symbols-light-close-small-outline-rounded h-6 w-6"
+                    ></span>
                   </div>
                 </div>
-              </Card>
-            </div>
-            <p
-              v-else
-              class="text-primary"
+              </div>
+            </ScrollArea>
+            <div
+              v-if="quizzflyShared?.id"
+              :class="{ 'h-auto rounded-lg px-4 py-3': quizzflyShared?.id }"
+              class="hover:bg-slate-100 flex h-11 items-center justify-center cursor-pointer rounded-full border border-primary"
+              @click="emits('openQuizzflys')"
             >
-              Click to choose the quizzfly you want to share
-            </p>
+              <div class="w-full">
+                <Card>
+                  <div class="flex w-full h-98 cursor-pointer">
+                    <!-- left -->
+                    <div>
+                      <img
+                        v-image
+                        class="w-[148px] h-[98px] object-cover rounded-s-md"
+                        :src="quizzflyShared.cover_image || ''"
+                        alt=""
+                      />
+                    </div>
+                    <div class="flex justify-between items-center w-full">
+                      <div class="flex flex-col w-full justify-between p-3 h-full">
+                        <div class="flex items-center justify-between">
+                          <div class="flex item-center gap-1">
+                            <span
+                              class="i-material-symbols-light-grid-view-outline-rounded h-6 w-6"
+                            ></span>
+                            <h2 class="title text-base font-medium">
+                              {{ quizzflyShared.title || 'Untitled' }}
+                            </h2>
+                          </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                          <div class="flex gap-1 items-center">
+                            <Avatar class="h-7 w-7">
+                              <AvatarImage :src="quizzflyShared.avatar" />
+                              <AvatarFallback>{{
+                                quizzflyShared.username.charAt(0).toUpperCase()
+                              }}</AvatarFallback>
+                            </Avatar>
+                            <div class="text-sm text-gray-500">@{{ quizzflyShared.username }}</div>
+                          </div>
+                          <div class="flex gap-1 items-center">
+                            <span class="i-material-symbols-light-person h-5 w-5"></span>
+                            <p class="text-sm text-gray-500">private</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="mr-3">
+                        <Button
+                          variant="secondary"
+                          class="h-8"
+                          @click.prevent.stop="handleRemoveQuizzfly"
+                        >
+                          Remove
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              </div>
+            </div>
+          </div>
+          <div
+            :class="{ 'mt-12': !quizzflyShared?.id && listImage.length === 0 }"
+            class="form-data flex h-11 items-center justify-center rounded-full border border-primary gap-11"
+          >
+            <p class="text-primary">Add to your post you want to share</p>
+            <div class="flex items-center gap-1">
+              <div
+                class="hover:bg-slate-100 h-8 w-8 flex items-center justify-center rounded-full cursor-pointer"
+                @click="showChooseImage"
+              >
+                <span
+                  class="i-material-symbols-light-photo-library-rounded h-7 w-6 text-primary"
+                ></span>
+                <input
+                  ref="refImage"
+                  type="file"
+                  accept="image/jpeg, image/png, image/jpg"
+                  multiple
+                  class="hidden"
+                  @input="onChangeBg"
+                />
+              </div>
+              <div
+                class="hover:bg-slate-100 h-8 w-8 flex items-center justify-center rounded-full cursor-pointer"
+                @click="emits('openQuizzflys')"
+              >
+                <span
+                  class="i-material-symbols-light-grid-view-outline-rounded h-6 w-6 text-primary"
+                ></span>
+              </div>
+            </div>
           </div>
         </div>
       </ScrollArea>
 
-      <div class="flex justify-end">
+      <div class="flex justify-end pr-6">
         <Button
           :disabled="isLoading"
           type="submit"

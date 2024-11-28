@@ -11,11 +11,11 @@ export const getInfoApi = async (): Promise<BaseResponse<IUser>> => {
   })
 }
 
-export const getUserApi = async (id: string): Promise<BaseResponse<IUser[]>> => {
-  return $api(`/users/profiles`, {
+export const getUserApi = async (id: string): Promise<BaseResponse<IUser>> => {
+  return $api(`/users`, {
     method: 'GET',
     query: {
-      ids: id,
+      userId: id,
     },
   })
 }
