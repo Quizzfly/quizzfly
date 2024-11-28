@@ -253,7 +253,7 @@ const handPosted = () => {
       v-if="isShowModal"
       @open-quizzflys="openQuizzflysModal"
       @close="closeModal"
-      @create="handPosted()"
+      @create="handPosted"
     />
     <MListQuizzfly
       v-if="isShowQuizzlfyModal"
