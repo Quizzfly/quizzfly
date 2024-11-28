@@ -95,7 +95,9 @@ const openModal = () => {
                     v-if="item?.avatar"
                     :src="item?.avatar"
                   />
-                  <AvatarFallback>{{ item.name.charAt(0).toUpperCase() }}</AvatarFallback>
+                  <AvatarFallback v-if="item.name">{{
+                    item.name.charAt(0).toUpperCase()
+                  }}</AvatarFallback>
                 </Avatar>
               </div>
               <Avatar

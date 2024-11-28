@@ -107,9 +107,9 @@ const onSubmit = async () => {
   }
 
   await postStore.createPost(idGroup, data)
+  closeModal()
   emits('created')
   isLoading.value = false
-  closeModal()
 }
 
 const handleRemoveQuizzfly = () => {
@@ -212,7 +212,7 @@ const handleRemoveQuizzfly = () => {
                           <div class="flex gap-1 items-center">
                             <Avatar class="h-7 w-7">
                               <AvatarImage :src="quizzflyShared.avatar" />
-                              <AvatarFallback>{{
+                              <AvatarFallback v-if="quizzflyShared.username">{{
                                 quizzflyShared.username.charAt(0).toUpperCase()
                               }}</AvatarFallback>
                             </Avatar>

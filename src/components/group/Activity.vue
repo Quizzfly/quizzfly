@@ -9,6 +9,7 @@ import { usePostStore } from '@/stores/group/post'
 import { formatDateTime } from '@/utils/time'
 import { useConfirmDialog } from '@/stores/modal'
 import FormSend from './comment/FormSend.vue'
+import ListComment from './comment/ListComment.vue'
 
 const confirmDialog = useConfirmDialog()
 const authStore = useAuthStore()
@@ -61,6 +62,10 @@ const handleDeletePost = async (id: string) => {
 const handPosted = () => {
   postStore.fetchPosts(1, groupId)
 }
+
+const handleReactPost = (postId: string) => {
+  postStore.createReactPost(postId)
+}
 </script>
 
 <template>
@@ -73,7 +78,9 @@ const handPosted = () => {
               v-if="getUser?.user_info.avatar"
               :src="getUser?.user_info.avatar"
             />
-            <AvatarFallback>{{ getUser?.user_info.name.charAt(0).toUpperCase() }}</AvatarFallback>
+            <AvatarFallback v-if="getUser?.user_info.name">{{
+              getUser?.user_info.name.charAt(0).toUpperCase()
+            }}</AvatarFallback>
           </Avatar>
           <div
             class="w-full hover:bg-slate-100 flex items-center cursor-pointer h-11 border rounded-full px-6 py-3 text-sm font-normal text-gray-600"
@@ -102,7 +109,9 @@ const handPosted = () => {
             <div class="flex items-center gap-2">
               <Avatar class="w-10 h-10">
                 <AvatarImage :src="item.member.avatar" />
-                <AvatarFallback>{{ item.member.name.charAt(0).toUpperCase() }}</AvatarFallback>
+                <AvatarFallback v-if="item.member.name">{{
+                  item?.member?.name.charAt(0).toUpperCase()
+                }}</AvatarFallback>
               </Avatar>
               <div class="flex flex-col gap-0">
                 <div class="flex items-center gap-2">
@@ -193,8 +202,8 @@ const handPosted = () => {
                         <div class="flex gap-1 items-center">
                           <Avatar class="h-6 w-6">
                             <AvatarImage :src="item.member?.avatar" />
-                            <AvatarFallback>{{
-                              item.member.name.charAt(0).toUpperCase()
+                            <AvatarFallback v-if="item.member.name">{{
+                              item?.member?.name.charAt(0).toUpperCase()
                             }}</AvatarFallback>
                           </Avatar>
                           <p class="text-sm text-gray-500">{{ item.member.name }}</p>
@@ -231,8 +240,18 @@ const handPosted = () => {
               </Card>
             </div>
             <div class="flex items-center gap-6 mt-6">
-              <div class="flex items-center gap-1 cursor-pointer">
-                <span class="text-slate-500 i-solar-like-broken h-5 w-5"></span>
+              <div
+                class="flex items-center gap-1 cursor-pointer"
+                @click="handleReactPost(item.id)"
+              >
+                <span
+                  v-if="item.is_liked"
+                  class="text-slate-500 i-solar-like-bold h-5 w-5 bg-primary"
+                ></span>
+                <span
+                  v-else
+                  class="text-slate-500 i-solar-like-broken h-5 w-5"
+                ></span>
                 <p class="font-x text-slate-600">{{ item.react_count }} Likes</p>
               </div>
               <div class="flex items-center gap-1 cursor-pointer">
@@ -244,7 +263,11 @@ const handPosted = () => {
             </div>
           </div>
           <div class="h-px w-full bg-slate-300"></div>
-          <FormSend :member="item.member" />
+          <FormSend
+            :member="item.member"
+            :id-post="item.id"
+          />
+          <ListComment :id-post="item.id" />
         </div>
       </Card>
     </div>

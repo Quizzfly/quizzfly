@@ -47,7 +47,9 @@ const handleQuizzflyShared = (data: IQuizzflyInfo) => {
             <div class="flex gap-1 items-center">
               <Avatar class="h-7 w-7">
                 <AvatarImage :src="quizzfly.avatar" />
-                <AvatarFallback>{{ quizzfly.username.charAt(0).toUpperCase() }}</AvatarFallback>
+                <AvatarFallback v-if="quizzfly.username">{{
+                  quizzfly.username.charAt(0).toUpperCase()
+                }}</AvatarFallback>
               </Avatar>
               <div class="text-sm text-gray-500">@{{ quizzfly.username }}</div>
             </div>

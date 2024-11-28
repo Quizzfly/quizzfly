@@ -1,5 +1,5 @@
 import type { BaseResponse } from '@/types/api'
-import type { IGroup, IPost, ICreatePost } from '@/types/group'
+import type { IGroup, IPost, ICreatePost, IComment } from '@/types/group'
 
 interface GroupInfo {
   name: string
@@ -97,9 +97,18 @@ export const reactPostApi = async (idPost: string): Promise<BaseResponse<IPost>>
   })
 }
 
-export const commentPostApi = async (idPost: string, data: any): Promise<BaseResponse<IPost>> => {
+export const commentPostApi = async (
+  idPost: string,
+  data: any,
+): Promise<BaseResponse<IComment>> => {
   return $api(`/posts/${idPost}/comments`, {
     method: 'POST',
     body: data,
+  })
+}
+
+export const getCommentPostApi = async (idPost: string): Promise<BaseResponse<IComment[]>> => {
+  return $api(`/posts/${idPost}/comments`, {
+    method: 'GET',
   })
 }
