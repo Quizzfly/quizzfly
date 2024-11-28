@@ -90,3 +90,16 @@ export const deletePostApi = async (idPost: string): Promise<BaseResponse<IPost>
     method: 'DELETE',
   })
 }
+
+export const reactPostApi = async (idPost: string): Promise<BaseResponse<IPost>> => {
+  return $api(`/posts/${idPost}/reacts`, {
+    method: 'POST',
+  })
+}
+
+export const commentPostApi = async (idPost: string, data: any): Promise<BaseResponse<IPost>> => {
+  return $api(`/posts/${idPost}/comments`, {
+    method: 'POST',
+    body: data,
+  })
+}
