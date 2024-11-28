@@ -106,7 +106,6 @@ export const commentPostApi = async (
     body: data,
   })
 }
-
 export const getCommentPostApi = async (idPost: string): Promise<BaseResponse<IComment[]>> => {
   return $api(`/posts/${idPost}/comments`, {
     method: 'GET',
