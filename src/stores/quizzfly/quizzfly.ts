@@ -1,5 +1,6 @@
 import {
   createQuizzflyDraftApi,
+  deleteQuizzflyApi,
   getQuizzflyApi,
   getQuizzflysApi,
   updateQuizzflySettingsApi,
@@ -111,6 +112,22 @@ export const useQuizzflyStore = defineStore({
     },
     setQuizzflyShared(val: any) {
       this.quizzflyShared = val
+    },
+    async deleteQuizzfly(id: string) {
+      console.log('deleteQuizzfly', id)
+      try {
+        await deleteQuizzflyApi(id)
+        this.quizzflys = this.quizzflys.filter((quizzfly) => quizzfly.id !== id)
+        showToast({
+          description: 'Delete quizzfly successfully',
+        })
+      } catch (error) {
+        console.error(error)
+        showToast({
+          description: 'Delete quizzfly failed',
+          variant: 'destructive',
+        })
+      }
     },
   },
   getters: {
