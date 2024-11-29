@@ -254,6 +254,7 @@ const handleReactPost = (postId: string) => {
                 ></span>
                 <p class="font-x text-slate-600">{{ item.react_count }} Likes</p>
               </div>
+
               <div class="flex items-center gap-1 cursor-pointer">
                 <span
                   class="i-material-symbols-light-add-comment-outline h-5 w-5 text-slate-500"
