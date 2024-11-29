@@ -49,6 +49,7 @@ export interface IPost {
   quizzfly: IQuizzfly
   react_count: number
   comment_count: number
+  is_liked: boolean
   member: {
     id: string
     username: string
@@ -72,4 +73,30 @@ export interface ICreatePost {
   content: string
   quizzfly_id: string
   files: Array<string>
+}
+
+export interface IComment {
+  parent_comment_id?: string | null
+  content: string
+  files: [
+    {
+      url: string
+      bytes: number
+      format: string
+      public_id: string
+      resource_type: string
+      original_filename: string
+    },
+  ]
+  member: {
+    id: string
+    username: string
+    avatar: string
+    name: string
+  }
+}
+
+export interface ICommentsPost {
+  post_id: string
+  comments: IComment[]
 }
