@@ -29,7 +29,7 @@ export const usePostStore = defineStore({
       try {
         this.isUpdating = true
         const { data } = await createPostApi(idGroup, payload)
-        this.posts.push({ ...this.posts, ...data })
+        this.posts.unshift(data)
         this.isUpdating = false
         showToast({
           description: 'Create post success',
