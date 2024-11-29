@@ -273,13 +273,13 @@ const handleReactPost = (postId: string) => {
     </div>
 
     <MCreatePost
-      v-if="isShowModal"
+      v-show="isShowModal"
       @open-quizzflys="openQuizzflysModal"
       @close="closeModal"
       @create="handPosted"
     />
     <MListQuizzfly
-      v-if="isShowQuizzlfyModal"
+      v-show="isShowQuizzlfyModal"
       @close="closeQuizzflysModal"
     />
   </div>

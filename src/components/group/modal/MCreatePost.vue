@@ -142,6 +142,7 @@ const handleRemoveQuizzfly = () => {
             <div class="form-data h-52">
               <QuillEditor
                 v-model:content="content"
+                placeholder="Enter your post"
                 content-type="html"
                 theme="snow"
               />
