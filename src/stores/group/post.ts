@@ -113,6 +113,7 @@ export const usePostStore = defineStore({
             description: 'Fetch comments failed',
             variant: 'destructive',
           })
+          return []
         }
       }
     },
