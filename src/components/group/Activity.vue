@@ -147,6 +147,7 @@ const handleReactPost = (postId: string) => {
               >
                 <div class="overflow-hidden flex-1 h-full">
                   <img
+                    v-image
                     :src="item.files[0].url"
                     class="w-full h-full object-cover cursor-pointer rounded-lg"
                     alt="image Item"
@@ -162,6 +163,7 @@ const handleReactPost = (postId: string) => {
                     class="image w-full h-full object-cover cursor-pointer rounded-lg relative"
                   >
                     <img
+                      v-image
                       :src="image.url"
                       class="w-full h-full object-cover cursor-pointer rounded-lg"
                       alt="Service"

@@ -40,6 +40,11 @@ onBeforeMount(() => {
   postStore.fetchPosts(1, groupId)
 })
 
+onBeforeUnmount(() => {
+  groupStore.$reset()
+  postStore.$reset()
+})
+
 const isShowModal = ref(false)
 
 const closeModal = () => {

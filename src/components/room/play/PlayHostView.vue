@@ -447,6 +447,7 @@ const isShowRightAnswer = ref(false)
 const timeCountdown = ref(0)
 const summaryAnswer = ref<SocketSummaryAnswer | null>(null)
 const usersAnswerCount = ref(0)
+const WAITING_TIME = 8000
 
 let countdownInterval: ReturnType<typeof setInterval> | null = null
 
@@ -500,7 +501,7 @@ const handleNewQuestion = (data: SocketQuizStarted) => {
 
         handleFinishQuestion()
 
-        await handleShowRightAnswer(10000)
+        await handleShowRightAnswer(WAITING_TIME)
 
         // request get leaderboard
         if (!socketData.value?.question) return
@@ -536,7 +537,7 @@ watch(
 
     if (newVal.event === 'updateLeaderboard') {
       console.log('updateLeaderboard', newVal.data)
-      await handleShowRanking(10000, newVal.data as SocketLeaderboard)
+      await handleShowRanking(WAITING_TIME, newVal.data as SocketLeaderboard)
     }
 
     if (newVal.event === 'answerQuestion') {

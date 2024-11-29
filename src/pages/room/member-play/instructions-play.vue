@@ -8,6 +8,7 @@ import RankingFinal from '@/components/room/play/RankingFinal.vue'
 import { useSocketStore } from '@/stores/socket'
 import { useRoomStore } from '@/stores/room'
 import type { IKickPlayer, IMember } from '@/types'
+import SlideEditor from '@/components/quizzfly/create/slide/SlideEditor.vue'
 
 const socketMessage = computed(() => {
   return socketStore.getMessage
@@ -110,18 +111,28 @@ const handleSendAnswer = (answerId: string) => {
     class="bg w-full layout-full overflow-hidden flex flex-col justify-center items-center bg-cover gap-8"
   >
     <Instructions v-if="!isGameStarted" />
+
+    <SlideEditor
+      v-else-if="socketData && socketData.question.type === 'SLIDE'"
+      class="w-full h-full"
+      :layout="JSON.parse(socketData?.question?.content)"
+    />
+
     <PlayUserBlock
-      v-else-if="socketData"
+      v-else-if="socketData && socketData.question.type !== 'SLIDE'"
       :current-question="socketData?.question"
       :is-sent-answer="isSentAnswer"
       :result-answer="resultAnswer"
       @select="handleSendAnswer"
     />
+
     <PlayLoading v-if="isSentAnswer && !isShowResult" />
+
     <PlayUserResult
       v-if="isShowResult && resultAnswer"
       :result-answer="resultAnswer"
     />
+
     <Teleport to="body">
       <div
         v-if="isShowFinalRanking && leaderboardData"

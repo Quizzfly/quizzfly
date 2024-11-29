@@ -2,24 +2,34 @@ import type { App, DirectiveBinding } from 'vue'
 
 const handleImage = {
   mounted(el: HTMLImageElement, binding: DirectiveBinding): void {
-    // Thêm sự kiện onload vào hình ảnh
     const srcDefault =
       binding.arg === 'avatar' ? '/assets/images/avatar.jpg' : '/assets/images/default.png'
 
     let img = new Image() as HTMLImageElement | null
     if (!img) return
     img.style.objectFit = 'cover'
-    img.src = el.src ?? srcDefault
+    if (el.tagName === 'DIV') {
+      img.src = el.style.backgroundImage?.replace(/url\((['"])?(.*?)\1\)/gi, '$2') ?? srcDefault
+    } else {
+      img.src = el.src ?? srcDefault
+    }
+
     img.onload = () => {
-      // Khi ảnh được tải lên thành công, gán đường dẫn vào src
-      // el.src = binding.value
-      // console.log('loaded')
-      el.src = img!.src
+      if (!img) return
+      console.log('loaded', el.src)
+      if (el.tagName === 'DIV') {
+        el.style.backgroundImage = `url(${img.src})`
+      } else {
+        el.src = img.src
+      }
       img = null
     }
 
-    // Thiết lập src của hình ảnh là đường dẫn của ảnh mặc định
-    el.src = srcDefault
+    if (el.tagName === 'DIV') {
+      el.style.backgroundImage = `url(${srcDefault})`
+    } else {
+      el.src = srcDefault
+    }
   },
 }
 
