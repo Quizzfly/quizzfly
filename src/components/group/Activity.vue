@@ -254,6 +254,7 @@ const handleReactPost = (postId: string) => {
                 ></span>
                 <p class="font-x text-slate-600">{{ item.react_count }} Likes</p>
               </div>
+
               <div class="flex items-center gap-1 cursor-pointer">
                 <span
                   class="i-material-symbols-light-add-comment-outline h-5 w-5 text-slate-500"
@@ -273,13 +274,13 @@ const handleReactPost = (postId: string) => {
     </div>
 
     <MCreatePost
-      v-if="isShowModal"
+      v-show="isShowModal"
       @open-quizzflys="openQuizzflysModal"
       @close="closeModal"
       @create="handPosted"
     />
     <MListQuizzfly
-      v-if="isShowQuizzlfyModal"
+      v-show="isShowQuizzlfyModal"
       @close="closeQuizzflysModal"
     />
   </div>
