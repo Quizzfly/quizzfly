@@ -7,9 +7,14 @@ export const groupRoute: RouteRecordRaw[] = [
     component: () => import('@/pages/groups/index.vue'),
   },
   {
-    path: 'detail/:groupId',
+    path: ':groupId',
     name: 'group-detail',
-    component: () => import('@/pages/groups/detail.vue'),
+    component: () => import('@/pages/groups/detail/group-detail.vue'),
+  },
+  {
+    path: ':groupId/posts/:postId',
+    name: 'group-post-detail',
+    component: () => import('@/pages/groups/detail/post-detail.vue'),
   },
   {
     path: 'joined',

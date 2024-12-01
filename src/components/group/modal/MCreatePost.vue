@@ -4,7 +4,7 @@ import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import Button from '@/components/ui/button/Button.vue'
 import Card from '@/components/ui/card/Card.vue'
-import Avatar from '@/components/ui/avatar/Avatar.vue'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import sanitizeHtml from 'sanitize-html'
 import { type ICreatePost } from '@/types/group'
 import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
@@ -142,6 +142,7 @@ const handleRemoveQuizzfly = () => {
             <div class="form-data h-52">
               <QuillEditor
                 v-model:content="content"
+                :toolbar="['bold', 'italic', 'underline', 'link']"
                 placeholder="Enter your post"
                 content-type="html"
                 theme="snow"

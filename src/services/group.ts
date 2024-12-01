@@ -72,7 +72,7 @@ export const createPostApi = async (
 export const getPostsApi = async (page = 1, idGroup: string): Promise<BaseResponse<IPost[]>> => {
   return $api(`/groups/${idGroup}/posts`, {
     method: 'GET',
-    params: { page },
+    params: { page, order: 'DESC' },
   })
 }
 
