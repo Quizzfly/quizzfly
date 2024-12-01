@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import { usePostStore } from '@/stores/group/post'
-import Avatar from '@/components/ui/avatar/Avatar.vue'
-import { computedAsync } from '@vueuse/core'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { vIntersectionObserver } from '@vueuse/components'
+import type { IComment } from '@/types/group'
 
 const postStore = usePostStore()
 
@@ -9,14 +10,39 @@ const props = defineProps<{
   idPost: string
 }>()
 
-const listComment = computedAsync(async () => {
-  return await postStore.getCommentByPostId(props.idPost)
-}, [])
+const listComment = ref<IComment[]>([])
+
+const isLoading = ref(false)
+const isFetched = ref(false)
+
+async function onIntersectionObserver([entry]: IntersectionObserverEntry[]) {
+  console.log(entry.target.id)
+  if (entry.isIntersecting) {
+    if (isFetched.value) return
+    isLoading.value = true
+    listComment.value = await postStore.getCommentByPostId(props.idPost)
+    isFetched.value = true
+    setTimeout(() => {
+      isLoading.value = false
+    }, 500)
+  }
+}
 </script>
 
 <template>
-  <div class="">
+  <div
+    v-intersection-observer="onIntersectionObserver"
+    class=""
+  >
     <div class="h-px w-full bg-slate-300"></div>
+    <!-- loading -->
+    <div class="flex justify-center h-5">
+      <span
+        v-if="isLoading"
+        class="i-svg-spinners-90-ring-with-bg text-2xl"
+      ></span>
+    </div>
+
     <div class="flex items-center justify-between p-6 gap-12 w-full">
       <div class="flex flex-col gap-2">
         <div

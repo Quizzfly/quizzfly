@@ -11,7 +11,6 @@ import TopBar from '@/components/layout/TopBar.vue'
         <slot />
       </div>
     </div>
-    <confirmDialog />
   </div>
 </template>
 <style lang="scss" scoped>

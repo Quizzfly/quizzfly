@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
 import { Card } from '@/components/ui/card'
-import Avatar from '@/components/ui/avatar/Avatar.vue'
 import { type IQuizzflyInfo } from '@/types/quizzfly'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 const emits = defineEmits<{
   (e: 'close'): void

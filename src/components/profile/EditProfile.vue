@@ -127,15 +127,10 @@ const onChangeImg = (e: Event) => {
           @click="showChooseImg()"
         >
           <img
-            v-if="avatar"
+            v-image
             class="w-full h-full rounded-lg object-cover"
             :src="avatar"
-          />
-          <img
-            v-else
-            class="w-full rounded-lg"
-            src="@/assets/img/avatar.jpg"
-            alt=""
+            alt="Avatar"
           />
           <input
             ref="refInput"
@@ -200,7 +195,7 @@ const onChangeImg = (e: Event) => {
           </div>
         </div>
       </div>
-      <div class="footer flex flex-col gap-2">
+      <!-- <div class="footer flex flex-col gap-2">
         <h2 class="text-lg font-semibold">Verified profile</h2>
         <div class="flex gap-2">
           <div class="w-28">
@@ -216,7 +211,7 @@ const onChangeImg = (e: Event) => {
             <span class="font-semibold cursor-pointer">Go to application</span>
           </p>
         </div>
-      </div>
+      </div> -->
     </div>
     <div class="w-2/4 flex flex-col gap-10 max-lg:w-full bg-white">
       <div class="shadow rounded-md p-4 flex flex-col gap-8">

@@ -1,8 +1,7 @@
 <script lang="ts" setup>
-import Avatar from '@/components/ui/avatar/Avatar.vue'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import Input from '@/components/ui/input/Input.vue'
 import { usePostStore } from '@/stores/group/post'
-// import ScrollArea from '@/components/ui/scroll-area/ScrollArea.vue'
 import { uploadMultiFileApi } from '@/services/file'
 import { showToast } from '@/utils/toast'
 import { type IComment } from '@/types/group'
@@ -11,8 +10,6 @@ const postStore = usePostStore()
 
 const isLoading = ref(false)
 const content = ref('')
-// const refImage = ref<HTMLInputElement | null>(null)
-// const listImage = ref<string[]>([])
 const ImageUpload = ref<File[]>([])
 const parentCommentId = ref(null)
 
