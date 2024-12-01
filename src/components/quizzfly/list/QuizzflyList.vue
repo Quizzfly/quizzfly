@@ -2,10 +2,24 @@
 import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { useConfirmDialog } from '@/stores/modal'
 import Chip from '@/components/base/Chip.vue'
+
 const quizzflyStore = useQuizzflyStore()
+const confirmDialog = useConfirmDialog()
 
 const quizzflys = computed(() => quizzflyStore.getQuizzflys)
+
+const handleConfirmDelete = async (quizzflyId: string) => {
+  const { isConfirmed } = await confirmDialog.open({
+    title: 'Delete Quizzfly',
+    question: 'Are you sure you want to delete this quizzfly?',
+  })
+
+  if (isConfirmed) {
+    quizzflyStore.deleteQuizzfly(quizzflyId)
+  }
+}
 </script>
 <template>
   <div class="grid grid-cols-2 max-md:grid-cols-1 gap-5">
@@ -32,21 +46,27 @@ const quizzflys = computed(() => quizzflyStore.getQuizzflys)
                 color="#df223a"
               />
             </div>
-            <RouterLink
-              :to="{ name: 'quizzfly-create', params: { quizzflyId: quizzfly.id } }"
-              class="flex items-center cursor-pointer hover:text-[#0061ff] gap-2 hover:underline"
-            >
-              <span>Edit</span>
-              <span class="i-material-symbols-light-arrow-right-alt text-2xl"></span>
-            </RouterLink>
+            <div class="flex items-center gap-2">
+              <span
+                class="i-material-symbols-light-delete-outline cursor-pointer text-2xl"
+                @click="handleConfirmDelete(quizzfly.id)"
+              ></span>
+            </div>
           </div>
           <div class="flex items-center justify-between">
             <div class="text-sm text-gray-500">@{{ quizzfly.username }}</div>
-            <div class="flex gap-2">
+            <div class="flex gap-5">
               <RouterLink
                 target="_blank"
                 :to="{ name: 'host-live', params: { quizzflyId: quizzfly.id } }"
                 ><Button class="flex items-center h-6 w-17 text-xs"> Host live</Button>
+              </RouterLink>
+              <RouterLink
+                :to="{ name: 'quizzfly-create', params: { quizzflyId: quizzfly.id } }"
+                class="flex items-center cursor-pointer hover:text-[#0061ff] gap-2 hover:underline"
+              >
+                <span>Edit</span>
+                <span class="i-material-symbols-light-arrow-right-alt text-2xl"></span>
               </RouterLink>
             </div>
           </div>
