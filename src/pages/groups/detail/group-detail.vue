@@ -41,7 +41,6 @@ const openModal = () => {
 }
 
 onBeforeUnmount(() => {
-  groupStore.$reset()
   postStore.$reset()
 })
 </script>

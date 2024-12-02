@@ -15,6 +15,10 @@ watchEffect(() => {
     postStore.fetchPosts(1, groupId.value)
   }
 })
+
+onBeforeUnmount(() => {
+  groupStore.$reset()
+})
 </script>
 
 <template>
