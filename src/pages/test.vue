@@ -32,7 +32,7 @@ const audioFiles = import.meta.glob('/assets/audio/*.mp3')
 //     title: 'Are you sure?',
 //     question: 'Do you really want to delete this item?',
 //     onlyConfirm: true,
-//     error: true,
+//     warning: true,
 //   })
 // }
 

@@ -27,7 +27,7 @@ onMounted(() => {
 //     title: 'Are you sure?',
 //     question: 'Do you really want to delete this item?',
 //     onlyConfirm: true,
-//     error: true,
+//     warning: true,
 //   })
 //   console.log('result', result)
 // }

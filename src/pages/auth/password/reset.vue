@@ -66,7 +66,7 @@ const openConfirmError = async () => {
     title: 'Failed',
     question: 'Expired password recovery link',
     onlyConfirm: true,
-    error: true,
+    warning: true,
   })
 
   router.push('/login')

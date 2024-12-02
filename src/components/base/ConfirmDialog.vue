@@ -32,7 +32,7 @@ watch(
           <span class="i-material-symbols-light-check-rounded text-3xl"></span>
         </div>
         <div
-          v-if="confirmDialog.getQuestion?.error"
+          v-if="confirmDialog.getQuestion?.warning"
           class="w-[48px] h-[48px] bg-[#fde7e7] text-[#e3342f] flex justify-center items-center rounded-full"
         >
           <span class="i-material-symbols-light-error-rounded text-3xl"></span>
@@ -52,6 +52,7 @@ watch(
         >
         <Button
           class="w-full rounded-md py-5 font-medium"
+          :class="{ 'bg-red-500 hover:bg-red-700': confirmDialog.getQuestion?.warning }"
           @click="confirmDialog.confirm(true)"
           >Confirm</Button
         >
