@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import Input from '@/components/ui/input/Input.vue'
 import { usePostStore } from '@/stores/group/post'
 import { uploadMultiFileApi } from '@/services/file'
@@ -71,10 +71,11 @@ const onSubmit = async () => {
   >
     <div class="flex items-center gap-2 w-full">
       <Avatar>
-        <AvatarImage :src="props.member.avatar" />
-        <AvatarFallback v-if="props.member.name">{{
+        <!-- <AvatarImage :src="props.member.avatar" /> -->
+        <!-- <AvatarFallback v-if="props.member.name">{{
           props.member.name.charAt(0).toUpperCase()
-        }}</AvatarFallback>
+        }}</AvatarFallback> -->
+        <AvatarFallback>H</AvatarFallback>
       </Avatar>
       <Input
         v-model="content"

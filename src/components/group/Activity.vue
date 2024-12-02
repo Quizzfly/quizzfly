@@ -268,7 +268,7 @@ const handleHtmlLinkClick = (event: MouseEvent) => {
                 <div class="flex items-center gap-6 mt-2 -ml-2">
                   <div
                     class="hover:bg-gray-100 px-2 py-1 rounded-full flex items-center gap-1 cursor-pointer"
-                    @click="handleReactPost(post.id)"
+                    @click.prevent="handleReactPost(post.id)"
                   >
                     <span
                       v-if="post.is_liked"
@@ -291,13 +291,6 @@ const handleHtmlLinkClick = (event: MouseEvent) => {
               </div>
             </div>
           </div>
-          <!-- <div class="h-px w-full bg-slate-200"></div> -->
-          <!-- <div class="h-px w-full bg-slate-300"></div> -->
-          <!-- <FormSend
-            :member="post.member"
-            :id-post="post.id"
-          /> -->
-          <!-- <ListComment :id-post="post.id" /> -->
         </div>
       </RouterLink>
     </div>

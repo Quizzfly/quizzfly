@@ -4,6 +4,7 @@ import {
   deletePostApi,
   commentPostApi,
   getCommentPostApi,
+  getPostDetailApi,
   reactPostApi,
 } from '@/services/group'
 import type { IPost, ICreatePost, IComment, ICommentsPost } from '@/types/group'
@@ -17,6 +18,7 @@ export const usePostStore = defineStore({
   state: () => ({
     isUpdating: false,
     posts: [] as IPost[],
+    detailPost: {} as IPost,
     postMeta: null as IPaging | null,
     comments: [] as IComment[],
     listComnentByPostId: [] as ICommentsPost[],
@@ -94,6 +96,20 @@ export const usePostStore = defineStore({
         throw error
       }
     },
+    async getDetailPostByPostId(idGroup: string, idPost: string) {
+      try {
+        const { data } = await getPostDetailApi(idGroup, idPost)
+        this.detailPost = data
+        console.log(data, 'check data detail')
+      } catch (error) {
+        console.error(error)
+        showToast({
+          description: 'Get detail post failed',
+          variant: 'destructive',
+        })
+        throw error
+      }
+    },
     async getCommentByPostId(postId: any) {
       const result = this.listComnentByPostId.find((item) => item.post_id == postId)
       if (result) {
@@ -141,5 +157,6 @@ export const usePostStore = defineStore({
     getIsUpdating: (state) => state.isUpdating,
     getPosts: (state) => state.posts,
     getPostMeta: (state) => state.postMeta,
+    getDetailPost: (state) => state.detailPost,
   },
 })

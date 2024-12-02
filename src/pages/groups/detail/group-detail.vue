@@ -9,6 +9,8 @@ import Shared from '@/components/group/Shared.vue'
 import Assignments from '@/components/group/Assignments.vue'
 import MInviteMember from '@/components/group/modal/MInviteMember.vue'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import ChatThumnail from '@/components/group/chat/ChatThumnail.vue'
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -47,7 +49,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="p-6 h-screen flex flex-col gap-4">
+  <div class="p-6 h-screen flex flex-col gap-4 relative overflow-hidden">
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
@@ -135,6 +137,10 @@ onBeforeUnmount(() => {
         </div>
       </ScrollArea>
     </Card>
+
+    <div class="">
+      <ChatThumnail />
+    </div>
   </div>
 </template>
 
