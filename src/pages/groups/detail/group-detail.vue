@@ -12,7 +12,6 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
