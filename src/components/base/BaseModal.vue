@@ -1,11 +1,15 @@
 <script lang="ts" setup></script>
 <template>
   <div
-    v-motion-pop-visibled
     delay="200"
     class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50"
   >
-    <slot />
+    <div
+      v-motion-pop-visible
+      class="px-5 flex justify-center items-center w-full h-full"
+    >
+      <slot />
+    </div>
   </div>
 </template>
 

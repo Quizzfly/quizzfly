@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { useGroupStore } from '@/stores/group/group'
-import { usePostStore } from '@/stores/group/post'
 import Card from '@/components/ui/card/Card.vue'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -10,7 +9,6 @@ import Shared from '@/components/group/Shared.vue'
 import Assignments from '@/components/group/Assignments.vue'
 import MInviteMember from '@/components/group/modal/MInviteMember.vue'
 import { ScrollArea } from '@/components/ui/scroll-area'
-
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -19,12 +17,10 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
+import { usePostStore } from '@/stores/group/post'
 
 const groupStore = useGroupStore()
 const postStore = usePostStore()
-const route = useRoute()
-
-const groupId = route.params.groupId as string
 
 const groupInfo = computed(() => {
   return groupStore.getGroupInfo
@@ -32,17 +28,6 @@ const groupInfo = computed(() => {
 
 const listMembers = computed(() => {
   return groupStore.getMemberGroup
-})
-
-onBeforeMount(() => {
-  groupStore.listMemberGroups(groupId)
-  groupStore.getDetailGroup(groupId)
-  postStore.fetchPosts(1, groupId)
-})
-
-onBeforeUnmount(() => {
-  groupStore.$reset()
-  postStore.$reset()
 })
 
 const isShowModal = ref(false)
@@ -54,6 +39,11 @@ const closeModal = () => {
 const openModal = () => {
   isShowModal.value = true
 }
+
+onBeforeUnmount(() => {
+  groupStore.$reset()
+  postStore.$reset()
+})
 </script>
 
 <template>
@@ -69,9 +59,9 @@ const openModal = () => {
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
-    <ScrollArea>
-      <Card class="flex flex-col gap-12 p-6 h-full overflow-auto">
-        <div class="flex items-center justify-between">
+    <Card class="flex flex-col gap-12 h-full overflow-auto">
+      <ScrollArea>
+        <div class="px-6 pt-6 flex items-center justify-between">
           <h3
             v-if="groupInfo.name"
             class="text-base font-semibold"
@@ -120,21 +110,20 @@ const openModal = () => {
           </div>
         </div>
         <div class="w-full relative">
-          <Tabs
-            default-value="activicy"
-            class=""
-          >
-            <TabsList class="mb-8">
-              <TabsTrigger value="activicy"> Activity </TabsTrigger>
+          <Tabs default-value="activity">
+            <TabsList class="mb-8 ml-6 mt-6">
+              <TabsTrigger value="activity"> Activity </TabsTrigger>
               <TabsTrigger value="shared"> Shared </TabsTrigger>
               <TabsTrigger value="assignment"> Assignments </TabsTrigger>
             </TabsList>
-            <TabsContent value="activicy"> <Activity /> </TabsContent>
+            <TabsContent value="activity">
+              <Activity />
+            </TabsContent>
             <TabsContent value="shared"> <Shared /> </TabsContent>
             <TabsContent value="assignment"> <Assignments /> </TabsContent>
           </Tabs>
           <Button
-            class="absolute top-0 right-0 h-10 bg-primary flex items-center"
+            class="absolute top-6 right-6 h-10 bg-primary flex items-center"
             @click="openModal"
           >
             Invite Member
@@ -144,8 +133,8 @@ const openModal = () => {
             @close="closeModal"
           />
         </div>
-      </Card>
-    </ScrollArea>
+      </ScrollArea>
+    </Card>
   </div>
 </template>
 

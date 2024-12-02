@@ -33,7 +33,7 @@ export const usePostStore = defineStore({
         this.isUpdating = false
         showToast({
           description: 'Create post success',
-          variant: 'default',
+          variant: 'success',
         })
       } catch (error) {
         console.error(error)

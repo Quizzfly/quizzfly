@@ -1,8 +1,4 @@
-<script setup lang="ts">
-import { useAuthStore } from '@/stores/auth'
-
-const authStore = useAuthStore()
-</script>
+<script setup lang="ts"></script>
 <template>
   <div
     class="hidden fixed top-0 left-0 z-[999] w-full h-[54px] items-center px-7 justify-between border-b"
@@ -17,16 +13,7 @@ const authStore = useAuthStore()
       </span>
       <!-- <TopBarMembers /> -->
     </div>
-    <div>
-      <Button
-        class="text-xs"
-        size="small"
-        @click="authStore.logout"
-      >
-        <Icon icon="hugeicons:login-03" />
-        <p>Logout</p>
-      </Button>
-    </div>
+    <div></div>
     <!-- <IconField>
             <InputIcon class="pi pi-search" />
             <InputText
