@@ -11,6 +11,7 @@ const handleDeleteGroup = async (id: string) => {
   const result = await confirmDialog.open({
     title: 'Are you want to delete this group?',
     question: 'All data in your group will be lost',
+    warning: true,
   })
 
   if (result.isConfirmed) {

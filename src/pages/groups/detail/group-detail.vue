@@ -21,6 +21,7 @@ import { usePostStore } from '@/stores/group/post'
 
 const groupStore = useGroupStore()
 const postStore = usePostStore()
+const route = useRoute()
 
 const groupInfo = computed(() => {
   return groupStore.getGroupInfo
@@ -40,6 +41,11 @@ const openModal = () => {
   isShowModal.value = true
 }
 
+onBeforeMount(() => {
+  if (route.params.groupId && typeof route.params.groupId === 'string') {
+    postStore.fetchPosts(1, route.params.groupId)
+  }
+})
 onBeforeUnmount(() => {
   postStore.$reset()
 })
@@ -50,7 +56,9 @@ onBeforeUnmount(() => {
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink href="/groups"> Groups </BreadcrumbLink>
+          <BreadcrumbPage>
+            <RouterLink to="/groups">Groups</RouterLink>
+          </BreadcrumbPage>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
