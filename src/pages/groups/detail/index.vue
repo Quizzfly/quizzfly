@@ -9,9 +9,11 @@ const route = useRoute()
 const groupId = route.params.groupId as string
 
 onBeforeMount(() => {
-  groupStore.listMemberGroups(groupId)
-  groupStore.getDetailGroup(groupId)
-  postStore.fetchPosts(1, groupId)
+  if (groupId) {
+    groupStore.listMemberGroups(groupId)
+    groupStore.getDetailGroup(groupId)
+    postStore.fetchPosts(1, groupId)
+  }
 })
 
 onBeforeUnmount(() => {
