@@ -6,19 +6,14 @@ const groupStore = useGroupStore()
 const postStore = usePostStore()
 const route = useRoute()
 
-const groupId = route.params.groupId as string
+const groupId = computed(() => route.params.groupId)
 
-onBeforeMount(() => {
-  if (groupId) {
-    groupStore.listMemberGroups(groupId)
-    groupStore.getDetailGroup(groupId)
-    postStore.fetchPosts(1, groupId)
+watchEffect(() => {
+  if (groupId.value && typeof groupId.value === 'string') {
+    groupStore.listMemberGroups(groupId.value)
+    groupStore.getDetailGroup(groupId.value)
+    postStore.fetchPosts(1, groupId.value)
   }
-})
-
-onBeforeUnmount(() => {
-  groupStore.$reset()
-  postStore.$reset()
 })
 </script>
 

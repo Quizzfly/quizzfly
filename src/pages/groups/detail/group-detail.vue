@@ -17,8 +17,10 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
+import { usePostStore } from '@/stores/group/post'
 
 const groupStore = useGroupStore()
+const postStore = usePostStore()
 
 const groupInfo = computed(() => {
   return groupStore.getGroupInfo
@@ -37,6 +39,11 @@ const closeModal = () => {
 const openModal = () => {
   isShowModal.value = true
 }
+
+onBeforeUnmount(() => {
+  groupStore.$reset()
+  postStore.$reset()
+})
 </script>
 
 <template>
