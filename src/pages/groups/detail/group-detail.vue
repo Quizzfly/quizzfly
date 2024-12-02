@@ -51,7 +51,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="p-6 h-screen flex flex-col gap-4">
+  <div class="p-6 h-full flex flex-col gap-4">
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>

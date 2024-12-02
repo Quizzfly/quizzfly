@@ -41,6 +41,7 @@
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^10.0.0",
     "vee-validate": "^4.13.2",
+    "viewerjs": "^1.11.7",
     "vue": "3.5.10",
     "vue-awesome-paginate": "^1.1.46",
     "vue-confetti-explosion": "^1.0.2",
