@@ -19,6 +19,7 @@ import { initAuthStore } from './stores'
 import { plugin as VueTippy } from 'vue-tippy'
 import { MotionPlugin } from '@vueuse/motion'
 import VImage from '@/plugins/directives/image'
+import Viewer from '@/plugins/directives/viewer'
 import 'tippy.js/dist/tippy.css' // optional for styling
 import 'vue-awesome-paginate/dist/style.css'
 import { setupI18n } from './plugins/i18n'
@@ -35,6 +36,7 @@ const initApp = async () => {
   app.use(Vue3Toastify.Vue3Toastify, Vue3Toastify.options)
   app.use(MotionPlugin)
   app.use(VImage)
+  app.use(Viewer)
   app.use(
     VueTippy,
     // optional
