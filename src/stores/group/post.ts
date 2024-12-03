@@ -18,7 +18,7 @@ export const usePostStore = defineStore({
   state: () => ({
     isUpdating: false,
     posts: [] as IPost[],
-    detailPost: {} as IPost,
+    postDetail: {} as IPost,
     postMeta: null as IPaging | null,
     comments: [] as IComment[],
     listComnentByPostId: [] as ICommentsPost[],
@@ -96,10 +96,10 @@ export const usePostStore = defineStore({
         throw error
       }
     },
-    async getDetailPostByPostId(idGroup: string, idPost: string) {
+    async getPostDetailByPostId(idGroup: string, idPost: string) {
       try {
         const { data } = await getPostDetailApi(idGroup, idPost)
-        this.detailPost = data
+        this.postDetail = data
         console.log(data, 'check data detail')
       } catch (error) {
         console.error(error)
@@ -157,6 +157,6 @@ export const usePostStore = defineStore({
     getIsUpdating: (state) => state.isUpdating,
     getPosts: (state) => state.posts,
     getPostMeta: (state) => state.postMeta,
-    getDetailPost: (state) => state.detailPost,
+    getPostDetail: (state) => state.postDetail,
   },
 })

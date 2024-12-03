@@ -18,6 +18,8 @@ import FormSend from '@/components/group/comment/FormSend.vue'
 import ListComment from '@/components/group/comment/ListComment.vue'
 import ScrollArea from '@/components/ui/scroll-area/ScrollArea.vue'
 import Button from '@/components/ui/button/Button.vue'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import ChatBox from '@/components/group/chat/ChatBox.vue'
 
 const groupStore = useGroupStore()
 const postStore = usePostStore()
@@ -44,7 +46,7 @@ const getDetailPostByPostId = async (idGroup: string, idPost: string) => {
   } catch (error) {
     console.error(error)
     showToast({
-      description: 'Get detail post failed',
+      description: 'Failed to get post detail',
       variant: 'destructive',
     })
     throw error
@@ -61,7 +63,7 @@ const handleHtmlLinkClick = (event: MouseEvent) => {
   }
 }
 
-onMounted(() => {
+onBeforeMount(() => {
   if (postId && groupId) {
     getDetailPostByPostId(groupId, postId)
   }
@@ -92,7 +94,7 @@ onMounted(() => {
       <ScrollArea>
         <div class="flex flex-col w-fulf">
           <div class="p-6 pb-3 flex flex-col items-start gap-2 w-full">
-            <div class="flex-auto">
+            <div class="flex-auto w-full">
               <div class="flex flex-auto justify-between">
                 <!-- name -->
                 <div class="flex items-center gap-2">
@@ -113,23 +115,22 @@ onMounted(() => {
                   </div>
                 </div>
                 <!-- menu options -->
-                <div class="flex gap-2 items-center">
-                  <p class="text-xs font-light text-slate-600">
-                    <!-- {{ formatDateTime(postInfo.created_at) }} -->
-                  </p>
-                  <div
-                    class="relative group cursor-pointer w-6 h-6 rounded-lg flex items-center justify-center border"
-                  >
-                    <span class="i-solar-menu-dots-bold rotate-90"></span>
+                <Popover>
+                  <PopoverTrigger>
                     <div
-                      class="hidden group-hover:block absolute rounded-md cursor-pointer py-1 px-1.5 shadow-md top-6 right-0 bg-white"
+                      class="cursor-pointer w-6 h-6 rounded-lg flex items-center justify-center border"
                     >
+                      <span class="i-solar-menu-dots-bold rotate-90"></span>
+                    </div>
+                  </PopoverTrigger>
+                  <PopoverContent class="p-0 w-full">
+                    <div class="rounded-md cursor-pointer py-1 px-1.5 shadow-md bg-white">
                       <p class="py-1 px-3 text-xs text-red-500 hover:bg-slate-100 rounded-sm">
                         Delete
                       </p>
                     </div>
-                  </div>
-                </div>
+                  </PopoverContent>
+                </Popover>
               </div>
 
               <!-- content -->
@@ -143,7 +144,9 @@ onMounted(() => {
 
                   <div
                     v-if="postInfo?.files.length"
+                    v-viewer:gallery
                     class="flex h-[328px] overflow-hidden w-full gap-1"
+                    @click.stop.prevent
                   >
                     <div class="overflow-hidden flex-1 h-full">
                       <img
@@ -277,6 +280,7 @@ onMounted(() => {
         </div>
       </ScrollArea>
     </Card>
+    <ChatBox />
   </div>
 </template>
 <style lang="scss" scoped>
