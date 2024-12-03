@@ -8,6 +8,7 @@ import { usePostStore } from '@/stores/group/post'
 import { formatDateTime } from '@/utils/time'
 import { useConfirmDialog } from '@/stores/modal'
 import { AvatarFallback, Avatar, AvatarImage } from '../ui/avatar'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 
 const confirmDialog = useConfirmDialog()
 const authStore = useAuthStore()
@@ -137,23 +138,27 @@ const handleHtmlLinkClick = (event: MouseEvent) => {
                   </div>
                 </div>
                 <!-- menu options -->
-                <div class="flex gap-2 items-center">
-                  <p class="text-xs font-light text-slate-600">
-                    <!-- {{ formatDateTime(post.created_at) }} -->
-                  </p>
-                  <div
-                    class="relative group cursor-pointer w-6 h-6 rounded-lg flex items-center justify-center border"
-                  >
-                    <span class="i-solar-menu-dots-bold rotate-90"></span>
-                    <div
-                      class="hidden group-hover:block absolute rounded-md cursor-pointer py-1 px-1.5 shadow-md top-6 right-0 bg-white"
+                <div @click.stop.prevent>
+                  <Popover>
+                    <PopoverTrigger>
+                      <div
+                        class="cursor-pointer w-6 h-6 rounded-lg flex items-center justify-center border"
+                      >
+                        <span class="i-solar-menu-dots-bold rotate-90"></span>
+                      </div>
+                    </PopoverTrigger>
+
+                    <PopoverContent
+                      class="p-0 w-full"
                       @click.prevent.stop="handleDeletePost(post?.id)"
                     >
-                      <p class="py-1 px-3 text-xs text-red-500 hover:bg-slate-100 rounded-sm">
-                        Delete
-                      </p>
-                    </div>
-                  </div>
+                      <div class="rounded-md cursor-pointer py-1 px-1.5 shadow-md bg-white">
+                        <p class="py-1 px-3 text-xs text-red-500 hover:bg-slate-100 rounded-sm">
+                          Delete
+                        </p>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
                 </div>
               </div>
 
@@ -274,7 +279,7 @@ const handleHtmlLinkClick = (event: MouseEvent) => {
                 <div class="flex items-center gap-6 mt-2 -ml-2">
                   <div
                     class="hover:bg-gray-100 px-2 py-1 rounded-full flex items-center gap-1 cursor-pointer"
-                    @click.stop.prevent="handleReactPost(post.id)"
+                    @click.prevent="handleReactPost(post.id)"
                   >
                     <span
                       v-if="post.is_liked"
@@ -314,13 +319,6 @@ const handleHtmlLinkClick = (event: MouseEvent) => {
               </div>
             </div>
           </div>
-          <!-- <div class="h-px w-full bg-slate-200"></div> -->
-          <!-- <div class="h-px w-full bg-slate-300"></div> -->
-          <!-- <FormSend
-            :member="post.member"
-            :id-post="post.id"
-          /> -->
-          <!-- <ListComment :id-post="post.id" /> -->
         </div>
       </RouterLink>
     </div>

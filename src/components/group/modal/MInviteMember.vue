@@ -9,8 +9,6 @@ import {
   TagsInputItemDelete,
   TagsInputItemText,
 } from '@/components/ui/tags-input'
-// import { useForm } from 'vee-validate'
-// import * as yup from 'yup'
 import { showToast } from '@/utils/toast'
 import { apiError } from '@/utils/exceptionHandler'
 
@@ -61,6 +59,8 @@ const onSubmit = async () => {
             <label for="name">Emails</label>
             <TagsInput
               v-model="listEmails"
+              :add-on-blur="true"
+              :add-on-paste="true"
               class="h-11"
             >
               <TagsInputItem
