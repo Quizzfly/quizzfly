@@ -50,6 +50,7 @@ const handleDeletePost = async (id: string) => {
   const result = await confirmDialog.open({
     title: 'Are you want to delete this group?',
     question: 'All data in your group will be lost',
+    warning: true,
   })
 
   if (result.isConfirmed) {
@@ -165,15 +166,18 @@ const handleHtmlLinkClick = (event: MouseEvent) => {
                     v-html="$sanitize(post?.content)"
                   ></div>
 
+                  <!-- list images -->
                   <div
                     v-if="post.files.length"
+                    v-viewer:gallery
                     class="flex h-[328px] overflow-hidden w-full gap-1"
+                    @click.stop.prevent
                   >
                     <div class="overflow-hidden flex-1 h-full">
                       <img
                         v-image
                         :src="post.files[0].url"
-                        class="w-full h-full object-cover cursor-pointer rounded-lg"
+                        class="border w-full h-full object-cover cursor-pointer rounded-lg"
                         alt="image post"
                       />
                     </div>
@@ -182,14 +186,15 @@ const handleHtmlLinkClick = (event: MouseEvent) => {
                       :class="`grid__${post.files.length > 5 ? 4 : post.files.length - 1}`"
                     >
                       <div
-                        v-for="(image, index) in post.files.slice(1, 5)"
+                        v-for="(image, index) in post.files"
                         :key="index"
                         class="image w-full h-full object-cover cursor-pointer rounded-lg relative"
                       >
                         <img
                           v-image
                           :src="image.url"
-                          class="w-full h-full object-cover cursor-pointer rounded-lg"
+                          class="border w-full h-full object-cover cursor-pointer rounded-lg"
+                          :class="{ hidden: index > 4 }"
                           alt="Service"
                         />
                         <div
@@ -201,6 +206,7 @@ const handleHtmlLinkClick = (event: MouseEvent) => {
                       </div>
                     </div>
                   </div>
+                  <!-- end list images -->
 
                   <Card v-if="post.quizzfly?.id">
                     <div class="flex w-full h-28">
@@ -272,10 +278,27 @@ const handleHtmlLinkClick = (event: MouseEvent) => {
                   >
                     <span
                       v-if="post.is_liked"
+                      v-motion
+                      :initial="{
+                        scale: 1.5,
+                      }"
+                      :enter="{
+                        scale: 1,
+                      }"
+                      :tapped="{
+                        scale: 0.8,
+                      }"
                       class="text-slate-500 i-solar-like-bold text-lg bg-primary"
                     ></span>
                     <span
                       v-else
+                      v-motion
+                      :initial="{
+                        scale: 1,
+                      }"
+                      :enter="{
+                        scale: 1,
+                      }"
                       class="text-slate-500 i-solar-like-broken text-lg"
                     ></span>
                     <p class="text-slate-600">{{ post.react_count }}</p>

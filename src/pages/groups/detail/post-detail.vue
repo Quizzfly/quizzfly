@@ -68,7 +68,7 @@ onMounted(() => {
 })
 </script>
 <template>
-  <div class="p-6 flex flex-col h-screen overflow-hidden">
+  <div class="p-6 flex flex-col h-full overflow-hidden">
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>

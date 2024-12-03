@@ -14,6 +14,7 @@ const handleConfirmDelete = async (quizzflyId: string) => {
   const { isConfirmed } = await confirmDialog.open({
     title: 'Delete Quizzfly',
     question: 'Are you sure you want to delete this quizzfly?',
+    warning: true,
   })
 
   if (isConfirmed) {

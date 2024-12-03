@@ -18,7 +18,7 @@ const openConfirm = async () => {
   const { isConfirmed } = await confirmDialog.open({
     title: 'Confirm',
     question: 'Do you really want to join this group?',
-    error: true,
+    warning: true,
   })
 
   if (isConfirmed) {

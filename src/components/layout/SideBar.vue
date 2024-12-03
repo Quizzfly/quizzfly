@@ -10,7 +10,7 @@ const openConfirm = async () => {
   const { isConfirmed } = await confirmDialog.open({
     title: 'Confirm',
     question: 'Do you really want to logout?',
-    error: true,
+    warning: true,
   })
 
   if (isConfirmed) {

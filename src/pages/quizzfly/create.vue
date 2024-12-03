@@ -35,7 +35,7 @@ onBeforeMount(async () => {
       title: 'Error',
       question: 'Have an error when fetching data!',
       onlyConfirm: true,
-      error: true,
+      warning: true,
     })
     router.push({ name: 'quizzfly' })
   } finally {

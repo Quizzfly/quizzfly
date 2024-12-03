@@ -70,6 +70,7 @@ const handleConfirmDelete = async (question: Question) => {
   const result = await confirmDialog.open({
     title: 'Are you sure?',
     question: 'Do you really want to delete this item?',
+    warning: true,
   })
 
   if (result.isConfirmed) {
