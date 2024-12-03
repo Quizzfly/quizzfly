@@ -9,7 +9,7 @@ import Shared from '@/components/group/Shared.vue'
 import Assignments from '@/components/group/Assignments.vue'
 import MInviteMember from '@/components/group/modal/MInviteMember.vue'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import ChatThumnail from '@/components/group/chat/ChatBox.vue'
+import ChatBox from '@/components/group/chat/ChatBox.vue'
 
 import {
   Breadcrumb,
@@ -145,7 +145,7 @@ onBeforeUnmount(() => {
     </Card>
 
     <div class="">
-      <ChatThumnail />
+      <ChatBox />
     </div>
   </div>
 </template>
