@@ -60,6 +60,10 @@ const showChooseImage = () => {
   refImage.value?.click()
 }
 
+const resetData = () => {
+  content.value = ''
+}
+
 const removeBg = (data: string) => {
   const index = listImage.value.indexOf(data)
   if (index > -1) {
@@ -107,6 +111,7 @@ const onSubmit = async () => {
   }
 
   await postStore.createPost(idGroup, data)
+  resetData()
   closeModal()
   emits('created')
   isLoading.value = false

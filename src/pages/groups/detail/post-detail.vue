@@ -90,7 +90,10 @@ onBeforeMount(() => {
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
-    <Card class="mt-6 flex flex-col h-full overflow-auto">
+    <Card
+      v-if="postInfo?.id"
+      class="mt-6 flex flex-col h-full overflow-auto"
+    >
       <ScrollArea>
         <div class="flex flex-col w-fulf">
           <div class="p-6 pb-3 flex flex-col items-start gap-2 w-full">

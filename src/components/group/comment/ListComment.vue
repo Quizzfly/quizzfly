@@ -3,6 +3,7 @@ import { usePostStore } from '@/stores/group/post'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { vIntersectionObserver } from '@vueuse/components'
 import type { IComment } from '@/types/group'
+import MReplyComment from '@/components/group/modal/MReplyComment.vue'
 
 const postStore = usePostStore()
 
@@ -14,9 +15,13 @@ const listComment = ref<IComment[]>([])
 
 const isLoading = ref(false)
 const isFetched = ref(false)
+const isShowReplyComment = ref(false)
+
+const closeReply = () => {
+  isShowReplyComment.value = false
+}
 
 async function onIntersectionObserver([entry]: IntersectionObserverEntry[]) {
-  console.log(entry.target.id)
   if (entry.isIntersecting) {
     if (isFetched.value) return
     isLoading.value = true
@@ -76,6 +81,7 @@ async function onIntersectionObserver([entry]: IntersectionObserverEntry[]) {
 
                   <div
                     class="hover:bg-gray-100 px-2 py-1 rounded-full flex items-center gap-1 cursor-pointer"
+                    @click.stop.prevent="isShowReplyComment = true"
                   >
                     <span class="i-solar-chat-round-line-duotone text-lg text-slate-500"></span>
                     <!-- <p class="text-slate-600">{{ post.comment_count }}</p> -->
@@ -83,10 +89,15 @@ async function onIntersectionObserver([entry]: IntersectionObserverEntry[]) {
                 </div>
               </div>
             </div>
+            
           </div>
         </div>
       </div>
     </div>
+    <MReplyComment
+      v-if="isShowReplyComment"
+      @close="closeReply"
+    />
   </div>
 </template>
 

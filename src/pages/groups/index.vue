@@ -7,6 +7,7 @@ import GroupList from '@/components/group/list/GroupList.vue'
 import { useGroupStore } from '@/stores/group/group'
 import QuizzflyFilter from '@/components/quizzfly/list/QuizzflyFilter.vue'
 import ModelCreateGroup from '@/components/group/modal/MCreateGroup.vue'
+import { useSocketStore } from '@/stores/socket'
 
 import {
   Pagination,
@@ -19,6 +20,7 @@ import {
 const groupStore = useGroupStore()
 
 const search = useRouteQuery('k', '')
+const socketStore = useSocketStore()
 const pageQuery = useRouteQuery<number>('page', 1)
 const isShowModal = ref(false)
 
@@ -46,6 +48,7 @@ const fetchGroups = () => {
 }
 
 onBeforeMount(() => {
+  // socketStore.setupGroupSocketStore()
   fetchGroups()
 })
 
