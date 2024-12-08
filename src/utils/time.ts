@@ -26,3 +26,37 @@ export function formatDateTime(time: string) {
 
   return `${month} ${day} at ${hour}:${minute} ${period}`
 }
+
+export function formatCommentDateTime(time: string) {
+  const now = new Date() as any
+  const date = new Date(time) as any
+  const diffInSeconds = Math.floor((now - date) / 1000) + 60
+
+  const diffInMinutes = Math.floor(diffInSeconds / 60)
+  if (diffInMinutes < 60) {
+    return `${diffInMinutes} minute`
+  }
+
+  const diffInHours = Math.floor(diffInMinutes / 60)
+  if (diffInHours < 24) {
+    return `${diffInHours} hour`
+  }
+
+  const diffInDays = Math.floor(diffInHours / 24)
+  if (diffInDays < 7) {
+    return `${diffInDays} day`
+  }
+
+  const diffInWeeks = Math.floor(diffInDays / 7)
+  if (diffInWeeks < 4) {
+    return `${diffInWeeks} week`
+  }
+
+  const diffInMonths = Math.floor(diffInDays / 30)
+  if (diffInMonths < 12) {
+    return `${diffInMonths} month`
+  }
+
+  const diffInYears = Math.floor(diffInDays / 365)
+  return `${diffInYears} year`
+}

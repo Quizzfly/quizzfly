@@ -2,30 +2,43 @@
 import { usePostStore } from '@/stores/group/post'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { vIntersectionObserver } from '@vueuse/components'
-import type { IComment } from '@/types/group'
-import MReplyComment from '@/components/group/modal/MReplyComment.vue'
+import { formatCommentDateTime } from '@/utils/time'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import FormSend from '@/components/group/comment/FormSend.vue'
+import { useAuthStore } from '@/stores/auth'
 
 const postStore = usePostStore()
+const authStore = useAuthStore()
+const route = useRoute()
+
+const postId = route.params.postId as string
 
 const props = defineProps<{
   idPost: string
 }>()
 
-const listComment = ref<IComment[]>([])
+const listComment = computed(() => {
+  return postStore.getListComnentByPostId
+})
 
 const isLoading = ref(false)
 const isFetched = ref(false)
-const isShowReplyComment = ref(false)
 
-const closeReply = () => {
-  isShowReplyComment.value = false
+const toggleReplyComment = (comment: any) => {
+  listComment.value.forEach((c) => {
+    if (c.id === comment.id) {
+      c.isShowReply = !c.isShowReply
+    } else {
+      c.isShowReply = false
+    }
+  })
 }
 
 async function onIntersectionObserver([entry]: IntersectionObserverEntry[]) {
   if (entry.isIntersecting) {
     if (isFetched.value) return
     isLoading.value = true
-    listComment.value = await postStore.getCommentByPostId(props.idPost)
+    await postStore.getCommentByPostId(props.idPost)
     isFetched.value = true
     setTimeout(() => {
       isLoading.value = false
@@ -35,12 +48,7 @@ async function onIntersectionObserver([entry]: IntersectionObserverEntry[]) {
 </script>
 
 <template>
-  <div
-    v-intersection-observer="onIntersectionObserver"
-    class=""
-  >
-    <!-- loading -->
-
+  <div v-intersection-observer="onIntersectionObserver">
     <div
       v-if="isLoading"
       class="flex justify-center h-5"
@@ -64,40 +72,117 @@ async function onIntersectionObserver([entry]: IntersectionObserverEntry[]) {
                   item.member.name.charAt(0).toUpperCase()
                 }}</AvatarFallback>
               </Avatar>
-              <div class="flex flex-col py-2 px-5 rounded-2xl bg-slate-50 min-w-72">
-                <p class="text-sm font-semibold">{{ item.member.name }}</p>
-                <span class="text-sm font-normal">{{ item.content }}</span>
-                <div class="flex items-center gap-2 -ml-2">
-                  <div
-                    class="hover:bg-gray-100 px-2 py-1 rounded-full flex items-center gap-1 cursor-pointer"
-                  >
-                    <!-- <span
-                      v-if="post.is_liked"
-                      class="text-slate-500 i-solar-like-bold text-lg bg-primary"
-                    ></span> -->
-                    <span class="text-slate-500 i-solar-like-broken text-lg"></span>
-                    <!-- <p class="text-slate-600">{{ post.react_count }}</p> -->
+              <div class="flex flex-col w-full">
+                <div class="flex flex-col py-2 px-5 rounded-2xl bg-slate-100 w-full">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center justify-center gap-2">
+                      <p class="text-sm font-semibold">{{ item.member.name }}</p>
+                      <p class="text-xs font-normal text-slate-500">
+                        {{ formatCommentDateTime(item.created_at) }}
+                      </p>
+                    </div>
+                    <div class="-mr-3">
+                      <Popover>
+                        <PopoverTrigger>
+                          <span class="i-solar-menu-dots-bold rotate-90 w-3 h-3"></span>
+                        </PopoverTrigger>
+                        <PopoverContent class="p-0 w-full">
+                          <div
+                            class="rounded-md cursor-pointer py-1 px-1.5 shadow-md bg-white"
+                            @click.prevent="postStore.handleDeleteComment(item.id)"
+                          >
+                            <p class="py-1 px-3 text-xs text-red-500 hover:bg-slate-100 rounded-sm">
+                              Delete
+                            </p>
+                          </div>
+                        </PopoverContent>
+                      </Popover>
+                    </div>
                   </div>
-
-                  <div
-                    class="hover:bg-gray-100 px-2 py-1 rounded-full flex items-center gap-1 cursor-pointer"
-                    @click.stop.prevent="isShowReplyComment = true"
-                  >
-                    <span class="i-solar-chat-round-line-duotone text-lg text-slate-500"></span>
-                    <!-- <p class="text-slate-600">{{ post.comment_count }}</p> -->
+                  <span class="text-sm font-normal">{{ item.content }}</span>
+                  <div class="flex items-center gap-2 -ml-2">
+                    <div
+                      class="hover:bg-gray-100 px-2 py-1 rounded-full flex items-center gap-1 cursor-pointer"
+                    >
+                      <span class="text-slate-500 i-solar-like-broken text-lg"></span>
+                    </div>
+                    <div
+                      class="hover:bg-gray-100 px-2 py-1 rounded-full flex items-center gap-1 cursor-pointer"
+                      @click.stop="toggleReplyComment(item)"
+                    >
+                      <span class="i-solar-chat-round-line-duotone text-lg text-slate-500"></span>
+                    </div>
                   </div>
                 </div>
+                <div
+                  v-if="item.child_comments"
+                  class=""
+                >
+                  <div
+                    v-for="el in item.child_comments"
+                    :key="el.id"
+                    class=""
+                  >
+                    <div class="pl-6 pt-6">
+                      <div class="flex items-start gap-1">
+                        <Avatar>
+                          <AvatarImage :src="el.member.avatar" />
+                          <AvatarFallback v-if="el.member.name">{{
+                            el.member.name.charAt(0).toUpperCase()
+                          }}</AvatarFallback>
+                        </Avatar>
+                        <div class="flex flex-col w-full">
+                          <div class="flex flex-col py-2 px-5 rounded-2xl bg-slate-100 w-full">
+                            <div class="flex items-center justify-between">
+                              <div class="flex items-center justify-center gap-2">
+                                <p class="text-sm font-semibold">{{ el.member.name }}</p>
+                                <p class="text-xs font-normal text-slate-500">
+                                  {{ formatCommentDateTime(el.created_at) }}
+                                </p>
+                              </div>
+                              <div class="-mr-3">
+                                <Popover>
+                                  <PopoverTrigger>
+                                    <span class="i-solar-menu-dots-bold rotate-90 w-3 h-3"></span>
+                                  </PopoverTrigger>
+                                  <PopoverContent class="p-0 w-full">
+                                    <div
+                                      class="rounded-md cursor-pointer py-1 px-1.5 shadow-md bg-white"
+                                      @click.prevent="postStore.handleDeleteComment(el.id)"
+                                    >
+                                      <p
+                                        class="py-1 px-3 text-xs text-red-500 hover:bg-slate-100 rounded-sm"
+                                      >
+                                        Delete
+                                      </p>
+                                    </div>
+                                  </PopoverContent>
+                                </Popover>
+                              </div>
+                            </div>
+                            <span class="text-sm font-normal">{{ el.content }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <FormSend
+                  v-if="item.isShowReply"
+                  v-motion
+                  :initial="{ opacity: 0, y: 100 }"
+                  :enter="{ opacity: 1, y: 0, scale: 1 }"
+                  :delay="100"
+                  :member="authStore.getUser"
+                  :id-post="postId"
+                  :parent-id="item.id"
+                />
               </div>
             </div>
-            
           </div>
         </div>
       </div>
     </div>
-    <MReplyComment
-      v-if="isShowReplyComment"
-      @close="closeReply"
-    />
   </div>
 </template>
 

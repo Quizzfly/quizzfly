@@ -1,6 +1,6 @@
 import type { Question } from './question'
 import type { IKickPlayer, IMember } from './room'
-import type { IPost } from './group'
+import type { IComment, IPost } from './group'
 
 export type SocketEventName =
   | 'nextQuestion'
@@ -13,6 +13,8 @@ export type SocketEventName =
   | 'kickPlayer'
   | 'playerJoined'
   | 'createPost'
+  | 'commentPost'
+  | 'reactPost'
 
 export interface SocketUserAnswerQuestion {
   no_player_answered: number
@@ -65,4 +67,5 @@ export interface SocketMessage {
     | IKickPlayer
     | IMember
     | IPost
+    | IComment
 }

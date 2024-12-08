@@ -4,23 +4,24 @@ import Input from '@/components/ui/input/Input.vue'
 import { usePostStore } from '@/stores/group/post'
 import { uploadMultiFileApi } from '@/services/file'
 import { showToast } from '@/utils/toast'
-import { type IComment } from '@/types/group'
+import { type ICommentCreate } from '@/types/group'
 
 const postStore = usePostStore()
 
 const isLoading = ref(false)
 const content = ref('')
 const ImageUpload = ref<File[]>([])
-const parentCommentId = ref(null)
+const parentCommentId = ref<string | null>('')
 
 const resetData = () => {
   content.value = ''
-  parentCommentId.value = null
+  parentCommentId.value = ''
 }
 
 const props = defineProps<{
   idPost: string
   member: any
+  parentId?: string
 }>()
 
 const onSubmit = async () => {
@@ -46,16 +47,16 @@ const onSubmit = async () => {
     }
   }
 
-  const data: IComment = {
+  if (props.parentId) {
+    parentCommentId.value = props.parentId
+  } else {
+    parentCommentId.value = null
+  }
+
+  const data: ICommentCreate = {
     parent_comment_id: parentCommentId.value,
     content: content.value,
     files: listImageUpload,
-    member: {
-      id: '',
-      username: '',
-      avatar: '',
-      name: '',
-    },
   }
 
   await postStore.createCommentPost(props.idPost, data)

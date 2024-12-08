@@ -106,8 +106,23 @@ export const commentPostApi = async (
     body: data,
   })
 }
+
 export const getCommentPostApi = async (idPost: string): Promise<BaseResponse<IComment[]>> => {
   return $api(`/posts/${idPost}/comments`, {
     method: 'GET',
+  })
+}
+
+export const getReplyCommentPostApi = async (
+  parentCommentId: string,
+): Promise<BaseResponse<IComment[]>> => {
+  return $api(`/comments/${parentCommentId}/replies`, {
+    method: 'GET',
+  })
+}
+
+export const deleteCommentApi = async (idComment: string): Promise<BaseResponse<IComment>> => {
+  return $api(`/comments/${idComment}`, {
+    method: 'DELETE',
   })
 }
