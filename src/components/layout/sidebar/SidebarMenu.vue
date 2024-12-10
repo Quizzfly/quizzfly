@@ -1,10 +1,4 @@
 <script setup lang="ts">
-// import { useSocketStore } from '@/stores/socket'
-// import { useAuthStore } from '@/stores/auth'
-
-// onMounted(() => {
-
-// })
 defineProps<{
   isCollapsed: boolean
 }>()
