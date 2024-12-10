@@ -6,7 +6,9 @@ import { formatCommentDateTime } from '@/utils/time'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import FormSend from '@/components/group/comment/FormSend.vue'
 import ListReply from './ListReply.vue'
+import { useConfirmDialog } from '@/stores/modal'
 
+const confirmDialog = useConfirmDialog()
 const postStore = usePostStore()
 const route = useRoute()
 
@@ -43,6 +45,18 @@ async function onIntersectionObserver([entry]: IntersectionObserverEntry[]) {
     setTimeout(() => {
       isLoading.value = false
     }, 500)
+  }
+}
+
+const handleDeletePost = async (id: string) => {
+  const result = await confirmDialog.open({
+    title: 'Are you want to delete this comment?',
+    question: 'All data in your comment will be lost',
+    warning: true,
+  })
+
+  if (result.isConfirmed) {
+    postStore.handleDeleteComment(id)
   }
 }
 </script>
@@ -89,7 +103,7 @@ async function onIntersectionObserver([entry]: IntersectionObserverEntry[]) {
                         <PopoverContent class="p-0 w-full">
                           <div
                             class="rounded-md cursor-pointer py-1 px-1.5 shadow-md bg-white"
-                            @click.prevent="postStore.handleDeleteComment(item.id)"
+                            @click.prevent="handleDeletePost(item.id)"
                           >
                             <p class="py-1 px-3 text-xs text-red-500 hover:bg-slate-100 rounded-sm">
                               Delete
@@ -124,12 +138,12 @@ async function onIntersectionObserver([entry]: IntersectionObserverEntry[]) {
                 <FormSend
                   v-if="item.isShowReply"
                   v-motion
-                  :ref-comment="isFocus"
+                  :focus-on-mount="isFocus"
                   :initial="{ opacity: 0, y: 100 }"
                   :enter="{ opacity: 1, y: 0, scale: 1 }"
                   :delay="300"
                   :member="item.member"
-                  :id-post="postId"
+                  :post-id="postId"
                   :parent-id="item.id"
                 />
               </div>

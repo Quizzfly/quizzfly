@@ -25,6 +25,7 @@ import 'vue-awesome-paginate/dist/style.css'
 import { setupI18n } from './plugins/i18n'
 import Vue3Toastify from './plugins/toast'
 import { useSocketStore } from './stores/socket'
+import { useAuthStore } from './stores/auth'
 import vue3GoogleLogin from 'vue3-google-login'
 import sanitizeHTML from 'sanitize-html'
 
@@ -65,6 +66,9 @@ const initApp = async () => {
   app.config.globalProperties.$sanitize = sanitizeHTML
 
   await initAuthStore()
+  if (useAuthStore().getUser?.id) {
+    useSocketStore().setupGroupSocketStore()
+  }
   // await initWebSocketStore();
   // await initMasterStore();
   app.use(router)

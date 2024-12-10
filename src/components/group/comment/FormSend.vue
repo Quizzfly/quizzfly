@@ -19,8 +19,8 @@ const resetData = () => {
 }
 
 const props = defineProps<{
-  refComment?: boolean
-  idPost: string
+  focusOnMount?: boolean
+  postId: string
   member: any
   parentId?: string
 }>()
@@ -60,16 +60,16 @@ const onSubmit = async () => {
     files: listImageUpload,
   }
 
-  await postStore.createCommentPost(props.idPost, data)
+  await postStore.createCommentPost(props.postId, data)
   resetData()
-  // postStore.fetchComments(props.idPost)
+  // postStore.fetchComments(props.postId)
   isLoading.value = false
 }
 
 const inputRef = ref()
 
 onMounted(() => {
-  if (props.refComment === true) {
+  if (props.focusOnMount === true) {
     inputRef.value.$el.focus()
   }
 })

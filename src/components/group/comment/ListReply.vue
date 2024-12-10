@@ -8,7 +8,9 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import type { IPaging } from '@/types'
 import { useSocketStore } from '@/stores/socket'
+import { useConfirmDialog } from '@/stores/modal'
 
+const confirmDialog = useConfirmDialog()
 const socketStore = useSocketStore()
 
 const getMessage = computed(() => {
@@ -23,15 +25,13 @@ const listReply = ref<IComment[]>([])
 const metaPage = ref<IPaging>()
 const isLoading = ref(true)
 
-onMounted(() => {
+onBeforeMount(() => {
   getListReply(props.idParent)
 })
 
 watch(getMessage, (val: any) => {
-  if (val.event === 'commentPost') {
-    if (val.data.parent_comment_id !== null) {
-      listReply.value.unshift(val.data)
-    }
+  if (val.event === 'commentPost' && val.data.parent_comment_id !== null) {
+    listReply.value.unshift(val.data)
   }
 })
 
@@ -71,6 +71,18 @@ const handleDeleteComment = async (idComment: string) => {
       description: apiError(error).message,
       variant: 'destructive',
     })
+  }
+}
+
+const confirmDeleteComment = async (id: string) => {
+  const result = await confirmDialog.open({
+    title: 'Are you want to delete this comment?',
+    question: 'All data in your comment will be lost',
+    warning: true,
+  })
+
+  if (result.isConfirmed) {
+    handleDeleteComment(id)
   }
 }
 </script>
@@ -114,7 +126,7 @@ const handleDeleteComment = async (idComment: string) => {
                     <PopoverContent class="p-0 w-full">
                       <div
                         class="rounded-md cursor-pointer py-1 px-1.5 shadow-md bg-white"
-                        @click.prevent.stop="handleDeleteComment(el.id)"
+                        @click.prevent.stop="confirmDeleteComment(el.id)"
                       >
                         <p class="py-1 px-3 text-xs text-red-500 hover:bg-slate-100 rounded-sm">
                           Delete

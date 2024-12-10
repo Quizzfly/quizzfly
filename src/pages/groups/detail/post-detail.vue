@@ -45,11 +45,9 @@ const getMessage = computed(() => {
 })
 
 watch(getMessage, (val: any) => {
-  if (val.event === 'commentPost') {
-    if (val.data.parent_comment_id == null) {
-      postStore.handleCommentByPostId(val.data)
-      commentCount.value += 1
-    }
+  if (val.event === 'commentPost' && val.data.parent_comment_id == null) {
+    postStore.handleCommentByPostId(val.data)
+    commentCount.value += 1
   }
 })
 
@@ -322,7 +320,7 @@ onBeforeMount(() => {
           <!-- <div class="h-px w-full bg-slate-200"></div> -->
           <FormSend
             :member="postInfo?.member"
-            :id-post="postInfo?.id"
+            :post-id="postInfo?.id"
           />
           <ListComment :id-post="postId" />
         </div>

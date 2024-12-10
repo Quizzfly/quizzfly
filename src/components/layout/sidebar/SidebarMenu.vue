@@ -1,13 +1,10 @@
 <script setup lang="ts">
-import { useSocketStore } from '@/stores/socket'
-import { useAuthStore } from '@/stores/auth'
+// import { useSocketStore } from '@/stores/socket'
+// import { useAuthStore } from '@/stores/auth'
 
-onMounted(() => {
-  if (useAuthStore().getUser?.id) {
-    useSocketStore().setupGroupSocketStore()
-    console.log('group socket init')
-  }
-})
+// onMounted(() => {
+
+// })
 defineProps<{
   isCollapsed: boolean
 }>()

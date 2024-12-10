@@ -109,10 +109,10 @@ export const usePostStore = defineStore({
         throw error
       }
     },
-    async getCommentByPostId(postId: any) {
+    async getCommentByPostId(postId: string) {
       try {
-        const { data: comments } = await getCommentPostApi(postId)
-        this.setCommentByPostId(comments)
+        const data = await getCommentPostApi(postId)
+        this.setCommentByPostId(data.data)
       } catch (error) {
         console.error(error)
         showToast({
@@ -153,13 +153,13 @@ export const usePostStore = defineStore({
         })
       }
     },
-    setCommentByPostId(data: any) {
+    setCommentByPostId(data: IComment[]) {
       this.listComnentByPostId = data
       this.listComnentByPostId.forEach((el) => {
         el.isShowReply = false
       })
     },
-    handleCommentByPostId(data: any) {
+    handleCommentByPostId(data: IComment) {
       this.listComnentByPostId.unshift(data)
       this.listComnentByPostId.forEach((el) => {
         el.isShowReply = false
