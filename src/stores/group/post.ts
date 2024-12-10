@@ -7,7 +7,6 @@ import {
   getPostDetailApi,
   reactPostApi,
   deleteCommentApi,
-  getReplyCommentPostApi,
 } from '@/services/group'
 import type { IPost, ICreatePost, IComment, ICommentCreate } from '@/types/group'
 import { showToast } from '@/utils/toast'
@@ -114,20 +113,6 @@ export const usePostStore = defineStore({
       try {
         const { data: comments } = await getCommentPostApi(postId)
         this.setCommentByPostId(comments)
-
-        const childCommentPromises = comments.map(async (comment: IComment) => {
-          const { id } = comment
-          try {
-            const { data: childComments } = await getReplyCommentPostApi(id)
-            comment.child_comments = childComments
-          } catch (error) {
-            console.error(`Failed to fetch child comments for comment ID: ${id}`, error)
-          }
-        })
-
-        await Promise.all(childCommentPromises)
-
-        this.setCommentByPostId(comments)
       } catch (error) {
         console.error(error)
         showToast({
@@ -136,7 +121,6 @@ export const usePostStore = defineStore({
         })
       }
     },
-
     async handleDeleteGroup(idPost: string) {
       try {
         await deletePostApi(idPost)
@@ -179,13 +163,6 @@ export const usePostStore = defineStore({
       this.listComnentByPostId.unshift(data)
       this.listComnentByPostId.forEach((el) => {
         el.isShowReply = false
-      })
-    },
-    handleChildComment(data: any) {
-      this.listComnentByPostId.forEach((el) => {
-        if (el.id === data.parent_comment_id) {
-          el.child_comments.unshift(data)
-        }
       })
     },
   },

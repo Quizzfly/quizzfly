@@ -99,8 +99,6 @@ export interface IComment {
   updated_at: string
   count_replies: number
   id: string
-  replies: IComment[]
-  child_comments: IComment[]
 }
 
 export interface ICommentCreate {

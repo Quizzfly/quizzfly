@@ -115,9 +115,15 @@ export const getCommentPostApi = async (idPost: string): Promise<BaseResponse<IC
 
 export const getReplyCommentPostApi = async (
   parentCommentId: string,
+  page = 1,
+  limit = 3,
 ): Promise<BaseResponse<IComment[]>> => {
   return $api(`/comments/${parentCommentId}/replies`, {
     method: 'GET',
+    query: {
+      page,
+      limit,
+    },
   })
 }
 

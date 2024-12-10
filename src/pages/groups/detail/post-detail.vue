@@ -49,8 +49,6 @@ watch(getMessage, (val: any) => {
     if (val.data.parent_comment_id == null) {
       postStore.handleCommentByPostId(val.data)
       commentCount.value += 1
-    } else {
-      postStore.handleChildComment(val.data)
     }
   }
 })
@@ -76,7 +74,6 @@ const getDetailPostByPostId = async (idGroup: string, idPost: string) => {
     }
     reactCount.value = data.react_count
   } catch (error) {
-    console.error(error)
     showToast({
       description: 'Failed to get post detail',
       variant: 'destructive',

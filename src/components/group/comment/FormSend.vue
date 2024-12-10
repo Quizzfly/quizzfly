@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import Input from '@/components/ui/input/Input.vue'
 import { usePostStore } from '@/stores/group/post'
 import { uploadMultiFileApi } from '@/services/file'
 import { showToast } from '@/utils/toast'
 import { type ICommentCreate } from '@/types/group'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 const postStore = usePostStore()
 
@@ -19,6 +19,7 @@ const resetData = () => {
 }
 
 const props = defineProps<{
+  refComment?: boolean
   idPost: string
   member: any
   parentId?: string
@@ -64,6 +65,14 @@ const onSubmit = async () => {
   // postStore.fetchComments(props.idPost)
   isLoading.value = false
 }
+
+const inputRef = ref()
+
+onMounted(() => {
+  if (props.refComment === true) {
+    inputRef.value.$el.focus()
+  }
+})
 </script>
 <template>
   <form
@@ -72,13 +81,13 @@ const onSubmit = async () => {
   >
     <div class="flex items-center gap-2 w-full">
       <Avatar>
-        <!-- <AvatarImage :src="props.member.avatar" /> -->
-        <!-- <AvatarFallback v-if="props.member.name">{{
+        <AvatarImage :src="props.member.avatar" />
+        <AvatarFallback v-if="props.member.name">{{
           props.member.name.charAt(0).toUpperCase()
-        }}</AvatarFallback> -->
-        <AvatarFallback>H</AvatarFallback>
+        }}</AvatarFallback>
       </Avatar>
       <Input
+        ref="inputRef"
         v-model="content"
         placeholder="Write your comment..."
         class="outline-none items-center h-11 border rounded-full px-6 py-3 text-sm font-normal text-gray-600"
