@@ -13,7 +13,7 @@ import GuestLayout from '@/layouts/GuestLayout.vue'
 import NoSideBarLayout from '@/layouts/NoSideBarLayout.vue'
 import QuizCreateLayout from './layouts/QuizCreateLayout.vue'
 import RoomLayout from './layouts/RoomLayout.vue'
-import { initAuthStore } from './stores'
+import { initAuthStore, initWebSocketStore } from './stores'
 
 /* plugins */
 import { plugin as VueTippy } from 'vue-tippy'
@@ -24,8 +24,6 @@ import 'tippy.js/dist/tippy.css' // optional for styling
 import 'vue-awesome-paginate/dist/style.css'
 import { setupI18n } from './plugins/i18n'
 import Vue3Toastify from './plugins/toast'
-import { useSocketStore } from './stores/socket'
-import { useAuthStore } from './stores/auth'
 import vue3GoogleLogin from 'vue3-google-login'
 import sanitizeHTML from 'sanitize-html'
 
@@ -57,7 +55,6 @@ const initApp = async () => {
   app.component('QuizCreateLayout', QuizCreateLayout)
   app.component('RoomLayout', RoomLayout)
   app.use(createPinia())
-  await useSocketStore().setupSocketStore()
   app.use(vue3GoogleLogin, {
     clientId:
       import.meta.env.VITE_GOOGLE_CLIENTID ||
@@ -66,10 +63,10 @@ const initApp = async () => {
   app.config.globalProperties.$sanitize = sanitizeHTML
 
   await initAuthStore()
-  if (useAuthStore().getUser?.id) {
-    useSocketStore().setupGroupSocketStore()
-  }
-  // await initWebSocketStore();
+  // if (useAuthStore().getUser?.id) {
+  //   await useGroupSocketStore().setupGroupSocketStore()
+  // }
+  await initWebSocketStore()
   // await initMasterStore();
   app.use(router)
   router.isReady().then(() => {

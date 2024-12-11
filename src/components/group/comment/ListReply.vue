@@ -7,11 +7,11 @@ import { apiError } from '@/utils/exceptionHandler'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import type { IPaging } from '@/types'
-import { useSocketStore } from '@/stores/socket'
+import { useGroupSocketStore } from '@/stores/socket/group'
 import { useConfirmDialog } from '@/stores/modal'
 
 const confirmDialog = useConfirmDialog()
-const socketStore = useSocketStore()
+const socketStore = useGroupSocketStore()
 
 const getMessage = computed(() => {
   return socketStore.getMessage

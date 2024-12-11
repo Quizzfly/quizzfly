@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import type { SocketLeaderboard } from '@/types/socket'
 import { Button } from '@/components/ui/button'
-import { useSocketStore } from '@/stores/socket'
+import { useRoomSocketStore } from '@/stores/socket/room'
 import { avatars } from '@/utils/avatar'
 
 const props = defineProps<{
   leaderboardData: SocketLeaderboard
 }>()
 
-const socketStore = useSocketStore()
+const socketStore = useRoomSocketStore()
 
 function getRandomAvatar(): string {
   // random avatar in avatars array

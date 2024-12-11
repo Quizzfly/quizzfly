@@ -6,9 +6,9 @@ import type {
   SocketSummaryAnswer,
   SocketUserAnswerQuestion,
 } from '@/types/socket'
-import { useSocketStore } from '@/stores/socket'
+import { useRoomSocketStore } from '@/stores/socket/room'
 import type { Quiz } from '@/types/question'
-const socketStore = useSocketStore()
+const socketStore = useRoomSocketStore()
 import AnswerStatistic from './AnswerStatistic.vue'
 import { useRoomStore } from '@/stores/room'
 import SlideEditor from '@/components/quizzfly/create/slide/SlideEditor.vue'
