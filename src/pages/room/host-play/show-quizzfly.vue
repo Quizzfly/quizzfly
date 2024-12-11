@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import BarWrapper from '@/components/room/BarWrapper.vue'
 import { useLoadingStore } from '@/stores/loading'
-import { useSocketStore } from '@/stores/socket'
+import { useRoomSocketStore } from '@/stores/socket/room'
 import PlayHostView from '@/components/room/play/PlayHostView.vue'
 import type { SocketLeaderboard, SocketQuizStarted } from '@/types/socket'
 import Ranking from '@/components/room/play/Ranking.vue'
@@ -9,7 +9,7 @@ import RankingFinal from '@/components/room/play/RankingFinal.vue'
 import { useRoomStore } from '@/stores/room'
 
 const loadingStore = useLoadingStore()
-const socketStore = useSocketStore()
+const socketStore = useRoomSocketStore()
 const roomStore = useRoomStore()
 
 const isShowRanking = ref(false)

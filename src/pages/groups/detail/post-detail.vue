@@ -10,7 +10,7 @@ import {
 import { Card } from '@/components/ui/card'
 import { useGroupStore } from '@/stores/group/group'
 import { usePostStore } from '@/stores/group/post'
-import { useSocketStore } from '@/stores/socket'
+import { useGroupSocketStore } from '@/stores/socket/group'
 import { formatDateTime } from '@/utils/time'
 import { getPostDetailApi } from '@/services/group'
 import { showToast } from '@/utils/toast'
@@ -26,7 +26,7 @@ const groupStore = useGroupStore()
 const postStore = usePostStore()
 const route = useRoute()
 const router = useRouter()
-const socketStore = useSocketStore()
+const socketStore = useGroupSocketStore()
 
 const groupId = route.params.groupId as string
 const postId = route.params.postId as string

@@ -3,12 +3,12 @@ import BarWrapper from '@/components/room/BarWrapper.vue'
 import Lobby from '@/components/room/lobby.vue'
 import { useRoomStore } from '@/stores/room'
 import { useLoadingStore } from '@/stores/loading'
-import { useSocketStore } from '@/stores/socket'
+import { useRoomSocketStore } from '@/stores/socket/room'
 import { useAuthStore } from '@/stores/auth'
 import type { IRoomSocket } from '@/types'
 
 const loadingStore = useLoadingStore()
-const socketStore = useSocketStore()
+const socketStore = useRoomSocketStore()
 const authStore = useAuthStore()
 
 const roomStore = useRoomStore()

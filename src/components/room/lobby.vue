@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Button } from '../ui/button'
 import { useRoomStore } from '@/stores/room'
-import { useSocketStore } from '@/stores/socket'
+import { useRoomSocketStore } from '@/stores/socket/room'
 import type { ILocked, IMember, IKickMem } from '@/types'
 import QRCodeVue3 from 'qrcode-vue3'
 import { avatars } from '@/utils/avatar'
@@ -16,7 +16,7 @@ const router = useRouter()
 const loadingStore = useLoadingStore()
 const authStore = useAuthStore()
 const roomStore = useRoomStore()
-const socketStore = useSocketStore()
+const socketStore = useRoomSocketStore()
 
 const detailRoom = computed(() => {
   return roomStore.getRoomInfo
