@@ -460,6 +460,7 @@ const handleShowRightAnswer = async (time: number) => {
 const handleShowRanking = async (time: number, val: SocketLeaderboard) => {
   if (lastQuestionId.value === socketData.value?.question?.id) {
     emits('showFinalRanking', true, val)
+    socketStore.handleQuizFinished()
     return
   }
   emits('showRanking', true, val)
@@ -542,13 +543,13 @@ watch(
 
     if (newVal.event === 'answerQuestion') {
       console.log('answerQuestion', newVal.data)
-      usersAnswerCount.value = (newVal.data as SocketUserAnswerQuestion).no_player_answered
+      usersAnswerCount.value = (newVal.data as SocketUserAnswerQuestion).no_participant_answered
     }
   },
   { immediate: true },
 )
 
-onUnmounted(() => {
+onBeforeUnmount(() => {
   if (countdownInterval) clearInterval(countdownInterval)
 })
 </script>

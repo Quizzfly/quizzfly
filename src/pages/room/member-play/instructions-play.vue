@@ -9,6 +9,7 @@ import { useSocketStore } from '@/stores/socket'
 import { useRoomStore } from '@/stores/room'
 import type { IKickPlayer, IMember } from '@/types'
 import SlideEditor from '@/components/quizzfly/create/slide/SlideEditor.vue'
+import { showToast } from '@/utils/toast'
 
 const socketMessage = computed(() => {
   return socketStore.getMessage
@@ -17,23 +18,22 @@ const socketMessage = computed(() => {
 const router = useRouter()
 const socketStore = useSocketStore()
 const roomStore = useRoomStore()
-const socketData = ref<SocketQuizStarted>()
 
-const socketIdLocalStorage = ref('')
+const socketData = ref<SocketQuizStarted>()
+const participantId = ref('')
 const isGameStarted = ref(false)
 const isSentAnswer = ref(false)
 const isShowResult = ref(false)
 const resultAnswer = ref<SocketResultAnswer | null>(null)
 const leaderboardData = ref<SocketLeaderboard>()
+const isShowFinalRanking = ref(false)
+
 const currentTotalScore = computed(() => {
   return (
-    leaderboardData.value?.leader_board.find(
-      (item) => item.socket_id === socketIdLocalStorage.value,
-    )?.total_score || 0
+    leaderboardData.value?.leader_board.find((item) => item.id === participantId.value)
+      ?.total_score || 0
   )
 })
-const isShowFinalRanking = ref(false)
-const lastQuestionId = ref<string | null>(null)
 
 onBeforeMount(() => {
   const name = localStorage.getItem('name')
@@ -50,15 +50,20 @@ onBeforeMount(() => {
   })
   console.log('name', name, 'roomPin', roomPin)
   socketStore.handleJoinRoomData({
-    name: name || '',
-    roomPin: roomPin || '',
+    nick_name: name || '',
+    room_pin: roomPin || '',
   })
 })
 
 watch(socketMessage, (val) => {
   if (val) {
-    if (val.event === 'playerJoined') {
-      socketIdLocalStorage.value = (val.data as IMember).new_player.socket_id
+    if (val.event === 'quizFinished') {
+      isShowFinalRanking.value = true
+      return
+    }
+
+    if (val.event === 'participantJoined') {
+      participantId.value = (val.data as IMember).new_participant.id
     }
 
     if (val.event === 'quizStarted' || val.event === 'nextQuestion') {
@@ -66,11 +71,6 @@ watch(socketMessage, (val) => {
       isSentAnswer.value = false
       isShowResult.value = false
       socketData.value = val.data as SocketQuizStarted
-
-      if (val.event === 'quizStarted') {
-        const numberOfQuestions = (val.data as SocketQuizStarted).questions.length
-        lastQuestionId.value = (val.data as SocketQuizStarted).questions[numberOfQuestions - 1].id
-      }
     }
 
     if (val.event === 'resultAnswer') {
@@ -79,9 +79,13 @@ watch(socketMessage, (val) => {
       resultAnswer.value = val.data as SocketResultAnswer
     }
 
-    if (val.event === 'kickPlayer') {
-      const socketId = localStorage.getItem('name') // TODO - use socketId
-      if (socketId && socketId === (val.data as IKickPlayer).player_left.name) {
+    if (val.event === 'kickParticipant') {
+      const id = localStorage.getItem('participantID') // TODO - use socketId
+      if (id && id === (val.data as IKickPlayer).participant_left.id) {
+        showToast({
+          description: 'You have been kicked out of the room',
+          variant: 'destructive',
+        })
         localStorage.removeItem('roomPin')
         router.push({ name: 'play-lobby' })
       }
@@ -89,10 +93,6 @@ watch(socketMessage, (val) => {
 
     if (val.event === 'updateLeaderboard') {
       leaderboardData.value = val.data as SocketLeaderboard
-      if (lastQuestionId.value === socketData.value?.question.id) {
-        console.log('show final ranking')
-        isShowFinalRanking.value = true
-      }
     }
   }
 })
@@ -100,8 +100,8 @@ watch(socketMessage, (val) => {
 const handleSendAnswer = (answerId: string) => {
   isSentAnswer.value = true
   socketStore.handleAnswerQuestion({
-    answerId,
-    questionId: socketData.value?.question.id || '',
+    answer_id: answerId,
+    question_id: socketData.value?.question.id || '',
   })
 }
 </script>

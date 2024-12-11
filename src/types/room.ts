@@ -12,25 +12,27 @@ export interface IRoom {
 }
 
 export interface IRoomSocket {
-  roomPin: string
-  userId?: string
-  name: string
+  room_pin: string
+  room_id?: string
+  user_id?: string
+  nick_name: string
 }
 
 export interface IMember {
-  new_player: {
+  new_participant: {
+    id: string
+    socket_id: string
+    user_id: string
+    nick_name: string
+    role: string
+  }
+  participant_left?: {
     socket_id: string
     user_id: string
     name: string
     role: string
   }
-  player_left?: {
-    socket_id: string
-    user_id: string
-    name: string
-    role: string
-  }
-  total_player: number
+  total_participant: number
   avatar: string
 }
 
@@ -39,16 +41,19 @@ export interface IRoomLocked {
 }
 
 export interface ILocked {
-  roomPin: string
+  room_pin: string
+  host_id: string
 }
 
 export interface IKickMem {
-  roomPin: string
-  socketId: string
+  room_pin: string
+  participant_id: string
+  host_id: string
 }
 
 export interface IKickPlayer {
-  player_left: {
+  participant_left: {
+    id: string
     socket_id: string
     user_id: string
     name: string

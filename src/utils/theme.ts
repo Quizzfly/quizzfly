@@ -22,4 +22,12 @@ export const colorsHex = [
     primary: '#0fd18d',
     border: '#00b775',
   },
+  {
+    primary: '#f65655',
+    border: '#e72261',
+  },
+  {
+    primary: '#fe9820',
+    border: '#f58400',
+  },
 ]

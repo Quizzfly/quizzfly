@@ -10,14 +10,15 @@ export type SocketEventName =
   | 'updateLeaderboard'
   | 'answerQuestion'
   | 'noMoreQuestions'
-  | 'kickPlayer'
-  | 'playerJoined'
   | 'createPost'
   | 'commentPost'
   | 'reactPost'
+  | 'kickParticipant'
+  | 'participantJoined'
+  | 'quizFinished'
 
 export interface SocketUserAnswerQuestion {
-  no_player_answered: number
+  no_participant_answered: number
 }
 export interface SocketLeaderboard {
   room_pin: string
@@ -25,9 +26,10 @@ export interface SocketLeaderboard {
 }
 
 interface LeaderboardEntry {
+  id: string
   user_id: string
   socket_id: string
-  name: string
+  nick_name: string
   role: string
   score: number
   total_score: string
@@ -38,7 +40,7 @@ export interface SocketResultAnswer {
   room_pin: string
   score: number
   total_score: number
-  correct: boolean
+  is_correct: boolean
   question_id: string
   correct_answer_id: string
   chosen_answer_id: string
@@ -47,7 +49,7 @@ export interface SocketSummaryAnswer {
   room_pin: string
   question_id: string
   correct_answer_id: string
-  answers_count: { [key: string]: number }
+  choices: { [key: string]: number }
 }
 export interface SocketQuizStarted {
   room_pin: string
