@@ -5,7 +5,7 @@ import type { SocketLeaderboard, SocketQuizStarted, SocketResultAnswer } from '@
 import PlayLoading from '@/components/room/play/PlayLoading.vue'
 import PlayUserResult from '@/components/room/play/PlayUserResult.vue'
 import RankingFinal from '@/components/room/play/RankingFinal.vue'
-import { useSocketStore } from '@/stores/socket'
+import { useRoomSocketStore } from '@/stores/socket/room'
 import { useRoomStore } from '@/stores/room'
 import type { IKickPlayer, IMember } from '@/types'
 import SlideEditor from '@/components/quizzfly/create/slide/SlideEditor.vue'
@@ -16,7 +16,7 @@ const socketMessage = computed(() => {
 })
 
 const router = useRouter()
-const socketStore = useSocketStore()
+const socketStore = useRoomSocketStore()
 const roomStore = useRoomStore()
 
 const socketData = ref<SocketQuizStarted>()
