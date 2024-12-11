@@ -47,13 +47,10 @@ onBeforeMount(() => {
     postStore.fetchPosts(1, route.params.groupId)
   }
 })
-onBeforeUnmount(() => {
-  postStore.$reset()
-})
 </script>
 
 <template>
-  <div class="p-6 h-screen flex flex-col gap-4 relative overflow-hidden">
+  <div class="p-6 pb-0 h-full flex flex-col gap-4 relative overflow-hidden">
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
@@ -67,85 +64,92 @@ onBeforeUnmount(() => {
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
-    <Card class="flex flex-col gap-12 h-full overflow-auto">
-      <ScrollArea>
-        <div class="px-6 pt-6 flex items-center justify-between">
-          <h3
-            v-if="groupInfo.name"
-            class="text-base font-semibold"
-          >
-            {{ groupInfo.name }}
-          </h3>
+    <div class="flex h-full justify-center">
+      <Card
+        class="w-full max-w-[600px] flex border-b-0 rounded-b-none flex-col gap-12 h-full overflow-auto"
+      >
+        <ScrollArea>
+          <div class="px-6 pt-6 flex items-center justify-between">
+            <h3
+              v-if="groupInfo.name"
+              class="text-base font-semibold"
+            >
+              {{ groupInfo.name }}
+            </h3>
 
-          <h3
-            v-else
-            class="text-base font-semibold"
-          >
-            Title
-          </h3>
-          <div class="flex items-center">
-            <div class="flex">
-              <div
-                v-for="(item, index) in listMembers"
-                :key="index"
-              >
-                <Avatar
-                  v-if="index < 4"
-                  :class="{ '-ml-[20px]': index > 0 }"
-                  class="border-2"
+            <h3
+              v-else
+              class="text-base font-semibold"
+            >
+              Title
+            </h3>
+            <div class="flex items-center">
+              <div class="flex">
+                <div
+                  v-for="(item, index) in listMembers"
+                  :key="index"
                 >
-                  <AvatarImage
-                    v-if="item?.avatar"
-                    :src="item?.avatar"
-                  />
-                  <AvatarFallback v-if="item.name">{{
-                    item.name.charAt(0).toUpperCase()
-                  }}</AvatarFallback>
+                  <Avatar
+                    v-if="index < 4"
+                    :class="{ '-ml-[20px]': index > 0 }"
+                    class="border-2"
+                  >
+                    <AvatarImage
+                      v-if="item?.avatar"
+                      :src="item?.avatar"
+                    />
+                    <AvatarFallback v-if="item.name">{{
+                      item.name.charAt(0).toUpperCase()
+                    }}</AvatarFallback>
+                  </Avatar>
+                </div>
+                <Avatar
+                  v-if="listMembers.length > 4"
+                  class="-ml-[20px]"
+                >
+                  <AvatarFallback>+{{ listMembers.length - 4 }}</AvatarFallback>
                 </Avatar>
               </div>
-              <Avatar
-                v-if="listMembers.length > 4"
-                class="-ml-[20px]"
+              <div
+                class="ml-6 cursor-pointer w-8 h-8 rounded-xl flex items-center justify-center border"
               >
-                <AvatarFallback>+{{ listMembers.length - 4 }}</AvatarFallback>
-              </Avatar>
-            </div>
-            <div
-              class="ml-6 cursor-pointer w-8 h-8 rounded-xl flex items-center justify-center border"
-            >
-              <span class="i-solar-menu-dots-bold rotate-90"></span>
+                <span class="i-solar-menu-dots-bold rotate-90"></span>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="w-full relative">
-          <Tabs default-value="activity">
-            <TabsList class="mb-8 ml-6 mt-6">
-              <TabsTrigger value="activity"> Activity </TabsTrigger>
-              <TabsTrigger value="shared"> Shared </TabsTrigger>
-              <TabsTrigger value="assignment"> Assignments </TabsTrigger>
-            </TabsList>
-            <TabsContent value="activity">
-              <Activity />
-            </TabsContent>
-            <TabsContent value="shared"> <Shared /> </TabsContent>
-            <TabsContent value="assignment"> <Assignments /> </TabsContent>
-          </Tabs>
-          <Button
-            class="absolute top-6 right-6 h-10 bg-primary flex items-center"
-            @click="openModal"
-          >
-            Invite Member
-          </Button>
-          <MInviteMember
-            v-if="isShowModal"
-            @close="closeModal"
-          />
-        </div>
-      </ScrollArea>
-    </Card>
+          <div class="w-full relative">
+            <Tabs default-value="activity">
+              <TabsList class="mb-8 ml-6 mt-6">
+                <TabsTrigger value="activity"> Activity </TabsTrigger>
+                <TabsTrigger value="shared"> Shared </TabsTrigger>
+                <TabsTrigger value="assignment"> Assignments </TabsTrigger>
+              </TabsList>
+              <TabsContent value="activity">
+                <Activity />
+              </TabsContent>
+              <TabsContent value="shared"> <Shared /> </TabsContent>
+              <TabsContent value="assignment"> <Assignments /> </TabsContent>
+            </Tabs>
+            <Button
+              class="absolute top-6 right-6 h-10 bg-primary flex items-center"
+              @click="openModal"
+            >
+              Invite Member
+            </Button>
+            <MInviteMember
+              v-if="isShowModal"
+              @close="closeModal"
+            />
+          </div>
+        </ScrollArea>
+      </Card>
 
+      <div class="">
+        <ChatBox />
+      </div>
+    </div>
     <div class="">
-      <ChatBox />
+      <ChatThumnail />
     </div>
   </div>
 </template>

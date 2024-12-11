@@ -95,12 +95,12 @@ export const useSocketStore = defineStore({
         })
       })
 
-      this.client.on('playerJoined', (newContent: IMember) => {
+      this.client.on('participantJoined', (newContent: IMember) => {
         this.message = {
-          event: 'playerJoined',
+          event: 'participantJoined',
           data: newContent,
         }
-        localStorage.setItem('socketId', newContent.new_player.socket_id)
+        localStorage.setItem('participantID', newContent.new_participant.id)
         roomStore.setMemberJoins(newContent)
       })
 
@@ -108,25 +108,25 @@ export const useSocketStore = defineStore({
         roomStore.setLockedRoom(newContent.locked)
       })
 
-      this.client.on('playerLeft', (newContent: IMember) => {
+      this.client.on('participantLeft', (newContent: IMember) => {
         const index = roomStore.getListMemberJoins.findIndex(
-          (item) => item.new_player.socket_id === newContent?.player_left?.socket_id,
+          (item) => item.new_participant.socket_id === newContent?.participant_left?.socket_id,
         )
         if (index !== -1) {
           roomStore.getListMemberJoins.splice(index, 1)
         }
       })
 
-      this.client.on('kickPlayer', (newContent: IKickPlayer) => {
+      this.client.on('kickParticipant', (newContent: IKickPlayer) => {
         const index = roomStore.getListMemberJoins.findIndex(
-          (item) => item.new_player.socket_id === newContent.player_left.socket_id,
+          (item) => item.new_participant.socket_id === newContent.participant_left.socket_id,
         )
         if (index !== -1) {
           roomStore.getListMemberJoins.splice(index, 1)
         }
 
         this.message = {
-          event: 'kickPlayer',
+          event: 'kickParticipant',
           data: newContent,
         }
       })
@@ -175,6 +175,15 @@ export const useSocketStore = defineStore({
         console.log('Received answerQuestion:', newContent) // Debug
         this.message = {
           event: 'answerQuestion',
+          data: newContent,
+        }
+      })
+
+      // event quizFinished
+      this.client.on('quizFinished', (newContent: any) => {
+        console.log('Received quizFinished:', newContent) // Debug
+        this.message = {
+          event: 'quizFinished',
           data: newContent,
         }
       })
@@ -239,7 +248,6 @@ export const useSocketStore = defineStore({
     },
     handleJoinRoomData(data: IRoomSocket) {
       try {
-        console.log('Join room data:', data) // Debug
         this.client.emit('joinRoom', data)
       } catch (error) {
         router.push({
@@ -256,7 +264,7 @@ export const useSocketStore = defineStore({
       this.client.emit('leaveRoom', data)
     },
     handleKickMember(data: IKickMem) {
-      this.client.emit('kickPlayer', data)
+      this.client.emit('kickParticipant', data)
     },
     handleLockRoomData(data: ILocked) {
       this.client.emit('lockRoom', data)
@@ -278,15 +286,17 @@ export const useSocketStore = defineStore({
       const roomStore = useRoomStore()
       const authStore = useAuthStore()
       this.client.emit('startQuiz', {
-        roomPin: roomStore.getRoomInfo.room_pin,
-        quizzflyId: roomStore.getRoomInfo.quizzfly_id,
-        hostId: authStore.getUser?.id || '',
+        room_pin: roomStore.getRoomInfo.room_pin,
+        quizzfly_id: roomStore.getRoomInfo.quizzfly_id,
+        host_id: authStore.getUser?.id || '',
       })
     },
     handleNextQuestion() {
       const roomStore = useRoomStore()
+      const authStore = useAuthStore()
       this.client.emit('nextQuestion', {
-        roomPin: roomStore.getRoomInfo.room_pin,
+        room_pin: roomStore.getRoomInfo.room_pin,
+        host_id: authStore.getUser?.id,
       })
     },
     clearSocketStore() {
@@ -298,23 +308,36 @@ export const useSocketStore = defineStore({
     },
     handleFinishQuestion(questionId: string) {
       const roomStore = useRoomStore()
+      const authStore = useAuthStore()
       this.client.emit('finishQuestion', {
-        roomPin: roomStore.getRoomInfo.room_pin,
-        questionId,
+        room_pin: roomStore.getRoomInfo.room_pin,
+        question_id: questionId,
+        host_id: authStore.getUser?.id,
       })
     },
-    handleAnswerQuestion(data: { answerId: string; questionId: string }) {
+    handleAnswerQuestion(data: { answer_id: string; question_id: string }) {
       const roomStore = useRoomStore()
       this.client.emit('answerQuestion', {
-        roomPin: roomStore.getRoomInfo.room_pin,
+        room_pin: roomStore.getRoomInfo.room_pin,
         ...data,
+        participant_id: localStorage.getItem('participantID'),
       })
     },
     handleRequestLeaderboard(questionId: string) {
       const roomStore = useRoomStore()
+      const authStore = useAuthStore()
       this.client.emit('updateLeaderboard', {
-        roomPin: roomStore.getRoomInfo.room_pin,
-        questionId,
+        room_pin: roomStore.getRoomInfo.room_pin,
+        question_id: questionId,
+        host_id: authStore.getUser?.id,
+      })
+    },
+    handleQuizFinished() {
+      const roomStore = useRoomStore()
+      const authStore = useAuthStore()
+      this.client.emit('finishQuiz', {
+        room_pin: roomStore.getRoomInfo.room_pin,
+        host_id: authStore.getUser?.id,
       })
     },
   },

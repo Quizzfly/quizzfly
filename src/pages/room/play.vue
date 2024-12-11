@@ -29,8 +29,9 @@ onMounted(() => {
 
   if (detailRoom.value.id) {
     const data: IRoomSocket = {
-      roomPin: detailRoom.value.room_pin,
-      userId: authStore.getUser?.id,
+      room_pin: detailRoom.value.room_pin,
+      room_id: detailRoom.value.id,
+      user_id: authStore.getUser?.id,
       name: '',
     }
 

@@ -62,7 +62,7 @@ const optionMapped = computed(() => {
     return {
       id: answer.id,
       label: answer.content,
-      votes: props.summaryAnswer.answers_count[answer.id],
+      votes: props.summaryAnswer.choices[answer.id],
       color: colorsHex[index].primary,
       correct: props.summaryAnswer.correct_answer_id === answer.id,
     }

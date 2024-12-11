@@ -52,9 +52,10 @@ onMounted(() => {
 
   if (detailRoom.value.id) {
     const data: IRoomSocket = {
-      roomPin: detailRoom.value.room_pin,
-      userId: authStore.getUser?.id,
-      name: 'name',
+      room_pin: detailRoom.value.room_pin,
+      room_id: detailRoom.value.id,
+      user_id: authStore.getUser?.id,
+      nick_name: 'name',
     }
 
     socketStore.handleCreateRoomData(data)
@@ -69,14 +70,16 @@ watch(listMember.value, (val) => {
 
 const handleLocked = () => {
   const data: ILocked = {
-    roomPin: detailRoom.value.room_pin,
+    room_pin: detailRoom.value.room_pin,
+    host_id: authStore.getUser?.id as string,
   }
   socketStore.handleLockRoomData(data)
 }
 
 const handleUnlocked = () => {
   const data: ILocked = {
-    roomPin: detailRoom.value.room_pin,
+    room_pin: detailRoom.value.room_pin,
+    host_id: authStore.getUser?.id as string,
   }
   socketStore.handleUnlockRoomData(data)
 }
@@ -90,8 +93,9 @@ const addAvatarOnList = (data: IMember[]) => {
 
 const removeMember = (item: IMember) => {
   const data: IKickMem = {
-    roomPin: detailRoom.value.room_pin,
-    socketId: item.new_player.socket_id,
+    room_pin: detailRoom.value.room_pin,
+    participant_id: item.new_participant.id,
+    host_id: authStore.getUser?.id as string,
   }
 
   socketStore.handleKickMember(data)
@@ -223,7 +227,7 @@ const copyCode = async () => {
       >
         <div
           v-for="item in membersWithAvatars"
-          :key="item.new_player.user_id"
+          :key="item.new_participant.user_id"
           v-motion
           :initial="{ opacity: 0, x: 100 }"
           :enter="{ opacity: 1, x: 0, scale: 1 }"
@@ -234,7 +238,7 @@ const copyCode = async () => {
             class="w-8 h-8"
             :src="item.avatar"
           />
-          <p class="text-base font-bold">{{ item.new_player.name }}</p>
+          <p class="text-base font-bold">{{ item.new_participant.nick_name }}</p>
           <div
             class="hidden group-hover:flex absolute bg-white -top-2 w-[18px] h-[18px] rounded-full text-[26px] font-semibold cursor-pointer items-center right-1"
             @click="removeMember(item)"

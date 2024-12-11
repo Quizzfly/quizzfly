@@ -100,7 +100,7 @@ onMounted(() => {
             :enter="{ opacity: 1, y: 0 }"
             :delay="delayTime.second + 500 + 200"
           >
-            {{ secondPlayer.name }}
+            {{ secondPlayer.nick_name }}
           </p>
           <div
             v-motion
@@ -149,7 +149,7 @@ onMounted(() => {
             :delay="delayTime.first + 500 + 200"
             class="font-bold text-white text-lg mt-5 mb-2"
           >
-            {{ firstPlayer.name }}
+            {{ firstPlayer.nick_name }}
           </p>
           <div
             v-motion
@@ -194,7 +194,7 @@ onMounted(() => {
             :delay="delayTime.third + 500 + 200"
             class="font-bold text-white text-lg mt-5 mb-2"
           >
-            {{ thirdPlayer.name }}
+            {{ thirdPlayer.nick_name }}
           </p>
           <div
             v-motion
@@ -237,7 +237,7 @@ onMounted(() => {
           />
           <div>
             <p class="font-semibold text-lg">
-              {{ user.name }}
+              {{ user.nick_name }}
             </p>
             <div class="flex gap-1">
               <span class="font-semibold text-primary"> {{ user.total_score }} </span> point
