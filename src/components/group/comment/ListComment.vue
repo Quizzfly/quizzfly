@@ -101,11 +101,12 @@ const handleDeletePost = async (id: string) => {
                           <span class="i-solar-menu-dots-bold rotate-90 w-3 h-3"></span>
                         </PopoverTrigger>
                         <PopoverContent class="p-0 w-full">
-                          <div
-                            class="rounded-md cursor-pointer py-1 px-1.5 shadow-md bg-white"
-                            @click.prevent="handleDeletePost(item.id)"
-                          >
-                            <p class="py-1 px-3 text-xs text-red-500 hover:bg-slate-100 rounded-sm">
+                          <div class="rounded-md cursor-pointer py-1 px-1.5 shadow-md bg-white">
+                            <p class="py-1 px-3 text-xs hover:bg-slate-100 rounded-sm">Edit</p>
+                            <p
+                              class="py-1 px-3 text-xs text-red-500 hover:bg-slate-100 rounded-sm"
+                              @click.prevent="handleDeletePost(item.id)"
+                            >
                               Delete
                             </p>
                           </div>

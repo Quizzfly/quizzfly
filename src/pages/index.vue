@@ -3,6 +3,9 @@ import { Button } from '@/components/ui/button'
 import { useAuthStore } from '@/stores/auth'
 import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
 import { useConfirmDialog } from '@/stores/modal'
+import NotificationPopup from '@/components/notification/NotificationPopup.vue'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+
 const authStore = useAuthStore()
 const quizzflyStore = useQuizzflyStore()
 const quizzflys = computed(() => quizzflyStore.getQuizzflys)
@@ -47,11 +50,18 @@ const handleOpenCreateWithAI = async () => {
         >
           <span class="i-solar-magnifer-linear text-lg"></span>
         </div>
-        <div
-          class="max-md:hidden w-10 h-10 hover:bg-slate-200 flex justify-center items-center rounded-full cursor-pointer"
-        >
-          <span class="i-solar-bell-line-duotone text-lg"></span>
-        </div>
+        <Popover>
+          <PopoverTrigger>
+            <div
+              class="max-md:hidden w-10 h-10 hover:bg-slate-200 flex justify-center items-center rounded-full cursor-pointer"
+            >
+              <span class="i-solar-bell-line-duotone text-lg"></span>
+            </div>
+          </PopoverTrigger>
+          <PopoverContent class="mr-4">
+            <NotificationPopup />
+          </PopoverContent>
+        </Popover>
       </div>
     </div>
 
