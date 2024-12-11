@@ -6,8 +6,9 @@ import {
   getCommentPostApi,
   getPostDetailApi,
   reactPostApi,
+  deleteCommentApi,
 } from '@/services/group'
-import type { IPost, ICreatePost, IComment, ICommentsPost } from '@/types/group'
+import type { IPost, ICreatePost, IComment, ICommentCreate } from '@/types/group'
 import { showToast } from '@/utils/toast'
 import { defineStore } from 'pinia'
 import { apiError } from '@/utils/exceptionHandler'
@@ -20,8 +21,7 @@ export const usePostStore = defineStore({
     posts: [] as IPost[],
     postDetail: {} as IPost,
     postMeta: null as IPaging | null,
-    comments: [] as IComment[],
-    listComnentByPostId: [] as ICommentsPost[],
+    listComnentByPostId: [] as IComment[],
   }),
   actions: {
     setIsUpdating(val: boolean) {
@@ -45,11 +45,10 @@ export const usePostStore = defineStore({
         })
       }
     },
-    async createCommentPost(idPost: string, payload: IComment) {
+    async createCommentPost(idPost: string, payload: ICommentCreate) {
       try {
         this.isUpdating = true
-        const { data } = await commentPostApi(idPost, payload)
-        this.setCommentPosts(data)
+        await commentPostApi(idPost, payload)
       } catch (error) {
         console.error(error)
         showToast({
@@ -110,27 +109,16 @@ export const usePostStore = defineStore({
         throw error
       }
     },
-    async getCommentByPostId(postId: any) {
-      const result = this.listComnentByPostId.find((item) => item.post_id == postId)
-      if (result) {
-        return result.comments
-      } else {
-        try {
-          const { data } = await getCommentPostApi(postId)
-          this.comments = data
-          this.listComnentByPostId.push({
-            post_id: postId,
-            comments: data,
-          })
-          return data
-        } catch (error) {
-          console.error(error)
-          showToast({
-            description: 'Fetch comments failed',
-            variant: 'destructive',
-          })
-          return []
-        }
+    async getCommentByPostId(postId: string) {
+      try {
+        const data = await getCommentPostApi(postId)
+        this.setCommentByPostId(data.data)
+      } catch (error) {
+        console.error(error)
+        showToast({
+          description: 'Fetch comments failed',
+          variant: 'destructive',
+        })
       }
     },
     async handleDeleteGroup(idPost: string) {
@@ -149,8 +137,33 @@ export const usePostStore = defineStore({
         })
       }
     },
-    setCommentPosts(val: any) {
-      this.comments = [...this.comments, val]
+    async handleDeleteComment(idComment: string) {
+      try {
+        await deleteCommentApi(idComment)
+        const index = this.listComnentByPostId.findIndex((i) => i.id === idComment)
+        index > -1 && this.listComnentByPostId.splice(index, 1)
+        showToast({
+          description: 'Delete comment success',
+          variant: 'default',
+        })
+      } catch (error) {
+        showToast({
+          description: apiError(error).message,
+          variant: 'destructive',
+        })
+      }
+    },
+    setCommentByPostId(data: IComment[]) {
+      this.listComnentByPostId = data
+      this.listComnentByPostId.forEach((el) => {
+        el.isShowReply = false
+      })
+    },
+    handleCommentByPostId(data: IComment) {
+      this.listComnentByPostId.unshift(data)
+      this.listComnentByPostId.forEach((el) => {
+        el.isShowReply = false
+      })
     },
   },
   getters: {
@@ -158,5 +171,6 @@ export const usePostStore = defineStore({
     getPosts: (state) => state.posts,
     getPostMeta: (state) => state.postMeta,
     getPostDetail: (state) => state.postDetail,
+    getListComnentByPostId: (state) => state.listComnentByPostId,
   },
 })

@@ -76,7 +76,8 @@ export interface ICreatePost {
 }
 
 export interface IComment {
-  parent_comment_id?: string | null
+  isShowReply: boolean
+  parent_comment_id: string | null
   content: string
   files: [
     {
@@ -94,6 +95,16 @@ export interface IComment {
     avatar: string
     name: string
   }
+  created_at: string
+  updated_at: string
+  count_replies: number
+  id: string
+}
+
+export interface ICommentCreate {
+  parent_comment_id: string | null
+  content: string
+  files: []
 }
 
 export interface ICommentsPost {

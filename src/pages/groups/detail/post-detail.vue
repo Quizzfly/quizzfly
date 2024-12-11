@@ -10,6 +10,7 @@ import {
 import { Card } from '@/components/ui/card'
 import { useGroupStore } from '@/stores/group/group'
 import { usePostStore } from '@/stores/group/post'
+import { useSocketStore } from '@/stores/socket'
 import { formatDateTime } from '@/utils/time'
 import { getPostDetailApi } from '@/services/group'
 import { showToast } from '@/utils/toast'
@@ -25,26 +26,52 @@ const groupStore = useGroupStore()
 const postStore = usePostStore()
 const route = useRoute()
 const router = useRouter()
+const socketStore = useSocketStore()
 
 const groupId = route.params.groupId as string
 const postId = route.params.postId as string
+
+const postInfo = ref()
+const commentCount = ref()
+const isCheckReact = ref(false)
+const reactCount = ref()
 
 const groupInfo = computed(() => {
   return groupStore.getGroupInfo
 })
 
-const postInfo = ref()
+const getMessage = computed(() => {
+  return socketStore.getMessage
+})
+
+watch(getMessage, (val: any) => {
+  if (val.event === 'commentPost' && val.data.parent_comment_id == null) {
+    postStore.handleCommentByPostId(val.data)
+    commentCount.value += 1
+  }
+})
 
 const handleReactPost = () => {
   postStore.createReactPost(postId)
+  if (isCheckReact.value) {
+    isCheckReact.value = false
+    reactCount.value -= 1
+  } else {
+    isCheckReact.value = true
+    reactCount.value += 1
+  }
 }
 
 const getDetailPostByPostId = async (idGroup: string, idPost: string) => {
   try {
     const { data } = await getPostDetailApi(idGroup, idPost)
     postInfo.value = data
+    commentCount.value = data.comment_count
+    if (data.is_liked) {
+      isCheckReact.value = true
+    }
+    reactCount.value = data.react_count
   } catch (error) {
-    console.error(error)
     showToast({
       description: 'Failed to get post detail',
       variant: 'destructive',
@@ -90,7 +117,10 @@ onBeforeMount(() => {
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
-    <Card class="mt-6 flex flex-col h-full overflow-auto">
+    <Card
+      v-if="postInfo?.id"
+      class="mt-6 flex flex-col h-full overflow-auto"
+    >
       <ScrollArea>
         <div class="flex flex-col w-fulf">
           <div class="p-6 pb-3 flex flex-col items-start gap-2 w-full">
@@ -111,7 +141,6 @@ onBeforeMount(() => {
                         {{ formatDateTime(postInfo?.created_at) }}
                       </p>
                     </div>
-                    <!-- <p class="text-x text-slate-600">Host</p> -->
                   </div>
                 </div>
                 <!-- menu options -->
@@ -247,24 +276,41 @@ onBeforeMount(() => {
                 <div class="flex items-center gap-6 mt-2 -ml-2">
                   <div
                     class="hover:bg-gray-100 px-2 py-1 rounded-full flex items-center gap-1 cursor-pointer"
-                    @click.stop="handleReactPost()"
+                    @click.prevent="handleReactPost()"
                   >
                     <span
-                      v-if="postInfo?.is_liked"
+                      v-if="isCheckReact"
+                      v-motion
+                      :initial="{
+                        scale: 1.5,
+                      }"
+                      :enter="{
+                        scale: 1,
+                      }"
+                      :tapped="{
+                        scale: 0.8,
+                      }"
                       class="text-slate-500 i-solar-like-bold text-lg bg-primary"
                     ></span>
                     <span
                       v-else
+                      v-motion
+                      :initial="{
+                        scale: 1,
+                      }"
+                      :enter="{
+                        scale: 1,
+                      }"
                       class="text-slate-500 i-solar-like-broken text-lg"
                     ></span>
-                    <p class="text-slate-600">{{ postInfo?.react_count }}</p>
+                    <p class="text-slate-600">{{ reactCount }}</p>
                   </div>
 
                   <div
                     class="hover:bg-gray-100 px-2 py-1 rounded-full flex items-center gap-1 cursor-pointer"
                   >
                     <span class="i-solar-chat-round-line-duotone text-lg text-slate-500"></span>
-                    <p class="text-slate-600">{{ postInfo?.comment_count }}</p>
+                    <p class="text-slate-600">{{ commentCount }}</p>
                   </div>
                 </div>
               </div>
@@ -274,7 +320,7 @@ onBeforeMount(() => {
           <!-- <div class="h-px w-full bg-slate-200"></div> -->
           <FormSend
             :member="postInfo?.member"
-            :id-post="postInfo?.id"
+            :post-id="postInfo?.id"
           />
           <ListComment :id-post="postId" />
         </div>
