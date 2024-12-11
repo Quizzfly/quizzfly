@@ -32,7 +32,7 @@ onMounted(() => {
       room_pin: detailRoom.value.room_pin,
       room_id: detailRoom.value.id,
       user_id: authStore.getUser?.id,
-      name: '',
+      nick_name: '',
     }
 
     socketStore.handleCreateRoomData(data)
