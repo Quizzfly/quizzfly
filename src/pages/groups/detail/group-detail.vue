@@ -50,7 +50,7 @@ onBeforeMount(() => {
 </script>
 
 <template>
-  <div class="p-6 pb-0 h-full flex flex-col gap-4 relative overflow-hidden">
+  <div class="p-6 flex h-full flex-col gap-4 relative overflow-hidden">
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>

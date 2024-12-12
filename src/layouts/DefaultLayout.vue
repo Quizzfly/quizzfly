@@ -9,7 +9,7 @@ import TopBar from '@/components/layout/TopBar.vue'
       <SideBar />
       <div
         id="saved-position"
-        class="flex-1 relative overflow-y-auto bg-gray-bg-100"
+        class="flex-1 h-full relative overflow-y-auto bg-gray-bg-100"
       >
         <slot />
       </div>
