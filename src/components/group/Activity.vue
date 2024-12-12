@@ -9,6 +9,7 @@ import { formatDateTime } from '@/utils/time'
 import { useConfirmDialog } from '@/stores/modal'
 import { AvatarFallback, Avatar, AvatarImage } from '../ui/avatar'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { Skeleton } from '@/components/ui/skeleton'
 
 const confirmDialog = useConfirmDialog()
 const authStore = useAuthStore()
@@ -109,218 +110,234 @@ const handleHtmlLinkClick = (event: MouseEvent) => {
       </div>
     </Card>
     <div class="flex flex-col">
-      <RouterLink
-        v-for="post in listPosts"
-        :key="post.id"
-        :to="{ name: 'group-post-detail', params: { postId: post.id } }"
-        class="rounded-3xl cursor-pointer"
-      >
-        <div class="border-t flex flex-col w-full">
-          <div class="p-6 pb-3 flex items-start gap-2 w-full">
-            <Avatar class="w-9 h-9">
-              <AvatarImage :src="post.member.avatar" />
-              <AvatarFallback v-if="post.member.name">
-                {{ post?.member?.name.charAt(0).toUpperCase() }}
-              </AvatarFallback>
-            </Avatar>
-            <div class="flex-auto">
-              <div class="flex flex-auto justify-between">
-                <!-- name -->
-                <div class="flex items-center gap-2">
-                  <div class="flex flex-col gap-0">
-                    <div class="flex items-center gap-2">
-                      <h4 class="text-sm font-medium">{{ post.member.name }}</h4>
-                      <p class="text-xs font-light text-slate-600">
-                        {{ formatDateTime(post.created_at) }}
-                      </p>
-                    </div>
-                    <!-- <p class="text-x text-slate-600">Host</p> -->
-                  </div>
-                </div>
-                <!-- menu options -->
-                <div @click.stop.prevent>
-                  <Popover>
-                    <PopoverTrigger>
-                      <div
-                        class="cursor-pointer w-6 h-6 rounded-lg flex items-center justify-center border"
-                      >
-                        <span class="i-solar-menu-dots-bold rotate-90"></span>
-                      </div>
-                    </PopoverTrigger>
-
-                    <PopoverContent
-                      class="p-0 w-full"
-                      @click.prevent.stop="handleDeletePost(post?.id)"
-                    >
-                      <div class="rounded-md cursor-pointer py-1 px-1.5 shadow-md bg-white">
-                        <p class="py-1 px-3 text-xs text-red-500 hover:bg-slate-100 rounded-sm">
-                          Delete
+      <div v-if="listPosts.length === 0 && postStore.getIsFetchingPosts">
+        <div class="flex p-4 gap-3">
+          <Skeleton class="w-10 h-10 rounded-full" />
+          <Skeleton class="w-full h-20 rounded-md" />
+        </div>
+        <div class="flex p-4 gap-3">
+          <Skeleton class="w-10 h-10 rounded-full" />
+          <Skeleton class="w-full h-20 rounded-md" />
+        </div>
+        <div class="flex p-4 gap-3">
+          <Skeleton class="w-10 h-10 rounded-full" />
+          <Skeleton class="w-full h-20 rounded-md" />
+        </div>
+      </div>
+      <template v-else>
+        <RouterLink
+          v-for="post in listPosts"
+          :key="post.id"
+          :to="{ name: 'group-post-detail', params: { postId: post.id } }"
+          class="rounded-3xl cursor-pointer"
+        >
+          <div class="border-t flex flex-col w-full">
+            <div class="p-6 pb-3 flex items-start gap-2 w-full">
+              <Avatar class="w-9 h-9">
+                <AvatarImage :src="post.member.avatar" />
+                <AvatarFallback v-if="post.member.name">
+                  {{ post?.member?.name.charAt(0).toUpperCase() }}
+                </AvatarFallback>
+              </Avatar>
+              <div class="flex-auto">
+                <div class="flex flex-auto justify-between">
+                  <!-- name -->
+                  <div class="flex items-center gap-2">
+                    <div class="flex flex-col gap-0">
+                      <div class="flex items-center gap-2">
+                        <h4 class="text-sm font-medium">{{ post.member.name }}</h4>
+                        <p class="text-xs font-light text-slate-600">
+                          {{ formatDateTime(post.created_at) }}
                         </p>
                       </div>
-                    </PopoverContent>
-                  </Popover>
-                </div>
-              </div>
-
-              <!-- content -->
-              <div class="">
-                <div class="flex flex-col gap-4">
-                  <div
-                    class="text-gray-900 font-normal mt-2 content-format"
-                    @click="handleHtmlLinkClick"
-                    v-html="$sanitize(post?.content)"
-                  ></div>
-
-                  <!-- list images -->
-                  <div
-                    v-if="post.files.length"
-                    v-viewer:gallery
-                    class="flex h-[328px] overflow-hidden w-full gap-1"
-                    @click.stop.prevent
-                  >
-                    <div class="overflow-hidden flex-1 h-full">
-                      <img
-                        v-image
-                        :src="post.files[0].url"
-                        class="border w-full h-full object-cover cursor-pointer rounded-lg"
-                        alt="image post"
-                      />
+                      <!-- <p class="text-x text-slate-600">Host</p> -->
                     </div>
-                    <div
-                      class="overflow-hidden flex-1 grid gap-1"
-                      :class="`grid__${post.files.length > 5 ? 4 : post.files.length - 1}`"
-                    >
-                      <div
-                        v-for="(image, index) in post.files"
-                        :key="index"
-                        class="image w-full h-full object-cover cursor-pointer rounded-lg relative"
-                      >
-                        <img
-                          v-image
-                          :src="image.url"
-                          class="border w-full h-full object-cover cursor-pointer rounded-lg"
-                          :class="{ hidden: index > 4 }"
-                          alt="Service"
-                        />
+                  </div>
+                  <!-- menu options -->
+                  <div @click.stop.prevent>
+                    <Popover>
+                      <PopoverTrigger>
                         <div
-                          v-if="index == 3 && post.files.length > 5"
-                          class="bg-black bg-opacity-30 rounded-lg absolute w-full h-full top-0 left-0 right-0 bottom-0 flex items-center justify-center text-base font-bold text-white"
+                          class="cursor-pointer w-6 h-6 rounded-lg flex items-center justify-center border"
                         >
-                          + {{ post.files.length - 5 }}
+                          <span class="i-solar-menu-dots-bold rotate-90"></span>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- end list images -->
+                      </PopoverTrigger>
 
-                  <Card v-if="post.quizzfly?.id">
-                    <div class="flex w-full h-28">
-                      <div>
+                      <PopoverContent
+                        class="p-0 w-full"
+                        @click.prevent.stop="handleDeletePost(post?.id)"
+                      >
+                        <div class="rounded-md cursor-pointer py-1 px-1.5 shadow-md bg-white">
+                          <p class="py-1 px-3 text-xs text-red-500 hover:bg-slate-100 rounded-sm">
+                            Delete
+                          </p>
+                        </div>
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                </div>
+
+                <!-- content -->
+                <div class="">
+                  <div class="flex flex-col gap-4">
+                    <div
+                      class="text-gray-900 font-normal mt-2 content-format"
+                      @click="handleHtmlLinkClick"
+                      v-html="$sanitize(post?.content)"
+                    ></div>
+
+                    <!-- list images -->
+                    <div
+                      v-if="post.files.length"
+                      v-viewer:gallery
+                      class="flex h-[328px] overflow-hidden w-full gap-1"
+                      @click.stop.prevent
+                    >
+                      <div class="overflow-hidden flex-1 h-full">
                         <img
                           v-image
-                          class="w-[188px] h-28 object-cover rounded-s-md"
-                          :src="post.quizzfly.cover_image || ''"
-                          alt=""
+                          :src="post.files[0].url"
+                          class="border w-full h-full object-cover cursor-pointer rounded-lg"
+                          alt="image post"
                         />
                       </div>
-                      <div class="flex justify-between items-center w-full">
-                        <div class="flex flex-col w-full justify-between p-3 h-full">
-                          <div class="flex items-center justify-between">
-                            <div class="flex post-center gap-1">
-                              <span
-                                class="i-material-symbols-light-grid-view-outline-rounded h-6 w-6"
-                              ></span>
-                              <h2 class="title text-base font-medium">
-                                {{ post.quizzfly.title || 'Untitled' }}
-                              </h2>
-                            </div>
-                          </div>
-                          <div class="flex items-center gap-2">
-                            <div class="flex gap-1 items-center">
-                              <Avatar class="h-6 w-6">
-                                <AvatarImage :src="post.member?.avatar" />
-                                <AvatarFallback v-if="post.member.name">{{
-                                  post?.member?.name.charAt(0).toUpperCase()
-                                }}</AvatarFallback>
-                              </Avatar>
-                              <p class="text-sm text-gray-500">{{ post.member.name }}</p>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="mr-3 flex items-center gap-2">
-                          <Button
-                            class="h-8 w-20"
-                            @click.prevent.stop="
-                              router.push({
-                                name: 'host-live',
-                                params: { quizzflyId: post.quizzfly.id },
-                              })
-                            "
+                      <div
+                        class="overflow-hidden flex-1 grid gap-1"
+                        :class="`grid__${post.files.length > 5 ? 4 : post.files.length - 1}`"
+                      >
+                        <div
+                          v-for="(image, index) in post.files"
+                          :key="index"
+                          class="image w-full h-full object-cover cursor-pointer rounded-lg relative"
+                        >
+                          <img
+                            v-image
+                            :src="image.url"
+                            class="border w-full h-full object-cover cursor-pointer rounded-lg"
+                            :class="{ hidden: index > 4 }"
+                            alt="Service"
+                          />
+                          <div
+                            v-if="index == 3 && post.files.length > 5"
+                            class="bg-black bg-opacity-30 rounded-lg absolute w-full h-full top-0 left-0 right-0 bottom-0 flex items-center justify-center text-base font-bold text-white"
                           >
-                            Play
-                          </Button>
-                          <Button
-                            variant="secondary"
-                            class="h-8 w-20"
-                            @click.prevent.stop="
-                              router.push({
-                                name: 'quizzfly-create',
-                                params: { quizzflyId: post.quizzfly.id },
-                              })
-                            "
-                          >
-                            Edit
-                          </Button>
+                            + {{ post.files.length - 5 }}
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </Card>
-                </div>
-                <div class="flex items-center gap-6 mt-2 -ml-2">
-                  <div
-                    class="hover:bg-gray-100 px-2 py-1 rounded-full flex items-center gap-1 cursor-pointer"
-                    @click.prevent="handleReactPost(post.id)"
-                  >
-                    <span
-                      v-if="post.is_liked"
-                      v-motion
-                      :initial="{
-                        scale: 1.5,
-                      }"
-                      :enter="{
-                        scale: 1,
-                      }"
-                      :tapped="{
-                        scale: 0.8,
-                      }"
-                      class="text-slate-500 i-solar-like-bold text-lg bg-primary"
-                    ></span>
-                    <span
-                      v-else
-                      v-motion
-                      :initial="{
-                        scale: 1,
-                      }"
-                      :enter="{
-                        scale: 1,
-                      }"
-                      class="text-slate-500 i-solar-like-broken text-lg"
-                    ></span>
-                    <p class="text-slate-600">{{ post.react_count }}</p>
-                  </div>
+                    <!-- end list images -->
 
-                  <div
-                    class="hover:bg-gray-100 px-2 py-1 rounded-full flex items-center gap-1 cursor-pointer"
-                  >
-                    <span class="i-solar-chat-round-line-duotone text-lg text-slate-500"></span>
-                    <p class="text-slate-600">{{ post.comment_count }}</p>
+                    <Card v-if="post.quizzfly?.id">
+                      <div class="flex w-full h-28">
+                        <div>
+                          <img
+                            v-image
+                            class="w-[188px] h-28 object-cover rounded-s-md"
+                            :src="post.quizzfly.cover_image || ''"
+                            alt=""
+                          />
+                        </div>
+                        <div class="flex justify-between items-center w-full">
+                          <div class="flex flex-col w-full justify-between p-3 h-full">
+                            <div class="flex items-center justify-between">
+                              <div class="flex post-center gap-1">
+                                <span
+                                  class="i-material-symbols-light-grid-view-outline-rounded h-6 w-6"
+                                ></span>
+                                <h2 class="title text-base font-medium">
+                                  {{ post.quizzfly.title || 'Untitled' }}
+                                </h2>
+                              </div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                              <div class="flex gap-1 items-center">
+                                <Avatar class="h-6 w-6">
+                                  <AvatarImage :src="post.member?.avatar" />
+                                  <AvatarFallback v-if="post.member.name">{{
+                                    post?.member?.name.charAt(0).toUpperCase()
+                                  }}</AvatarFallback>
+                                </Avatar>
+                                <p class="text-sm text-gray-500">{{ post.member.name }}</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="mr-3 flex items-center gap-2">
+                            <Button
+                              class="h-8 w-20"
+                              @click.prevent.stop="
+                                router.push({
+                                  name: 'host-live',
+                                  params: { quizzflyId: post.quizzfly.id },
+                                })
+                              "
+                            >
+                              Play
+                            </Button>
+                            <Button
+                              variant="secondary"
+                              class="h-8 w-20"
+                              @click.prevent.stop="
+                                router.push({
+                                  name: 'quizzfly-create',
+                                  params: { quizzflyId: post.quizzfly.id },
+                                })
+                              "
+                            >
+                              Edit
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </Card>
+                  </div>
+                  <div class="flex items-center gap-6 mt-2 -ml-2">
+                    <div
+                      class="hover:bg-gray-100 px-2 py-1 rounded-full flex items-center gap-1 cursor-pointer"
+                      @click.prevent="handleReactPost(post.id)"
+                    >
+                      <span
+                        v-if="post.is_liked"
+                        v-motion
+                        :initial="{
+                          scale: 1.5,
+                        }"
+                        :enter="{
+                          scale: 1,
+                        }"
+                        :tapped="{
+                          scale: 0.8,
+                        }"
+                        class="text-slate-500 i-solar-like-bold text-lg bg-primary"
+                      ></span>
+                      <span
+                        v-else
+                        v-motion
+                        :initial="{
+                          scale: 1,
+                        }"
+                        :enter="{
+                          scale: 1,
+                        }"
+                        class="text-slate-500 i-solar-like-broken text-lg"
+                      ></span>
+                      <p class="text-slate-600">{{ post.react_count }}</p>
+                    </div>
+
+                    <div
+                      class="hover:bg-gray-100 px-2 py-1 rounded-full flex items-center gap-1 cursor-pointer"
+                    >
+                      <span class="i-solar-chat-round-line-duotone text-lg text-slate-500"></span>
+                      <p class="text-slate-600">{{ post.comment_count }}</p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </RouterLink>
+        </RouterLink>
+      </template>
     </div>
 
     <MCreatePost

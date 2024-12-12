@@ -18,6 +18,7 @@ export const usePostStore = defineStore({
   id: 'post',
   state: () => ({
     isUpdating: false,
+    isFetching: false,
     posts: [] as IPost[],
     postDetail: {} as IPost,
     postMeta: null as IPaging | null,
@@ -82,6 +83,7 @@ export const usePostStore = defineStore({
       this.isUpdating = false
     },
     async fetchPosts(page = 1, idGroup: string) {
+      this.isFetching = true
       try {
         const { data, meta } = await getPostsApi(page, idGroup)
         this.posts = data
@@ -93,6 +95,8 @@ export const usePostStore = defineStore({
           variant: 'destructive',
         })
         throw error
+      } finally {
+        this.isFetching = false
       }
     },
     async getPostDetailByPostId(idGroup: string, idPost: string) {
@@ -172,5 +176,6 @@ export const usePostStore = defineStore({
     getPostMeta: (state) => state.postMeta,
     getPostDetail: (state) => state.postDetail,
     getListComnentByPostId: (state) => state.listComnentByPostId,
+    getIsFetchingPosts: (state) => state.isFetching,
   },
 })

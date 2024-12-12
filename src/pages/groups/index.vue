@@ -16,8 +16,9 @@ import {
   PaginationNext,
   PaginationPrev,
 } from '@/components/ui/pagination'
+import { usePostStore } from '@/stores/group/post'
 const groupStore = useGroupStore()
-
+const postStore = usePostStore()
 const search = useRouteQuery('k', '')
 const pageQuery = useRouteQuery<number>('page', 1)
 const isShowModal = ref(false)
@@ -46,6 +47,7 @@ const fetchGroups = () => {
 }
 
 onBeforeMount(() => {
+  postStore.$reset()
   fetchGroups()
 })
 

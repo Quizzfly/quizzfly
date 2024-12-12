@@ -7,13 +7,11 @@ import QRCodeVue3 from 'qrcode-vue3'
 import { avatars } from '@/utils/avatar'
 import { showToast } from '@/utils/toast'
 
-import { useLoadingStore } from '@/stores/loading'
 import { useAuthStore } from '@/stores/auth'
 import type { IRoomSocket } from '@/types'
 
 const router = useRouter()
 
-const loadingStore = useLoadingStore()
 const authStore = useAuthStore()
 const roomStore = useRoomStore()
 const socketStore = useRoomSocketStore()
@@ -44,11 +42,6 @@ onMounted(() => {
   }
 
   roomPin.value = detailRoom.value.room_pin
-
-  loadingStore.setLoading(true, false)
-  setTimeout(() => {
-    loadingStore.setLoading(false)
-  }, 2000)
 
   if (detailRoom.value.id) {
     const data: IRoomSocket = {
@@ -127,7 +120,7 @@ const copyCode = async () => {
           v-motion
           :initial="{ opacity: 0, x: -100 }"
           :enter="{ opacity: 1, x: 0, scale: 1 }"
-          :delay="2000"
+          :delay="500"
           class="flex flex-col gap-1 bg-white p-6 rounded"
         >
           <p class="text-base font-medium">
@@ -141,7 +134,7 @@ const copyCode = async () => {
           v-motion
           :initial="{ opacity: 0, y: -100 }"
           :enter="{ opacity: 1, y: 0, scale: 1 }"
-          :delay="2200"
+          :delay="1000"
           class="flex flex-col bg-white px-6 py-3 rounded"
         >
           <p class="text-base font-medium">Game PIN:</p>
@@ -157,7 +150,7 @@ const copyCode = async () => {
         v-motion
         :initial="{ opacity: 0, x: 100 }"
         :enter="{ opacity: 1, x: 0, scale: 1 }"
-        :delay="2000"
+        :delay="1200"
         class="bg-white w-32 h-32 rounded p-1"
       >
         <QRCodeVue3

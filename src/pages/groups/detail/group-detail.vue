@@ -65,9 +65,7 @@ onBeforeMount(() => {
       </BreadcrumbList>
     </Breadcrumb>
     <div class="flex h-full justify-center">
-      <Card
-        class="w-full max-w-[600px] flex border-b-0 rounded-b-none flex-col gap-12 h-full overflow-auto"
-      >
+      <Card class="w-full flex border-b-0 rounded-b-none flex-col gap-12 h-full overflow-auto">
         <ScrollArea>
           <div class="px-6 pt-6 flex items-center justify-between">
             <h3
