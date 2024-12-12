@@ -360,6 +360,11 @@ const handleHtmlLinkClick = (event: MouseEvent) => {
 .grid__1 {
   grid-template-columns: repeat(1, 1fr);
   grid-template-rows: repeat(1, 1fr);
+
+  img {
+    width: 100%;
+    max-height: 162px;
+  }
 }
 .grid__2 {
   grid-template-columns: auto;
