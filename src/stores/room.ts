@@ -3,6 +3,7 @@ import type { IRoom, IMember } from '@/types/room'
 import { showToast } from '@/utils/toast'
 import { defineStore } from 'pinia'
 import { apiError } from '@/utils/exceptionHandler'
+import router from '@/routers/router'
 
 export const useRoomStore = defineStore({
   id: 'room',
@@ -31,6 +32,7 @@ export const useRoomStore = defineStore({
           description: apiError(error).message,
           variant: 'destructive',
         })
+        router.push({ name: 'host-live' })
       }
     },
     setDetailRoom(val: Partial<IRoom>) {
