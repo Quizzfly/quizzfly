@@ -24,10 +24,10 @@ const quizzflyInfo = computed(() => {
 
 const quizzflyId = route.params.quizzflyId as string
 
-const onSubmit = () => {
+const onSubmit = async () => {
   loadingStore.setLoading(true, false)
   if (currentSetting.value.quizzfly_id) {
-    roomStore.initRoom(currentSetting.value)
+    await roomStore.initRoom(currentSetting.value)
     emits('start')
   } else {
     const data = {
@@ -36,7 +36,7 @@ const onSubmit = () => {
       is_auto_play: false,
       lobby_music: 'string',
     }
-    roomStore.initRoom(data)
+    await roomStore.initRoom(data)
     handleStartClick()
   }
 }
