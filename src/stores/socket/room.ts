@@ -19,6 +19,7 @@ import type {
   SocketResultAnswer,
   SocketUserAnswerQuestion,
 } from '@/types/socket'
+import { useLoadingStore } from '../loading'
 
 const BASE_URL_SOCKET__ROOM =
   import.meta.env.VITE_BASE_URL_SOCKET_ROOM || 'https://api.quizzfly.site/rooms'
@@ -76,6 +77,12 @@ export const useRoomSocketStore = defineStore({
           description: newContent?.message,
           variant: 'destructive',
         })
+      })
+
+      this.client.on('roomCreated', (newContent: IRoomSocket) => {
+        console.log('Received roomCreated:', newContent) // Debug
+        const loadingStore = useLoadingStore()
+        loadingStore.setLoading(false)
       })
 
       this.client.on('roomCanceled', (newContent: IRoomSocket) => {
