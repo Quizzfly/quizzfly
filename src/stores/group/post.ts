@@ -169,6 +169,9 @@ export const usePostStore = defineStore({
         el.isShowReply = false
       })
     },
+    handlePostsRealtime(data: IPost) {
+      this.posts.unshift(data)
+    },
   },
   getters: {
     getIsUpdating: (state) => state.isUpdating,

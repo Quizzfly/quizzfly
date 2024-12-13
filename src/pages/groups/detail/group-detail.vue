@@ -10,6 +10,7 @@ import Assignments from '@/components/group/Assignments.vue'
 import MInviteMember from '@/components/group/modal/MInviteMember.vue'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import ChatBox from '@/components/group/chat/ChatBox.vue'
+import { useGroupSocketStore } from '@/stores/socket/group'
 
 import {
   Breadcrumb,
@@ -23,6 +24,11 @@ import { usePostStore } from '@/stores/group/post'
 const groupStore = useGroupStore()
 const postStore = usePostStore()
 const route = useRoute()
+const groupSocketStore = useGroupSocketStore()
+
+const getMessage = computed(() => {
+  return groupSocketStore.getMessage
+})
 
 const groupInfo = computed(() => {
   return groupStore.getGroupInfo
@@ -45,6 +51,12 @@ const openModal = () => {
 onBeforeMount(() => {
   if (route.params.groupId && typeof route.params.groupId === 'string') {
     postStore.fetchPosts(1, route.params.groupId)
+  }
+})
+
+watch(getMessage, (val: any) => {
+  if (val.event === 'createPost') {
+    postStore.handlePostsRealtime(val.data)
   }
 })
 </script>

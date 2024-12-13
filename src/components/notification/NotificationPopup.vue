@@ -1,6 +1,68 @@
 <script lang="ts" setup>
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import ScrollArea from '../ui/scroll-area/ScrollArea.vue'
+import { getListNotificationApi, markSpecificNotificationApi } from '@/services/notification'
+import { useNotificationSocketStore } from '@/stores/socket/notification'
+import type { INotification } from '@/types/notification'
+import type { IPaging } from '@/types'
+import { showToast } from '@/utils/toast'
+import { apiError } from '@/utils/exceptionHandler'
+import { formatCommentDateTime } from '@/utils/time'
+import router from '@/routers/router'
+
+const notificationStore = useNotificationSocketStore()
+
+const getMessage = computed(() => {
+  return notificationStore.getMessage
+})
+
+const listNotification = ref<INotification[]>([])
+const isLoading = ref(false)
+const metaPage = ref<IPaging>()
+
+watch(getMessage, (val: any) => {
+  if (val.event) {
+    // console.log(val.data, 'check data')
+  }
+})
+
+const getListNotification = async (page = 1) => {
+  try {
+    isLoading.value = true
+    const data = await getListNotificationApi(page)
+    listNotification.value.push(...data.data)
+    metaPage.value = data.meta
+  } catch (error) {
+    showToast({
+      description: apiError(error).message,
+      variant: 'destructive',
+    })
+  }
+  isLoading.value = false
+}
+
+const handleMarkSpecific = async (id: string) => {
+  try {
+    markSpecificNotificationApi(id)
+  } catch (error) {
+    showToast({
+      description: apiError(error).message,
+      variant: 'destructive',
+    })
+  }
+}
+
+const handleDetailNoti = (item: INotification) => {
+  if (item.notification_type === 'POST') {
+    router.push(`/post/detail/${item.object_id}`)
+  }
+
+  handleMarkSpecific(item.id)
+}
+
+onMounted(() => {
+  getListNotification()
+})
 </script>
 <template>
   <div class="flex flex-col bg-white w-[400px] shadow-lg rounded-lg">
@@ -10,118 +72,39 @@ import ScrollArea from '../ui/scroll-area/ScrollArea.vue'
     </div>
     <div class="h-0.5 w-full bg-slate-100"></div>
     <ScrollArea>
-      <div class="flex flex-col cursor-pointer max-h-[400px] pr-2">
-        <div class="flex gap-3 p-4 hover:bg-slate-50">
-          <Avatar class="border-2">
-            <AvatarImage src="item.avatar" />
-            <AvatarFallback>H</AvatarFallback>
-          </Avatar>
-          <div class="flex flex-col gap-2 w-full relative">
-            <div class="flex gap-0 flex-col">
-              <h3 class="text-base font-semibold">Trung Dong</h3>
-              <p class="text-sm font-normal text-slate-700">
-                Anh Nam đã mời bạn vào một group bí mật
-              </p>
-            </div>
-            <div class="w-full flex">
-              <p class="w-full text-right text-xs font-normal text-slate-500">9 phút trước</p>
-            </div>
-            <div class="absolute -top-1 -right-1 w-3 h-3 bg-primary rounded-full"></div>
-          </div>
-        </div>
-        <div class="h-px w-full bg-slate-100"></div>
-        <div class="flex gap-3 p-4 hover:bg-slate-50">
-          <Avatar class="border-2">
-            <AvatarImage src="item.avatar" />
-            <AvatarFallback>H</AvatarFallback>
-          </Avatar>
-          <div class="flex flex-col gap-2 w-full">
-            <div class="flex gap-0 flex-col">
-              <h3 class="text-base font-semibold">Trung Dong</h3>
-              <p class="text-sm font-normal text-slate-700">
-                Anh Nam đã mời bạn vào một group bí mật
-              </p>
-            </div>
-            <div class="w-full flex">
-              <p class="w-full text-right text-xs font-normal text-slate-500">9 phút trước</p>
-            </div>
-          </div>
-        </div>
-        <div class="h-px w-full bg-slate-100"></div>
-        <div class="flex flex-col cursor-pointer">
-          <div class="flex gap-3 p-4 hover:bg-slate-50">
+      <div class="flex flex-col cursor-pointer h-[400px] pr-2">
+        <div
+          v-for="(item, index) in listNotification"
+          :key="index"
+          class=""
+        >
+          <div
+            class="flex gap-3 p-4 hover:bg-slate-50"
+            @click="handleDetailNoti(item)"
+          >
             <Avatar class="border-2">
-              <AvatarImage src="item.avatar" />
-              <AvatarFallback>H</AvatarFallback>
+              <AvatarImage :src="item.avatar" />
+              <AvatarFallback>{{ item.name.charAt(0).toUpperCase() }}</AvatarFallback>
             </Avatar>
-            <div class="flex flex-col gap-2 w-full">
+            <div class="flex flex-col gap-2 w-full relative">
               <div class="flex gap-0 flex-col">
-                <h3 class="text-base font-semibold">Trung Dong</h3>
+                <h3 class="text-base font-semibold">{{ item.name }}</h3>
                 <p class="text-sm font-normal text-slate-700">
-                  Anh Nam đã mời bạn vào một group bí mật
+                  {{ item.content }}
                 </p>
               </div>
               <div class="w-full flex">
-                <p class="w-full text-right text-xs font-normal text-slate-500">9 phút trước</p>
+                <p class="w-full text-right text-xs font-normal text-slate-500">
+                  {{ formatCommentDateTime(item.created_at) }}
+                </p>
               </div>
+              <div
+                v-if="!item.is_read"
+                class="absolute -top-1 -right-1 w-3 h-3 bg-primary rounded-full"
+              ></div>
             </div>
           </div>
           <div class="h-px w-full bg-slate-100"></div>
-          <div class="flex gap-3 p-4 hover:bg-slate-50">
-            <Avatar class="border-2">
-              <AvatarImage src="item.avatar" />
-              <AvatarFallback>H</AvatarFallback>
-            </Avatar>
-            <div class="flex flex-col gap-2 w-full">
-              <div class="flex gap-0 flex-col">
-                <h3 class="text-base font-semibold">Trung Dong</h3>
-                <p class="text-sm font-normal text-slate-700">
-                  Anh Nam đã mời bạn vào một group bí mật
-                </p>
-              </div>
-              <div class="w-full flex">
-                <p class="w-full text-right text-xs font-normal text-slate-500">9 phút trước</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="h-px w-full bg-slate-100"></div>
-        <div class="flex flex-col cursor-pointer">
-          <div class="flex gap-3 p-4 hover:bg-slate-50">
-            <Avatar class="border-2">
-              <AvatarImage src="item.avatar" />
-              <AvatarFallback>H</AvatarFallback>
-            </Avatar>
-            <div class="flex flex-col gap-2 w-full">
-              <div class="flex gap-0 flex-col">
-                <h3 class="text-base font-semibold">Trung Dong</h3>
-                <p class="text-sm font-normal text-slate-700">
-                  Anh Nam đã mời bạn vào một group bí mật
-                </p>
-              </div>
-              <div class="w-full flex">
-                <p class="w-full text-right text-xs font-normal text-slate-500">9 phút trước</p>
-              </div>
-            </div>
-          </div>
-          <div class="h-px w-full bg-slate-100"></div>
-          <div class="flex gap-3 p-4 hover:bg-slate-50">
-            <Avatar class="border-2">
-              <AvatarImage src="item.avatar" />
-              <AvatarFallback>H</AvatarFallback>
-            </Avatar>
-            <div class="flex flex-col gap-2 w-full">
-              <div class="flex gap-0 flex-col">
-                <h3 class="text-base font-semibold">Trung Dong</h3>
-                <p class="text-sm font-normal text-slate-700">
-                  Anh Nam đã mời bạn vào một group bí mật
-                </p>
-              </div>
-              <div class="w-full flex">
-                <p class="w-full text-right text-xs font-normal text-slate-500">9 phút trước</p>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </ScrollArea>
