@@ -14,4 +14,8 @@ export interface INotification {
     avatar: string
     name: string
   }
+  object: {
+    id: string
+    post_id: string
+  }
 }

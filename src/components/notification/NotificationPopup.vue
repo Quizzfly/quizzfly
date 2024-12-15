@@ -63,10 +63,10 @@ const handleMarkSpecific = async (id: string) => {
 
 const handleDetailNoti = (item: INotification) => {
   if (item.notification_type === 'POST') {
-    router.push(`/groups/${item.target_id}/posts/${item.object_id}`)
+    router.push(`/groups/${item.target_id}/posts/${item.object.id}`)
   }
   if (item.notification_type === 'COMMENT') {
-    router.push(`/groups/${item.target_id}/posts/${item.object_id}`)
+    router.push(`/groups/${item.target_id}/posts/${item.object.post_id}`)
   }
 
   handleMarkSpecific(item.id)
@@ -105,7 +105,7 @@ const notifyMe = (data: INotification) => {
     notification.onclick = (event: { preventDefault: () => void }) => {
       event.preventDefault()
       window.open(
-        `https://quizzfly.site/groups/${data.target_id}/posts/${data.object_id}`,
+        `https://quizzfly.site/groups/${data.target_id}/posts/${data.notification_type == 'POST' ? data.object.id : data.object.post_id}`,
         '_blank',
       )
     }
@@ -121,7 +121,7 @@ const notifyMe = (data: INotification) => {
           notification.onclick = (event: { preventDefault: () => void }) => {
             event.preventDefault()
             window.open(
-              `https://quizzfly.site/groups/${data.target_id}/posts/${data.object_id}`,
+              `https://quizzfly.site/groups/${data.target_id}/posts/${data.notification_type == 'POST' ? data.object.id : data.object.post_id}`,
               '_blank',
             )
           }
@@ -185,7 +185,7 @@ onMounted(() => {
                 </p>
                 <p
                   v-else
-                  class="text-sm font-normal text-slate-700"
+                  class="text-sm font-normal text-slate-700 description"
                 >
                   {{ item.description }}
                 </p>
@@ -229,3 +229,12 @@ onMounted(() => {
     </div>
   </div>
 </template>
+<style lang="scss" scoped>
+.description {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+</style>

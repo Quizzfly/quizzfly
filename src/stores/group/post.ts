@@ -161,12 +161,14 @@ export const usePostStore = defineStore({
       this.listComnentByPostId = data
       this.listComnentByPostId.forEach((el) => {
         el.isShowReply = false
+        el.isShowEdit = false
       })
     },
     handleCommentByPostId(data: IComment) {
       this.listComnentByPostId.unshift(data)
       this.listComnentByPostId.forEach((el) => {
         el.isShowReply = false
+        el.isShowEdit = false
       })
     },
     handlePostsRealtime(data: IPost) {
