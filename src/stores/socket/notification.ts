@@ -39,16 +39,15 @@ export const useNotificationSocketStore = defineStore({
         this.connected = false
       })
 
+      await new Promise((resolve) => {
+        this.resolveCallback = resolve
+      })
+
       this.client.on('notification', (newContent: INotification) => {
         this.message = {
           event: 'notification',
           data: newContent,
         }
-
-        console.log(newContent, 'check notification')
-      })
-      await new Promise((resolve) => {
-        this.resolveCallback = resolve
       })
     },
     clearSocketStore() {

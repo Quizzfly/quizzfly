@@ -11,6 +11,7 @@ import MInviteMember from '@/components/group/modal/MInviteMember.vue'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import ChatBox from '@/components/group/chat/ChatBox.vue'
 import { useGroupSocketStore } from '@/stores/socket/group'
+import MListMember from '@/components/group/modal/MListMember.vue'
 
 import {
   Breadcrumb,
@@ -39,9 +40,11 @@ const listMembers = computed(() => {
 })
 
 const isShowModal = ref(false)
+const isShowListMember = ref(false)
 
 const closeModal = () => {
   isShowModal.value = false
+  isShowListMember.value = false
 }
 
 const openModal = () => {
@@ -94,7 +97,10 @@ watch(getMessage, (val: any) => {
               Title
             </h3>
             <div class="flex items-center">
-              <div class="flex">
+              <div
+                class="flex cursor-pointer"
+                @click.stop="isShowListMember = true"
+              >
                 <div
                   v-for="(item, index) in listMembers"
                   :key="index"
@@ -161,6 +167,10 @@ watch(getMessage, (val: any) => {
     <div class="">
       <ChatThumnail />
     </div>
+    <MListMember
+      v-if="isShowListMember"
+      @close="closeModal"
+    />
   </div>
 </template>
 

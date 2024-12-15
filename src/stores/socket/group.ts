@@ -48,8 +48,6 @@ export const useGroupSocketStore = defineStore({
           event: 'createPost',
           data: newContent,
         }
-
-        console.log(newContent, 'check comment')
       })
       this.client.on('commentPost', (newContent: any) => {
         this.message = {

@@ -1,7 +1,11 @@
 <script lang="ts" setup>
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import ScrollArea from '../ui/scroll-area/ScrollArea.vue'
-import { getListNotificationApi, markSpecificNotificationApi } from '@/services/notification'
+import {
+  getListNotificationApi,
+  markSpecificNotificationApi,
+  markAllNotificationApi,
+} from '@/services/notification'
 import { useNotificationSocketStore } from '@/stores/socket/notification'
 import type { INotification } from '@/types/notification'
 import type { IPaging } from '@/types'
@@ -12,6 +16,10 @@ import router from '@/routers/router'
 
 const notificationStore = useNotificationSocketStore()
 
+const emits = defineEmits<{
+  (e: 'readAllNotification', value: boolean): void
+}>()
+
 const getMessage = computed(() => {
   return notificationStore.getMessage
 })
@@ -21,8 +29,9 @@ const isLoading = ref(false)
 const metaPage = ref<IPaging>()
 
 watch(getMessage, (val: any) => {
-  if (val.event) {
-    // console.log(val.data, 'check data')
+  if (val.event === 'notification') {
+    listNotification.value.unshift(val.data)
+    notifyMe(val.data)
   }
 })
 
@@ -54,10 +63,76 @@ const handleMarkSpecific = async (id: string) => {
 
 const handleDetailNoti = (item: INotification) => {
   if (item.notification_type === 'POST') {
-    router.push(`/post/detail/${item.object_id}`)
+    router.push(`/groups/${item.target_id}/posts/${item.object_id}`)
+  }
+  if (item.notification_type === 'COMMENT') {
+    router.push(`/groups/${item.target_id}/posts/${item.object_id}`)
   }
 
   handleMarkSpecific(item.id)
+}
+
+const handleLoadMore = () => {
+  if (metaPage.value?.has_next_page) {
+    getListNotification(metaPage.value.current_page + 1)
+  }
+}
+
+const handleMarkAllNotification = async () => {
+  try {
+    await markAllNotificationApi()
+    emits('readAllNotification', true)
+    listNotification.value.forEach((item) => {
+      if (!item.is_read) {
+        item.is_read = true
+      }
+    })
+  } catch (error) {
+    showToast({
+      description: apiError(error).message,
+      variant: 'destructive',
+    })
+  }
+}
+
+const notifyMe = (data: INotification) => {
+  if (Notification.permission === 'granted' && window.Notification) {
+    const notification = new Notification('Notification!', {
+      body: `${data.content}`,
+      icon: 'https://res.cloudinary.com/dx5omabv0/image/upload/v1734167367/vdijsfa92grm0kw5chsi.jpg',
+    })
+
+    notification.onclick = (event: { preventDefault: () => void }) => {
+      event.preventDefault()
+      window.open(
+        `https://quizzfly.site/groups/${data.target_id}/posts/${data.object_id}`,
+        '_blank',
+      )
+    }
+  } else {
+    Notification.requestPermission()
+      .then(function (p) {
+        if (p === 'granted') {
+          const notification = new Notification('Notification!', {
+            body: `${data.content}`,
+            icon: 'https://res.cloudinary.com/dx5omabv0/image/upload/v1734167367/vdijsfa92grm0kw5chsi.jpg',
+          })
+
+          notification.onclick = (event: { preventDefault: () => void }) => {
+            event.preventDefault()
+            window.open(
+              `https://quizzfly.site/groups/${data.target_id}/posts/${data.object_id}`,
+              '_blank',
+            )
+          }
+        } else {
+          console.log('User blocked notifications.')
+        }
+      })
+      .catch(function (err) {
+        console.error(err)
+      })
+  }
 }
 
 onMounted(() => {
@@ -68,7 +143,12 @@ onMounted(() => {
   <div class="flex flex-col bg-white w-[400px] shadow-lg rounded-lg">
     <div class="flex p-4 items-center justify-between rounded-t-lg">
       <h3 class="text-base font-medium">Notification</h3>
-      <p class="cursor-pointer text-sm text-primary">Read all</p>
+      <p
+        class="cursor-pointer text-sm text-primary"
+        @click.stop.prevent="handleMarkAllNotification()"
+      >
+        Read all
+      </p>
     </div>
     <div class="h-0.5 w-full bg-slate-100"></div>
     <ScrollArea>
@@ -83,14 +163,31 @@ onMounted(() => {
             @click="handleDetailNoti(item)"
           >
             <Avatar class="border-2">
-              <AvatarImage :src="item.avatar" />
-              <AvatarFallback>{{ item.name.charAt(0).toUpperCase() }}</AvatarFallback>
+              <AvatarImage :src="item.agent.avatar" />
+              <AvatarFallback>{{ item.agent.name.charAt(0).toUpperCase() }}</AvatarFallback>
             </Avatar>
             <div class="flex flex-col gap-2 w-full relative">
               <div class="flex gap-0 flex-col">
-                <h3 class="text-base font-semibold">{{ item.name }}</h3>
-                <p class="text-sm font-normal text-slate-700">
+                <div class="flex items-end gap-1">
+                  <h3 class="text-base font-semibold">{{ item.agent.name }}</h3>
+                  <p
+                    v-if="item.notification_type == 'COMMENT'"
+                    class="text-sm font-normal text-slate-700"
+                  >
+                    {{ item.content }}
+                  </p>
+                </div>
+                <p
+                  v-if="item.notification_type == 'POST'"
+                  class="text-sm font-normal text-slate-700"
+                >
                   {{ item.content }}
+                </p>
+                <p
+                  v-else
+                  class="text-sm font-normal text-slate-700"
+                >
+                  {{ item.description }}
                 </p>
               </div>
               <div class="w-full flex">
@@ -106,11 +203,29 @@ onMounted(() => {
           </div>
           <div class="h-px w-full bg-slate-100"></div>
         </div>
+        <div
+          v-if="isLoading"
+          class="flex justify-center items-center my-3"
+        >
+          <span class="i-svg-spinners-180-ring-with-bg text-primary"></span>
+        </div>
       </div>
     </ScrollArea>
     <div class="h-0.5 w-full bg-slate-100"></div>
-    <div class="flex items-center justify-center my-3">
-      <p class="text-sm text-primary cursor-pointer">See more</p>
+    <div
+      v-if="metaPage?.has_next_page"
+      class="flex items-center justify-center my-3 gap-2"
+    >
+      <p
+        class="text-sm text-primary cursor-pointer"
+        @click.stop.prevent="handleLoadMore()"
+      >
+        See more
+      </p>
+      <span
+        v-if="isLoading"
+        class="i-svg-spinners-180-ring-with-bg text-primary"
+      ></span>
     </div>
   </div>
 </template>

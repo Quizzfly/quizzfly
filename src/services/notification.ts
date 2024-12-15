@@ -14,7 +14,7 @@ export const getListNotificationApi = async (
   })
 }
 
-export const getListUnreadNotificationApi = async (): Promise<BaseResponse<INotification[]>> => {
+export const getCountUnreadNotificationApi = async (): Promise<BaseResponse<any>> => {
   return $api(`/notifications/unread-count`, {
     method: 'GET',
   })

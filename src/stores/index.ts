@@ -27,11 +27,13 @@ export const initMasterStore = async () => {
 
 export const initWebSocketStore = async () => {
   const socketStore = useRoomSocketStore()
-  socketStore.setupRoomSocketStore()
+  const notificationStore = useNotificationSocketStore()
   if (useAuthStore().getUser?.id) {
     useGroupSocketStore().setupGroupSocketStore()
-    useNotificationSocketStore().setupNotificationSocketStore()
+    notificationStore.setupNotificationSocketStore()
   }
+
+  await socketStore.setupRoomSocketStore()
 }
 
 export { useUserStore } from './user'
