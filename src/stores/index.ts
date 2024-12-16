@@ -1,6 +1,7 @@
 import { useAuthStore } from './auth'
 import { useRoomSocketStore } from './socket/room'
 import { useGroupSocketStore } from './socket/group'
+import { useNotificationSocketStore } from './socket/notification'
 import { showToast } from '@/utils/toast'
 
 export const initAuthStore = async () => {
@@ -26,10 +27,13 @@ export const initMasterStore = async () => {
 
 export const initWebSocketStore = async () => {
   const socketStore = useRoomSocketStore()
-  socketStore.setupRoomSocketStore()
+  const notificationStore = useNotificationSocketStore()
   if (useAuthStore().getUser?.id) {
     useGroupSocketStore().setupGroupSocketStore()
+    notificationStore.setupNotificationSocketStore()
   }
+
+  await socketStore.setupRoomSocketStore()
 }
 
 export { useUserStore } from './user'

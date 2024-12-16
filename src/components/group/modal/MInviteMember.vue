@@ -60,7 +60,6 @@ const onSubmit = async () => {
             <TagsInput
               v-model="listEmails"
               :add-on-blur="true"
-              :add-on-paste="true"
               class="h-11"
             >
               <TagsInputItem

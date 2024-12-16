@@ -3,10 +3,23 @@ import { Button } from '@/components/ui/button'
 import { useAuthStore } from '@/stores/auth'
 import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
 import { useConfirmDialog } from '@/stores/modal'
+import NotificationPopup from '@/components/notification/NotificationPopup.vue'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { getCountUnreadNotificationApi } from '@/services/notification'
+import { showToast } from '@/utils/toast'
+import { apiError } from '@/utils/exceptionHandler'
+import { useNotificationSocketStore } from '@/stores/socket/notification'
+
 const authStore = useAuthStore()
 const quizzflyStore = useQuizzflyStore()
 const quizzflys = computed(() => quizzflyStore.getQuizzflys)
 const confirmDialog = useConfirmDialog()
+const countUnreadNotification = ref(0)
+const notificationStore = useNotificationSocketStore()
+
+const getMessage = computed(() => {
+  return notificationStore.getMessage
+})
 
 const handleClickCreateQuiz = async () => {
   await quizzflyStore.initQuizzflyDraft()
@@ -14,7 +27,20 @@ const handleClickCreateQuiz = async () => {
 
 onBeforeMount(() => {
   quizzflyStore.fetchQuizzflys()
+  getCountUnreadNotification()
 })
+
+watch(getMessage, (val: any) => {
+  if (val.event === 'notification') {
+    countUnreadNotification.value++
+  }
+})
+
+const handleAllNotification = (data: boolean) => {
+  if (data) {
+    countUnreadNotification.value = 0
+  }
+}
 
 const handleOpenHostLive = (quizzflyId: string) => {
   window.open(`/room/host-live/${quizzflyId}`, '_blank')
@@ -28,6 +54,18 @@ const handleOpenCreateWithAI = async () => {
 
   if (isConfirmed) {
     quizzflyStore.initQuizzflyDraft()
+  }
+}
+
+const getCountUnreadNotification = async () => {
+  try {
+    const data = await getCountUnreadNotificationApi()
+    countUnreadNotification.value = data.data
+  } catch (error) {
+    showToast({
+      description: apiError(error).message,
+      variant: 'destructive',
+    })
   }
 }
 </script>
@@ -47,11 +85,24 @@ const handleOpenCreateWithAI = async () => {
         >
           <span class="i-solar-magnifer-linear text-lg"></span>
         </div>
-        <div
-          class="max-md:hidden w-10 h-10 hover:bg-slate-200 flex justify-center items-center rounded-full cursor-pointer"
-        >
-          <span class="i-solar-bell-line-duotone text-lg"></span>
-        </div>
+        <Popover>
+          <PopoverTrigger>
+            <div
+              class="max-md:hidden w-10 h-10 hover:bg-slate-200 flex justify-center items-center rounded-full cursor-pointer relative"
+            >
+              <span class="i-solar-bell-line-duotone text-lg"></span>
+              <div
+                v-if="countUnreadNotification > 0"
+                class="flex rounded-full items-center justify-center absolute top-1 right-1 bg-red-600 text-white w-4 h-4 text-xs font-medium"
+              >
+                {{ countUnreadNotification }}
+              </div>
+            </div>
+          </PopoverTrigger>
+          <PopoverContent class="mr-4">
+            <NotificationPopup @read-all-notification="handleAllNotification" />
+          </PopoverContent>
+        </Popover>
       </div>
     </div>
 

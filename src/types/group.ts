@@ -77,6 +77,7 @@ export interface ICreatePost {
 
 export interface IComment {
   isShowReply: boolean
+  isShowEdit: boolean
   parent_comment_id: string | null
   content: string
   files: [

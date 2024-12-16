@@ -5,8 +5,14 @@ import { uploadMultiFileApi } from '@/services/file'
 import { showToast } from '@/utils/toast'
 import { type ICommentCreate } from '@/types/group'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { useAuthStore } from '@/stores/auth'
 
 const postStore = usePostStore()
+const authStore = useAuthStore()
+
+const getUserInfor = computed(() => {
+  return authStore.getUser
+})
 
 const isLoading = ref(false)
 const content = ref('')
@@ -81,9 +87,12 @@ onMounted(() => {
   >
     <div class="flex items-center gap-2 w-full">
       <Avatar>
-        <AvatarImage :src="props.member.avatar" />
-        <AvatarFallback v-if="props.member.name">{{
-          props.member.name.charAt(0).toUpperCase()
+        <AvatarImage
+          v-if="getUserInfor?.user_info.avatar"
+          :src="getUserInfor?.user_info.avatar"
+        />
+        <AvatarFallback v-if="getUserInfor?.user_info.name">{{
+          getUserInfor?.user_info.name.charAt(0).toUpperCase()
         }}</AvatarFallback>
       </Avatar>
       <Input
