@@ -1,28 +1,27 @@
 <script setup lang="ts">
 import BarWrapper from '@/components/room/BarWrapper.vue'
-import { useLoadingStore } from '@/stores/loading'
 import { useRoomSocketStore } from '@/stores/socket/room'
 import PlayHostView from '@/components/room/play/PlayHostView.vue'
+import PlayCountdown from '@/components/room/play/PlayCountdown.vue'
 import type { SocketLeaderboard, SocketQuizStarted } from '@/types/socket'
 import Ranking from '@/components/room/play/Ranking.vue'
 import RankingFinal from '@/components/room/play/RankingFinal.vue'
 import { useRoomStore } from '@/stores/room'
 
-const loadingStore = useLoadingStore()
 const socketStore = useRoomSocketStore()
 const roomStore = useRoomStore()
-
+const isShowCountdown = ref(true)
+const isGameStarted = ref(false)
 const isShowRanking = ref(false)
 const isShowFinalRanking = ref(false)
 const socketData = ref<SocketQuizStarted>()
 const leaderboardData = ref<SocketLeaderboard>()
-
 onMounted(() => {
-  loadingStore.setLoading(true, false)
-  setTimeout(() => {
-    loadingStore.setLoading(false)
-    socketStore.handleStartQuestion()
-  }, 2000)
+  // loadingStore.setLoading(true, false)
+  // setTimeout(() => {
+  //   loadingStore.setLoading(false)
+  //   // socketStore.handleStartQuestion()
+  // }, 2000)
 })
 
 onBeforeUnmount(() => {
@@ -31,12 +30,28 @@ onBeforeUnmount(() => {
 
 const handleShowRanking = (value: boolean, data?: SocketLeaderboard) => {
   isShowRanking.value = value
+  console.log('data', data)
   leaderboardData.value = data
 }
 
 const handleShowFinalRanking = (value: boolean, data?: SocketLeaderboard) => {
   isShowFinalRanking.value = value
   leaderboardData.value = data
+}
+
+const handleStartGame = () => {
+  isShowCountdown.value = false
+  if (!isGameStarted.value) {
+    isGameStarted.value = true
+    socketStore.handleStartQuestion()
+  } else {
+    socketStore.handleNextQuestion()
+  }
+}
+
+const handleNewQuestion = () => {
+  isShowCountdown.value = true
+  isShowRanking.value = false
 }
 </script>
 <template>
@@ -47,6 +62,7 @@ const handleShowFinalRanking = (value: boolean, data?: SocketLeaderboard) => {
       <Ranking
         v-if="isShowRanking && leaderboardData"
         :leaderboard-data="leaderboardData"
+        @next-question="handleNewQuestion"
       />
     </Teleport>
 
@@ -59,8 +75,12 @@ const handleShowFinalRanking = (value: boolean, data?: SocketLeaderboard) => {
       </div>
     </Teleport>
 
-    <!-- <PreDisplay /> -->
+    <PlayCountdown
+      v-if="isShowCountdown"
+      @countdown-end="handleStartGame"
+    />
     <PlayHostView
+      v-else
       :socket-data="socketData"
       @show-ranking="handleShowRanking"
       @show-final-ranking="handleShowFinalRanking"
@@ -71,6 +91,7 @@ const handleShowFinalRanking = (value: boolean, data?: SocketLeaderboard) => {
 <style scoped>
 .img-test {
   /* background: url('@/assets/img/bg-image-3.jpg'); */
+  background-image: url(https://images.squarespace-cdn.com/content/v1/54fc8146e4b02a22841f4df7/1503538406982-OOD7PC8BL3DLWBHEFRLW/adve.jpg?format=2500w);
   background-size: cover;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);

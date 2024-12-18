@@ -78,7 +78,11 @@ const debouncedFn = useDebounceFn((value) => {
     <div class="flex justify-between">
       <!-- result -->
       <div class="flex gap-2">
-        <span class="text-sm text-gray-500">Result for:</span>
+        <span
+          v-if="search"
+          class="text-sm text-gray-500"
+          >Result for:</span
+        >
         <span class="text-sm font-semibold">{{ search }}</span>
       </div>
       <!-- filter -->
