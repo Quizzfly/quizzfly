@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import type { SocketLeaderboard } from '@/types/socket'
 import { Button } from '@/components/ui/button'
-import { useRoomSocketStore } from '@/stores/socket/room'
 import { avatars } from '@/utils/avatar'
 
 const props = defineProps<{
   leaderboardData: SocketLeaderboard
 }>()
 
-const socketStore = useRoomSocketStore()
+const emits = defineEmits<{
+  (e: 'nextQuestion'): void
+}>()
 
 function getRandomAvatar(): string {
   // random avatar in avatars array
@@ -41,7 +42,7 @@ const leaderboardArr = computed(() => {
       class="absolute top-4 right-4"
       variant="outline"
       color="white"
-      @click="socketStore.handleNextQuestion"
+      @click="emits('nextQuestion')"
       >Next</Button
     >
     <div class="px-40 rounded-sm flex justify-center items-center h-20 bg-white">

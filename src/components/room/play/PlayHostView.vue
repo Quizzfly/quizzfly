@@ -463,6 +463,7 @@ const handleShowRanking = async (time: number, val: SocketLeaderboard) => {
     socketStore.handleQuizFinished()
     return
   }
+  console.log('showRanking', val)
   emits('showRanking', true, val)
   await new Promise((resolve) => setTimeout(resolve, time))
 
@@ -520,6 +521,7 @@ const lastQuestionId = ref<string | null>(null)
 watch(
   () => socketMessage.value,
   async (newVal) => {
+    console.log('socketMessage', newVal)
     if (newVal.event === 'summaryAnswer') {
       handleSummaryAnswer(newVal.data as SocketSummaryAnswer)
     }
@@ -546,7 +548,7 @@ watch(
       usersAnswerCount.value = (newVal.data as SocketUserAnswerQuestion).no_participant_answered
     }
   },
-  { immediate: true },
+  { deep: true },
 )
 
 onBeforeUnmount(() => {

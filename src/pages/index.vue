@@ -10,6 +10,7 @@ import { showToast } from '@/utils/toast'
 import { apiError } from '@/utils/exceptionHandler'
 import { useNotificationSocketStore } from '@/stores/socket/notification'
 
+import { useGroupStore } from '@/stores/group/group'
 const authStore = useAuthStore()
 const quizzflyStore = useQuizzflyStore()
 const quizzflys = computed(() => quizzflyStore.getQuizzflys)
@@ -20,6 +21,7 @@ const notificationStore = useNotificationSocketStore()
 const getMessage = computed(() => {
   return notificationStore.getMessage
 })
+const groupStore = useGroupStore()
 
 const handleClickCreateQuiz = async () => {
   await quizzflyStore.initQuizzflyDraft()
@@ -28,6 +30,7 @@ const handleClickCreateQuiz = async () => {
 onBeforeMount(() => {
   quizzflyStore.fetchQuizzflys()
   getCountUnreadNotification()
+  groupStore.fetchGroups({ page: 1 })
 })
 
 watch(getMessage, (val: any) => {
@@ -189,7 +192,34 @@ const getCountUnreadNotification = async () => {
       </div>
 
       <!-- quizzfly -->
-      <div class="flex-1 p-6 border bg-white rounded-xl shadow-sm"></div>
+      <div class="flex-1 flex flex-col gap-3 p-6 border bg-white rounded-xl shadow-sm">
+        <p>Quick access</p>
+        <div
+          v-for="group in groupStore.getGroups"
+          :key="group.group.id"
+          class="flex gap-3 border-b mb-2 pb-2 items-center"
+        >
+          <img
+            v-image
+            class="w-10 h-10 rounded-md"
+            :src="group.group.background"
+            alt=""
+          />
+          <div>
+            <p class="truncate">
+              {{ group.group.name }}
+            </p>
+            <p class="text-xs">
+              {{ group.role }}
+            </p>
+          </div>
+          <RouterLink
+            :to="{ name: 'group-detail', params: { groupId: group.group.id } }"
+            class="flex items-center hover:bg-gray-100 border ml-auto text-xs h-[30px] px-5 rounded-md"
+            >Detail</RouterLink
+          >
+        </div>
+      </div>
     </div>
 
     <!-- recent -->
