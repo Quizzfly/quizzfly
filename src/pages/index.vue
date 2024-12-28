@@ -201,7 +201,7 @@ const getCountUnreadNotification = async () => {
         >
           <img
             v-image
-            class="w-10 h-10 rounded-md"
+            class="w-10 h-10 rounded-md object-cover"
             :src="group.group.background"
             alt=""
           />

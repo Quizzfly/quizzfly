@@ -21,6 +21,10 @@ const onSubmit = handleSubmit((values) => {
   })
   isLoading.value = false
 })
+
+onBeforeMount(() => {
+  localStorage.removeItem('participantID')
+})
 </script>
 
 <template>

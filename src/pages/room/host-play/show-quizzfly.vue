@@ -80,7 +80,7 @@ const handleNewQuestion = () => {
       @countdown-end="handleStartGame"
     />
     <PlayHostView
-      v-else
+      v-show="!isShowCountdown"
       :socket-data="socketData"
       @show-ranking="handleShowRanking"
       @show-final-ranking="handleShowFinalRanking"

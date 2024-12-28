@@ -18,6 +18,7 @@ export type SocketEventName =
   | 'participantJoined'
   | 'quizFinished'
   | 'notification'
+  | 'participantReconnected'
 
 export interface SocketUserAnswerQuestion {
   no_participant_answered: number
@@ -60,6 +61,10 @@ export interface SocketQuizStarted {
   questions: Question[]
 }
 
+export interface IUserReconnect {
+  participant: IMember
+  total_participant: number
+}
 export interface SocketMessage {
   event: SocketEventName
   data:
@@ -73,4 +78,5 @@ export interface SocketMessage {
     | IPost
     | IComment
     | INotification
+    | IUserReconnect
 }
