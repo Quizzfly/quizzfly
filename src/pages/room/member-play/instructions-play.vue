@@ -49,10 +49,16 @@ onBeforeMount(() => {
     room_pin: roomPin,
   })
   console.log('name', name, 'roomPin', roomPin)
-  socketStore.handleJoinRoomData({
-    nick_name: name || '',
-    room_pin: roomPin || '',
-  })
+  const participant_id = localStorage.getItem('participantID')
+  const joinRoomData: any = {
+    nick_name: name,
+    room_pin: roomPin,
+  }
+
+  if (participant_id) {
+    joinRoomData.participant_id = participant_id
+  }
+  socketStore.handleJoinRoomData(joinRoomData)
 })
 
 watch(socketMessage, (val) => {

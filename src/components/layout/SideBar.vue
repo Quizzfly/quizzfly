@@ -31,11 +31,11 @@ const toggleSidebar = () => {
       'w-20 min-w-20': isCollapsed,
       'min-w-[250px] w-[250px]': !isCollapsed,
     }"
-    class="max-md:hidden group overflow-hidden whitespace-nowrap relative py-3 flex flex-col border-r p-4 gap-2 transition-all duration-400"
+    class="max-md:hidden bg-[#07182d] text-white group overflow-hidden whitespace-nowrap relative py-3 flex flex-col border-r p-4 gap-2 transition-all duration-400"
   >
     <div
       :class="{
-        'flex-col items-center': isCollapsed,
+        'flex-col items-center !gap-5': isCollapsed,
       }"
       class="flex gap-2 text-lg mt-5"
     >
@@ -52,10 +52,10 @@ const toggleSidebar = () => {
       <!-- collapse button -->
       <div
         :class="{
-          ' ml-auto': !isCollapsed,
-          '!flex': isCollapsed,
+          ' ml-auto translate-x-5 rounded-tl-full rounded-bl-full': !isCollapsed,
+          '!flex !w-12 -translate-x-5 rounded-tr-full rounded-br-full': isCollapsed,
         }"
-        class="hidden group-hover:flex transition-all duration-600 justify-center items-center cursor-pointer bg-white shadow-md w-7 h-7 rounded-full"
+        class="hidden bg-[#44AA5C] group-hover:flex transition-all duration-600 justify-center items-center cursor-pointer shadow-md w-9 h-9"
         @click="toggleSidebar"
       >
         <span

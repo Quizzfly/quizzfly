@@ -23,6 +23,12 @@ const { handleSubmit } = useForm({
 const onSubmit = handleSubmit((values) => {
   isLoading.value = true
 
+  const currentRoomPin = localStorage.getItem('roomPin')
+
+  if (currentRoomPin && currentRoomPin !== pinCode) {
+    localStorage.removeItem('participantID')
+  }
+
   localStorage.setItem('name', values.name)
   if (pinCode) {
     localStorage.setItem('roomPin', pinCode)

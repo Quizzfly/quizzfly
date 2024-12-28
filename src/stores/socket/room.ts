@@ -14,6 +14,7 @@ import { apiError } from '@/utils/exceptionHandler'
 import router from '@/routers/router'
 import { useAuthStore } from '../auth'
 import type {
+  IUserReconnect,
   SocketLeaderboard,
   SocketMessage,
   SocketResultAnswer,
@@ -43,6 +44,11 @@ export const useRoomSocketStore = defineStore({
         console.log('Connected to socket server') // Debug
         this.connected = true
         this.resolveCallback && this.resolveCallback()
+      })
+
+      this.client.on('reconnect', () => {
+        console.log('Reconnected to socket server') // Debug
+        this.connected = true
       })
 
       this.client.on('disconnect', () => {
@@ -87,6 +93,7 @@ export const useRoomSocketStore = defineStore({
 
       this.client.on('roomCanceled', (newContent: IRoomSocket) => {
         console.log('Received roomCanceled:', newContent) // Debug
+        localStorage.removeItem('participantID')
         const redirectOnErrorRouterName =
           (router.currentRoute.value.meta.redirectOnErrorRouterName as string) || 'home'
         router.push({
@@ -106,6 +113,17 @@ export const useRoomSocketStore = defineStore({
         }
         localStorage.setItem('participantID', newContent.new_participant.id)
         roomStore.setMemberJoins(newContent)
+      })
+
+      this.client.on('participantReconnected', (newContent: IUserReconnect) => {
+        this.message = {
+          event: 'participantReconnected',
+          data: newContent,
+        }
+        console.log('Received participantReconnected:', newContent) // Debug
+        roomStore.setMemberJoins({
+          new_participant: newContent.participant,
+        })
       })
 
       this.client.on('roomLocked', (newContent: IRoomLocked) => {

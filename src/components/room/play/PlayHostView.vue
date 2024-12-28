@@ -458,6 +458,7 @@ const handleShowRightAnswer = async (time: number) => {
 }
 
 const handleShowRanking = async (time: number, val: SocketLeaderboard) => {
+  console.log('lastQuestionId', lastQuestionId.value, socketData.value?.question?.id)
   if (lastQuestionId.value === socketData.value?.question?.id) {
     emits('showFinalRanking', true, val)
     socketStore.handleQuizFinished()
@@ -533,6 +534,12 @@ watch(
         lastQuestionId.value = (newVal.data as SocketQuizStarted).questions[
           numberOfQuestions - 1
         ].id
+        console.log(
+          'lastQuestionId started',
+          lastQuestionId.value,
+          (newVal.data as SocketQuizStarted).questions,
+          numberOfQuestions,
+        )
       }
 
       handleNewQuestion(newVal.data as SocketQuizStarted)

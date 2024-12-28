@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import Join from '@/components/room/play/Join.vue'
+
+onBeforeMount(() => {
+  console.log('mounted')
+})
 </script>
 
 <template>
