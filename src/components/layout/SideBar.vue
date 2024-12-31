@@ -57,34 +57,44 @@ onBeforeMount(() => {
       :class="{
         'flex-col items-center !gap-5': isCollapsed,
       }"
-      class="flex gap-2 text-lg mt-5"
+      class="flex items-center gap-2 text-lg mt-5"
     >
-      <img
-        class="w-12 rounded-md"
-        src="/assets/images/favicon.jfif"
-        alt=""
-      />
-      <div v-if="!isCollapsed">
-        <p>QUIZZFLY</p>
-        <p class="text-xs text-gray-500">Make quizzes easy!</p>
+      <div class="min-w-16 w-16 h-16 object-cover rounded-full p-1 border-2 border-[#E6EBF2]">
+        <img
+          v-image
+          class="w-full h-full object-cover rounded-full"
+          :src="authStore.getUser?.user_info.avatar || ''"
+          alt=""
+        />
+      </div>
+      <div
+        v-if="!isCollapsed"
+        class="flex flex-col overflow-hidden"
+      >
+        <p>
+          {{ authStore.getUser?.user_info.name }}
+        </p>
+        <p class="truncate text-xs text-gray-500">
+          {{ authStore.getUser?.email }}
+        </p>
       </div>
 
       <!-- collapse button -->
       <div
         :class="{
           ' ml-auto translate-x-5 rounded-tl-full rounded-bl-full': !isCollapsed,
-          '!flex !w-12 -translate-x-5 rounded-tr-full rounded-br-full': isCollapsed,
+          '!flex !w-12 !min-w-12 -translate-x-5 rounded-tr-full rounded-br-full': isCollapsed,
         }"
-        class="hidden bg-[#44AA5C] group-hover:flex transition-all duration-600 justify-center items-center cursor-pointer shadow-md w-9 h-9"
+        class="hidden text-white bg-[#44AA5C] group-hover:flex transition-all duration-600 justify-center items-center cursor-pointer shadow-md min-w-9 w-9 h-9"
         @click="toggleSidebar"
       >
         <span
           v-if="isCollapsed"
-          class="i-solar-alt-arrow-right-line-duotone text-xl"
+          class="i-material-symbols-light-arrow-right-alt text-xl"
         ></span>
         <span
           v-else
-          class="i-solar-alt-arrow-left-line-duotone text-xl"
+          class="i-material-symbols-light-arrow-left-alt-rounded text-xl"
         ></span>
       </div>
     </div>
