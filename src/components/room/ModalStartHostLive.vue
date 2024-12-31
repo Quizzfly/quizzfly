@@ -86,6 +86,13 @@ const handleStartClick = () => {
         >
           Up to 10 players
         </div>
+        <RouterLink
+          :to="{ name: 'billing-plan' }"
+          class="w-fit flex items-center gap-2 rounded-full py-2 px-5 border border-[#F47432] text-[#F47432]"
+        >
+          <p>Upgrade your plan for more players</p>
+          <span class="i-material-symbols-light-workspace-premium text-2xl"></span>
+        </RouterLink>
         <p
           v-motion
           :initial="{ opacity: 0, x: 100 }"

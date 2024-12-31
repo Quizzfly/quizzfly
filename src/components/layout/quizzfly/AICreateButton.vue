@@ -3,6 +3,8 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import InputValidation from '@/components/base/InputValidation.vue'
 import { Checkbox } from '@/components/ui/checkbox'
 import { languages } from '@/utils/common'
+import BillingAndPlan from '@/components/billing-plan/BillingAndPlan.vue'
+import BaseModal from '@/components/base/BaseModal.vue'
 import {
   NumberField,
   NumberFieldContent,
@@ -26,6 +28,7 @@ import { useForm } from 'vee-validate'
 import * as yup from 'yup'
 import { createMultipleQuizApi } from '@/services/quizzes'
 import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
+import { useAuthStore } from '@/stores/auth'
 
 const quizzflyStore = useQuizzflyStore()
 const { handleSubmit } = useForm({
@@ -55,6 +58,7 @@ const option = ref<Option>({
   numberOfQuestion: 1,
   quizTypes: ['MULTIPLE_CHOICE'],
 })
+const isShowUpgradeModal = ref(false)
 
 const handleSelectQuizType = (type: string) => {
   if (option.value.quizTypes.includes(type)) {
@@ -65,13 +69,27 @@ const handleSelectQuizType = (type: string) => {
 }
 
 const isLoading = ref(false)
+const authStore = useAuthStore()
+const hightestPlanUser = computed(() => authStore.getHighestPlan)
 const handleCreateWithAI = handleSubmit(async (value) => {
+  popoverState.value = false
+  if (!hightestPlanUser.value || hightestPlanUser.value?.subscription_plan?.price === 0) {
+    isShowUpgradeModal.value = true
+    return
+  }
   isLoading.value = true
   try {
-    const quizzes = await createQuizUseAIApi(model.value, language.value, {
-      ...option.value,
-      theme: value.theme,
-    })
+    const quizzes = await createQuizUseAIApi(
+      model.value,
+      language.value,
+      {
+        ...option.value,
+        theme: value.theme,
+      },
+      questionsStore.getSlides
+        .filter((item) => item.type === 'QUIZ')
+        .map((question) => question.content),
+    )
 
     const { data } = await createMultipleQuizApi(quizzflyStore.getQuizzflyInfo.id, quizzes)
     questionsStore.addMultipleQuestions(data)
@@ -95,14 +113,36 @@ const handleCreateWithAI = handleSubmit(async (value) => {
     isLoading.value = false
   }
 })
+
+const popoverState = ref(false)
 </script>
 <template>
-  <Popover>
+  <Teleport
+    v-if="isShowUpgradeModal"
+    to="body"
+  >
+    <BaseModal>
+      <div class="relative">
+        <div
+          class="w-10 h-10 bg-white rounded-full flex items-center justify-center absolute -top-5 -right-5 cursor-pointer shadow-lg"
+          @click="isShowUpgradeModal = false"
+        >
+          <span class="text-2xl i-material-symbols-light-close"></span>
+        </div>
+        <BillingAndPlan />
+      </div>
+    </BaseModal>
+  </Teleport>
+  <Popover
+    :modal="false"
+    :open="popoverState"
+  >
     <PopoverTrigger>
       <button
         id="tour-item"
         data-tour="1"
         class="flex items-center gap-2 px-4 h-9 gradient-from-primary text-white font-medium rounded-full shadow-lg hover:bg-indigo-300 transition"
+        @click="popoverState = !popoverState"
       >
         ✨ Create with AI
         <span

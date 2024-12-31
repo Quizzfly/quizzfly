@@ -26,6 +26,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   roomStore.$reset()
+  window.onbeforeunload = null
 })
 
 const handleShowRanking = (value: boolean, data?: SocketLeaderboard) => {
@@ -53,6 +54,20 @@ const handleNewQuestion = () => {
   isShowCountdown.value = true
   isShowRanking.value = false
 }
+
+onBeforeMount(() => {
+  window.onbeforeunload = function (e) {
+    e = e || window.event
+
+    // For IE and Firefox prior to version 4
+    if (e) {
+      e.returnValue = 'Sure?'
+    }
+
+    // For Safari
+    return 'Sure?'
+  }
+})
 </script>
 <template>
   <div

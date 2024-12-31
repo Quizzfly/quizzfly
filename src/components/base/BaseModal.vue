@@ -2,7 +2,7 @@
 <template>
   <div
     delay="200"
-    class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50"
+    class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-[45]"
   >
     <div
       v-motion-pop-visible

@@ -36,6 +36,26 @@ Quizzfly is a quiz app that allows you to create quizzes and play quizzes. It is
       <img src="docs/images/image-2.png" alt="Preview" title="Mobile Preview">
     </td>
   </tr>
+  <tr>
+    <td align="center" width="100%" colspan="2">
+      <img src="docs/images/image-6.png" alt="Preview" title="Desktop Preview">
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="100%" colspan="2">
+      <img src="docs/images/image-7.png" alt="Preview" title="Desktop Preview">
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="100%" colspan="2">
+      <img src="docs/images/image-5.png" alt="Preview" title="Desktop Preview">
+    </td>
+  </tr>
+   <tr>
+    <td align="center" width="100%" colspan="2">
+      <img src="docs/images/image-4.png" alt="Preview" title="Desktop Preview">
+    </td>
+  </tr>
 </table>
 <p align="center">
   <br>

@@ -16,7 +16,7 @@ defineProps<{
 }>()
 </script>
 <template>
-  <div class="flex gap-5 h-[200px] items-stretch">
+  <div class="max-md:flex-col max-md:h-auto flex gap-5 h-[200px] items-stretch">
     <div class="w-full border rounded-md shadow-sm p-4">
       <p class="text-3xl font-bold">Practice makes perfect!</p>
       <p>
