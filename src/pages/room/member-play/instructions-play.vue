@@ -36,6 +36,17 @@ const currentTotalScore = computed(() => {
 })
 
 onBeforeMount(() => {
+  window.onbeforeunload = function (e) {
+    e = e || window.event
+
+    // For IE and Firefox prior to version 4
+    if (e) {
+      e.returnValue = 'Sure?'
+    }
+
+    // For Safari
+    return 'Sure?'
+  }
   const name = localStorage.getItem('name')
   const roomPin = localStorage.getItem('roomPin')
 
@@ -110,6 +121,10 @@ const handleSendAnswer = (answerId: string) => {
     question_id: socketData.value?.question.id || '',
   })
 }
+
+onBeforeUnmount(() => {
+  window.onbeforeunload = null
+})
 </script>
 
 <template>

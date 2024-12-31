@@ -16,8 +16,11 @@ watch(
 )
 </script>
 <template>
-  <AlertDialog v-model:open="isShow">
-    <AlertDialogContent class="md:w-[400px]">
+  <AlertDialog
+    v-model:open="isShow"
+    class="!z-[9999]"
+  >
+    <AlertDialogContent class="md:w-[400px] !z-[9999]">
       <!-- <AlertDialogHeader>
         <AlertDialogTitle> {{ confirmDialog.getQuestion?.title }}</AlertDialogTitle>
         <AlertDialogDescription>

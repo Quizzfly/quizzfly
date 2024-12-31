@@ -39,10 +39,6 @@ export const useGroupSocketStore = defineStore({
         this.connected = false
       })
 
-      await new Promise((resolve) => {
-        this.resolveCallback = resolve
-      })
-
       this.client.on('createPost', (newContent: IPost) => {
         this.message = {
           event: 'createPost',

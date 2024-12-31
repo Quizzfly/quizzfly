@@ -60,3 +60,9 @@ export function formatCommentDateTime(time: string) {
   const diffInYears = Math.floor(diffInDays / 365)
   return `${diffInYears} year`
 }
+
+export function isExpiredPlan(dateString: string) {
+  const inputDate = new Date(dateString)
+  const currentDate = new Date()
+  return inputDate < currentDate
+}

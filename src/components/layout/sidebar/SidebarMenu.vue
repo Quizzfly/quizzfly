@@ -1,8 +1,23 @@
 <script setup lang="ts">
+import { useAuthStore } from '@/stores/auth'
+
 defineProps<{
   isCollapsed: boolean
+  sidebarMode: 'dark' | 'light'
 }>()
-const menus = ref([
+
+const authStore = useAuthStore()
+interface Menu {
+  title: string
+  children: {
+    class: string
+    title: string
+    link: string
+    item_right?: string
+  }[]
+}
+
+const menus = ref<Menu[]>([
   {
     title: 'DASHBOARD',
     children: [
@@ -39,12 +54,18 @@ const menus = ref([
     ],
   },
   {
-    title: 'PAYMENTS',
+    title: 'Plan',
     children: [
       {
         class: 'i-solar-money-bag-bold-duotone',
+        title: 'Billing & plan',
+        link: '/billing-plan/plans',
+        item_right: authStore.getHighestPlan ? authStore.getHighestPlan.subscription_plan.name : '',
+      },
+      {
+        class: 'i-solar-alarm-bold',
         title: 'Payment history',
-        link: '/dashboard',
+        link: '/billing-plan/history',
       },
     ],
   },
@@ -83,8 +104,8 @@ const menus = ref([
           :key="sub.title"
           v-tippy="{ content: isCollapsed ? sub.title : '', placement: 'right' }"
           :to="sub.link"
-          :class="{ 'justify-center !px-0': isCollapsed }"
-          class="flex border-4 h-[50px] px-5 border-transparent group/item1 items-center gap-4 mb-[2px] group cursor-pointer hover:bg-slate-800 rounded-full transition-all ease-in-out duration-500"
+          :class="{ 'justify-center !px-0': isCollapsed, 'light-mode': sidebarMode === 'light' }"
+          class="relative flex border-4 h-[50px] px-5 pr-2 border-transparent group/item1 items-center gap-4 mb-[2px] group cursor-pointer hover:bg-slate-800 rounded-full transition-all ease-in-out duration-500"
         >
           <span
             class="text-xl"
@@ -95,17 +116,35 @@ const menus = ref([
             class="font-base"
             >{{ sub.title }}</span
           >
+
+          <span
+            v-if="sub.item_right"
+            class="chip ml-auto text-[10px] border border-[#F47432] text-[#F47432] px-2 py-1 rounded-full"
+          >
+            {{ sub.item_right }}
+          </span>
         </RouterLink>
       </div>
     </template>
   </div>
 </template>
 <style scoped>
+.light-mode:hover {
+  background-color: #e6e6e6;
+}
+
 .router-link-active {
-  background-color: #0077fd;
+  background-color: #0077fd !important;
   color: #fff;
   font-weight: 500;
   border: 3px solid #3984e0;
-  box-shadow: 0px 8px 20px 1px #3d8ced9c;
+  /* box-shadow: 0px 8px 20px 1px #3d8ced9c; */
+  box-shadow: 0px 8px 20px 1px #3d8ced70;
+  z-index: 10;
+}
+
+.router-link-active .chip {
+  background-color: #f47432;
+  color: #fff;
 }
 </style>

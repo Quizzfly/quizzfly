@@ -20,9 +20,21 @@ const confirmDialog = useConfirmDialog()
 onBeforeUnmount(() => {
   questionsStore.$reset()
   quizzflyStore.$reset()
+  window.onbeforeunload = null
 })
 
 onBeforeMount(async () => {
+  window.onbeforeunload = function (e) {
+    e = e || window.event
+
+    // For IE and Firefox prior to version 4
+    if (e) {
+      e.returnValue = 'Sure?'
+    }
+
+    // For Safari
+    return 'Sure?'
+  }
   loadingStore.setLoading(true)
   try {
     await quizzflyStore.getQuizzflyDetail(route.params.quizzflyId as string)

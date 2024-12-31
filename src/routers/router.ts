@@ -8,6 +8,7 @@ import {
   playRoute,
   groupRoute,
   reportRoute,
+  planRoute,
 } from './modules'
 import { authGuard } from './auth-guard'
 const { progress } = useIndicator()
@@ -63,6 +64,11 @@ const routes: RouteRecordRaw[] = [
     path: '/reports',
     beforeEnter: [authGuard],
     children: reportRoute,
+  },
+  {
+    path: '/billing-plan',
+    beforeEnter: [authGuard],
+    children: planRoute,
   },
   {
     path: '/test',

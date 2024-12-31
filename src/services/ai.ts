@@ -10,13 +10,15 @@ export const createQuizUseAIApi = async (
   model: string,
   language: string,
   option: Option,
+  quizzes: string[],
 ): Promise<Quiz[]> => {
-  return $api(`https://hinam.nuxt.dev/api/ai/quizzes`, {
+  return $api('/quizzfly/quizzes/generate-by-ai', {
     method: 'POST',
     body: {
       model,
       language,
       option,
+      quizzes,
     },
   })
 }
