@@ -22,7 +22,7 @@ const userPaymentsHistory = computed(() => authStore.getPlans)
       <p>All your history payment here</p>
     </div>
     <div class="h-full w-full flex overflow-hidden border rounded-xl">
-      <Table class="w-full h-full overflow-y-auto">
+      <Table class="w-full overflow-y-auto">
         <TableCaption v-if="userPaymentsHistory.length === 0"> No pay! </TableCaption>
         <TableHeader>
           <TableRow class="bg-slate-200 sticky top-0">
