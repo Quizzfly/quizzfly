@@ -13,3 +13,16 @@ export interface IQuizzflyInfo {
   username: string
   avatar: string
 }
+
+export interface IQuizzflyShared {
+  id: string
+  created_at: string
+  title: string
+  cover_image: string
+  description: string
+  is_public: boolean
+  quizzfly_status: string
+  user_id: string
+  username: string
+  avatar: string
+}

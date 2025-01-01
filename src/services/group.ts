@@ -1,5 +1,6 @@
 import type { BaseResponse } from '@/types/api'
 import type { IGroup, IPost, ICreatePost, IComment } from '@/types/group'
+import type { IQuizzflyShared } from '@/types/quizzfly'
 
 interface GroupInfo {
   name: string
@@ -13,6 +14,18 @@ export const getGroupsApi = async ({ page = 1, keyword = '' }): Promise<BaseResp
     params: {
       page,
       keyword,
+    },
+  })
+}
+
+export const getQuizzflySharedApi = async (
+  groupId: string,
+  page = 1,
+): Promise<BaseResponse<IQuizzflyShared[]>> => {
+  return $api(`/groups/${groupId}/shared`, {
+    method: 'GET',
+    params: {
+      page,
     },
   })
 }

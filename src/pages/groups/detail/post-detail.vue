@@ -256,7 +256,7 @@ onBeforeMount(() => {
                           >
                             Play
                           </Button>
-                          <Button
+                          <!-- <Button
                             variant="secondary"
                             class="h-8 w-20"
                             @click.prevent.stop="
@@ -267,7 +267,7 @@ onBeforeMount(() => {
                             "
                           >
                             Edit
-                          </Button>
+                          </Button> -->
                         </div>
                       </div>
                     </div>
