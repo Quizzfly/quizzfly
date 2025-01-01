@@ -36,19 +36,15 @@ const initApp = async () => {
   app.use(MotionPlugin)
   app.use(VImage)
   app.use(Viewer)
-  app.use(
-    VueTippy,
-    // optional
-    {
-      directive: 'tippy', // => v-tippy
-      component: 'tippy', // => <tippy/>
-      componentSingleton: 'tippy-singleton', // => <tippy-singleton/>,
-      defaultProps: {
-        placement: 'auto-end',
-        allowHTML: true,
-      }, // => Global default options * see all props
-    },
-  )
+  app.use(VueTippy, {
+    directive: 'tippy', // => v-tippy
+    component: 'tippy', // => <tippy/>
+    componentSingleton: 'tippy-singleton', // => <tippy-singleton/>,
+    defaultProps: {
+      placement: 'auto-end',
+      allowHTML: true,
+    }, // => Global default options * see all props
+  })
   app.component('DefaultLayout', DefaultLayout)
   app.component('GuestLayout', GuestLayout)
   app.component('NoSideBarLayout', NoSideBarLayout)
