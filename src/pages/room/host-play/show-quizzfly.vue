@@ -8,6 +8,8 @@ import Ranking from '@/components/room/play/Ranking.vue'
 import RankingFinal from '@/components/room/play/RankingFinal.vue'
 import { useRoomStore } from '@/stores/room'
 
+const router = useRouter()
+const route = useRoute()
 const socketStore = useRoomSocketStore()
 const roomStore = useRoomStore()
 const isShowCountdown = ref(true)
@@ -22,6 +24,13 @@ onMounted(() => {
   //   loadingStore.setLoading(false)
   //   // socketStore.handleStartQuestion()
   // }, 2000)
+})
+
+onBeforeMount(() => {
+  const isStarted = route.query.isStarted
+  if (isStarted) {
+    router.push({ name: 'host-live' })
+  }
 })
 
 onBeforeUnmount(() => {
@@ -42,6 +51,7 @@ const handleShowFinalRanking = (value: boolean, data?: SocketLeaderboard) => {
 
 const handleStartGame = () => {
   isShowCountdown.value = false
+  router.replace({ query: { isStarted: 'true' } })
   if (!isGameStarted.value) {
     isGameStarted.value = true
     socketStore.handleStartQuestion()
