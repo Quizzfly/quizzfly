@@ -2,9 +2,20 @@
 import Toaster from '@/components/ui/toast/Toaster.vue'
 import ConfirmModal from './components/base/ConfirmDialog.vue'
 import LoadingOverlay from '@/components/base/LoadingOverlay.vue'
-// import { useConfirmDialog } from './stores/modal'
-// import { useLoadingStore } from './stores/loading'
-// import { useConfirmDialog } from './stores/modal'
+import { useNotificationSocketStore } from '@/stores/socket/notification'
+import { notifyMe } from './utils/noti'
+
+const notificationStore = useNotificationSocketStore()
+const getMessage = computed(() => {
+  return notificationStore.getMessage
+})
+
+watch(getMessage, (val: any) => {
+  if (val.event === 'notification') {
+    notifyMe(val.data)
+  }
+})
+
 const route = useRoute()
 
 const layout = computed(() => {

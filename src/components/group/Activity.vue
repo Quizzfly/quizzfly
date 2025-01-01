@@ -275,18 +275,6 @@ const handleHtmlLinkClick = (event: MouseEvent) => {
                             >
                               Play
                             </Button>
-                            <Button
-                              variant="secondary"
-                              class="h-8 w-20"
-                              @click.prevent.stop="
-                                router.push({
-                                  name: 'quizzfly-create',
-                                  params: { quizzflyId: post.quizzfly.id },
-                                })
-                              "
-                            >
-                              Edit
-                            </Button>
                           </div>
                         </div>
                       </div>

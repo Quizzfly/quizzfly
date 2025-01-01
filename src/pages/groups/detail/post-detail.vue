@@ -20,7 +20,7 @@ import ListComment from '@/components/group/comment/ListComment.vue'
 import ScrollArea from '@/components/ui/scroll-area/ScrollArea.vue'
 import Button from '@/components/ui/button/Button.vue'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import ChatBox from '@/components/group/chat/ChatBox.vue'
+// import ChatBox from '@/components/group/chat/ChatBox.vue'
 
 const groupStore = useGroupStore()
 const postStore = usePostStore()
@@ -256,7 +256,7 @@ onBeforeMount(() => {
                           >
                             Play
                           </Button>
-                          <Button
+                          <!-- <Button
                             variant="secondary"
                             class="h-8 w-20"
                             @click.prevent.stop="
@@ -267,7 +267,7 @@ onBeforeMount(() => {
                             "
                           >
                             Edit
-                          </Button>
+                          </Button> -->
                         </div>
                       </div>
                     </div>
@@ -326,7 +326,7 @@ onBeforeMount(() => {
         </div>
       </ScrollArea>
     </Card>
-    <ChatBox />
+    <!-- <ChatBox /> -->
   </div>
 </template>
 <style lang="scss" scoped>

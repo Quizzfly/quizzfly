@@ -6,10 +6,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import Button from '@/components/ui/button/Button.vue'
 import Activity from '@/components/group/Activity.vue'
 import Shared from '@/components/group/Shared.vue'
-import Assignments from '@/components/group/Assignments.vue'
 import MInviteMember from '@/components/group/modal/MInviteMember.vue'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import ChatBox from '@/components/group/chat/ChatBox.vue'
+// import ChatBox from '@/components/group/chat/ChatBox.vue'
 import { useGroupSocketStore } from '@/stores/socket/group'
 import MListMember from '@/components/group/modal/MListMember.vue'
 
@@ -82,7 +81,7 @@ watch(getMessage, (val: any) => {
     <div class="flex h-full justify-center">
       <Card class="w-full flex border-b-0 rounded-b-none flex-col gap-12 h-full overflow-auto">
         <ScrollArea>
-          <div class="px-6 pt-6 flex items-center justify-between">
+          <div class="px-6 pt-10 flex items-center justify-between">
             <h3
               v-if="groupInfo.name"
               class="text-base font-semibold"
@@ -126,11 +125,11 @@ watch(getMessage, (val: any) => {
                   <AvatarFallback>+{{ listMembers.length - 4 }}</AvatarFallback>
                 </Avatar>
               </div>
-              <div
+              <!-- <div
                 class="ml-6 cursor-pointer w-8 h-8 rounded-xl flex items-center justify-center border"
               >
                 <span class="i-solar-menu-dots-bold rotate-90"></span>
-              </div>
+              </div> -->
             </div>
           </div>
           <div class="w-full relative">
@@ -138,13 +137,11 @@ watch(getMessage, (val: any) => {
               <TabsList class="mb-8 ml-6 mt-6">
                 <TabsTrigger value="activity"> Activity </TabsTrigger>
                 <TabsTrigger value="shared"> Shared </TabsTrigger>
-                <TabsTrigger value="assignment"> Assignments </TabsTrigger>
               </TabsList>
               <TabsContent value="activity">
                 <Activity />
               </TabsContent>
               <TabsContent value="shared"> <Shared /> </TabsContent>
-              <TabsContent value="assignment"> <Assignments /> </TabsContent>
             </Tabs>
             <Button
               class="absolute top-6 right-6 h-10 bg-primary flex items-center"
@@ -160,9 +157,9 @@ watch(getMessage, (val: any) => {
         </ScrollArea>
       </Card>
 
-      <div class="">
+      <!-- <div class="">
         <ChatBox />
-      </div>
+      </div> -->
     </div>
     <div class="">
       <ChatThumnail />

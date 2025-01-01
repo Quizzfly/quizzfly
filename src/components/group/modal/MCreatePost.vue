@@ -42,6 +42,7 @@ const type = ref<'SHARE' | 'POST'>('POST')
 const refImage = ref<HTMLInputElement | null>(null)
 const listImage = ref<string[]>([])
 const ImageUpload = ref<File[]>([])
+const quillEditor = ref<any>(null)
 
 const onChangeBg = (e: Event) => {
   const target = e.target as HTMLInputElement
@@ -61,7 +62,13 @@ const showChooseImage = () => {
 }
 
 const resetData = () => {
+  ImageUpload.value = []
+  listImage.value = []
   content.value = ''
+  if (quillEditor.value) {
+    quillEditor.value.setContents('')
+  }
+  console.log(ImageUpload.value, content.value, 'check value reset')
 }
 
 const removeBg = (data: string) => {
@@ -74,7 +81,7 @@ const removeBg = (data: string) => {
 
 const onSubmit = async () => {
   isLoading.value = true
-  const listImageUpload = [] as any
+  let listImageUpload = [] as any
 
   if (ImageUpload.value.length > 0) {
     const formData = new FormData()
@@ -111,6 +118,7 @@ const onSubmit = async () => {
   }
 
   await postStore.createPost(idGroup, data)
+  listImageUpload = []
   resetData()
   closeModal()
   emits('created')
@@ -146,6 +154,7 @@ const handleRemoveQuizzfly = () => {
           <div class="flex flex-col h-52">
             <div class="form-data h-52">
               <QuillEditor
+                ref="quillEditor"
                 v-model:content="content"
                 :toolbar="['bold', 'italic', 'underline', 'link']"
                 placeholder="Enter your post"

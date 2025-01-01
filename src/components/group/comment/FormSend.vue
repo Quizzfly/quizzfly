@@ -103,9 +103,9 @@ onMounted(() => {
       />
     </div>
     <div class="flex items-center gap-2">
-      <div class="flex items-center justify-center rounded-full w-10 h-10 border cursor-pointer">
+      <!-- <div class="flex items-center justify-center rounded-full w-10 h-10 border cursor-pointer">
         <span class="i-material-symbols-light-attach-file w-6 h-6"></span>
-      </div>
+      </div> -->
       <div
         class="flex items-center justify-center border-primary rounded-full w-10 h-10 border cursor-pointer"
       >
