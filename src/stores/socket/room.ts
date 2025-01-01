@@ -21,6 +21,7 @@ import type {
   SocketUserAnswerQuestion,
 } from '@/types/socket'
 import { useLoadingStore } from '../loading'
+import { RoomError } from '@/utils/error'
 
 const BASE_URL_SOCKET__ROOM =
   import.meta.env.VITE_BASE_URL_SOCKET_ROOM || 'https://api.quizzfly.site/rooms'
@@ -74,10 +75,13 @@ export const useRoomSocketStore = defineStore({
             break
         }
 
-        router.push({
-          name: redirectOnErrorRouterName,
-        })
+        const errorsOnRouter = [RoomError.ROOM_NOT_FOUND]
 
+        if (errorsOnRouter.includes(newContent?.errorCode)) {
+          router.push({
+            name: redirectOnErrorRouterName,
+          })
+        }
         showToast({
           title: 'Error',
           description: newContent?.message,

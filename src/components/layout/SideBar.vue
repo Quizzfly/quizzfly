@@ -105,6 +105,7 @@ onBeforeMount(() => {
     />
 
     <div
+      v-if="!isCollapsed"
       :class="{ 'border-slate-600': sidebarMode === 'dark' }"
       class="border mt-auto rounded-full text-xs flex items-center py-1 px-1"
     >
@@ -126,6 +127,7 @@ onBeforeMount(() => {
       </div>
     </div>
     <div
+      :class="{ ' mt-auto': isCollapsed }"
       class="text-red-600 flex items-center gap-2 cursor-pointer hover:text-[#0061ff] hover:bg-[#eff7ff] py-3 px-2 rounded-xl transition-all duration-200"
       @click="openConfirm"
     >
