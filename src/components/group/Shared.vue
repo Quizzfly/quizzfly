@@ -56,9 +56,7 @@ const listQuizzflyShared = async () => {
             <Skeleton class="w-full h-20 rounded-md" />
           </div>
         </div>
-        <div
-          class="flex items-center justify-between p-8 gap-12 w-full overflow-y-auto overflow-hidden"
-        >
+        <div class="flex flex-col justify-between p-8 gap-4 w-full overflow-y-auto overflow-hidden">
           <Card
             v-for="quizzfly in quizzflyShared"
             :key="quizzfly.id"
