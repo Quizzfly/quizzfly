@@ -60,7 +60,7 @@ const onSubmit = async () => {
             <TagsInput
               v-model="listEmails"
               :add-on-blur="true"
-              class="h-11"
+              class="h-full min-h-11"
             >
               <TagsInputItem
                 v-for="item in listEmails"

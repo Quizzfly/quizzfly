@@ -23,8 +23,8 @@ const listMembers = computed(() => {
       @click.stop
     >
       <div class="text-4xl w-full text-center font-semibold">List Member</div>
-      <ScrollArea>
-        <div class="mt-11 flex flex-col gap-4 max-h-[150px] overflow-hidden overflow-y-auto">
+      <ScrollArea class="overflow-hidden overflow-y-auto px-3">
+        <div class="mt-11 flex flex-col gap-4 max-h-[350px]">
           <div
             v-for="item in listMembers"
             :key="item.id"
