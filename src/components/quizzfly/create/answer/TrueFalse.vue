@@ -11,6 +11,7 @@ defineProps<{
 const emits = defineEmits<{
   (e: 'select', value: string): void
   (e: 'update:modelValue', value: any): void
+  (e: 'delete', value: any): void
 }>()
 </script>
 <template>
@@ -28,5 +29,6 @@ const emits = defineEmits<{
     :is-show-right-answer="isShowRightAnswer"
     @select="emits('select', item.id)"
     @update:model-value="emits('update:modelValue', item)"
+    @delete="emits('delete', item)"
   />
 </template>

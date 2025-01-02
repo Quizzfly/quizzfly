@@ -39,6 +39,13 @@ const pageQueryComputed = computed({
   },
 })
 
+watch(
+  () => search.value,
+  () => {
+    fetchGroups()
+  },
+)
+
 const fetchGroups = () => {
   groupStore.fetchGroups({
     page: pageQueryComputed.value,

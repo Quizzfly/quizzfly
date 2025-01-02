@@ -13,7 +13,7 @@ export const getGroupsApi = async ({ page = 1, keyword = '' }): Promise<BaseResp
     method: 'GET',
     params: {
       page,
-      keyword,
+      keywords: keyword,
     },
   })
 }

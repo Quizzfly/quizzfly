@@ -16,6 +16,7 @@ const props = defineProps<{
 
 const emits = defineEmits<{
   (e: 'update:modelValue', value: Answer): void
+  (e: 'delete', value: Answer): void
 }>()
 
 const updateAnswer = useDebounceFn((value: Answer) => {
@@ -32,7 +33,7 @@ onMounted(() => {
 </script>
 <template>
   <div
-    class="relative flex flex-row-reverse gap-5 py-6 min-h-[120px] items-center px-4 rounded-2xl text-white answer-item"
+    class="relative flex group flex-row-reverse gap-5 py-6 min-h-[120px] items-center px-4 rounded-2xl text-white answer-item"
     :style="{ backgroundColor: colorsHex[index].primary }"
   >
     <ConfettiExplosion
@@ -44,6 +45,13 @@ onMounted(() => {
       class="overlay-wrong absolute top-0 left-0 z-10 w-full h-[calc(100%+4px)] bg-gray-900 bg-opacity-60 rounded-2xl"
     ></div>
 
+    <div
+      v-if="editMode"
+      class="absolute group-hover:flex cursor-pointer w-8 h-8 justify-center items-center hidden -top-3 -right-3 bg-white rounded-full shadow-md"
+      @click="emits('delete', modelValue)"
+    >
+      <span class="text-black i-material-symbols-light-close-rounded text-2xl"></span>
+    </div>
     <img
       v-if="isShowRightAnswer && modelValue.is_correct"
       v-motion
