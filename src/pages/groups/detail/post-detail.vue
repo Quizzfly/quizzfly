@@ -251,6 +251,7 @@ onBeforeMount(() => {
                               router.push({
                                 name: 'host-live',
                                 params: { quizzflyId: postInfo?.quizzfly.id },
+                                query: { group_id: groupId },
                               })
                             "
                           >

@@ -102,6 +102,7 @@ const listQuizzflyShared = async () => {
                       router.push({
                         name: 'host-live',
                         params: { quizzflyId: quizzfly.id },
+                        query: { group_id: groupId },
                       })
                     "
                   >
