@@ -41,7 +41,7 @@ defineProps<{
               </p>
             </div>
 
-            <div>
+            <div class="flex items-center gap-2">
               <span
                 v-if="answer.is_correct"
                 class="i-material-symbols-light-check text-2xl text-green-700"
@@ -51,6 +51,8 @@ defineProps<{
                 v-else
                 class="i-material-symbols-light-close text-2xl text-red-700"
               ></span>
+
+              {{ answer.answer_count }}
             </div>
           </div>
         </div>

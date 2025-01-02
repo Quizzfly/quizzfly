@@ -3,7 +3,7 @@ import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { useConfirmDialog } from '@/stores/modal'
-import Chip from '@/components/base/Chip.vue'
+// import Chip from '@/components/base/Chip.vue'
 
 const quizzflyStore = useQuizzflyStore()
 const confirmDialog = useConfirmDialog()
@@ -42,10 +42,10 @@ const handleConfirmDelete = async (quizzflyId: string) => {
           <div class="flex items-center justify-between">
             <div class="flex item-center gap-3">
               <h2 class="title text-base font-medium">{{ quizzfly.title || 'Untitled' }}</h2>
-              <Chip
+              <!-- <Chip
                 :name="quizzfly.quizzfly_status"
                 color="#df223a"
-              />
+              /> -->
             </div>
             <div class="flex items-center gap-2">
               <span
