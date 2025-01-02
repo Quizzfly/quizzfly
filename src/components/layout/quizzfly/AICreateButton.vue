@@ -79,7 +79,7 @@ const handleCreateWithAI = handleSubmit(async (value) => {
   }
   isLoading.value = true
   try {
-    const quizzes = await createQuizUseAIApi(
+    const { data: quizzes } = await createQuizUseAIApi(
       model.value,
       language.value,
       {

@@ -142,6 +142,7 @@ interface Answer {
   files: File[]
   index: number
   quiz_id: string
+  answer_count: number
 }
 
 interface File {

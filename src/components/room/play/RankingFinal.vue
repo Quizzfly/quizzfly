@@ -81,7 +81,7 @@ onMounted(() => {
     <div class="flex items-stretch transform translate-y-5">
       <div
         v-if="secondPlayer"
-        class="flex flex-col items-center justify-end"
+        class="flex flex-col items-center justify-end max-w-[100px] overflow-hidden"
       >
         <div class="mb-2 flex flex-col items-center">
           <img
@@ -126,7 +126,7 @@ onMounted(() => {
       <!-- first user -->
       <div
         v-if="firstPlayer"
-        class="flex flex-col items-center justify-end"
+        class="flex flex-col items-center justify-end max-w-[100px] overflow-hidden"
       >
         <ConfettiExplosion
           v-if="isShowConfetti"
@@ -175,7 +175,7 @@ onMounted(() => {
       <!-- third user -->
       <div
         v-if="thirdPlayer"
-        class="flex flex-col items-center justify-end"
+        class="flex flex-col items-center justify-end max-w-[100px] overflow-hidden"
       >
         <div class="mb-2 flex flex-col items-center">
           <img
