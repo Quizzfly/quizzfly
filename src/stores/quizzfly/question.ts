@@ -364,6 +364,22 @@ export const useQuestionsStore = defineStore({
         throw error
       }
     },
+
+    async deleteCurrentQuestionAnswer(answer: Answer) {
+      // Delete a specific answer in the current question
+      try {
+        await deleteAnswerApi(answer.id)
+        this.updateCurrentQuestionAnswers(
+          (this.currentQuestion as Quiz).answers?.filter((a) => a.id !== answer.id) || [],
+        )
+      } catch (error) {
+        console.error(error)
+        showToast({
+          description: apiError(error).message,
+          variant: 'destructive',
+        })
+      }
+    },
   },
   getters: {
     getSlideById: (state) => (id: string) => {

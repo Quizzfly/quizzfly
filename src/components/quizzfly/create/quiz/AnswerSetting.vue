@@ -33,6 +33,10 @@ const handleUpdateAnswer = (value: any) => {
     is_correct: true,
   })
 }
+
+const handleDeleteAnswer = (value: any) => {
+  questionsStore.deleteCurrentQuestionAnswer(value)
+}
 </script>
 <template>
   <div class="pb-8">
@@ -55,6 +59,7 @@ const handleUpdateAnswer = (value: any) => {
           :edit-mode="true"
           :is-true-false="false"
           @update:model-value="questionsStore.updateCurrentQuestionAnswer"
+          @delete="handleDeleteAnswer"
         />
       </template>
 
@@ -63,6 +68,7 @@ const handleUpdateAnswer = (value: any) => {
           :edit-mode="true"
           :answers="currentQuestion.answers"
           @update:model-value="handleUpdateAnswer"
+          @delete="handleDeleteAnswer"
         />
       </template>
     </div>
