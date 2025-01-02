@@ -61,6 +61,7 @@ onBeforeMount(() => {
   })
   console.log('name', name, 'roomPin', roomPin)
   const participant_id = localStorage.getItem('participantID')
+  participantId.value = participant_id || ''
   const joinRoomData: any = {
     nick_name: name,
     room_pin: roomPin,
