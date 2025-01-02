@@ -1,5 +1,5 @@
 import type { Question } from './question'
-import type { IKickPlayer, IMember } from './room'
+import type { IKickPlayer, IMember, ParticipantReconnectedSuccess } from './room'
 import type { IComment, IPost } from './group'
 import type { INotification } from './notification'
 
@@ -19,6 +19,7 @@ export type SocketEventName =
   | 'quizFinished'
   | 'notification'
   | 'participantReconnected'
+  | 'participantReconnectedSuccess'
 
 export interface SocketUserAnswerQuestion {
   no_participant_answered: number
@@ -79,4 +80,5 @@ export interface SocketMessage {
     | IComment
     | INotification
     | IUserReconnect
+    | ParticipantReconnectedSuccess
 }
