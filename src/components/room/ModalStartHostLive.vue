@@ -30,11 +30,15 @@ const onSubmit = async () => {
     await roomStore.initRoom(currentSetting.value)
     emits('start')
   } else {
-    const data = {
+    const data: any = {
       quizzfly_id: quizzflyId,
       is_show_question: false,
       is_auto_play: false,
       lobby_music: 'string',
+    }
+    const group_id = route.query.group_id as string
+    if (group_id) {
+      data.group_id = group_id
     }
     await roomStore.initRoom(data)
     handleStartClick()

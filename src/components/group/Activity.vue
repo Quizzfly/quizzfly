@@ -270,6 +270,7 @@ const handleHtmlLinkClick = (event: MouseEvent) => {
                                 router.push({
                                   name: 'host-live',
                                   params: { quizzflyId: post.quizzfly.id },
+                                  query: { group_id: groupId },
                                 })
                               "
                             >
