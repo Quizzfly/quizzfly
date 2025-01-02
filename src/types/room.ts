@@ -1,3 +1,5 @@
+import type { Question } from './question'
+
 export interface IRoom {
   id?: string
   created_at: string
@@ -174,4 +176,11 @@ export interface ReportRoom {
 interface Quizzfly {
   id: string
   title: null
+}
+
+export interface ParticipantReconnectedSuccess {
+  participant: Participant
+  room_pin: string
+  state: number
+  question: Question
 }

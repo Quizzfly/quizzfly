@@ -7,6 +7,7 @@ import type {
   IRoomLocked,
   IKickMem,
   IKickPlayer,
+  ParticipantReconnectedSuccess,
 } from '@/types/room'
 import { useRoomStore } from '../room'
 import { showToast } from '@/utils/toast'
@@ -124,14 +125,32 @@ export const useRoomSocketStore = defineStore({
           data: newContent,
         }
         console.log('Received participantReconnected:', newContent) // Debug
-        roomStore.setMemberJoins({
-          new_participant: newContent.participant,
-        })
+        const currentMembers = roomStore.getListMemberJoins
+        // check if user already in the room
+        const index = currentMembers.findIndex(
+          (item) => item.new_participant.id === (newContent.participant as any).id,
+        )
+
+        if (index === -1) {
+          roomStore.setMemberJoins({
+            new_participant: newContent.participant,
+          })
+        }
       })
 
-      this.client.on('roomLocked', (newContent: IRoomLocked) => {
-        roomStore.setLockedRoom(newContent.locked)
-      })
+      this.client.on(
+        'participantReconnectedSuccess',
+        (newContent: ParticipantReconnectedSuccess) => {
+          this.message = {
+            event: 'participantReconnectedSuccess',
+            data: newContent,
+          }
+          console.log('Received participantReconnectedSuccess:', newContent) // Debug
+        },
+      ),
+        this.client.on('roomLocked', (newContent: IRoomLocked) => {
+          roomStore.setLockedRoom(newContent.locked)
+        })
 
       this.client.on('participantLeft', (newContent: IMember) => {
         const index = roomStore.getListMemberJoins.findIndex(

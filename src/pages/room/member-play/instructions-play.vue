@@ -92,6 +92,13 @@ watch(socketMessage, (val) => {
       socketData.value = val.data as SocketQuizStarted
     }
 
+    if (val.event === 'participantReconnectedSuccess') {
+      isGameStarted.value = true
+      isSentAnswer.value = false
+      isShowResult.value = false
+      socketData.value = val.data as SocketQuizStarted
+    }
+
     if (val.event === 'resultAnswer') {
       isShowResult.value = true
       isSentAnswer.value = true
