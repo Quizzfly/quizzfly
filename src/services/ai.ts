@@ -1,3 +1,4 @@
+import type { BaseResponse } from '@/types/api'
 import type { Quiz } from '@/types/question'
 
 interface Option {
@@ -11,7 +12,7 @@ export const createQuizUseAIApi = async (
   language: string,
   option: Option,
   quizzes: string[],
-): Promise<Quiz[]> => {
+): Promise<BaseResponse<Quiz[]>> => {
   return $api('/quizzfly/quizzes/generate-by-ai', {
     method: 'POST',
     body: {

@@ -3,7 +3,7 @@ import EditableText from '@/components/base/EditableText.vue'
 import { Button } from '@/components/ui/button'
 import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
 import QuizzflySettings from './QuizzflySettings.vue'
-import ThemeSetting from './ThemeSetting.vue'
+// import ThemeSetting from './ThemeSetting.vue'
 import AICreateButton from './AICreateButton.vue'
 
 const router = useRouter()
@@ -69,13 +69,13 @@ const handleClickCancel = () => {
 
     <div class="flex items-center gap-3">
       <AICreateButton />
-      <ThemeSetting />
-      <Button
+      <!-- <ThemeSetting /> -->
+      <!-- <Button
         variant="secondary"
         class="px-2"
       >
         <span class="i-solar-eye-linear text-xl"></span>
-      </Button>
+      </Button> -->
       <div class="h-6 border-r"></div>
       <Button
         variant="secondary"

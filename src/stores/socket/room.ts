@@ -76,17 +76,16 @@ export const useRoomSocketStore = defineStore({
         }
 
         const errorsOnRouter = [RoomError.ROOM_NOT_FOUND]
-
-        if (errorsOnRouter.includes(newContent?.errorCode)) {
-          router.push({
-            name: redirectOnErrorRouterName,
-          })
-        }
         showToast({
           title: 'Error',
           description: newContent?.message,
           variant: 'destructive',
         })
+        if (errorsOnRouter.includes(newContent?.errorCode)) {
+          router.push({
+            name: redirectOnErrorRouterName,
+          })
+        }
       })
 
       this.client.on('roomCreated', (newContent: IRoomSocket) => {
