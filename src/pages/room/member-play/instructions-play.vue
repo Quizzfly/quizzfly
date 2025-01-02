@@ -133,6 +133,9 @@ const handleSendAnswer = (answerId: string) => {
 
 onBeforeUnmount(() => {
   window.onbeforeunload = null
+  localStorage.removeItem('roomPin')
+  localStorage.removeItem('name')
+  // localStorage.removeItem('participantID')
 })
 </script>
 
