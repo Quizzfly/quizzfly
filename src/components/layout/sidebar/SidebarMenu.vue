@@ -24,7 +24,7 @@ const menus = ref<Menu[]>([
       {
         class: 'i-solar-graph-bold',
         title: 'Dashboard',
-        link: '/',
+        link: '/dashboard',
       },
     ],
   },

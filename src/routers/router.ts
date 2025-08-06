@@ -15,10 +15,18 @@ const { progress } = useIndicator()
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/',
+    path: '/dashboard',
     beforeEnter: [authGuard],
     component: () => import('@/pages/index.vue'),
     children: dashboardRoute,
+  },
+  {
+    path: '/',
+    component: () => import('@/pages/landing/index.vue'),
+    meta: {
+      layout: 'GuestLayout',
+      unAuth: true,
+    },
   },
   {
     path: '/auth',
