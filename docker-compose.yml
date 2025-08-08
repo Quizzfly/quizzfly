@@ -2,6 +2,8 @@ version: '3.8'
 
 services:
   quizzfly-client:
+    image: quizzfly-client
+    container_name: quizzfly-client
     build:
       context: .
       dockerfile: Dockerfile
