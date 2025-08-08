@@ -28,7 +28,7 @@ import { useForm } from 'vee-validate'
 import * as yup from 'yup'
 import { createMultipleQuizApi } from '@/services/quizzes'
 import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
-import { useAuthStore } from '@/stores/auth'
+// import { useAuthStore } from '@/stores/auth'
 
 const quizzflyStore = useQuizzflyStore()
 const { handleSubmit } = useForm({
@@ -69,14 +69,14 @@ const handleSelectQuizType = (type: string) => {
 }
 
 const isLoading = ref(false)
-const authStore = useAuthStore()
-const hightestPlanUser = computed(() => authStore.getHighestPlan)
+// const authStore = useAuthStore()
+// const hightestPlanUser = computed(() => authStore.getHighestPlan)
 const handleCreateWithAI = handleSubmit(async (value) => {
   popoverState.value = false
-  if (!hightestPlanUser.value || hightestPlanUser.value?.subscription_plan?.price === 0) {
-    isShowUpgradeModal.value = true
-    return
-  }
+  // if (!hightestPlanUser.value || hightestPlanUser.value?.subscription_plan?.price === 0) {
+  //   isShowUpgradeModal.value = true
+  //   return
+  // }
   isLoading.value = true
   try {
     const { data: quizzes } = await createQuizUseAIApi(
@@ -133,10 +133,7 @@ const popoverState = ref(false)
       </div>
     </BaseModal>
   </Teleport>
-  <Popover
-    :modal="false"
-    :open="popoverState"
-  >
+  <Popover>
     <PopoverTrigger>
       <button
         id="tour-item"

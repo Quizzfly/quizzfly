@@ -17,7 +17,7 @@ export const authGuard: NavigationGuardWithThis<any> = async (to, from, next) =>
 
   // Redirect logged-in users away from public routes
   if (isLoggedIn && isPublicRoute) {
-    return next('/') // Or another default page
+    return next('/dashboard') // Or another default page
   }
 
   // Routes that require login but the user is not logged in
