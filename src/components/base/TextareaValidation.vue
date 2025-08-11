@@ -28,6 +28,7 @@ onBeforeMount(() => {
     v-bind="{ ...$props, ...$attrs }"
     v-model="value"
     :invalid="errorMessage"
+    class="hover:border-primary border"
   />
   <ErrorMessage
     :error="errorMessage"

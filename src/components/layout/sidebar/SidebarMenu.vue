@@ -51,6 +51,11 @@ const menus = ref<Menu[]>([
         title: 'Report',
         link: '/reports',
       },
+      {
+        class: 'i-solar-document-add-bold',
+        title: 'FlashCard',
+        link: '/flash-card',
+      },
     ],
   },
   {
