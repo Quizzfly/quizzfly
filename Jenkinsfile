@@ -2,11 +2,6 @@ pipeline {
     agent any
 
     stages {
-        stage('Clone Repository') {
-            steps {
-                git url: 'https://github.com/Quizzfly/quizzfly.git'
-            }
-        }
         stage('Stop Existing Container') {
             steps {
                 script {
