@@ -105,12 +105,16 @@ const [email, emailAttrs] = defineField('email')
         </div>
         <div class="flex flex-col items-start gap-2 mb-2 mt-6">
           <h1 class="text-[344054] text-lg font-semibold">{{ $t('auth.forgot_password') }}</h1>
-          <h1
+          <i18n-t
             v-if="isForgot"
+            keypath="auth.forgot_password_sent"
+            tag="h1"
             class="text-[344054] text-sm font-medium"
           >
-            {{ $t('auth.forgot_password_sent', { email: email }) }}
-          </h1>
+            <template #email>
+              <span class="text-primary">{{ email }}</span>
+            </template>
+          </i18n-t>
         </div>
         <div>
           <h2
