@@ -5,15 +5,18 @@ import { useForm } from 'vee-validate'
 import * as yup from 'yup'
 import { useAuthStore } from '@/stores/auth'
 import { googleTokenLogin } from 'vue3-google-login'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const { handleSubmit } = useForm({
   validationSchema: yup.object({
-    email: yup.string().email().required('Email is required'),
+    email: yup.string().email().required(t('auth.email_required')),
     password: yup
       .string()
-      .required('Password is required')
-      .min(6, 'Password must be at least 6 characters')
-      .matches(/[A-Z]/, 'Password must contain uppercase letter'),
+      .required(t('auth.password_required'))
+      .min(6, t('auth.password_min_length'))
+      .matches(/[A-Z]/, t('auth.password_uppercase')),
   }),
 })
 
@@ -40,28 +43,28 @@ const loginGoogle = () => {
           @submit="onSubmit"
         >
           <div class="flex items-center gap-0.5 mb-4">
-            <h1 class="text-[344054] text-lg font-semibold mt-3">Welcome Back</h1>
+            <h1 class="text-[344054] text-lg font-semibold mt-3">{{ $t('auth.welcome_back') }}</h1>
           </div>
           <div>
-            <h2 class="mt-1 text-[#667085]">Today is a new day. It's your day. You shape it.</h2>
-            <h2 class="mt-1 text-[#667085]">Sign in to start managing your projects</h2>
+            <h2 class="mt-1 text-[#667085]">{{ $t('auth.new_day_description') }}</h2>
+            <h2 class="mt-1 text-[#667085]">{{ $t('auth.sign_in_description') }}</h2>
           </div>
           <div class="mt-6">
             <div class="form-data">
-              <label for="email">Email</label>
+              <label for="email">{{ $t('auth.email') }}</label>
               <InputValidation
                 id="email"
-                placeholder="Enter email..."
+                :placeholder="$t('auth.email_placeholder')"
                 type="email"
                 name="email"
                 class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
               />
             </div>
             <div class="form-data mt-3">
-              <label for="password">Password</label>
+              <label for="password">{{ $t('auth.password') }}</label>
               <InputValidation
                 id="password"
-                placeholder="Enter password..."
+                :placeholder="$t('auth.password_placeholder')"
                 type="password"
                 name="password"
                 class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
@@ -73,7 +76,7 @@ const loginGoogle = () => {
               class="text-[#0921D9] text-xs font-normal"
               to="/password/forgot"
             >
-              Forgot Password?
+              {{ $t('auth.forgot_password') }}
             </RouterLink>
           </div>
           <Button
@@ -84,11 +87,11 @@ const loginGoogle = () => {
               v-if="isLoading"
               class="i-svg-spinners-ring-resize"
             ></span>
-            Sign in
+            {{ $t('auth.sign_in') }}
           </Button>
           <div class="flex items-center gap-2 w-full mt-8">
             <span class="h-px bg-slate-200 w-full"></span>
-            <p class="text-base">Or</p>
+            <p class="text-base">{{ $t('auth.or') }}</p>
             <span class="h-px bg-slate-200 w-full"></span>
           </div>
         </form>
@@ -102,16 +105,16 @@ const loginGoogle = () => {
             src="@/assets/img/google-logo.png"
             alt=""
           />
-          Sign in with Google
+          {{ $t('auth.sign_in_with_google') }}
         </Button>
 
         <div class="flex justify-center mt-6">
-          <p>Don't you have an account?</p>
+          <p>{{ $t('auth.no_account') }}</p>
           <RouterLink
             class="ml-[6px] text-[#0921D9] font-normal"
             to="/register"
           >
-            Sign up
+            {{ $t('auth.sign_up') }}
           </RouterLink>
         </div>
       </div>

@@ -1,0 +1,21 @@
+{
+  "auth": {
+    "welcome_back": "Chào Mừng Trở Lại",
+    "new_day_description": "Hôm nay là một ngày mới. Đó là ngày của bạn. Bạn tạo nên nó.",
+    "sign_in_description": "Đăng nhập để bắt đầu quản lý dự án của bạn",
+    "email": "Email",
+    "email_placeholder": "Nhập email...",
+    "password": "Mật khẩu",
+    "password_placeholder": "Nhập mật khẩu...",
+    "forgot_password": "Quên mật khẩu?",
+    "sign_in": "Đăng nhập",
+    "or": "Hoặc",
+    "sign_in_with_google": "Đăng nhập với Google",
+    "no_account": "Bạn chưa có tài khoản?",
+    "sign_up": "Đăng ký",
+    "email_required": "Email là bắt buộc",
+    "password_required": "Mật khẩu là bắt buộc",
+    "password_min_length": "Mật khẩu phải có ít nhất 6 ký tự",
+    "password_uppercase": "Mật khẩu phải chứa chữ hoa"
+  }
+}

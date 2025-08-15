@@ -1,0 +1,21 @@
+{
+  "auth": {
+    "welcome_back": "Welcome Back",
+    "new_day_description": "Today is a new day. It's your day. You shape it.",
+    "sign_in_description": "Sign in to start managing your projects",
+    "email": "Email",
+    "email_placeholder": "Enter email...",
+    "password": "Password",
+    "password_placeholder": "Enter password...",
+    "forgot_password": "Forgot Password?",
+    "sign_in": "Sign in",
+    "or": "Or",
+    "sign_in_with_google": "Sign in with Google",
+    "no_account": "Don't you have an account?",
+    "sign_up": "Sign up",
+    "email_required": "Email is required",
+    "password_required": "Password is required",
+    "password_min_length": "Password must be at least 6 characters",
+    "password_uppercase": "Password must contain uppercase letter"
+  }
+}
