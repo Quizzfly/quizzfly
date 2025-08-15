@@ -4,16 +4,15 @@ import { createI18n } from 'vue-i18n'
 
 export const i18n = createI18n({
   legacy: false,
-  locale: localStorage.getItem('locale') || 'en',
   messages: {},
 })
 
 async function loadLocaleMessages() {
   let locales = {} as any
   try {
-    const vi = await $fetch('/locales/vi.json')
-    const en = await $fetch('/locales/en.json')
-    locales = { vi, en }
+    const VN = await $fetch('/locales/VN.json')
+    const US = await $fetch('/locales/US.json')
+    locales = { VN, US }
   } catch (error) {
     console.error(error)
   }
@@ -22,7 +21,9 @@ async function loadLocaleMessages() {
 
 export async function setupI18n(app: App) {
   const messages = await loadLocaleMessages()
-  i18n.global.setLocaleMessage('vi', messages.vi)
-  i18n.global.setLocaleMessage('en', messages.en)
+  const { countryCode } = await $fetch('https://ip.quizzfly.site')
+  i18n.global.setLocaleMessage('VN', messages.VN)
+  i18n.global.setLocaleMessage('US', messages.US)
+  i18n.global.locale.value = countryCode || 'US'
   app.use(i18n)
 }

@@ -10,7 +10,9 @@ import { apiError } from '@/utils/exceptionHandler'
 import { showToast } from '@/utils/toast'
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const router = useRouter()
 const route = useRoute()
 const confirmDialog = useConfirmDialog()
@@ -19,13 +21,13 @@ const { errors, handleSubmit, defineField } = useForm({
   validationSchema: yup.object({
     password: yup
       .string()
-      .required('Password is required')
-      .min(6, 'Password must be at least 6 characters')
-      .matches(/[A-Z]/, 'Password must contain uppercase letter'),
+      .required(t('auth.password_required'))
+      .min(6, t('auth.password_min_length'))
+      .matches(/[A-Z]/, t('auth.password_uppercase')),
     confirmPassword: yup
       .string()
-      .oneOf([yup.ref('password')], 'Passwords must match')
-      .required('Confirm password is required'),
+      .oneOf([yup.ref('password')], t('auth.passwords_must_match'))
+      .required(t('auth.confirm_password_required')),
   }),
 })
 
@@ -52,8 +54,8 @@ const verifyResetPassword = async (token: string) => {
 
 const openConfirmSuccess = async () => {
   await confirmDialog.open({
-    title: 'Success',
-    question: 'Reset password successful',
+    title: t('auth.reset_success'),
+    question: t('auth.reset_success_message'),
     onlyConfirm: true,
     success: true,
   })
@@ -63,8 +65,8 @@ const openConfirmSuccess = async () => {
 
 const openConfirmError = async () => {
   await confirmDialog.open({
-    title: 'Failed',
-    question: 'Expired password recovery link',
+    title: t('auth.reset_failed'),
+    question: t('auth.reset_expired'),
     onlyConfirm: true,
     warning: true,
   })
@@ -82,7 +84,7 @@ const onSubmit = handleSubmit(async (values) => {
     openConfirmSuccess()
   } catch (error) {
     showToast({
-      title: 'Resend failed',
+      title: t('auth.reset_error'),
       description: apiError(error).message,
       variant: 'destructive',
     })
@@ -101,18 +103,18 @@ const onSubmit = handleSubmit(async (values) => {
         @submit.prevent="onSubmit"
       >
         <div class="flex items-center gap-0.5 mb-4">
-          <h1 class="text-[344054] text-lg font-semibold">Reset Password</h1>
+          <h1 class="text-[344054] text-lg font-semibold">{{ $t('auth.reset_password') }}</h1>
         </div>
         <div>
-          <h2 class="mt-1 text-[#667085]">Today is a new day. It's your day. You shape it.</h2>
-          <h2 class="mt-1 text-[#667085]">Sign in to start managing your projects</h2>
+          <h2 class="mt-1 text-[#667085]">{{ $t('auth.new_day_description') }}</h2>
+          <h2 class="mt-1 text-[#667085]">{{ $t('auth.reset_password_description') }}</h2>
         </div>
         <div class="mt-6">
           <div class="form-data">
-            <label for="password">Password</label>
+            <label for="password">{{ $t('auth.password') }}</label>
             <Input
               v-model="password"
-              placeholder="Enter password..."
+              :placeholder="$t('auth.password_placeholder')"
               type="password"
               class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
               v-bind="passwordAttrs"
@@ -121,10 +123,10 @@ const onSubmit = handleSubmit(async (values) => {
             <ErrorMessage :error="errors.password" />
           </div>
           <div class="form-data">
-            <label for="confirm-password">Confirm password</label>
+            <label for="confirm-password">{{ $t('auth.confirm_password') }}</label>
             <Input
               v-model="confirmPassword"
-              placeholder="Enter password..."
+              :placeholder="$t('auth.confirm_password_placeholder')"
               type="password"
               class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
               v-bind="confirmPasswordAttrs"
@@ -141,7 +143,7 @@ const onSubmit = handleSubmit(async (values) => {
             v-if="isLoading"
             class="i-svg-spinners-ring-resize"
           ></span>
-          Reset Password
+          {{ $t('auth.reset_password') }}
         </Button>
       </form>
     </div>

@@ -6,7 +6,9 @@ import { Button } from '@/components/ui/button'
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
 import { showToast } from '@/utils/toast'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const errorEmail = ref()
 const isForgot = ref(false)
 const isCountdown = ref(false)
@@ -17,21 +19,21 @@ const isLoading = ref(false)
 const handleForgot = async () => {
   try {
     if (!email.value) {
-      errorEmail.value = 'Email must not be blank'
+      errorEmail.value = t('auth.email_must_not_blank')
       return
     }
     await forgotPasswordApi(email.value)
     isLoading.value = true
     showToast({
-      title: 'Success',
-      description: 'Resend email success',
+      title: t('auth.forgot_success'),
+      description: t('auth.forgot_success_message'),
       variant: 'default',
     })
     isForgot.value = true
   } catch (error) {
     showToast({
-      title: 'Resend email failed',
-      description: `${((error as any).data?.error?.message as string) || 'Send forgot password error'}`,
+      title: t('auth.forgot_failed'),
+      description: `${((error as any).data?.error?.message as string) || t('auth.forgot_failed_message')}`,
       variant: 'destructive',
     })
   } finally {
@@ -43,8 +45,8 @@ const handleResentEmail = async (time: number) => {
   try {
     await forgotPasswordApi(email.value)
     showToast({
-      title: 'Success',
-      description: 'Resend email success',
+      title: t('auth.forgot_success'),
+      description: t('auth.forgot_success_message'),
       variant: 'default',
     })
     isForgot.value = true
@@ -53,8 +55,8 @@ const handleResentEmail = async (time: number) => {
     startTimer()
   } catch (error) {
     showToast({
-      title: 'Failed',
-      description: 'Resend email failed',
+      title: t('auth.resend_failed'),
+      description: t('auth.resend_failed_message'),
       variant: 'default',
     })
   }
@@ -83,7 +85,7 @@ const checkSecond = (sec: number) => {
 
 const { errors, defineField } = useForm({
   validationSchema: yup.object({
-    email: yup.string().email().required('Email is required'),
+    email: yup.string().email().required(t('auth.email_required')),
   }),
 })
 
@@ -102,22 +104,24 @@ const [email, emailAttrs] = defineField('email')
           <h2 class="text-lg font-semibold">Quizzfly</h2>
         </div>
         <div class="flex flex-col items-start gap-2 mb-2 mt-6">
-          <h1 class="text-[344054] text-lg font-semibold">Forgot password</h1>
-          <h1
+          <h1 class="text-[344054] text-lg font-semibold">{{ $t('auth.forgot_password') }}</h1>
+          <i18n-t
             v-if="isForgot"
+            keypath="auth.forgot_password_sent"
+            tag="h1"
             class="text-[344054] text-sm font-medium"
           >
-            A password reset link has been sent to <span class="text-primary">{{ email }}</span
-            >. Click the link to complete the password reset. If you still haven't received the
-            email, please hit resend below.
-          </h1>
+            <template #email>
+              <span class="text-primary">{{ email }}</span>
+            </template>
+          </i18n-t>
         </div>
         <div>
           <h2
             v-if="!isForgot"
             class="mt-1 text-[#667085]"
           >
-            Enter your email to reset password
+            {{ $t('auth.forgot_password_description') }}
           </h2>
         </div>
         <div class="mt-6">
@@ -126,12 +130,12 @@ const [email, emailAttrs] = defineField('email')
             class="form-data"
             @submit.prevent="handleForgot"
           >
-            <label for="email">Email</label>
+            <label for="email">{{ $t('auth.email') }}</label>
             <Input
               v-if="!isForgot"
               id="email"
               v-model="email"
-              placeholder="Enter email..."
+              :placeholder="$t('auth.email_placeholder')"
               v-bind="emailAttrs"
               :invalid="errors.email"
               type="email"
@@ -150,7 +154,7 @@ const [email, emailAttrs] = defineField('email')
                 v-if="isLoading"
                 class="i-svg-spinners-ring-resize"
               ></span>
-              Submit
+              {{ $t('auth.submit') }}
             </Button>
           </form>
           <Button
@@ -160,7 +164,7 @@ const [email, emailAttrs] = defineField('email')
             :disable-cache="isCountdown"
             @click="handleResentEmail(5)"
           >
-            Resend
+            {{ $t('auth.resend') }}
           </Button>
           <div class="flex items-center justify-center w-full">
             <div
@@ -178,7 +182,7 @@ const [email, emailAttrs] = defineField('email')
             class="text-[#0921D9] text-xs font-semibold"
             to="/login"
           >
-            Come back
+            {{ $t('auth.come_back') }}
           </RouterLink>
         </div>
       </div>
