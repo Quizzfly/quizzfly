@@ -69,7 +69,7 @@ watch(getMessage, (val: any) => {
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbPage>
-            <RouterLink to="/groups">Groups</RouterLink>
+            <RouterLink to="/groups">{{ $t('groups.groups') }}</RouterLink>
           </BreadcrumbPage>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
@@ -93,7 +93,7 @@ watch(getMessage, (val: any) => {
               v-else
               class="text-base font-semibold"
             >
-              Title
+              {{ $t('groups.title') }}
             </h3>
             <div class="flex items-center">
               <div
@@ -135,8 +135,8 @@ watch(getMessage, (val: any) => {
           <div class="w-full relative">
             <Tabs default-value="activity">
               <TabsList class="mb-8 ml-6 mt-6">
-                <TabsTrigger value="activity"> Activity </TabsTrigger>
-                <TabsTrigger value="shared"> Shared </TabsTrigger>
+                <TabsTrigger value="activity"> {{ $t('groups.activity') }} </TabsTrigger>
+                <TabsTrigger value="shared"> {{ $t('groups.shared') }} </TabsTrigger>
               </TabsList>
               <TabsContent value="activity">
                 <Activity />
@@ -147,7 +147,7 @@ watch(getMessage, (val: any) => {
               class="absolute top-6 right-6 h-10 bg-primary flex items-center"
               @click="openModal"
             >
-              Invite Member
+              {{ $t('groups.invite_member') }}
             </Button>
             <MInviteMember
               v-if="isShowModal"

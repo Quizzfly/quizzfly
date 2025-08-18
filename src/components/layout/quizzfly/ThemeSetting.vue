@@ -13,14 +13,13 @@ import { Button } from '@/components/ui/button'
 <template>
   <Sheet>
     <SheetTrigger>
-      <Button variant="outline"> Theme </Button>
+      <Button variant="outline"> {{ $t('quizzfly.create.theme.theme') }} </Button>
     </SheetTrigger>
     <SheetContent>
       <SheetHeader>
-        <SheetTitle>Theme</SheetTitle>
+        <SheetTitle>{{ $t('quizzfly.create.theme.theme_title') }}</SheetTitle>
         <SheetDescription>
-          This is the theme setting for your quizzfly. You can choose the theme that you like for
-          each quiz.
+          {{ $t('quizzfly.create.theme.theme_description') }}
         </SheetDescription>
       </SheetHeader>
     </SheetContent>

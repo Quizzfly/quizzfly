@@ -14,7 +14,9 @@ import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
 import { uploadFileApi } from '@/services/file'
 import { showToast } from '@/utils/toast'
 import { useLoadingStore } from '@/stores/loading'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const loadingStore = useLoadingStore()
 const quizzflyStore = useQuizzflyStore()
 
@@ -24,8 +26,8 @@ interface Tab {
 }
 
 const tabs: Tab[] = [
-  { title: 'Basic information', value: 'basic' },
-  { title: 'Playing', value: 'playing' },
+  { title: t('quizzfly.create.settings.basic_information'), value: 'basic' },
+  { title: t('quizzfly.create.settings.playing'), value: 'playing' },
 ]
 const currentTab = ref<Tab>(tabs[0])
 
@@ -57,8 +59,8 @@ const handleSaveSettings = async () => {
     quizzflyStore.updateQuizzflySettings(quizzflyStore.getQuizzflyInfo.id, settings.value)
   } catch (error) {
     showToast({
-      title: 'Error',
-      description: 'Failed to upload image',
+      title: t('quizzfly.create.settings.error_upload_title'),
+      description: t('quizzfly.create.settings.error_upload_description'),
       variant: 'destructive',
     })
   }
@@ -69,13 +71,13 @@ const handleSaveSettings = async () => {
 <template>
   <Dialog>
     <DialogTrigger as-child>
-      <Button variant="outline"> Settings </Button>
+      <Button variant="outline"> {{ $t('quizzfly.create.settings.settings') }} </Button>
     </DialogTrigger>
     <DialogContent class="w-[80vw] grid-rows-[auto_minmax(0,1fr)_auto] p-0 max-h-[90dvh]">
       <DialogHeader class="p-6 pb-0">
-        <DialogTitle> Quizzfly settings </DialogTitle>
+        <DialogTitle> {{ $t('quizzfly.create.settings.quizzfly_settings') }} </DialogTitle>
         <DialogDescription>
-          Settings for your Quizzfly. You can change your Quizzfly settings here.
+          {{ $t('quizzfly.create.settings.settings_description') }}
         </DialogDescription>
       </DialogHeader>
       <div class="grid gap-4 py-4 px-6 h-[80vh]">
@@ -116,7 +118,7 @@ const handleSaveSettings = async () => {
             v-if="quizzflyStore.getIsUpdating"
             class="i-svg-spinners-180-ring-with-bg mr-1"
           ></span>
-          Save changes
+          {{ $t('quizzfly.create.settings.save_changes') }}
         </Button>
       </DialogFooter>
     </DialogContent>

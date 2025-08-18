@@ -3,7 +3,9 @@ import SidebarMenu from '@/components/layout/sidebar/SidebarMenu.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useConfirmDialog } from '@/stores/modal'
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const breakpoints = useBreakpoints(breakpointsTailwind)
 const lgAndSmaller = breakpoints.smallerOrEqual('lg')
 const authStore = useAuthStore()
@@ -17,8 +19,8 @@ watch(lgAndSmaller, (value) => {
 
 const openConfirm = async () => {
   const { isConfirmed } = await confirmDialog.open({
-    title: 'Confirm',
-    question: 'Do you really want to logout?',
+    title: t('sidebar.confirm_logout'),
+    question: t('sidebar.confirm_logout_message'),
     warning: true,
   })
 
@@ -115,7 +117,7 @@ onBeforeMount(() => {
         @click="handleChangeMode('light')"
       >
         <span class="i-solar-sun-2-bold"></span>
-        Light
+        {{ $t('sidebar.light') }}
       </div>
       <div
         :class="{ 'bg-slate-600': sidebarMode === 'dark' }"
@@ -123,7 +125,7 @@ onBeforeMount(() => {
         @click="handleChangeMode('dark')"
       >
         <span class="i-solar-moon-bold"></span>
-        Dark
+        {{ $t('sidebar.dark') }}
       </div>
     </div>
     <div
@@ -132,7 +134,7 @@ onBeforeMount(() => {
       @click="openConfirm"
     >
       <span class="i-solar-logout-2-linear text-xl"></span>
-      <p v-if="!isCollapsed">Logout</p>
+      <p v-if="!isCollapsed">{{ $t('sidebar.logout') }}</p>
     </div>
   </div>
 </template>

@@ -39,9 +39,9 @@ function handleFileChange(event: Event) {
 <template>
   <div class="grid gap-4 pb-2">
     <Card class="w-full p-4">
-      <h2 class="text-lg font-medium">Cover image</h2>
+      <h2 class="text-lg font-medium">{{ $t('quizzfly.create.basic_info.cover_image') }}</h2>
       <p class="text-sm text-gray-500">
-        Upload a cover image for your quiz. This image will be displayed on the quiz page.
+        {{ $t('quizzfly.create.basic_info.cover_image_description') }}
       </p>
       <div
         class="w-full h-[200px] border-2 border-dashed rounded-md mt-5 overflow-hidden bg-cover bg-center"
@@ -61,7 +61,11 @@ function handleFileChange(event: Event) {
             @click="handleUpload"
           >
             <span class="i-material-symbols-light-add text-2xl"></span>
-            {{ imagePreview ? 'Change' : 'Upload' }} image
+            {{
+              imagePreview
+                ? $t('quizzfly.create.basic_info.change_image')
+                : $t('quizzfly.create.basic_info.upload_image')
+            }}
           </Button>
         </div>
       </div>
@@ -70,32 +74,35 @@ function handleFileChange(event: Event) {
     <!-- text, description -->
     <div class="grid grid-cols-3 gap-4">
       <Card class="w-full p-4 col-span-2">
-        <h2 class="text-lg font-medium">Title</h2>
+        <h2 class="text-lg font-medium">{{ $t('quizzfly.create.basic_info.title') }}</h2>
         <p class="text-sm text-gray-500">
-          Title of your quizzfly. This will be displayed on the quiz page.
+          {{ $t('quizzfly.create.basic_info.title_description') }}
         </p>
         <Input
           v-model="settingsData.title"
           class="mt-3"
-          placeholder="Enter title"
+          :placeholder="$t('quizzfly.create.basic_info.enter_title')"
         />
-        <h2 class="text-lg font-medium mt-5">Description</h2>
+        <h2 class="text-lg font-medium mt-5">{{ $t('quizzfly.create.basic_info.description') }}</h2>
         <p class="text-sm text-gray-500">
-          Description of your quizzfly. This will be displayed on the quiz page.
+          {{ $t('quizzfly.create.basic_info.description_description') }}
         </p>
         <Textarea
           v-model="settingsData.description"
           class="mt-3"
-          placeholder="Enter description"
+          :placeholder="$t('quizzfly.create.basic_info.enter_description')"
         />
       </Card>
 
       <!-- visibility -->
       <Card class="w-full p-4">
         <h2 class="text-lg font-medium">
-          Visibility <span class="text-xs text-gray-500">(optional)</span>
+          {{ $t('quizzfly.create.basic_info.visibility') }}
+          <span class="text-xs text-gray-500">{{ $t('quizzfly.create.basic_info.optional') }}</span>
         </h2>
-        <p class="text-sm text-gray-500">Choose who can view your quizzfly.</p>
+        <p class="text-sm text-gray-500">
+          {{ $t('quizzfly.create.basic_info.visibility_description') }}
+        </p>
         <RadioGroup
           default-value="public"
           class="mt-4"
@@ -105,14 +112,14 @@ function handleFileChange(event: Event) {
               id="public"
               value="public"
             />
-            <label for="public">Public</label>
+            <label for="public">{{ $t('quizzfly.create.basic_info.public') }}</label>
           </Card>
           <Card class="p-4 flex items-center gap-2">
             <RadioGroupItem
               id="private"
               value="private"
             />
-            <label for="private">Private</label>
+            <label for="private">{{ $t('quizzfly.create.basic_info.private') }}</label>
           </Card>
         </RadioGroup>
       </Card>

@@ -7,7 +7,9 @@ import { showToast } from '@/utils/toast'
 import { useDebounceFn, useTextareaAutosize } from '@vueuse/core'
 import { Button } from '@/components/ui/button'
 import { createAnswerApi } from '@/services/quizzes'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const questionsStore = useQuestionsStore()
 const currentQuestion = computed(() => questionsStore.getCurrentQuestion as Quiz)
 
@@ -58,8 +60,8 @@ const handleCreateAnswer = async () => {
     })
   } catch (error) {
     showToast({
-      title: 'Error',
-      description: 'Error creating answer',
+      title: t('quizzfly.create.error'),
+      description: t('quizzfly.create.error_creating_answer'),
       variant: 'destructive',
     })
   }
@@ -86,7 +88,7 @@ const handleEnterPress = (event: KeyboardEvent) => {
         v-model="input"
         data-tour="4"
         class="resize-none bg-white rounded-md py-4 px-4 text-center border border-b-4 text-gray-700 font-medium text-2xl w-full shadow-sm outline-none"
-        placeholder="Enter your answer..."
+        :placeholder="$t('quizzfly.create.enter_your_answer')"
         maxlength="120"
         @keydown="handleEnterPress"
         @update:model-value="handleUpdateTitle($event.trim())"
@@ -95,7 +97,7 @@ const handleEnterPress = (event: KeyboardEvent) => {
         v-if="input"
         class="text-right"
       >
-        {{ 120 - input.length }} characters left
+        {{ 120 - input.length }} {{ $t('quizzfly.create.characters_left') }}
       </p>
     </div>
 
@@ -119,7 +121,9 @@ const handleEnterPress = (event: KeyboardEvent) => {
           :class="{ 'hight-light': currentQuestion.background_url }"
         >
           <span class="i-solar-gallery-add-outline text-3xl text-gray-500"></span>
-          <p class="text-xs text-gray-500 font-light text-center">Drag and drop or</p>
+          <p class="text-xs text-gray-500 font-light text-center">
+            {{ $t('quizzfly.create.drag_and_drop') }}
+          </p>
           <input
             ref="inputRef"
             type="file"
@@ -128,9 +132,9 @@ const handleEnterPress = (event: KeyboardEvent) => {
           />
           <p
             class="text-xs text-primary text-center cursor-pointer mt-2 hover:underline"
-            @click="$refs.inputRef.click()"
+            @click="($refs.inputRef as HTMLInputElement).click()"
           >
-            Click to upload your image
+            {{ $t('quizzfly.create.click_to_upload') }}
           </p>
         </div>
       </div>
@@ -147,7 +151,7 @@ const handleEnterPress = (event: KeyboardEvent) => {
       class="w-fit"
       color="primary"
       @click="handleCreateAnswer"
-      >Add Answer</Button
+      >{{ t('quizzfly.create.add_answer') }}</Button
     >
     <AnswerSetting :key="currentQuestion.id" />
   </div>

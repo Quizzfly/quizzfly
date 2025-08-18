@@ -24,9 +24,9 @@ const handleChangedLayout = async (layout: SlideLayout) => {
 <template>
   <div class="md:min-w-[340px] w-[340px]">
     <div class="w-full bg-white border h-full rounded-xl p-5">
-      <p class="font-medium text-lg">Question settings</p>
+      <p class="font-medium text-lg">{{ $t('quizzfly.create.slide.question_settings') }}</p>
       <div class="mt-10">
-        <p class="font-medium">Layout</p>
+        <p class="font-medium">{{ $t('quizzfly.create.slide.layout') }}</p>
         <div class="grid grid-cols-2 gap-2 mt-5">
           <PreviewLayout
             v-for="layout in slideLayouts"
@@ -41,7 +41,7 @@ const handleChangedLayout = async (layout: SlideLayout) => {
       <div class="border-t-[1.2px] my-8 w-full"></div>
       <!-- theme -->
       <div>
-        <span class="font-medium text-sm">Select theme</span>
+        <span class="font-medium text-sm">{{ $t('quizzfly.create.slide.select_theme') }}</span>
         <div class="grid grid-cols-2 gap-2 mt-4">
           <img
             v-for="img in themeImages"

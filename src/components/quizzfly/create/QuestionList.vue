@@ -10,7 +10,9 @@ import { useQuestionsStore } from '@/stores/quizzfly/question'
 import { useConfirmDialog } from '@/stores/modal'
 import PreviewLayout from '../layout/PreviewLayout.vue'
 import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const currentQuestion = defineModel<Question>({ required: true })
 const questionsStore = useQuestionsStore()
 const quizzflyStore = useQuizzflyStore()
@@ -68,8 +70,8 @@ const handleAddSlide = (type: string, quizType?: QuizType) => {
 
 const handleConfirmDelete = async (question: Question) => {
   const result = await confirmDialog.open({
-    title: 'Are you sure?',
-    question: 'Do you really want to delete this item?',
+    title: t('quizzfly.create.confirm_delete'),
+    question: t('quizzfly.create.confirm_delete_message'),
     warning: true,
   })
 
@@ -142,13 +144,13 @@ const selectQuestion = (question: Question) => {
             class="rounded-full w-[150px]"
           >
             <span class="i-material-symbols-light-add text-2xl"></span>
-            Add quiz
+            {{ $t('quizzfly.create.add_quiz') }}
           </Button>
         </PopoverTrigger>
         <PopoverContent>
           <div class="w-[400px] py-6 px-4">
             <div class="flex items-center justify-between px-4">
-              <span class="text-sm">Quiz type</span>
+              <span class="text-sm">{{ $t('quizzfly.create.quiz_type') }}</span>
               <span
                 class="i-material-symbols-light-close text-xl cursor-pointer"
                 @click="isShow = false"
@@ -170,14 +172,14 @@ const selectQuestion = (question: Question) => {
                 <span class="text-sm font-medium">{{ item.name }}</span>
               </div>
             </div>
-            <p class="text-sm mt-4 px-4">Impressed slide</p>
+            <p class="text-sm mt-4 px-4">{{ $t('quizzfly.create.impressed_slide') }}</p>
             <div class="px-3">
               <Button
                 variant="secondary"
                 class="w-full mt-5"
                 @click="handleAddSlide('slide')"
               >
-                Add slide
+                {{ $t('quizzfly.create.add_slide') }}
               </Button>
             </div>
           </div>
@@ -217,7 +219,7 @@ const selectQuestion = (question: Question) => {
             <div
               v-if="!element.isCompleted"
               v-tippy
-              :content="`This ${element.type.toLowerCase()} is not completed`"
+              :content="$t(`quizzfly.create.${element.type.toLowerCase()}_not_completed`)"
               :class="{ 'border-primary': currentQuestion.id === element.id }"
               class="absolute top-1/2 z-10 -right-2 border-2 flex justify-center items-center w-5 h-5 bg-red-500 text-white text-xs px-1 rounded-full"
             >

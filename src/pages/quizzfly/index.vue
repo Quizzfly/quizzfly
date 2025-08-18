@@ -53,13 +53,15 @@ const debouncedFn = useDebounceFn((value) => {
     <div class="flex justify-between items-center">
       <!-- left -->
       <div class="flex items-center gap-10">
-        <h2 class="text-2xl font-semibold whitespace-nowrap">Your quizzfly</h2>
+        <h2 class="text-2xl font-semibold whitespace-nowrap">
+          {{ $t('quizzfly.list.your_quizzfly') }}
+        </h2>
         <div class="relative w-full max-w-sm items-center">
           <Input
             id="search"
             :model-value="search"
             type="text"
-            placeholder="Search..."
+            :placeholder="$t('quizzfly.list.search_placeholder')"
             class="md:min-w-[300px] pl-10 bg-white"
             @update:model-value="debouncedFn"
           />
@@ -71,7 +73,7 @@ const debouncedFn = useDebounceFn((value) => {
       <!-- right -->
       <Button @click="handleClickCreateQuiz">
         <span class="i-material-symbols-light-add text-2xl"></span>
-        Create Quiz
+        {{ $t('quizzfly.list.create_quiz') }}
       </Button>
     </div>
 
@@ -81,7 +83,7 @@ const debouncedFn = useDebounceFn((value) => {
         <span
           v-if="search"
           class="text-sm text-gray-500"
-          >Result for:</span
+          >{{ $t('quizzfly.list.result_for') }}</span
         >
         <span class="text-sm font-semibold">{{ search }}</span>
       </div>
@@ -98,7 +100,7 @@ const debouncedFn = useDebounceFn((value) => {
           src="@/assets/icons/empty.png"
           alt=""
         />
-        <p>No quizzfly found. Create one now!</p>
+        <p>{{ $t('quizzfly.list.no_quizzfly_found') }}</p>
       </div>
       <QuizzflyList v-else />
     </div>

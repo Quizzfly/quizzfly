@@ -3,7 +3,9 @@ import { useConfirmDialog } from '@/stores/modal'
 import { joinGroupApi } from '@/services/group'
 import { showToast } from '@/utils/toast'
 import { apiError } from '@/utils/exceptionHandler'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const confirmDialog = useConfirmDialog()
 const route = useRoute()
 const router = useRouter()
@@ -16,8 +18,8 @@ onBeforeMount(() => {
 
 const openConfirm = async () => {
   const { isConfirmed } = await confirmDialog.open({
-    title: 'Confirm',
-    question: 'Do you really want to join this group?',
+    title: t('groups.confirm'),
+    question: t('groups.join_group_confirm'),
     warning: true,
   })
 
@@ -30,8 +32,8 @@ const handleJoinGroup = async () => {
   try {
     await joinGroupApi(groupId)
     showToast({
-      title: 'Success',
-      description: 'Group joined success',
+      title: t('groups.success'),
+      description: t('groups.group_joined_success'),
       variant: 'default',
     })
     router.push({ name: 'group-detail', params: { groupId: groupId } })

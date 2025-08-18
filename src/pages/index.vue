@@ -9,8 +9,11 @@ import { getCountUnreadNotificationApi } from '@/services/notification'
 import { showToast } from '@/utils/toast'
 import { apiError } from '@/utils/exceptionHandler'
 import { useNotificationSocketStore } from '@/stores/socket/notification'
+import { useI18n } from 'vue-i18n'
 
 import { useGroupStore } from '@/stores/group/group'
+
+const { t } = useI18n()
 const authStore = useAuthStore()
 const quizzflyStore = useQuizzflyStore()
 const quizzflys = computed(() => quizzflyStore.getQuizzflys)
@@ -51,8 +54,8 @@ const handleOpenHostLive = (quizzflyId: string) => {
 
 const handleOpenCreateWithAI = async () => {
   const { isConfirmed } = await confirmDialog.open({
-    title: 'Create with AI✨',
-    question: 'Are you sure you want to create with AI?',
+    title: t('dashboard.create_with_ai'),
+    question: t('dashboard.confirm_create_with_ai'),
   })
 
   if (isConfirmed) {
@@ -78,9 +81,10 @@ const getCountUnreadNotification = async () => {
     <div class="flex justify-between items-center">
       <div>
         <h1 class="text-2xl font-medium text-black">
-          Hello, <span class="text-black/90">{{ authStore.getUser?.user_info.name }} 👋</span>
+          {{ $t('dashboard.hello') }},
+          <span class="text-black/90">{{ authStore.getUser?.user_info.name }} 👋</span>
         </h1>
-        <p class="mt-2 text-base text-gradient">How were you today?</p>
+        <p class="mt-2 text-base text-gradient">{{ $t('dashboard.how_were_you_today') }}</p>
       </div>
       <div class="flex items-center gap-5">
         <div
@@ -116,7 +120,7 @@ const getCountUnreadNotification = async () => {
         class="px-4 h-9 gradient-from-primary text-white font-medium rounded-full shadow-lg hover:bg-indigo-300 transition"
         @click="handleOpenCreateWithAI"
       >
-        ✨ Create with AI
+        {{ $t('dashboard.create_with_ai') }}
       </button>
 
       <RouterLink
@@ -124,14 +128,14 @@ const getCountUnreadNotification = async () => {
         class="h-9 btn-gradient"
       >
         <div class="flex items-center h-full w-full bg-white text-black rounded-full px-3 py-[6px]">
-          Create your group
+          {{ $t('dashboard.create_your_group') }}
         </div>
       </RouterLink>
     </div>
     <!-- body -->
     <div class="flex max-md:flex-col mt-10 gap-5">
       <div class="flex-[2] p-6 border bg-white rounded-xl shadow-sm">
-        <p>Projects</p>
+        <p>{{ $t('dashboard.projects') }}</p>
 
         <!-- grid 4 item -->
         <div class="grid grid-cols-2 gap-6 mt-5">
@@ -144,7 +148,7 @@ const getCountUnreadNotification = async () => {
             >
               <span class="text-primary text-xl i-material-symbols-light-add-2-rounded"></span>
             </div>
-            <p>Create new quizzfly</p>
+            <p>{{ $t('dashboard.create_new_quizzfly') }}</p>
           </div>
 
           <RouterLink
@@ -157,8 +161,8 @@ const getCountUnreadNotification = async () => {
               <span class="text-[#9521c8] text-xl i-material-symbols-light-groups-2"></span>
             </div>
             <div>
-              <p>Your groups</p>
-              <p class="text-xs text-gray-500">Create a new group</p>
+              <p>{{ $t('dashboard.your_groups') }}</p>
+              <p class="text-xs text-gray-500">{{ $t('dashboard.create_new_group') }}</p>
             </div>
           </RouterLink>
 
@@ -172,8 +176,10 @@ const getCountUnreadNotification = async () => {
               <span class="text-[#232ac9] text-xl i-material-symbols-light-payments-sharp"></span>
             </div>
             <div>
-              <p>Upgrade plans</p>
-              <p class="text-xs text-gray-500">Upgrade plan for more features</p>
+              <p>{{ $t('dashboard.upgrade_plans') }}</p>
+              <p class="text-xs text-gray-500">
+                {{ $t('dashboard.upgrade_plan_for_more_features') }}
+              </p>
             </div>
           </RouterLink>
 
@@ -187,8 +193,8 @@ const getCountUnreadNotification = async () => {
               <span class="text-[#00b9c4] text-xl i-material-symbols-light-attach-money"> </span>
             </div>
             <div>
-              <p>Payment history</p>
-              <p class="text-xs text-gray-500">View your payment history</p>
+              <p>{{ $t('dashboard.payment_history') }}</p>
+              <p class="text-xs text-gray-500">{{ $t('dashboard.view_payment_history') }}</p>
             </div>
           </RouterLink>
         </div>
@@ -196,7 +202,7 @@ const getCountUnreadNotification = async () => {
 
       <!-- quizzfly -->
       <div class="flex-1 flex flex-col gap-3 p-6 border bg-white rounded-xl shadow-sm">
-        <p>Quick access</p>
+        <p>{{ $t('dashboard.quick_access') }}</p>
         <div
           v-for="group in groupStore.getGroups"
           :key="group.group.id"
@@ -219,7 +225,7 @@ const getCountUnreadNotification = async () => {
           <RouterLink
             :to="{ name: 'group-detail', params: { groupId: group.group.id } }"
             class="flex items-center hover:bg-gray-100 border ml-auto text-xs h-[30px] px-5 rounded-md"
-            >Detail</RouterLink
+            >{{ $t('dashboard.detail') }}</RouterLink
           >
         </div>
       </div>
@@ -227,7 +233,7 @@ const getCountUnreadNotification = async () => {
 
     <!-- recent -->
     <div class="mt-10">
-      <p class="text-lg font-medium mb-4">Recent activities</p>
+      <p class="text-lg font-medium mb-4">{{ $t('dashboard.recent_activities') }}</p>
       <div
         v-if="!quizzflyStore.getIsFetching && quizzflyStore.getQuizzflys.length === 0"
         class="h-full w-full flex flex-col justify-center items-center"
@@ -237,14 +243,14 @@ const getCountUnreadNotification = async () => {
           src="@/assets/icons/empty.png"
           alt=""
         />
-        <p>No quizzfly. Create one now!</p>
+        <p>{{ $t('dashboard.no_quizzfly_create_now') }}</p>
 
         <div class="flex items-center gap-3 mt-5">
           <Button
             class="text-xs w-full"
             @click="handleClickCreateQuiz"
           >
-            Create new quizzfly
+            {{ $t('dashboard.create_new_quizzfly') }}
           </Button>
         </div>
       </div>
@@ -264,7 +270,7 @@ const getCountUnreadNotification = async () => {
               alt=""
             />
             <div class="p-5">
-              <p class="font-medium">{{ quizzfly.title || 'Untitled' }}</p>
+              <p class="font-medium">{{ quizzfly.title || $t('dashboard.untitled') }}</p>
               <p class="text-xs mt-1 text-gray-600">
                 {{ new Date(quizzfly.created_at).toLocaleString() }}
               </p>
@@ -277,13 +283,13 @@ const getCountUnreadNotification = async () => {
                   class="flex items-center gap-1 flex-1"
                 >
                   <span class="i-material-symbols-light-edit"></span>
-                  <p>Edit</p>
+                  <p>{{ $t('dashboard.edit') }}</p>
                 </RouterLink>
                 <div
                   class="flex items-center gap-1 flex-1"
                   @click="handleOpenHostLive(quizzfly.id)"
                 >
-                  <Button class="flex-1 text-xs bg-black">Start</Button>
+                  <Button class="flex-1 text-xs bg-black">{{ $t('dashboard.start') }}</Button>
                 </div>
               </div>
             </div>
