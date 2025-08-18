@@ -20,8 +20,10 @@ import ListComment from '@/components/group/comment/ListComment.vue'
 import ScrollArea from '@/components/ui/scroll-area/ScrollArea.vue'
 import Button from '@/components/ui/button/Button.vue'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { useI18n } from 'vue-i18n'
 // import ChatBox from '@/components/group/chat/ChatBox.vue'
 
+const { t } = useI18n()
 const groupStore = useGroupStore()
 const postStore = usePostStore()
 const route = useRoute()
@@ -73,7 +75,7 @@ const getDetailPostByPostId = async (idGroup: string, idPost: string) => {
     reactCount.value = data.react_count
   } catch (error) {
     showToast({
-      description: 'Failed to get post detail',
+      description: t('groups.failed_to_get_post_detail'),
       variant: 'destructive',
     })
     throw error
@@ -101,7 +103,7 @@ onBeforeMount(() => {
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink href="/groups"> Groups </BreadcrumbLink>
+          <BreadcrumbLink href="/groups"> {{ $t('groups.groups') }} </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
@@ -113,7 +115,7 @@ onBeforeMount(() => {
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbPage>Detail</BreadcrumbPage>
+          <BreadcrumbPage>{{ $t('groups.detail') }}</BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
@@ -155,7 +157,7 @@ onBeforeMount(() => {
                   <PopoverContent class="p-0 w-full">
                     <div class="rounded-md cursor-pointer py-1 px-1.5 shadow-md bg-white">
                       <p class="py-1 px-3 text-xs text-red-500 hover:bg-slate-100 rounded-sm">
-                        Delete
+                        {{ $t('groups.delete') }}
                       </p>
                     </div>
                   </PopoverContent>
@@ -228,7 +230,7 @@ onBeforeMount(() => {
                                 class="i-material-symbols-light-grid-view-outline-rounded h-6 w-6"
                               ></span>
                               <h2 class="title text-base font-medium">
-                                {{ postInfo?.quizzfly.title || 'Untitled' }}
+                                {{ postInfo?.quizzfly.title || $t('groups.untitled') }}
                               </h2>
                             </div>
                           </div>
@@ -255,7 +257,7 @@ onBeforeMount(() => {
                               })
                             "
                           >
-                            Play
+                            {{ $t('groups.play') }}
                           </Button>
                           <!-- <Button
                             variant="secondary"

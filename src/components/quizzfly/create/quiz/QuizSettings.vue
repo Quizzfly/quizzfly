@@ -68,20 +68,20 @@ const handleChangeQuizType = async (quizType: QuizType) => {
     class="md:min-w-[340px] w-[340px] bg-white border h-full rounded-xl p-8 flex flex-col overflow-hidden"
   >
     <div class="flex items-center justify-between">
-      <span class="text-base">Quiz settings</span>
+      <span class="text-base">{{ $t('quizzfly.create.quiz_settings') }}</span>
     </div>
 
     <ScrollArea class="flex flex-col flex-auto gap-2">
       <div class="px-1">
         <!-- quiz type -->
         <div class="mt-8">
-          <span class="font-medium text-sm">Quiz type</span>
+          <span class="font-medium text-sm">{{ $t('quizzfly.create.quiz_type') }}</span>
           <Select
             :model-value="currentQuestion.quiz_type"
             @update:model-value="handleChangeQuizType($event as QuizType)"
           >
             <SelectTrigger class="mt-3">
-              <SelectValue placeholder="Question type" />
+              <SelectValue :placeholder="$t('quizzfly.create.question_type')" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
@@ -105,7 +105,7 @@ const handleChangeQuizType = async (quizType: QuizType) => {
 
         <!-- time limit -->
         <div class="mt-8">
-          <span class="font-medium text-sm">Time limit</span>
+          <span class="font-medium text-sm">{{ $t('quizzfly.create.time_limit') }}</span>
           <Select
             :model-value="String(currentQuestion.time_limit)"
             @update:model-value="
@@ -113,7 +113,7 @@ const handleChangeQuizType = async (quizType: QuizType) => {
             "
           >
             <SelectTrigger class="mt-3">
-              <SelectValue placeholder="Time limit" />
+              <SelectValue :placeholder="$t('quizzfly.create.time_limit')" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
@@ -122,7 +122,7 @@ const handleChangeQuizType = async (quizType: QuizType) => {
                   :key="n"
                   :value="String(n * 5)"
                 >
-                  {{ n * 5 }} seconds
+                  {{ n * 5 }} {{ $t('quizzfly.create.seconds') }}
                 </SelectItem>
               </SelectGroup>
             </SelectContent>
@@ -131,7 +131,7 @@ const handleChangeQuizType = async (quizType: QuizType) => {
 
         <!-- points -->
         <div class="mt-8">
-          <span class="font-medium text-sm">Points</span>
+          <span class="font-medium text-sm">{{ $t('quizzfly.create.points') }}</span>
           <Select
             :model-value="String(currentQuestion.point_multiplier)"
             @update:model-value="
@@ -139,12 +139,12 @@ const handleChangeQuizType = async (quizType: QuizType) => {
             "
           >
             <SelectTrigger class="mt-3">
-              <SelectValue placeholder="Points" />
+              <SelectValue :placeholder="$t('quizzfly.create.points')" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="1"> normal </SelectItem>
-                <SelectItem value="2"> Duplicate </SelectItem>
+                <SelectItem value="1">{{ $t('quizzfly.create.normal') }}</SelectItem>
+                <SelectItem value="2">{{ $t('quizzfly.create.duplicate') }}</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
@@ -153,7 +153,7 @@ const handleChangeQuizType = async (quizType: QuizType) => {
         <div class="border-t-[1.2px] my-8 w-full"></div>
         <!-- theme -->
         <div>
-          <span class="font-medium text-sm">Select theme</span>
+          <span class="font-medium text-sm">{{ $t('quizzfly.create.select_theme') }}</span>
           <div class="grid grid-cols-2 gap-2 mt-4">
             <img
               v-for="img in themeImages"
@@ -171,8 +171,10 @@ const handleChangeQuizType = async (quizType: QuizType) => {
 
         <!-- image -->
         <div class="mt-10">
-          <span class="font-medium text-sm">Upload image</span>
-          <p class="text-xs text-gray-500 font-light">We support png, gif, jpg and svg</p>
+          <span class="font-medium text-sm">{{ $t('quizzfly.create.upload_image') }}</span>
+          <p class="text-xs text-gray-500 font-light">
+            {{ $t('quizzfly.create.upload_image_support') }}
+          </p>
           <div
             ref="dropZoneRef"
             class="flex items-center px-5 gap-5 w-full h-[100px] border-2 border-dashed rounded-md mt-5 overflow-hidden bg-cover bg-center"
@@ -183,7 +185,9 @@ const handleChangeQuizType = async (quizType: QuizType) => {
               alt=""
             />
             <div>
-              <p class="text-xs text-gray-500 font-light text-center">Drag and drop or</p>
+              <p class="text-xs text-gray-500 font-light text-center">
+                {{ $t('quizzfly.create.drag_and_drop') }}
+              </p>
               <input
                 ref="file"
                 type="file"
@@ -193,9 +197,9 @@ const handleChangeQuizType = async (quizType: QuizType) => {
 
               <p
                 class="text-xs text-primary text-center cursor-pointer mt-2 hover:underline"
-                @click="$refs.file.click()"
+                @click="($refs.file as HTMLInputElement).click()"
               >
-                Click to upload your image
+                {{ $t('quizzfly.create.click_to_upload') }}
               </p>
             </div>
           </div>

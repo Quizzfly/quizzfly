@@ -93,7 +93,7 @@ onMounted(() => {
       v-model="input"
       :disabled="!editMode || isTrueFalse"
       class="resize-none bg-transparent text-white text-2xl font-semibold w-full border-none outline-none text-input"
-      placeholder="Enter your answer..."
+      :placeholder="$t('quizzfly.create.answer.enter_your_answer')"
       maxlength="80"
       @update:model-value="updateAnswer({ ...modelValue, content: $event.trim() + ' ' })"
       @keydown.enter.prevent

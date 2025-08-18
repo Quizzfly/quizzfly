@@ -36,14 +36,16 @@ const handleClickCancel = () => {
         <EditableText
           v-slot="{ data }"
           class="text-lg font-medium"
-          :value="quizzflyStore.getQuizzflyInfo.title || 'Untitled'"
+          :value="quizzflyStore.getQuizzflyInfo.title || $t('quizzfly.create.topbar.untitled')"
           @save="handleSaveTitle"
         >
           <div class="flex flex-col">
             <span class="border-transparent hover:border-slate-500 text-base">
               {{ data }}
             </span>
-            <span class="text-xs text-gray-500"> Click to edit </span>
+            <span class="text-xs text-gray-500">
+              {{ $t('quizzfly.create.topbar.click_to_edit') }}
+            </span>
           </div>
         </EditableText>
       </div>
@@ -56,14 +58,14 @@ const handleClickCancel = () => {
         class="flex items-center gap-2"
       >
         <span class="i-svg-spinners-tadpole"></span>
-        <span>saving...</span>
+        <span>{{ $t('quizzfly.create.topbar.saving') }}</span>
       </div>
       <div
         v-else
         class="flex items-center"
       >
         <span class="i-material-symbols-light-check-rounded text-2xl"></span>
-        <span>Saved</span>
+        <span>{{ $t('quizzfly.create.topbar.saved') }}</span>
       </div>
     </div>
 
@@ -81,9 +83,9 @@ const handleClickCancel = () => {
         variant="secondary"
         @click="handleClickCancel"
       >
-        Cancel
+        {{ $t('quizzfly.create.topbar.cancel') }}
       </Button>
-      <Button @click="handleSaveSettings"> Save </Button>
+      <Button @click="handleSaveSettings"> {{ $t('quizzfly.create.topbar.save') }} </Button>
     </div>
   </div>
 </template>

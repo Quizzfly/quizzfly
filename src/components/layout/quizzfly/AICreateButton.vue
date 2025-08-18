@@ -28,12 +28,14 @@ import { useForm } from 'vee-validate'
 import * as yup from 'yup'
 import { createMultipleQuizApi } from '@/services/quizzes'
 import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
+import { useI18n } from 'vue-i18n'
 // import { useAuthStore } from '@/stores/auth'
 
+const { t } = useI18n()
 const quizzflyStore = useQuizzflyStore()
 const { handleSubmit } = useForm({
   validationSchema: yup.object({
-    theme: yup.string().required('Theme is required'),
+    theme: yup.string().required(t('quizzfly.create.ai.theme_required')),
   }),
 })
 
@@ -98,15 +100,15 @@ const handleCreateWithAI = handleSubmit(async (value) => {
     questionsStore.setCurrentQuestion(data[data.length - 1], true)
 
     showToast({
-      title: '✨Create with AI successfully',
-      description: 'Your quiz has been created successfully',
+      title: t('quizzfly.create.ai.create_success_title'),
+      description: t('quizzfly.create.ai.create_success_description'),
       variant: 'success',
     })
   } catch (error) {
     console.error(error)
     showToast({
-      title: 'Error',
-      description: 'Failed to create quiz with AI 🥲, please try again',
+      title: t('quizzfly.create.ai.create_error_title'),
+      description: t('quizzfly.create.ai.create_error_description'),
       variant: 'destructive',
     })
   } finally {
@@ -141,7 +143,7 @@ const popoverState = ref(false)
         class="flex items-center gap-2 px-4 h-9 gradient-from-primary text-white font-medium rounded-full shadow-lg hover:bg-indigo-300 transition"
         @click="popoverState = !popoverState"
       >
-        ✨ Create with AI
+        {{ $t('quizzfly.create.ai.create_with_ai') }}
         <span
           v-if="isLoading"
           class="i-svg-spinners-90-ring-with-bg text-xl"
@@ -156,19 +158,22 @@ const popoverState = ref(false)
       >
         <div>
           <p class="mb-1 font-medium">
-            Theme of your quiz
-            <span class="text-red-500">*</span>
+            {{ $t('quizzfly.create.ai.theme_of_quiz') }}
+            <span class="text-red-500">{{ $t('quizzfly.create.ai.required') }}</span>
           </p>
           <InputValidation
             class="w-full"
             name="theme"
             type="text"
-            placeholder="Ex: History, Science, etc."
+            :placeholder="$t('quizzfly.create.ai.theme_placeholder')"
           />
         </div>
 
         <div class="">
-          <p class="mb-2 font-medium">Quiz type <span class="text-red-500">*</span></p>
+          <p class="mb-2 font-medium">
+            {{ $t('quizzfly.create.ai.quiz_type') }}
+            <span class="text-red-500">{{ $t('quizzfly.create.ai.required') }}</span>
+          </p>
           <div class="flex gap-5 px-2">
             <div class="flex items-center gap-1">
               <Checkbox
@@ -180,7 +185,7 @@ const popoverState = ref(false)
                 for="terms"
                 class="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
-                Choice
+                {{ $t('quizzfly.create.ai.choice') }}
               </label>
             </div>
             <div class="flex items-center gap-1">
@@ -193,13 +198,16 @@ const popoverState = ref(false)
                 for="terms"
                 class="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
-                True/False
+                {{ $t('quizzfly.create.ai.true_false') }}
               </label>
             </div>
           </div>
         </div>
 
-        <p class="mt-5 mb-1 font-medium">Language <span class="text-red-500">*</span></p>
+        <p class="mt-5 mb-1 font-medium">
+          {{ $t('quizzfly.create.ai.language') }}
+          <span class="text-red-500">{{ $t('quizzfly.create.ai.required') }}</span>
+        </p>
         <Select v-model="language">
           <SelectTrigger>
             <SelectValue placeholder="Time limit" />
@@ -222,7 +230,10 @@ const popoverState = ref(false)
           v-model="option.numberOfQuestion"
           :max="5"
         >
-          <p class="mt-5 mb-1 font-medium">Number of quiz <span class="text-red-500">*</span></p>
+          <p class="mt-5 mb-1 font-medium">
+            {{ $t('quizzfly.create.ai.number_of_quiz') }}
+            <span class="text-red-500">{{ $t('quizzfly.create.ai.required') }}</span>
+          </p>
           <NumberFieldContent>
             <NumberFieldDecrement />
             <NumberFieldInput />
@@ -233,13 +244,16 @@ const popoverState = ref(false)
           v-if="option.numberOfQuestion === 5"
           class="mt-1 text-xs text-gray-500"
         >
-          Free plan only supports creating 5 quiz at a time
+          {{ $t('quizzfly.create.ai.free_plan_limit') }}
         </p>
 
-        <p class="mt-5 mb-1 font-medium">Model <span class="text-red-500">*</span></p>
+        <p class="mt-5 mb-1 font-medium">
+          {{ $t('quizzfly.create.ai.model') }}
+          <span class="text-red-500">{{ $t('quizzfly.create.ai.required') }}</span>
+        </p>
         <Select v-model="model">
           <SelectTrigger>
-            <SelectValue placeholder="Model AI" />
+            <SelectValue :placeholder="$t('quizzfly.create.ai.model_ai_placeholder')" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
@@ -269,7 +283,7 @@ const popoverState = ref(false)
             :disabled="isLoading"
             @click="handleCreateWithAI"
           >
-            Generate 🚀
+            {{ $t('quizzfly.create.ai.generate') }}
             <span
               v-if="isLoading"
               class="i-svg-spinners-90-ring-with-bg text-xl"

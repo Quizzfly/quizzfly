@@ -19,14 +19,16 @@ import { uploadFileApi } from '@/services/file'
 import { apiError } from '@/utils/exceptionHandler'
 import Toaster from '@/components/ui/toast/Toaster.vue'
 import { showToast } from '@/utils/toast'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const authStore = useAuthStore()
 
 const { errors, handleSubmit, defineField } = useForm({
   validationSchema: yup.object({
-    email: yup.string().email().required('Email is required'),
-    name: yup.string().required('Name is required'),
-    username: yup.string().required('Username is required'),
+    email: yup.string().email().required(t('profiles.email_required')),
+    name: yup.string().required(t('profiles.name_required')),
+    username: yup.string().required(t('profiles.username_required')),
   }),
 })
 
@@ -70,13 +72,13 @@ const onSubmit = handleSubmit(async () => {
     authStore.setUser(res)
     isLoading.value = false
     showToast({
-      title: 'Update success',
-      description: 'This is a simple toast message',
+      title: t('profiles.update_success'),
+      description: t('profiles.update_success_message'),
       variant: 'default',
     })
   } catch (error) {
     showToast({
-      title: 'Update failed',
+      title: t('profiles.update_failed'),
       description: `${apiError(error).message}`,
       variant: 'destructive',
     })
@@ -107,7 +109,7 @@ const onChangeImg = (e: Event) => {
   <div class="w-full flex items-start gap-8 max-lg:flex-col">
     <div class="w-2/4 p-4 rounded-md shadow flex flex-col gap-10 max-lg:w-full bg-white">
       <div class="header flex items-center justify-between">
-        <h3 class="text-lg font-semibold">User information</h3>
+        <h3 class="text-lg font-semibold">{{ t('profiles.user_information') }}</h3>
         <Button
           class="h-10 flex items-center gap-2 bg-slate-100 w-24"
           variant="secondary"
@@ -118,7 +120,7 @@ const onChangeImg = (e: Event) => {
             v-if="isLoading"
             class="i-svg-spinners-ring-resize"
           ></span>
-          Save
+          {{ t('profiles.save') }}
         </Button>
       </div>
       <div class="body flex items-start gap-8">
@@ -151,12 +153,12 @@ const onChangeImg = (e: Event) => {
             <label
               for="username"
               class="font-medium text-sm"
-              >Username</label
+              >{{ t('profiles.username') }}</label
             >
             <Input
               v-model="username"
               disabled
-              placeholder="Enter name..."
+              :placeholder="t('profiles.enter_name')"
               :invalid="errors.username"
               type="username"
               class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
@@ -166,11 +168,11 @@ const onChangeImg = (e: Event) => {
             <label
               for="name"
               class="font-medium text-sm"
-              >Name</label
+              >{{ t('profiles.name') }}</label
             >
             <Input
               v-model="name"
-              placeholder="Enter name..."
+              :placeholder="t('profiles.enter_name')"
               v-bind="nameAttrs"
               :invalid="errors.name"
               type="name"
@@ -182,12 +184,12 @@ const onChangeImg = (e: Event) => {
             <label
               for="email"
               class="font-medium text-sm"
-              >Email</label
+              >{{ t('profiles.email') }}</label
             >
             <Input
               v-model="email"
               disabled
-              placeholder="Enter email..."
+              :placeholder="t('profiles.enter_email')"
               :invalid="errors.email"
               type="email"
               class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
@@ -216,24 +218,24 @@ const onChangeImg = (e: Event) => {
     <div class="w-2/4 flex flex-col gap-10 max-lg:w-full bg-white">
       <div class="shadow rounded-md p-4 flex flex-col gap-8">
         <div class="header">
-          <h3 class="text-lg font-semibold">Account details</h3>
+          <h3 class="text-lg font-semibold">{{ t('profiles.account_details') }}</h3>
         </div>
         <div class="w-full">
           <div class="form-data flex flex-col gap-2">
             <label
               for="name"
               class="font-medium text-sm"
-              >Language</label
+              >{{ t('profiles.language') }}</label
             >
             <Select>
               <SelectTrigger class="w-[280px]">
-                <SelectValue placeholder="Select a language" />
+                <SelectValue :placeholder="t('profiles.select_language')" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <Selectlabel>Languages</Selectlabel>
-                  <SelectItem value="en"> English </SelectItem>
-                  <SelectItem value="vi"> Tiếng việt </SelectItem>
+                  <Selectlabel>{{ t('profiles.languages') }}</Selectlabel>
+                  <SelectItem value="en">{{ t('profiles.english') }}</SelectItem>
+                  <SelectItem value="vi">{{ t('profiles.vietnamese') }}</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
@@ -245,10 +247,10 @@ const onChangeImg = (e: Event) => {
           :to="{ name: 'delete-account' }"
           class="text-base text-red-400 font-semibold underline underline-offset-2 cursor-pointer"
         >
-          Delete account
+          {{ t('profiles.delete_account') }}
         </RouterLink>
         <p class="text-sm">
-          If you delete your account, you'll lose access to all the quizzfly you created
+          {{ t('profiles.delete_account_warning') }}
         </p>
       </div>
     </div>

@@ -3,8 +3,10 @@ import { useQuizzflyStore } from '@/stores/quizzfly/quizzfly'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { useConfirmDialog } from '@/stores/modal'
+import { useI18n } from 'vue-i18n'
 // import Chip from '@/components/base/Chip.vue'
 
+const { t } = useI18n()
 const quizzflyStore = useQuizzflyStore()
 const confirmDialog = useConfirmDialog()
 
@@ -12,8 +14,8 @@ const quizzflys = computed(() => quizzflyStore.getQuizzflys)
 
 const handleConfirmDelete = async (quizzflyId: string) => {
   const { isConfirmed } = await confirmDialog.open({
-    title: 'Delete Quizzfly',
-    question: 'Are you sure you want to delete this quizzfly?',
+    title: t('quizzfly.list.delete_quizzfly'),
+    question: t('quizzfly.list.delete_confirm'),
     warning: true,
   })
 
@@ -36,13 +38,15 @@ const handleConfirmDelete = async (quizzflyId: string) => {
             v-image
             class="w-[60px] h-[60px] object-cover rounded-sm"
             :src="quizzfly.cover_image || ''"
-            :alt="quizzfly.title || 'Untitled Quizzfly'"
+            :alt="quizzfly.title || $t('quizzfly.list.untitled')"
           />
         </div>
         <div class="flex flex-col w-full gap-2">
           <div class="flex items-center justify-between">
             <div class="flex gap-3">
-              <h2 class="title text-base font-medium">{{ quizzfly.title || 'Untitled' }}</h2>
+              <h2 class="title text-base font-medium">
+                {{ quizzfly.title || $t('quizzfly.list.untitled') }}
+              </h2>
               <!-- <Chip
                 :name="quizzfly.quizzfly_status"
                 color="#df223a"
@@ -62,13 +66,15 @@ const handleConfirmDelete = async (quizzflyId: string) => {
         <RouterLink
           target="_blank"
           :to="{ name: 'host-live', params: { quizzflyId: quizzfly.id } }"
-          ><Button class="flex items-center h-8 rounded-lg w-20 text-xs"> Host live</Button>
+          ><Button class="flex items-center h-8 rounded-lg w-20 text-xs">
+            {{ $t('quizzfly.list.host_live') }}
+          </Button>
         </RouterLink>
         <RouterLink
           :to="{ name: 'quizzfly-create', params: { quizzflyId: quizzfly.id } }"
           class="flex items-center cursor-pointer hover:text-[#0061ff] gap-2 hover:underline"
         >
-          <span>Edit</span>
+          <span>{{ $t('quizzfly.list.edit') }}</span>
           <span class="i-material-symbols-light-arrow-right-alt text-2xl"></span>
         </RouterLink>
       </div>

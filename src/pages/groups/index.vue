@@ -72,13 +72,13 @@ const handleCreated = () => {
     <div class="flex justify-between items-center">
       <!-- left -->
       <div class="flex items-center gap-10">
-        <h2 class="text-2xl font-semibold whitespace-nowrap">Your groups</h2>
+        <h2 class="text-2xl font-semibold whitespace-nowrap">{{ $t('groups.your_groups') }}</h2>
         <div class="relative w-full max-w-sm items-center">
           <Input
             id="search"
             :model-value="search"
             type="text"
-            placeholder="Search..."
+            :placeholder="$t('groups.search_placeholder')"
             class="md:min-w-[300px] pl-10 bg-white"
             @update:model-value="debouncedFn"
           />
@@ -90,7 +90,7 @@ const handleCreated = () => {
       <!-- right -->
       <Button @click="openModal">
         <span class="i-material-symbols-light-add text-2xl"></span>
-        Create Group
+        {{ $t('groups.create_group') }}
       </Button>
     </div>
 
@@ -100,7 +100,7 @@ const handleCreated = () => {
         v-if="search"
         class="flex gap-2"
       >
-        <span class="text-sm text-gray-500">Result for:</span>
+        <span class="text-sm text-gray-500">{{ $t('groups.result_for') }}</span>
         <span class="text-sm font-semibold">{{ search }}</span>
       </div>
       <!-- filter -->
@@ -116,7 +116,7 @@ const handleCreated = () => {
           src="@/assets/icons/empty.png"
           alt=""
         />
-        <p>No group found. Create one now!</p>
+        <p>{{ $t('groups.no_group_found') }}</p>
       </div>
       <GroupList v-else />
     </div>

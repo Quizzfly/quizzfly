@@ -9,7 +9,9 @@ import { useConfirmDialog } from '@/stores/modal'
 import { Button } from '@/components/ui/button'
 import type { QuizType } from '@/types/question'
 import { driver } from 'driver.js'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const quizzflyStore = useQuizzflyStore()
@@ -29,11 +31,11 @@ onBeforeMount(async () => {
 
     // For IE and Firefox prior to version 4
     if (e) {
-      e.returnValue = 'Sure?'
+      e.returnValue = t('quizzfly.create.unsaved_changes')
     }
 
     // For Safari
-    return 'Sure?'
+    return t('quizzfly.create.unsaved_changes')
   }
   loadingStore.setLoading(true)
   try {
@@ -44,8 +46,8 @@ onBeforeMount(async () => {
     console.error(error)
     loadingStore.setLoading(false)
     await confirmDialog.open({
-      title: 'Error',
-      question: 'Have an error when fetching data!',
+      title: t('quizzfly.create.error'),
+      question: t('quizzfly.create.error_fetching_data'),
       onlyConfirm: true,
       warning: true,
     })
@@ -77,8 +79,8 @@ onMounted(() => {
       {
         element: '#tour-item[data-tour="1"]',
         popover: {
-          title: 'Create quiz with AI',
-          description: 'You can create a quiz with AI by clicking this button.',
+          title: t('quizzfly.create.tour.create_quiz_with_ai'),
+          description: t('quizzfly.create.tour.create_quiz_with_ai_desc'),
           side: 'left',
           align: 'start',
         },
@@ -86,8 +88,8 @@ onMounted(() => {
       {
         element: '#tour-item[data-tour="2"]',
         popover: {
-          title: 'Add new Quiz or Slide',
-          description: 'You can add a new quiz or slide by clicking these buttons.',
+          title: t('quizzfly.create.tour.add_new_quiz_or_slide'),
+          description: t('quizzfly.create.tour.add_new_quiz_or_slide_desc'),
           side: 'bottom',
           align: 'start',
         },
@@ -95,8 +97,8 @@ onMounted(() => {
       {
         element: '#tour-item[data-tour="3"]',
         popover: {
-          title: 'All your questions here',
-          description: 'You can see all your questions here and click on the question to edit it.',
+          title: t('quizzfly.create.tour.all_questions_here'),
+          description: t('quizzfly.create.tour.all_questions_here_desc'),
           side: 'bottom',
           align: 'start',
         },
@@ -104,8 +106,8 @@ onMounted(() => {
       {
         element: '#tour-item[data-tour="4"]',
         popover: {
-          title: 'Add question content',
-          description: 'You can add question content here.',
+          title: t('quizzfly.create.tour.add_question_content'),
+          description: t('quizzfly.create.tour.add_question_content_desc'),
           side: 'left',
           align: 'start',
         },
@@ -113,8 +115,8 @@ onMounted(() => {
       {
         element: '#tour-item[data-tour="5"]',
         popover: {
-          title: 'Add question answer',
-          description: 'You can add question answer here.',
+          title: t('quizzfly.create.tour.add_question_answer'),
+          description: t('quizzfly.create.tour.add_question_answer_desc'),
           side: 'top',
           align: 'start',
         },
@@ -122,8 +124,8 @@ onMounted(() => {
       {
         element: '#tour-item[data-tour="6"]',
         popover: {
-          title: 'Settings for quiz',
-          description: 'You can change the settings for the quiz here.',
+          title: t('quizzfly.create.tour.quiz_settings'),
+          description: t('quizzfly.create.tour.quiz_settings_desc'),
           side: 'top',
           align: 'start',
         },
@@ -167,9 +169,9 @@ const handleAddSlide = (type: 'quiz' | 'slide', quizType?: QuizType) => {
           src="/assets/images/work-at-home.png"
           alt=""
         />
-        <p class="text-center font-medium">Please use a larger screen to create a quiz</p>
+        <p class="text-center font-medium">{{ $t('quizzfly.create.please_use_larger_screen') }}</p>
         <RouterLink :to="{ name: 'quizzfly' }">
-          <Button>Back to home</Button>
+          <Button>{{ $t('quizzfly.create.back_to_home') }}</Button>
         </RouterLink>
       </div>
     </Teleport>

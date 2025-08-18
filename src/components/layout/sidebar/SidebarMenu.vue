@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { useAuthStore } from '@/stores/auth'
+import { useI18n } from 'vue-i18n'
 
 defineProps<{
   isCollapsed: boolean
   sidebarMode: 'dark' | 'light'
 }>()
 
+const { t } = useI18n()
 const authStore = useAuthStore()
 interface Menu {
   title: string
@@ -19,52 +21,52 @@ interface Menu {
 
 const menus = ref<Menu[]>([
   {
-    title: 'DASHBOARD',
+    title: t('sidebar.dashboard_menu'),
     children: [
       {
         class: 'i-solar-graph-bold',
-        title: 'Dashboard',
+        title: t('sidebar.dashboard'),
         link: '/dashboard',
       },
     ],
   },
   {
-    title: 'PERSONAL',
+    title: t('sidebar.personal_menu'),
     children: [
       {
         class: 'i-solar-user-bold-duotone',
-        title: 'Profiles',
+        title: t('sidebar.profiles'),
         link: '/profiles',
       },
       {
         class: 'i-solar-users-group-rounded-bold-duotone',
-        title: 'Groups',
+        title: t('sidebar.groups'),
         link: '/groups',
       },
       {
         class: 'i-solar-bolt-bold-duotone',
-        title: 'Quiz Management',
+        title: t('sidebar.quiz_management'),
         link: '/quizzfly',
       },
       {
         class: 'i-solar-document-add-bold',
-        title: 'Report',
+        title: t('sidebar.report'),
         link: '/reports',
       },
     ],
   },
   {
-    title: 'Plan',
+    title: t('sidebar.plan_menu'),
     children: [
       {
         class: 'i-solar-money-bag-bold-duotone',
-        title: 'Billing & plan',
+        title: t('sidebar.billing_plan'),
         link: '/billing-plan/plans',
         item_right: authStore.getHighestPlan ? authStore.getHighestPlan.subscription_plan.name : '',
       },
       {
         class: 'i-solar-alarm-bold',
-        title: 'Payment history',
+        title: t('sidebar.payment_history'),
         link: '/billing-plan/history',
       },
     ],
