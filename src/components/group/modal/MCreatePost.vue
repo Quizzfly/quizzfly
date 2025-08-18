@@ -68,7 +68,6 @@ const resetData = () => {
   if (quillEditor.value) {
     quillEditor.value.setContents('')
   }
-  console.log(ImageUpload.value, content.value, 'check value reset')
 }
 
 const removeBg = (data: string) => {
