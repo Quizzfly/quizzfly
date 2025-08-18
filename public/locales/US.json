@@ -1,5 +1,7 @@
 {
   "auth": {
+    "reset_link_sent": "Reset link sent",
+    "check_your_email": "Check your email",
     "welcome_back": "Welcome Back",
     "new_day_description": "Today is a new day. It's your day. You shape it.",
     "sign_in_description": "Sign in to start managing your projects",

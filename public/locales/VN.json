@@ -1,5 +1,7 @@
 {
   "auth": {
+    "reset_link_sent": "Gửi liên kết đặt lại",
+    "check_your_email": "Kiểm tra email của bạn",
     "welcome_back": "Chào Mừng Trở Lại",
     "new_day_description": "Hôm nay là một ngày mới. Đó là ngày của bạn. Bạn tạo nên nó.",
     "sign_in_description": "Đăng nhập để bắt đầu quản lý dự án của bạn",
