@@ -96,182 +96,238 @@ const onSubmit = handleSubmit(async (values) => {
 
 <template>
   <Toaster />
-  <div class="h-full flex p-8">
+  <div class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex p-8 gap-12">
     <div class="flex-1 flex justify-center items-center">
-      <form
-        class="rounded-xl max-md:w-full max-sm:p-0 w-96"
-        @submit.prevent="onSubmit"
+      <div
+        class="login-container backdrop-blur-xl bg-white/70 border border-white/20 shadow-2xl rounded-3xl p-8 max-md:w-full max-sm:p-6 w-[440px] relative overflow-hidden"
       >
-        <div class="flex items-center gap-0.5 mb-4">
-          <h1 class="text-[344054] text-lg font-semibold">{{ $t('auth.reset_password') }}</h1>
-        </div>
-        <div>
-          <h2 class="mt-1 text-[#667085]">{{ $t('auth.new_day_description') }}</h2>
-          <h2 class="mt-1 text-[#667085]">{{ $t('auth.reset_password_description') }}</h2>
-        </div>
-        <div class="mt-6">
-          <div class="form-data">
-            <label for="password">{{ $t('auth.password') }}</label>
-            <Input
-              v-model="password"
-              :placeholder="$t('auth.password_placeholder')"
-              type="password"
-              class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
-              v-bind="passwordAttrs"
-              :invalid="errors.password"
-            />
-            <ErrorMessage :error="errors.password" />
-          </div>
-          <div class="form-data">
-            <label for="confirm-password">{{ $t('auth.confirm_password') }}</label>
-            <Input
-              v-model="confirmPassword"
-              :placeholder="$t('auth.confirm_password_placeholder')"
-              type="password"
-              class="h-10 mt-1 bg-slate-50 border-slate-200 outline-none"
-              v-bind="confirmPasswordAttrs"
-              :invalid="errors.confirmPassword"
-            />
-            <ErrorMessage :error="errors.confirmPassword" />
-          </div>
-        </div>
-        <Button
-          :disabled="isLoading"
-          class="mt-6 w-full h-10 gap-2 flex"
+        <div
+          class="absolute -top-20 -right-20 w-40 h-40 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full opacity-20 animate-pulse"
+        ></div>
+        <div
+          class="absolute -bottom-20 -left-20 w-32 h-32 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full opacity-20 animate-pulse"
+        ></div>
+        <form
+          class="relative z-10 space-y-6"
+          @submit.prevent="onSubmit"
         >
-          <span
-            v-if="isLoading"
-            class="i-svg-spinners-ring-resize"
-          ></span>
-          {{ $t('auth.reset_password') }}
-        </Button>
-      </form>
+          <div class="text-center mb-8">
+            <div
+              class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl mb-4 shadow-lg"
+            >
+              <span class="text-white text-2xl font-bold">Q</span>
+            </div>
+            <h1
+              class="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent mb-2"
+            >
+              {{ $t('auth.reset_password') }}
+            </h1>
+            <p class="text-gray-500 leading-relaxed">
+              {{ $t('auth.new_day_description') }}<br />
+              {{ $t('auth.reset_password_description') }}
+            </p>
+          </div>
+          <div class="form-group">
+            <label
+              for="password"
+              class="block text-sm font-semibold text-gray-700 mb-2"
+            >
+              {{ $t('auth.password') }}
+            </label>
+            <div class="relative">
+              <div
+                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10"
+              >
+                <span class="i-material-symbols-light-lock-outline text-gray-400 text-xl"></span>
+              </div>
+              <Input
+                v-model="password"
+                :placeholder="$t('auth.password_placeholder')"
+                type="password"
+                class="w-full h-12 pl-12 pr-4 bg-white/80 backdrop-blur border-2 border-gray-200/50 rounded-xl outline-none transition-all duration-300 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 focus:bg-white hover:border-gray-300"
+                v-bind="passwordAttrs"
+                :invalid="errors.password"
+              />
+            </div>
+            <ErrorMessage
+              class="text-xs mt-1 text-red-500"
+              :error="errors.password"
+            />
+          </div>
+          <div class="form-group">
+            <label
+              for="confirm-password"
+              class="block text-sm font-semibold text-gray-700 mb-2"
+            >
+              {{ $t('auth.confirm_password') }}
+            </label>
+            <div class="relative">
+              <div
+                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10"
+              >
+                <span class="i-material-symbols-light-lock-outline text-gray-400 text-xl"></span>
+              </div>
+              <Input
+                v-model="confirmPassword"
+                :placeholder="$t('auth.confirm_password_placeholder')"
+                type="password"
+                class="w-full h-12 pl-12 pr-4 bg-white/80 backdrop-blur border-2 border-gray-200/50 rounded-xl outline-none transition-all duration-300 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 focus:bg-white hover:border-gray-300"
+                v-bind="confirmPasswordAttrs"
+                :invalid="errors.confirmPassword"
+              />
+            </div>
+            <ErrorMessage
+              class="text-xs mt-1 text-red-500"
+              :error="errors.confirmPassword"
+            />
+          </div>
+          <Button
+            :disabled="isLoading"
+            class="w-full h-12 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed gap-2 flex"
+          >
+            <span
+              v-if="isLoading"
+              class="i-svg-spinners-ring-resize mr-2"
+            ></span>
+            <span
+              v-if="!isLoading"
+              class="i-material-symbols-light-key mr-2"
+            ></span>
+            {{ $t('auth.reset_password') }}
+          </Button>
+        </form>
+      </div>
     </div>
     <div class="flex-1 relative max-md:hidden">
+      <div
+        class="absolute inset-0 bg-gradient-to-br from-indigo-600/20 to-purple-600/20 rounded-3xl"
+      ></div>
       <img
-        class="absolute top-0 left-0 w-full h-full object-cover rounded-3xl"
+        class="absolute top-0 left-0 w-full h-full object-cover rounded-3xl shadow-2xl"
         src="@/assets/img/bg-image-1.jpg"
-        alt=""
+        alt="Background"
       />
+      <div
+        class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent rounded-3xl flex items-end"
+      >
+        <div class="p-8 text-white">
+          <h2 class="text-3xl font-bold mb-2">Reset Your Password</h2>
+          <p class="text-lg opacity-90">Create a new password and get back to quizzing!</p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.forgot-header {
+/* Enhanced login form animations */
+.login-container {
+  animation: slideInUp 0.6s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Form group styling */
+.form-group {
+  position: relative;
+}
+
+.form-group label {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Enhanced input styling */
+.form-group input:focus + label,
+.form-group input:not(:placeholder-shown) + label {
+  /* transform: translateY(-8px) scale(0.85); */
+  color: #4f46e5;
+}
+
+/* Floating label animation */
+.form-group input {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.form-group input:focus {
+  /* transform: translateY(-2px); */
+  box-shadow: 0 10px 25px rgba(79, 70, 229, 0.15);
+}
+
+/* Button hover effects */
+.btn-gradient {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-gradient::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
   width: 100%;
-  height: 56px;
-  background: #334d6e;
-  display: flex;
-  align-items: center;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 100%);
+  transition: left 0.5s;
 }
 
-.forgot-container {
-  text-align: center;
+.btn-gradient:hover::before {
+  left: 100%;
 }
 
-.forgot-container-head {
-  font-weight: bold;
-  font-size: 36px;
-  line-height: 42px;
-  text-align: center;
-
-  /* Dark green */
-  color: #00693b;
-  margin-top: 74px;
+/* Enhanced backdrop blur effect */
+@supports (backdrop-filter: blur(20px)) {
+  .login-container {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
 }
 
-.forgot-container-intro {
-  font-weight: normal;
-  font-size: 16px;
-  line-height: 24px;
-
-  /* or 150% */
-  text-align: center;
-  letter-spacing: 0.02em;
-
-  /* Body text 2 */
-  color: #525252;
-  margin-top: 24px;
-  max-width: 556px;
-  clear: both;
-  display: inline-block;
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .login-container {
+    margin: 1rem;
+    padding: 2rem 1.5rem;
+  }
 }
 
-.forgot-input-label {
-  font-weight: normal;
-  font-size: 15px;
-  line-height: 24px;
-
-  /* identical to box height, or 160% */
-  letter-spacing: 0.02em;
-
-  /* Title text */
-  color: #363445;
+/* Enhanced focus states */
+button:focus-visible {
+  outline: 2px solid #4f46e5;
+  outline-offset: 2px;
 }
 
-.forgot-input-container {
-  width: 556px;
-  height: 200px;
-  clear: both;
-  display: inline-block;
-  text-align: left;
-  margin-top: 24px;
+/* Enhanced divider */
+.divider-gradient {
+  background: linear-gradient(90deg, transparent, #e5e7eb, transparent);
 }
 
-.forgot-input {
-  width: 566px;
-  height: 48px;
-
-  background: #dde1cd;
-  border-radius: 4px;
-  border: none;
-
-  font-weight: normal;
-  font-size: 16px;
-  line-height: 24px;
-  letter-spacing: 0.02em;
-  color: #525252;
-  padding: 0px 12px;
+/* Link hover effects */
+a {
+  position: relative;
 }
 
-.login-validation {
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 22px;
-
-  /* identical to box height, or 157% */
-  display: flex;
-  align-items: center;
-  letter-spacing: 0.02em;
-
-  /* highlight */
-  color: #f46414;
-  min-height: 24px;
+a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: currentColor;
+  transition: width 0.3s ease-in-out;
 }
 
-.fotgot-btn {
-  width: 566px;
-  height: 48px;
-
-  /* Dark green */
-  background: #00693b;
-  border-radius: 4px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 24px;
-
-  /* identical to box height, or 150% */
-  text-align: center;
-  letter-spacing: 0.02em;
-
-  color: #ffffff;
-}
-
-.fotgot-btn:hover {
-  cursor: pointer;
+a:hover::after {
+  width: 100%;
 }
 </style>
