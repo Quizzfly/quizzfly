@@ -22,8 +22,8 @@ const handleForgot = async () => {
       errorEmail.value = t('auth.email_must_not_blank')
       return
     }
-    await forgotPasswordApi(email.value)
     isLoading.value = true
+    await forgotPasswordApi(email.value)
     showToast({
       title: t('auth.forgot_success'),
       description: t('auth.forgot_success_message'),
@@ -43,6 +43,7 @@ const handleForgot = async () => {
 
 const handleResentEmail = async (time: number) => {
   try {
+    isLoading.value = true
     await forgotPasswordApi(email.value)
     showToast({
       title: t('auth.forgot_success'),
@@ -59,6 +60,8 @@ const handleResentEmail = async (time: number) => {
       description: t('auth.resend_failed_message'),
       variant: 'default',
     })
+  } finally {
+    isLoading.value = false
   }
 }
 
@@ -213,10 +216,18 @@ const [email, emailAttrs] = defineField('email')
 
           <Button
             v-if="!isCountdown"
+            :disabled="isCountdown || isLoading"
             class="w-full h-12 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]"
             @click="handleResentEmail(5)"
           >
-            <span class="i-material-symbols-light-refresh mr-2"></span>
+            <span
+              v-if="isLoading"
+              class="i-svg-spinners-ring-resize mr-2"
+            ></span>
+            <span
+              v-else
+              class="i-material-symbols-light-refresh mr-2"
+            ></span>
             {{ $t('auth.resend') }}
           </Button>
 
